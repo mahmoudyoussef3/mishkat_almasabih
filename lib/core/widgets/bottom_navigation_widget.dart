@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../theming/colors.dart';
 import '../theming/styles.dart';
 import '../helpers/spacing.dart';
@@ -63,52 +61,62 @@ class BottomNavigationWidget extends StatelessWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: Spacing.md, vertical: Spacing.sm),
+          padding: EdgeInsets.symmetric(
+            horizontal: Spacing.md,
+            vertical: Spacing.sm,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: items.asMap().entries.map((entry) {
-              final index = entry.key;
-              final item = entry.value;
-              final isActive = currentIndex == index;
+            children:
+                items.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final item = entry.value;
+                  final isActive = currentIndex == index;
 
-              return GestureDetector(
-                onTap: () => onTap(index),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Spacing.sm,
-                    vertical: Spacing.xs,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isActive 
-                        ? (item['color'] as Color).withOpacity(0.1)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(Spacing.md),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        isActive ? item['activeIcon'] as IconData : item['icon'] as IconData,
-                        color: isActive 
-                            ? item['color'] as Color
-                            : ColorsManager.gray,
-                        size: 24,
+                  return GestureDetector(
+                    onTap: () => onTap(index),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: Spacing.sm,
+                        vertical: Spacing.xs,
                       ),
-                      SizedBox(height: Spacing.xs),
-                      Text(
-                        item['label'] as String,
-                        style: TextStyles.labelSmall.copyWith(
-                          color: isActive 
-                              ? item['color'] as Color
-                              : ColorsManager.gray,
-                          fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
-                        ),
+                      decoration: BoxDecoration(
+                        color:
+                            isActive
+                                ? (item['color'] as Color).withOpacity(0.1)
+                                : Colors.transparent,
+                        borderRadius: BorderRadius.circular(Spacing.md),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            }).toList(),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isActive
+                                ? item['activeIcon'] as IconData
+                                : item['icon'] as IconData,
+                            color:
+                                isActive
+                                    ? item['color'] as Color
+                                    : ColorsManager.gray,
+                            size: 24,
+                          ),
+                          SizedBox(height: Spacing.xs),
+                          Text(
+                            item['label'] as String,
+                            style: TextStyles.labelSmall.copyWith(
+                              color:
+                                  isActive
+                                      ? item['color'] as Color
+                                      : ColorsManager.gray,
+                              fontWeight:
+                                  isActive ? FontWeight.w600 : FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
           ),
         ),
       ),

@@ -262,6 +262,8 @@ class AppTheme {
 
   static ThemeData get darkTheme {
     return ThemeData(
+      fontFamily: 'YaModernPro',
+
       useMaterial3: true,
       brightness: Brightness.dark,
 

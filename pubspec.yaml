@@ -56,4 +56,6 @@ flutter:
       - family: YaModernPro
         fonts:
             - asset: assets/fonts/Ya-ModernPro-Bold.otf
+            
+
 

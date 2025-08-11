@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
+import 'package:mishkat_almasabih/features/login/ui/widgets/login_with_google.dart';
 import '../../../../core/theming/colors.dart';
+import '../../../../core/theming/styles.dart';
+import '../../../../core/helpers/spacing.dart';
 import '../../../../core/widgets/app_text_form_field.dart';
 import '../../../../core/widgets/app_text_button.dart';
-import '../widgets/don`t_have_account_text.dart';
-import '../widgets/login_with_google.dart';
-import '../widgets/terms_and_conditions.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignupScreen> createState() => _SignupScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
+  bool _isConfirmPasswordVisible = false;
+  bool _agreeToTerms = false;
 
   @override
   void dispose() {
+    _fullNameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -37,43 +47,42 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: ColorsManager.white,
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Top spacing
-                  SizedBox(height: 60.h),
 
                   // App Logo and Title
                   _buildHeaderSection(),
 
-                  SizedBox(height: 60.h),
-
-                  // Login Form
-                  _buildLoginForm(),
-
                   SizedBox(height: 24.h),
 
-                  _buildRememberMeSection(),
+                  // Welcome Text
+                  _buildWelcomeSection(),
+
+                  SizedBox(height: 32.h),
+
+                  // Signup Form
+                  _buildSignupForm(),
+
+                  SizedBox(height: 32.h),
+
+                  // Signup Button
+                  _buildSignupButton(),
 
                   SizedBox(height: 24.h),
-
-                  // Login Button
-                  _buildLoginButton(),
-
-                  SizedBox(height: 18.h),
 
                   // Divider
                   _buildDivider(),
 
                   SizedBox(height: 24.h),
 
-                  // Don't have account
-                  const DontHaveAccountText(),
-
-                  SizedBox(height: 32.h),
+                  // Already have account
+                  _buildAlreadyHaveAccount(),
+                  SizedBox(height: 8.h),
 
                   LoginWithGoogle(),
 
@@ -92,8 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         // App Logo
         Container(
-              width: 100.w,
-              height: 100.w,
+              width: 80.w,
+              height: 80.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: ColorsManager.primaryGreen,
@@ -107,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               child: Padding(
-                padding: EdgeInsets.all(20.w),
+                padding: EdgeInsets.all(16.w),
                 child: Image.asset(
                   'assets/images/app_logo.png',
                   fit: BoxFit.contain,
@@ -121,14 +130,17 @@ class _LoginScreenState extends State<LoginScreen> {
               duration: 800.ms,
               color: ColorsManager.white.withOpacity(0.3),
             ),
+      ],
+    );
+  }
 
-        SizedBox(height: 20.h),
-
-        // App Name
+  Widget _buildWelcomeSection() {
+    return Column(
+      children: [
         Text(
-          'مرحباً بك مرة أخرى',
+          'انضم إلي مشكاة ',
           style: TextStyle(
-            fontSize: 24.sp,
+            fontSize: 22.sp,
             fontWeight: FontWeight.bold,
             color: ColorsManager.primaryText,
           ),
@@ -137,9 +149,9 @@ class _LoginScreenState extends State<LoginScreen> {
         SizedBox(height: 8.h),
 
         Text(
-          "سجل دخولك وابدء رحلتك مع الأحاديث والعلوم الإسلامية",
+          'أنشئ حسابك وابدأ رحلتك مع الأحاديث والعلوم الإسلامية',
           style: TextStyle(
-            fontSize: 16.sp,
+            fontSize: 15.sp,
             fontWeight: FontWeight.w400,
             color: ColorsManager.secondaryText,
             height: 1.4,
@@ -149,16 +161,38 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildLoginForm() {
+  Widget _buildSignupForm() {
     return Column(
       children: [
+        // Full Name Field
+        AppTextFormField(
+          controller: _fullNameController,
+
+          backgroundColor: ColorsManager.lightGray,
+          suffixIcon: Icon(Icons.person, color: ColorsManager.primaryGreen),
+          hintText: 'الاسم الكامل',
+          hintStyle: TextStyle(color: Colors.black),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'يرجى إدخال الاسم الكامل';
+            }
+            if (value.length < 3) {
+              return 'الاسم يجب أن يكون 3 أحرف على الأقل';
+            }
+            return null;
+          },
+        ).animate().fadeIn(delay: 500.ms, duration: 300.ms).slideX(begin: -0.3),
+
+        SizedBox(height: 16.h),
+
         // Email Field
         AppTextFormField(
+          hintStyle: TextStyle(color: Colors.black),
+
           backgroundColor: ColorsManager.lightGray,
           suffixIcon: Icon(Icons.email, color: ColorsManager.primaryGreen),
           controller: _emailController,
           hintText: 'البريد الإلكتروني',
-          hintStyle: TextStyle(color: Colors.black),
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'يرجى إدخال البريد الإلكتروني';
@@ -168,15 +202,15 @@ class _LoginScreenState extends State<LoginScreen> {
             }
             return null;
           },
-        ).animate().fadeIn(delay: 500.ms, duration: 300.ms).slideX(begin: -0.3),
+        ).animate().fadeIn(delay: 600.ms, duration: 300.ms).slideX(begin: -0.3),
 
-        SizedBox(height: 20.h),
+        SizedBox(height: 16.h),
 
         // Password Field
         AppTextFormField(
-          backgroundColor: ColorsManager.lightGray,
           hintStyle: TextStyle(color: Colors.black),
 
+          backgroundColor: ColorsManager.lightGray,
           controller: _passwordController,
           hintText: 'كلمة المرور',
           isObscureText: !_isPasswordVisible,
@@ -200,81 +234,70 @@ class _LoginScreenState extends State<LoginScreen> {
             }
             return null;
           },
-        ).animate().fadeIn(delay: 600.ms, duration: 300.ms).slideX(begin: -0.3),
-      ],
-    );
-  }
+        ).animate().fadeIn(delay: 700.ms, duration: 300.ms).slideX(begin: -0.3),
 
-  Widget _buildRememberMeSection() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        // Remember Me
-        Row(
-          children: [
-            Checkbox(
-              side: BorderSide(color: ColorsManager.primaryGreen),
-              value: _rememberMe,
-              onChanged: (value) {
-                setState(() {
-                  _rememberMe = value ?? false;
-                });
-              },
-              activeColor: ColorsManager.primaryGreen,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            Text(
-              'تذكرني',
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                color: ColorsManager.primaryText,
-              ),
-            ),
-          ],
-        ).animate().fadeIn(delay: 700.ms, duration: 300.ms),
+        SizedBox(height: 16.h),
 
-        // Forgot Password
-        TextButton(
-          onPressed: () {
-            // TODO: Navigate to forgot password screen
-          },
-          child: Text(
-            'نسيت كلمة المرور؟',
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
+        // Confirm Password Field
+        AppTextFormField(
+          hintStyle: TextStyle(color: Colors.black),
+
+          backgroundColor: ColorsManager.lightGray,
+          controller: _confirmPasswordController,
+          hintText: 'تأكيد كلمة المرور',
+          isObscureText: !_isConfirmPasswordVisible,
+          suffixIcon: IconButton(
+            icon: Icon(
+              _isConfirmPasswordVisible
+                  ? Icons.visibility
+                  : Icons.visibility_off,
               color: ColorsManager.primaryGreen,
-              decoration: TextDecoration.underline,
             ),
+            onPressed: () {
+              setState(() {
+                _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+              });
+            },
           ),
-        ).animate().fadeIn(delay: 800.ms, duration: 300.ms),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'يرجى تأكيد كلمة المرور';
+            }
+            if (value != _passwordController.text) {
+              return 'كلمة المرور غير متطابقة';
+            }
+            return null;
+          },
+        ).animate().fadeIn(delay: 800.ms, duration: 300.ms).slideX(begin: -0.3),
       ],
     );
   }
 
-  Widget _buildLoginButton() {
+  Widget _buildSignupButton() {
     return AppTextButton(
-          buttonText: 'تسجيل الدخول',
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              // TODO: Implement login logic
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('جاري تسجيل الدخول...'),
-                  backgroundColor: ColorsManager.primaryGreen,
-                ),
-              );
-            }
-          },
           backgroundColor: ColorsManager.primaryGreen,
+          buttonText: 'إنشاء الحساب',
+
+          onPressed:
+              _agreeToTerms
+                  ? () {
+                    if (_formKey.currentState!.validate()) {
+                      // TODO: Implement signup logic
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('جاري إنشاء الحساب...'),
+                          backgroundColor: ColorsManager.primaryGreen,
+                        ),
+                      );
+                    }
+                  }
+                  : () {},
+
           textStyle: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w600,
-            color: ColorsManager.white,
             letterSpacing: 0.5,
+            color: ColorsManager.white,
           ),
         )
         .animate()
@@ -300,5 +323,35 @@ class _LoginScreenState extends State<LoginScreen> {
         Expanded(child: Container(height: 1, color: ColorsManager.mediumGray)),
       ],
     ).animate().fadeIn(delay: 1000.ms, duration: 300.ms).scaleX(begin: 0.0);
+  }
+
+  Widget _buildAlreadyHaveAccount() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'لديك حساب بالفعل؟ ',
+          style: TextStyle(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.w500,
+            color: ColorsManager.secondaryText,
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            context.pushNamed(Routes.loginScreen);
+          },
+          child: Text(
+            'تسجيل الدخول',
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
+              color: ColorsManager.primaryGreen,
+              decoration: TextDecoration.underline,
+            ),
+          ),
+        ),
+      ],
+    ).animate().fadeIn(delay: 1100.ms, duration: 300.ms);
   }
 }
