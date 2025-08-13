@@ -5,7 +5,6 @@ import 'colors.dart';
 import 'font_weight_helper.dart';
 
 class TextStyles {
-  // Display Styles - Large, prominent text for headers
   static TextStyle displayLarge = TextStyle(
     fontSize: 32.sp,
     fontWeight: FontWeightHelper.bold,
@@ -175,7 +174,7 @@ class TextStyles {
   static TextStyle font14DarkBlueMedium = bodyMedium.copyWith(color: ColorsManager.primaryNavy, fontWeight: FontWeightHelper.medium);
   static TextStyle font14DarkBlueBold = bodyMedium.copyWith(color: ColorsManager.primaryNavy, fontWeight: FontWeightHelper.bold);
   static TextStyle font16WhiteMedium = bodyLarge.copyWith(color: ColorsManager.white, fontWeight: FontWeightHelper.medium);
-  static TextStyle font14BlueSemiBold = bodyMedium.copyWith(color: ColorsManager.primaryNavy, fontWeight: FontWeightHelper.semiBold);
+  static TextStyle font14BlueSemiBold = bodyMedium.copyWith(color: ColorsManager.primaryNavy, fontWeight: FontWeightHelper.semiBold,fontFamily: '');
   static TextStyle font15DarkBlueMedium = bodyMedium.copyWith(fontSize: 15.sp, color: ColorsManager.primaryNavy, fontWeight: FontWeightHelper.medium);
   static TextStyle font18DarkBlueBold = headlineSmall.copyWith(color: ColorsManager.primaryNavy);
   static TextStyle font18DarkBlueSemiBold = headlineSmall.copyWith(fontWeight: FontWeightHelper.semiBold);

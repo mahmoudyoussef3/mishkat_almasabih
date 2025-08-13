@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theming/colors.dart';
 import '../theming/styles.dart';
 import '../helpers/spacing.dart';
@@ -19,31 +20,20 @@ class BottomNavigationWidget extends StatelessWidget {
       {
         'icon': Icons.home_outlined,
         'activeIcon': Icons.home,
-        'label': 'Home',
+        'label': 'الرئيسية',
         'color': ColorsManager.primaryGreen,
       },
-      {
-        'icon': Icons.search_outlined,
-        'activeIcon': Icons.search,
-        'label': 'Search',
-        'color': ColorsManager.primaryGold,
-      },
-      {
-        'icon': Icons.book_outlined,
-        'activeIcon': Icons.book,
-        'label': 'Library',
-        'color': ColorsManager.primaryNavy,
-      },
+
       {
         'icon': Icons.bookmark_outline,
         'activeIcon': Icons.bookmark,
-        'label': 'Bookmarks',
+        'label': 'المفضلة',
         'color': ColorsManager.secondaryGreen,
       },
       {
         'icon': Icons.person_outline,
         'activeIcon': Icons.person,
-        'label': 'Profile',
+        'label': 'الحساب',
         'color': ColorsManager.accentOrange,
       },
     ];
@@ -98,7 +88,7 @@ class BottomNavigationWidget extends StatelessWidget {
                                 isActive
                                     ? item['color'] as Color
                                     : ColorsManager.gray,
-                            size: 24,
+                            size: 24.sp,
                           ),
                           SizedBox(height: Spacing.xs),
                           Text(

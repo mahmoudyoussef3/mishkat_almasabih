@@ -5,16 +5,16 @@ import 'package:mishkat_almasabih/mishkat_almasabih.dart';
 
 import 'core/di/dependency_injection.dart';
 import 'package:device_preview/device_preview.dart';
+
 void main() async {
   await setUpGetIt();
   await ScreenUtil.ensureScreenSize();
   runApp(
- //     DevicePreview(
-   //     enabled: true,
+    //     DevicePreview(
+    //     enabled: true,
 
-
-     //     builder: (context) =>
-
-              MishkatAlmasabih(appRouter: AppRouter()));
+    //     builder: (context) =>
+    MishkatAlmasabih(appRouter: AppRouter()),
+  );
   //);
 }

@@ -46,6 +46,8 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/book_covers/
+    - assets/images/islamic_pattern.jpg
 
 
   fonts:

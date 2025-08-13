@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mishkat_almasabih/features/signup/ui/screens/signup_screen.dart';
+import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/signup_screen.dart';
 
 import '../../features/main_navigation/main_navigation_screen.dart';
 import '../di/dependency_injection.dart';
 import 'routes.dart';
-import '../../features/login/logic/cubit/login_cubit.dart';
-import '../../features/login/ui/screens/login_screen.dart';
+import '../../features/authentication/login/logic/cubit/login_cubit.dart';
+import '../../features/authentication/login/ui/screens/login_screen.dart';
 import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
 

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../core/theming/colors.dart';
 import '../../core/widgets/bottom_navigation_widget.dart';
-import '../home/home_screen.dart';
+import '../home/ui/home_screen.dart';
 import '../search/search_screen.dart';
-import '../library/library_screen.dart';
+import '../library/ui/screens/library_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -18,9 +19,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const SearchScreen(),
-    const LibraryScreen(),
-    //const BookmarksScreen(),
-    //const ProfileScreen(),
+    LibraryScreen(),
   ];
 
   void _onTabTapped(int index) {
@@ -31,11 +30,19 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: _currentIndex, children: _screens),
-      bottomNavigationBar: BottomNavigationWidget(
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: ColorsManager.white,
+          child: const Icon(Icons.search, color: ColorsManager.primaryGreen),
+          onPressed: () {},
+        ),
+        body: IndexedStack(index: _currentIndex, children: _screens),
+        bottomNavigationBar: BottomNavigationWidget(
+          currentIndex: _currentIndex,
+          onTap: _onTabTapped,
+        ),
       ),
     );
   }
