@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 
 import '../../core/theming/colors.dart';
 import '../../core/theming/styles.dart';
@@ -442,7 +443,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(color: ColorsManager.primaryPurple),
+         loadingProgressIndicator(),
             SizedBox(height: Spacing.md),
             Text(
               'جاري البحث...',

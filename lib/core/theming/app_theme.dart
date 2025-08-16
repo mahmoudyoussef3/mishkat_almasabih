@@ -3,7 +3,7 @@ import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 
 import 'colors.dart';
 import 'styles.dart';
-
+/*
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
@@ -13,6 +13,7 @@ class AppTheme {
 
       // Color Scheme
       colorScheme: const ColorScheme.light(
+        
         primary: ColorsManager.primaryGreen,
         onPrimary: ColorsManager.white,
         secondary: ColorsManager.primaryGold,
@@ -71,6 +72,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(Spacing.buttonRadius),
           ),
           textStyle: TextStyles.buttonText,
+
+          
         ),
       ),
 
@@ -291,3 +294,4 @@ class AppTheme {
     );
   }
 }
+*/

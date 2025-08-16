@@ -9,6 +9,8 @@ class BuildHeaderAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      leading: Icon(Icons.arrow_back,color: Colors.transparent,),
+      
       expandedHeight: 100.h,
       floating: false,
       pinned: true,
