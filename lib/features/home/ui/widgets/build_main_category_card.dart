@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
@@ -42,7 +43,7 @@ class BuildMainCategoryCard extends StatelessWidget {
           children: [
             Positioned.fill(
               child: Opacity(
-                opacity: 0.1,
+                opacity: 0.05,
                 child: Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -64,7 +65,7 @@ class BuildMainCategoryCard extends StatelessWidget {
                       color: ColorsManager.white.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Icon(icon, color: ColorsManager.white, size: 32),
+                    child: Icon(icon, color: ColorsManager.white, size: 32.sp),
                   ),
                   SizedBox(width: Spacing.md),
                   Expanded(

@@ -19,7 +19,7 @@ class MishkatAlmasabih extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           debugShowCheckedModeBanner: false,
-          initialRoute: Routes.loginScreen,
+          initialRoute: Routes.mainNavigationScreen,
           onGenerateRoute: appRouter.generateRoute,
         );
       },

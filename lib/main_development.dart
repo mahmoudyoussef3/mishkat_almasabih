@@ -10,11 +10,10 @@ void main() async {
   await setUpGetIt();
   await ScreenUtil.ensureScreenSize();
   runApp(
-    //     DevicePreview(
-    //     enabled: true,
+    DevicePreview(
+      enabled: true,
 
-    //     builder: (context) =>
-    MishkatAlmasabih(appRouter: AppRouter()),
+      builder: (context) => MishkatAlmasabih(appRouter: AppRouter()),
+    ),
   );
-  //);
 }

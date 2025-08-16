@@ -9,7 +9,7 @@ class BuildHeaderAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      expandedHeight: 80.h,
+      expandedHeight: 100.h,
       floating: false,
       pinned: true,
       backgroundColor: ColorsManager.primaryPurple,
@@ -22,7 +22,7 @@ class BuildHeaderAppBar extends StatelessWidget {
               style: TextStyles.displaySmall.copyWith(
                 color: ColorsManager.white,
                 fontWeight: FontWeight.bold,
-                fontSize: 20.sp,
+                fontSize: 24.sp,
               ),
             ),
             Text(
@@ -40,17 +40,14 @@ class BuildHeaderAppBar extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                ColorsManager.primaryPurple,
-                ColorsManager.secondaryPurple,
-              ],
+              colors: [ColorsManager.primaryPurple, ColorsManager.primaryGreen],
             ),
           ),
           child: Stack(
             children: [
               Positioned.fill(
                 child: Opacity(
-                  opacity: 0.1,
+                  opacity: 0.05,
                   child: Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
