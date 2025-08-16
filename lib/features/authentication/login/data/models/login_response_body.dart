@@ -2,13 +2,13 @@ import 'package:json_annotation/json_annotation.dart';
 part 'login_response_body.g.dart';
 @JsonSerializable()
 class LoginResponseBody{
-  String? message;
+  String? msg;
   @JsonKey(name: 'data')
   UserData? userData;
   bool? status;
   int? code;
   LoginResponseBody({
-    this.message,
+    this.msg,
     this.userData,
     this.status,
     this.code,
