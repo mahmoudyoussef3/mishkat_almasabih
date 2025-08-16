@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/signup_screen.dart';
+import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistics_repo.dart';
+import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
+import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 
 import '../../features/main_navigation/main_navigation_screen.dart';
 import '../di/dependency_injection.dart';
@@ -38,7 +41,21 @@ class AppRouter {
         );
       case Routes.mainNavigationScreen:
         // Assuming you have a MainNavigationScreen widget
-        return MaterialPageRoute(builder: (_) => const MainNavigationScreen());
+        return MaterialPageRoute(
+          builder:
+              (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create:
+                        (context) => getIt<GetAllBooksWithCategoriesCubit>(),
+                  ),
+                  BlocProvider(
+                    create: (context) => getIt<GetLibraryStatisticsCubit>(),
+                  ),
+                ],
+                child: const MainNavigationScreen(),
+              ),
+        );
 
       default:
         return null;

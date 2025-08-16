@@ -5,6 +5,9 @@ class ApiConstants {
 
   static const String login = "auth/login";
   static const String signup = "auth/register";
+  static const String getAllBooksWithCategories = "islamic-library/books";
+
+  static const String getLibraryStatistics = "islamic-library/statistics";
 }
 
 class ApiErrors {
