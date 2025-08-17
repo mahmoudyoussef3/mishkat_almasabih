@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/signup_screen.dart';
+import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistics_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
@@ -51,6 +52,9 @@ class AppRouter {
                   ),
                   BlocProvider(
                     create: (context) => getIt<GetLibraryStatisticsCubit>(),
+                  ),
+                      BlocProvider(
+                    create: (context) => getIt<BookDataCubit>(),
                   ),
                 ],
                 child: const MainNavigationScreen(),

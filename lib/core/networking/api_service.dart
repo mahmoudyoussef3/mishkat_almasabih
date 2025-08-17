@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_response_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_request_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_response_body.dart';
+import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -25,4 +26,8 @@ abstract class ApiService {
   Future<BooksResponse> getAllBooksWithCategories();
   @GET(ApiConstants.getLibraryStatistics)
   Future<StatisticsResponse> getLibraryStatisctics();
+
+  @GET(ApiConstants.getBooksByCategory)
+  Future<CategoryResponse> getBookData(
+    @Path("categoryId") String categoryId);
 }

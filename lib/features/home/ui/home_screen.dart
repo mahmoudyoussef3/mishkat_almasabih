@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_main_category_card.dart';
+import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
 import '../../../core/helpers/spacing.dart';
@@ -161,7 +163,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ColorsManager.primaryGreen,
                               ],
                             ),
-                            onTap: () {},
+                            onTap: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return LibraryScreen(id:'kutub_tisaa');
+                                  },
+                                ),
+                              );
+                            },
                           ),
 
                           SizedBox(height: Spacing.md),
@@ -190,8 +201,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ColorsManager.primaryGreen,
                               ],
                             ),
-                            onTap: () {},
-                          ),
+      onTap: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return LibraryScreen(id:'arbaain');
+                                  },
+                                ),
+                              );
+                            },                          ),
 
                           SizedBox(height: Spacing.md),
 
@@ -219,7 +238,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ColorsManager.primaryGreen,
                               ],
                             ),
-                            onTap: () {},
+                            onTap: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return LibraryScreen(id:'adab');
+                                  },
+                                ),
+                              );
+                            },    
                           ),
                         ],
                       ),
