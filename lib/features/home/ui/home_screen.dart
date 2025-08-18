@@ -53,7 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
             } else if (state is GetLivraryStatisticsSuccess) {
               return CustomScrollView(
                 slivers: [
-                  BuildHeaderAppBar(),
+                  BuildHeaderAppBar(
+                    title: 'مشكاة المصابيح',
+                    description: 'مكتبة مشكاة الإسلامية',
+                  ),
                   SliverToBoxAdapter(child: SizedBox(height: 20.h)),
                   SliverToBoxAdapter(
                     child: Padding(
@@ -168,7 +171,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return LibraryScreen(id:'kutub_tisaa');
+                                    return LibraryScreen(
+                                      name: "كتب الأحاديث الكبيرة",
+                                      id: 'kutub_tisaa',
+                                    );
                                   },
                                 ),
                               );
@@ -201,16 +207,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ColorsManager.primaryGreen,
                               ],
                             ),
-      onTap: () async {
+                            onTap: () async {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return LibraryScreen(id:'arbaain');
+                                    return LibraryScreen(
+                                      name: 'كتب الأربعينات',
+                                      id: 'arbaain',
+                                    );
                                   },
                                 ),
                               );
-                            },                          ),
+                            },
+                          ),
 
                           SizedBox(height: Spacing.md),
 
@@ -243,18 +253,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return LibraryScreen(id:'adab');
+                                    return LibraryScreen(name: 'كتب الأدب و الآداب', id: 'adab');
                                   },
                                 ),
                               );
-                            },    
+                            },
                           ),
                         ],
                       ),
                     ),
                   ),
 
-                  SliverToBoxAdapter(child: SizedBox(height: Spacing.lg)),
+                  SliverToBoxAdapter(child: SizedBox(height: Spacing.xl)),
                 ],
               );
             }

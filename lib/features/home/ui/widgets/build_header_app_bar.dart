@@ -4,23 +4,26 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class BuildHeaderAppBar extends StatelessWidget {
-  const BuildHeaderAppBar({super.key});
+  const BuildHeaderAppBar({super.key, this.description,required this.title});
+  final String title;
+  final String? description;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      leading: Icon(Icons.arrow_back,color: Colors.transparent,),
-      
+      leading: Icon(Icons.arrow_back, color: Colors.transparent),
+
       expandedHeight: 100.h,
-      floating: false,
-      pinned: true,
+      floating: true,
+      pinned: false,
       backgroundColor: ColorsManager.primaryPurple,
       flexibleSpace: FlexibleSpaceBar(
+      
         title: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
-              'مشكاة المصابيح',
+              title,
               style: TextStyles.displaySmall.copyWith(
                 color: ColorsManager.white,
                 fontWeight: FontWeight.bold,
@@ -28,7 +31,7 @@ class BuildHeaderAppBar extends StatelessWidget {
               ),
             ),
             Text(
-              'مكتبة مشكاة الإسلامية',
+             description??'',
               style: TextStyles.bodyMedium.copyWith(
                 color: ColorsManager.white.withOpacity(0.9),
                 fontSize: 12.sp,
