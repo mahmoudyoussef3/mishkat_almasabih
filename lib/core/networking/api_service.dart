@@ -3,6 +3,7 @@ import 'package:mishkat_almasabih/features/authentication/login/data/models/logi
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_request_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_response_body.dart';
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
+import 'package:mishkat_almasabih/features/get_book_chapters/data/models/book_chapters_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -28,6 +29,8 @@ abstract class ApiService {
   Future<StatisticsResponse> getLibraryStatisctics();
 
   @GET(ApiConstants.getBooksByCategory)
-  Future<CategoryResponse> getBookData(
-    @Path("categoryId") String categoryId);
+  Future<CategoryResponse> getBookData(@Path("categoryId") String categoryId);
+
+  @GET(ApiConstants.getBookChapters)
+  Future<BookChaptersModel> getBookChapters(@Path("bookSlug") String bookSlug);
 }

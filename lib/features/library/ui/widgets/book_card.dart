@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
+import 'package:mishkat_almasabih/features/get_book_chapters/ui/screens/book_chapters_screen.dart';
 import 'package:mishkat_almasabih/features/library/ui/widgets/book_stat.dart';
 
 class BookCard extends StatelessWidget {
@@ -70,7 +73,11 @@ class BookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {}, // TODO: Navigate to details
+      onTap:
+          () => context.pushNamed(
+            Routes.bookChaptersScreen,
+            arguments: book.bookSlug,
+          ),
       child: Container(
         decoration: BoxDecoration(
           color: ColorsManager.white,

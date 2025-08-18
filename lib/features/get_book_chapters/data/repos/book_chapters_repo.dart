@@ -1,0 +1,22 @@
+import 'dart:developer';
+
+import 'package:dartz/dartz.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
+import 'package:mishkat_almasabih/core/networking/api_service.dart';
+import 'package:mishkat_almasabih/features/get_book_chapters/data/models/book_chapters_model.dart';
+
+class BookChaptersRepo {
+  final ApiService _apiService;
+  BookChaptersRepo(this._apiService);
+  Future<Either<ErrorHandler, BookChaptersModel>> getBookChapters(
+    String bookSlug,
+  ) async {
+    try {
+      final response = await _apiService.getBookChapters(bookSlug);
+      return Right(response);
+    } catch (error) {
+      log(error.toString());
+      return Left(ErrorHandler.handle(error));
+    }
+  }
+}

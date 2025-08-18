@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/signup_screen.dart';
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
-import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistics_repo.dart';
+import 'package:mishkat_almasabih/features/get_book_chapters/logic/cubit/get_book_chapters_cubit.dart';
+import 'package:mishkat_almasabih/features/get_book_chapters/ui/screens/book_chapters_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 
@@ -17,7 +18,6 @@ import '../../features/splash/splash_screen.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
-    final arguments = settings.arguments;
 
     switch (settings.name) {
       case Routes.splashScreen:
@@ -60,6 +60,18 @@ class AppRouter {
                 child: const MainNavigationScreen(),
               ),
         );
+        
+            case Routes.bookChaptersScreen:
+    final arguments = settings.arguments as String;
+
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create: (context) => getIt<GetBookChaptersCubit>()..emitGetBookChapters(arguments),
+                child: BookChaptersScreen(bookSlug:arguments),
+              ),
+        );
+        
 
       default:
         return null;

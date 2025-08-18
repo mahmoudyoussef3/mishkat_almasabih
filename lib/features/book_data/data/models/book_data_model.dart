@@ -53,8 +53,10 @@ class Book {
   final String? writerNameEn;
   final String? writerNameUr;
   final String? bookSlug;
-  final String? hadiths_count;
-  final String? chapters_count;
+    @JsonKey(fromJson: _toInt)
+  final int? hadiths_count;
+    @JsonKey(fromJson: _toInt)
+final int? chapters_count;
   final String? status;
   final bool? isLocal;
   final String? category;
@@ -78,4 +80,9 @@ class Book {
   });
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
-}
+  static int? _toInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value);
+    return null;
+  }}

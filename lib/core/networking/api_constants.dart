@@ -8,7 +8,9 @@ class ApiConstants {
   static const String getAllBooksWithCategories = "islamic-library/books";
 
   static const String getLibraryStatistics = "islamic-library/statistics";
-  static const String getBooksByCategory = "/islamic-library/categories/{categoryId}/books";
+  static const String getBooksByCategory =
+      "/islamic-library/categories/{categoryId}/books";
+  static const String getBookChapters = "/islamic-library/books/{bookSlug}/chapters";
 }
 
 class ApiErrors {
