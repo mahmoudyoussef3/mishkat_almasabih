@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
-import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -97,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       .totalChapters
                                       .toString(),
 
-                              color: ColorsManager.secondaryPurple,
+                              color: ColorsManager.hadithAuthentic,
                             ),
                           ),
                           SizedBox(width: Spacing.md),
@@ -253,7 +252,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) {
-                                    return LibraryScreen(name: 'كتب الأدب و الآداب', id: 'adab');
+                                    return LibraryScreen(
+                                      name: 'كتب الأدب و الآداب',
+                                      id: 'adab',
+                                    );
                                   },
                                 ),
                               );

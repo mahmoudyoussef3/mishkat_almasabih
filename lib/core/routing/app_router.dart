@@ -18,7 +18,6 @@ import '../../features/splash/splash_screen.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
-
     switch (settings.name) {
       case Routes.splashScreen:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
@@ -53,25 +52,25 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => getIt<GetLibraryStatisticsCubit>(),
                   ),
-                      BlocProvider(
-                    create: (context) => getIt<BookDataCubit>(),
-                  ),
+                  BlocProvider(create: (context) => getIt<BookDataCubit>()),
                 ],
                 child: const MainNavigationScreen(),
               ),
         );
-        
-            case Routes.bookChaptersScreen:
-    final arguments = settings.arguments as String;
 
+      case Routes.bookChaptersScreen:
+        final args = settings.arguments as List<dynamic>;
+        final bookSlug = args[0];
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-                create: (context) => getIt<GetBookChaptersCubit>()..emitGetBookChapters(arguments),
-                child: BookChaptersScreen(bookSlug:arguments),
+                create:
+                    (context) =>
+                        getIt<GetBookChaptersCubit>()
+                          ..emitGetBookChapters(bookSlug),
+                child: BookChaptersScreen(args: args),
               ),
         );
-        
 
       default:
         return null;

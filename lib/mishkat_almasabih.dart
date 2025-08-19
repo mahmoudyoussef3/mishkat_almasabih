@@ -16,10 +16,9 @@ class MishkatAlmasabih extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: 'Mishkat Almasabih',
-          theme: ThemeData(fontFamily:  'YaModernPro',
-          ),
-//          theme: AppTheme.lightTheme,
-  //        darkTheme: AppTheme.darkTheme,
+          theme: ThemeData(fontFamily: 'YaModernPro'),
+          //          theme: AppTheme.lightTheme,
+          //        darkTheme: AppTheme.darkTheme,
           debugShowCheckedModeBanner: false,
           initialRoute: Routes.mainNavigationScreen,
           onGenerateRoute: appRouter.generateRoute,

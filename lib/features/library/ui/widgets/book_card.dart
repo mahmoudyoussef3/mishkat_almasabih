@@ -4,7 +4,6 @@ import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
-import 'package:mishkat_almasabih/features/get_book_chapters/ui/screens/book_chapters_screen.dart';
 import 'package:mishkat_almasabih/features/library/ui/widgets/book_stat.dart';
 
 class BookCard extends StatelessWidget {
@@ -76,7 +75,15 @@ class BookCard extends StatelessWidget {
       onTap:
           () => context.pushNamed(
             Routes.bookChaptersScreen,
-            arguments: book.bookSlug,
+            arguments: [
+              book.bookSlug!,
+              {
+                "bookName": bookNamesArabic[book.bookName],
+                "writerName": bookWriters[book.bookName],
+                "noOfChapters": book.chapters_count.toString(),
+                "noOfHadith": book.hadiths_count.toString(),
+              },
+            ],
           ),
       child: Container(
         decoration: BoxDecoration(
