@@ -5,6 +5,8 @@ import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/sign
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/logic/cubit/get_book_chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/ui/screens/book_chapters_screen.dart';
+import 'package:mishkat_almasabih/features/get_chapter_ahadith/logic/cubit/get_chapter_ahadiths_cubit.dart';
+import 'package:mishkat_almasabih/features/get_chapter_ahadith/ui/screens/chapter_ahadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 
@@ -71,7 +73,23 @@ class AppRouter {
                 child: BookChaptersScreen(args: args),
               ),
         );
-
+      case Routes.chapterAhadithsScreen:
+        final args = settings.arguments as List<dynamic>;
+        final bookSlug = args[0];
+        final chapterId = args[1];
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create:
+                    (context) =>
+                        getIt<GetChapterAhadithsCubit>()
+                          ..emitChapterAhadiths(bookSlug: bookSlug,chapterId:chapterId ),
+                child: ChapterAhadithScreen(
+                  bookId: chapterId,
+                  bookSlug: bookSlug,
+                ),
+              ),
+        );
       default:
         return null;
     }

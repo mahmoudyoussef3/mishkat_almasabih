@@ -6,6 +6,8 @@ import 'package:mishkat_almasabih/features/book_data/data/repos/book_data_repo.d
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/data/repos/book_chapters_repo.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/logic/cubit/get_book_chapters_cubit.dart';
+import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/repos/chapter_ahadiths_repo.dart';
+import 'package:mishkat_almasabih/features/get_chapter_ahadith/logic/cubit/get_chapter_ahadiths_cubit.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_all_books_with_categories_repo.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistics_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
@@ -43,4 +45,7 @@ Future<void> setUpGetIt() async {
 
         getIt.registerLazySingleton<BookChaptersRepo>(() => BookChaptersRepo(getIt()));
   getIt.registerFactory<GetBookChaptersCubit>(() => GetBookChaptersCubit(getIt()));
+
+        getIt.registerLazySingleton<ChapterAhadithsRepo>(() => ChapterAhadithsRepo(getIt()));
+  getIt.registerFactory<GetChapterAhadithsCubit>(() => GetChapterAhadithsCubit(getIt()));
 }

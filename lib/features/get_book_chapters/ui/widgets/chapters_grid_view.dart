@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/ui/widgets/build_chapter_card.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/ui/widgets/chapter_card_shimmer.dart';
 
@@ -35,14 +37,18 @@ class ResponsiveChapterList extends StatelessWidget {
         }
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 8.w),
-          child: ChapterCard(
-                chapterNumber: items[index].chapterNumber,
-                ar: items[index].chapterArabic,
-                primaryPurple: primaryPurple,
-              )
-              .animate()
-              .fadeIn(duration: 1.seconds)
-              .scale(duration: 1.seconds, curve: Curves.easeOutBack),
+          child: InkWell(
+            onTap: ()=> context.pushNamed(Routes.chapterAhadithsScreen,arguments: ['bulugh_al_maram',items[index].chapterNumber]),
+            child: ChapterCard(
+              
+                  chapterNumber: items[index].chapterNumber,
+                  ar: items[index].chapterArabic,
+                  primaryPurple: primaryPurple,
+                )
+                .animate()
+                .fadeIn(duration: 1.seconds)
+                .scale(duration: 1.seconds, curve: Curves.easeOutBack),
+          ),
         );
       }, childCount: isLoading ? 12 : items.length),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

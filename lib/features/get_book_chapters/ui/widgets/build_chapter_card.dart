@@ -15,10 +15,7 @@ class ChapterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
+    return  Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
           gradient: LinearGradient(
@@ -92,8 +89,7 @@ class ChapterCard extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      )    ;
   }
 }
 
