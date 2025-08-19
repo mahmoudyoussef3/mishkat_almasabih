@@ -35,12 +35,11 @@ class ResponsiveChapterList extends StatelessWidget {
             child: ChapterCardShimmer(),
           );
         }
-        return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.w),
-          child: InkWell(
+        return InkWell(
             onTap: ()=> context.pushNamed(Routes.chapterAhadithsScreen,arguments: ['bulugh_al_maram',items[index].chapterNumber]),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.w),
             child: ChapterCard(
-              
                   chapterNumber: items[index].chapterNumber,
                   ar: items[index].chapterArabic,
                   primaryPurple: primaryPurple,

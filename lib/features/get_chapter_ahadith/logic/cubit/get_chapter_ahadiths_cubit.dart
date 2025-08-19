@@ -14,6 +14,7 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
     required String bookSlug,
     required int chapterId,
   }) async {
+    emit(GetChapterAhadithsLoading());
     final result = await _chapterAhadithsRepo.getAhadith(
       bookSlug: bookSlug,
       chapterId: chapterId,
