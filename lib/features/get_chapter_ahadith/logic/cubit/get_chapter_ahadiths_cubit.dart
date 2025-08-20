@@ -17,6 +17,15 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
     required int chapterId,
     required bool hadithLocal,
   }) async {
+    emit(GetChapterAhadithsLoading());
+    final result = await _chapterAhadithsRepo.getAhadith(
+      bookSlug: bookSlug,
+      chapterId: chapterId,
+    );
+    result.fold(
+      (l) => emit(GetChapterAhadithsFailure(l.apiErrorModel.msg!)),
+      (r) => emit(GetChapterAhadithsSuccess(r)),
+    );
     if (hadithLocal) {
       final result = await _chapterAhadithsRepo.getAhadith(
         bookSlug: bookSlug,

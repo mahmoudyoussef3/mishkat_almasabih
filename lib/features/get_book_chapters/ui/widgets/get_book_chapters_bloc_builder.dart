@@ -71,6 +71,9 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 isLoading: true,
                 items: [],
                 primaryPurple: ColorsManager.primaryGreen,
+                bookName: '',
+                writerName: '',
+                bookSlug: '',
               ),
             ],
           );
@@ -144,6 +147,9 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 ResponsiveChapterList(
                   items: chapters,
                   primaryPurple: ColorsManager.primaryGreen,
+                  bookName:  bookData['bookName'],
+                  writerName: bookData['writerName'],
+                  bookSlug: bookSlug,
                 ),
               ],
             ),

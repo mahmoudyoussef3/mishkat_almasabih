@@ -85,4 +85,5 @@ final int? chapters_count;
     if (value is int) return value;
     if (value is String) return int.tryParse(value);
     return null;
-  }}
+  }
+  }
