@@ -12,6 +12,12 @@ final class GetChapterAhadithsSuccess extends GetChapterAhadithsState {
   GetChapterAhadithsSuccess(this.hadithResponse);
 }
 
+final class GetLocalChapterAhadithsSuccess extends GetChapterAhadithsState {
+  final LocalHadithResponse localHadithResponse;
+  GetLocalChapterAhadithsSuccess(this.localHadithResponse);
+}
+
+
 final class GetChapterAhadithsFailure extends GetChapterAhadithsState {
   final String error;
   GetChapterAhadithsFailure(this.error);

@@ -5,6 +5,7 @@ import 'package:mishkat_almasabih/features/authentication/signup/data/models/sig
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/data/models/book_chapters_model.dart';
 import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/models/chapter_ahadiths_model.dart';
+import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -37,6 +38,14 @@ abstract class ApiService {
 
   @GET(ApiConstants.getChapterAhadiths)
   Future<HadithResponse> getChapterAhadiths(
+    @Path("bookSlug") String bookSlug,
+    @Path("chapterId") int chapterId
+  );
+
+
+
+    @GET(ApiConstants.getChapterAhadiths)
+  Future<LocalHadithResponse> getLocalChapterAhadiths(
     @Path("bookSlug") String bookSlug,
     @Path("chapterId") int chapterId
   );
