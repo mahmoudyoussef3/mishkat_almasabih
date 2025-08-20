@@ -170,9 +170,12 @@ class HadithDetailScreen extends StatelessWidget {
                       _buildActionButton(
                         icon: Icons.share,
                         label: "مشاركة",
-                        onTap: () {
-                          Share.share(hadithText);
-                        },
+                   onTap: () async {
+  await Share.share(
+    hadithText,
+    subject: "شارك الحديث",
+  );
+}
                       ),
                       _buildActionButton(
                         icon: Icons.bookmark,
