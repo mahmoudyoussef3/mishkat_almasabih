@@ -16,7 +16,9 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
   void initState() {
     super.initState();
     context.read<GetChapterAhadithsCubit>().emitChapterAhadiths(
+
       bookSlug: widget.bookSlug,
+      hadithLocal: ,
       chapterId: widget.bookId,
     );
   }
