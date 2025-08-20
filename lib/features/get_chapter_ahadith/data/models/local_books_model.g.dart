@@ -9,59 +9,57 @@ part of 'local_books_model.dart';
 LocalHadithResponse _$LocalHadithResponseFromJson(Map<String, dynamic> json) =>
     LocalHadithResponse(
       status: (json['status'] as num?)?.toInt(),
-      message: json['message'] as String?,
-      data:
-          json['data'] == null
+      hadiths:
+          json['hadiths'] == null
               ? null
-              : LocalHadithData.fromJson(json['data'] as Map<String, dynamic>),
+              : LocalHadithsWrapper.fromJson(
+                json['hadiths'] as Map<String, dynamic>,
+              ),
     );
 
 Map<String, dynamic> _$LocalHadithResponseToJson(
   LocalHadithResponse instance,
-) => <String, dynamic>{
-  'status': instance.status,
-  'message': instance.message,
-  'data': instance.data,
-};
+) => <String, dynamic>{'status': instance.status, 'hadiths': instance.hadiths};
 
-LocalHadithData _$LocalHadithDataFromJson(Map<String, dynamic> json) =>
-    LocalHadithData(
-      currentPage: (json['currentPage'] as num?)?.toInt(),
-      hadiths:
-          (json['hadiths'] as List<dynamic>?)
+LocalHadithsWrapper _$LocalHadithsWrapperFromJson(Map<String, dynamic> json) =>
+    LocalHadithsWrapper(
+      data:
+          (json['data'] as List<dynamic>?)
               ?.map((e) => LocalHadith.fromJson(e as Map<String, dynamic>))
               .toList(),
-      from: (json['from'] as num?)?.toInt(),
-      to: (json['to'] as num?)?.toInt(),
-      perPage: (json['perPage'] as num?)?.toInt(),
-      total: (json['total'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$LocalHadithDataToJson(LocalHadithData instance) =>
-    <String, dynamic>{
-      'currentPage': instance.currentPage,
-      'hadiths': instance.hadiths,
-      'from': instance.from,
-      'to': instance.to,
-      'perPage': instance.perPage,
-      'total': instance.total,
-    };
+Map<String, dynamic> _$LocalHadithsWrapperToJson(
+  LocalHadithsWrapper instance,
+) => <String, dynamic>{'data': instance.data};
 
 LocalHadith _$LocalHadithFromJson(Map<String, dynamic> json) => LocalHadith(
   id: (json['id'] as num?)?.toInt(),
-  hadithEnglish: json['hadithEnglish'] as String?,
-  hadithUrdu: json['hadithUrdu'] as String?,
-  hadithArabic: json['hadithArabic'] as String?,
-  chapterId: json['chapterId'] as String?,
-  bookSlug: json['bookSlug'] as String?,
+  idInBook: (json['idInBook'] as num?)?.toInt(),
+  chapterId: (json['chapterId'] as num?)?.toInt(),
+  bookId: (json['bookId'] as num?)?.toInt(),
+  arabic: json['arabic'] as String?,
+  english:
+      json['english'] == null
+          ? null
+          : EnglishHadith.fromJson(json['english'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$LocalHadithToJson(LocalHadith instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'hadithEnglish': instance.hadithEnglish,
-      'hadithUrdu': instance.hadithUrdu,
-      'hadithArabic': instance.hadithArabic,
+      'idInBook': instance.idInBook,
       'chapterId': instance.chapterId,
-      'bookSlug': instance.bookSlug,
+      'bookId': instance.bookId,
+      'arabic': instance.arabic,
+      'english': instance.english,
     };
+
+EnglishHadith _$EnglishHadithFromJson(Map<String, dynamic> json) =>
+    EnglishHadith(
+      narrator: json['narrator'] as String?,
+      text: json['text'] as String?,
+    );
+
+Map<String, dynamic> _$EnglishHadithToJson(EnglishHadith instance) =>
+    <String, dynamic>{'narrator': instance.narrator, 'text': instance.text};

@@ -64,7 +64,7 @@ class ResponsiveChapterList extends StatelessWidget {
                           (context) =>
                               getIt<GetChapterAhadithsCubit>()
                                 ..emitChapterAhadiths(
-                                  hadithLocal: true,
+                                  hadithLocal: false,
                                   bookSlug: bookSlug,
                                   chapterId: items[index].chapterNumber,
                                 ),

@@ -5,53 +5,53 @@ part 'local_books_model.g.dart';
 @JsonSerializable()
 class LocalHadithResponse {
   final int? status;
-  final String? message;
-  final LocalHadithData? data;
+  final LocalHadithsWrapper? hadiths;
 
-  LocalHadithResponse({this.status, this.message, this.data});
+  LocalHadithResponse({this.status, this.hadiths});
 
   factory LocalHadithResponse.fromJson(Map<String, dynamic> json) =>
       _$LocalHadithResponseFromJson(json);
 }
 
 @JsonSerializable()
-class LocalHadithData {
-  final int? currentPage;
-  final List<LocalHadith>? hadiths;
-  final int? from;
-  final int? to;
-  final int? perPage;
-  final int? total;
+class LocalHadithsWrapper {
+  final List<LocalHadith>? data;
 
-  LocalHadithData({
-    this.currentPage,
-    this.hadiths,
-    this.from,
-    this.to,
-    this.perPage,
-    this.total,
-  });
-  factory LocalHadithData.fromJson(Map<String, dynamic> json) =>
-      _$LocalHadithDataFromJson(json);
+  LocalHadithsWrapper({this.data});
+
+  factory LocalHadithsWrapper.fromJson(Map<String, dynamic> json) =>
+      _$LocalHadithsWrapperFromJson(json);
 }
 
 @JsonSerializable()
 class LocalHadith {
   final int? id;
-  final String? hadithEnglish;
-  final String? hadithUrdu;
-  final String? hadithArabic;
-  final String? chapterId;
-  final String? bookSlug;
+  final int? idInBook;
+  final int? chapterId;
+  final int? bookId;
+  final String? arabic;
+  final EnglishHadith? english;
 
   LocalHadith({
     this.id,
-    this.hadithEnglish,
-    this.hadithUrdu,
-    this.hadithArabic,
+    this.idInBook,
     this.chapterId,
-    this.bookSlug,
+    this.bookId,
+    this.arabic,
+    this.english,
   });
+
   factory LocalHadith.fromJson(Map<String, dynamic> json) =>
       _$LocalHadithFromJson(json);
+}
+
+@JsonSerializable()
+class EnglishHadith {
+  final String? narrator;
+  final String? text;
+
+  EnglishHadith({this.narrator, this.text});
+
+  factory EnglishHadith.fromJson(Map<String, dynamic> json) =>
+      _$EnglishHadithFromJson(json);
 }

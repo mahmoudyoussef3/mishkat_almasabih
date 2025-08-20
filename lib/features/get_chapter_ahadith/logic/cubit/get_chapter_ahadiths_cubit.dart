@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/models/chapter_ahadiths_model.dart';
@@ -18,15 +20,8 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
     required bool hadithLocal,
   }) async {
     emit(GetChapterAhadithsLoading());
-    final result = await _chapterAhadithsRepo.getAhadith(
-      bookSlug: bookSlug,
-      chapterId: chapterId,
-    );
-    result.fold(
-      (l) => emit(GetChapterAhadithsFailure(l.apiErrorModel.msg!)),
-      (r) => emit(GetChapterAhadithsSuccess(r)),
-    );
-    if (hadithLocal) {
+
+    if (!hadithLocal) {
       final result = await _chapterAhadithsRepo.getAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
@@ -35,6 +30,7 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
         (l) => emit(GetChapterAhadithsFailure(l.apiErrorModel.msg!)),
         (r) => emit(GetChapterAhadithsSuccess(r)),
       );
+      log(state.toString());
     } else {
       final result = await _chapterAhadithsRepo.getLocalAhadith(
         bookSlug: bookSlug,
@@ -43,7 +39,10 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
       result.fold(
         (l) => emit(GetChapterAhadithsFailure(l.apiErrorModel.msg!)),
         (r) => emit(GetLocalChapterAhadithsSuccess(r)),
+        
       );
+            log(state.toString());
+
     }
   }
 }

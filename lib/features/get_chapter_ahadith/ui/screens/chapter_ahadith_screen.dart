@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,6 +10,7 @@ import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_deta
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 
 import '../widgets/hadith_card_shimer.dart';
+import '../widgets/local_hadith_card.dart';
 
 class ChapterAhadithScreen extends StatefulWidget {
   const ChapterAhadithScreen({
@@ -114,7 +117,9 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                                               ?.writerName] ??
                                           '',
                                       chapter:
-                                          hadith.chapter?.chapterArabic ?? '', hadithNumber:hadith.hadithNumber.toString()??'',
+                                          hadith.chapter?.chapterArabic ?? '',
+                                      hadithNumber:
+                                          hadith.hadithNumber.toString() ?? '',
                                     ),
                               ),
                             ),
@@ -133,6 +138,32 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                   return SliverList.builder(
                     itemCount: 6,
                     itemBuilder: (context, index) => const HadithCardShimmer(),
+                  );
+                } else if (state is GetLocalChapterAhadithsSuccess) {
+                  log(state.localHadithResponse.hadiths?.data.toString() ?? [].toString());
+final list = state.localHadithResponse.hadiths?.data ?? [];
+                  debugPrint("Local hadith count: ${list.length}");
+                  if (list.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: Center(child: Text("❌ لا توجد أحاديث محلية")),
+                    );
+                  }
+                  return SliverList.separated(
+                    itemCount: list.length,
+                    separatorBuilder:
+                        (_, __) => Divider(
+                          color: ColorsManager.primaryNavy,
+                          endIndent: 30.h,
+                          indent: 30.h,
+                        ),
+                    itemBuilder: (context, index) {
+                      final hadith = list[index];
+                    //  debugPrint("Hadith ${index + 1}: ${hadith.hadithArabic}");
+                      return InkWell(
+                        onTap: () {},
+                        child: LocalHadithCard(hadith: hadith),
+                      );
+                    },
                   );
                 } else if (state is GetChapterAhadithsFailure) {
                   return SliverToBoxAdapter(
