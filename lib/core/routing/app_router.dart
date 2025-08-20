@@ -73,6 +73,7 @@ class AppRouter {
                 child: BookChaptersScreen(args: args),
               ),
         );
+        /*
       case Routes.chapterAhadithsScreen:
         final args = settings.arguments as List<dynamic>;
         final bookSlug = args[0];
@@ -90,6 +91,7 @@ class AppRouter {
                 ),
               ),
         );
+        */
       default:
         return null;
     }

@@ -9,7 +9,7 @@ class HadithCard extends StatefulWidget {
     required this.text,
     this.narrator,
     this.grade,
-    this.reference,
+    this.reference, required this.bookName,
   });
 
   final String number;
@@ -17,13 +17,13 @@ class HadithCard extends StatefulWidget {
   final String? narrator;
   final String? grade;
   final String? reference;
+  final String bookName;
 
   @override
   State<HadithCard> createState() => _HadithCardState();
 }
 
 class _HadithCardState extends State<HadithCard> {
-
   Color _gradeColor(String? g) {
     switch (g?.toLowerCase()) {
       case "sahih":
@@ -50,10 +50,7 @@ class _HadithCardState extends State<HadithCard> {
       margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            ColorsManager.secondaryBackground,
-            ColorsManager.offWhite,
-          ],
+          colors: [ColorsManager.secondaryBackground, ColorsManager.offWhite],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
@@ -95,7 +92,10 @@ class _HadithCardState extends State<HadithCard> {
                 ),
                 // Grade Pill
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 6.h,
+                  ),
                   decoration: BoxDecoration(
                     color: gradeColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12.r),
@@ -117,8 +117,7 @@ class _HadithCardState extends State<HadithCard> {
             GestureDetector(
               child: AnimatedCrossFade(
                 duration: const Duration(milliseconds: 300),
-                crossFadeState:
-                    CrossFadeState.showFirst,
+                crossFadeState: CrossFadeState.showFirst,
                 firstChild: Text(
                   widget.text,
                   maxLines: 4,
@@ -147,28 +146,27 @@ class _HadithCardState extends State<HadithCard> {
             SizedBox(height: 12.h),
 
             // BOOK + CHAPTER PILLS
-      Row(
-  children: [
-    _buildGradientPill(
-      text: "صحيح البخاري",
-      colors: [
-        ColorsManager.primaryGreen.withOpacity(0.7),
-        ColorsManager.primaryGreen.withOpacity(0.5),
-      ],
-      textColor: ColorsManager.offWhite,
-    ),
-    SizedBox(width: 12.w),
-    _buildGradientPill(
-      text: "كتاب بدء الوحي",
-      colors: [
-        ColorsManager.hadithAuthentic.withOpacity(0.7),
-        ColorsManager.hadithAuthentic.withOpacity(0.5),
-      ],
-      textColor: ColorsManager.offWhite,
-    ),
-  ],
-)
-
+            Row(
+              children: [
+                _buildGradientPill(
+                  text:widget.bookName,
+                  colors: [
+                    ColorsManager.primaryGreen.withOpacity(0.7),
+                    ColorsManager.primaryGreen.withOpacity(0.5),
+                  ],
+                  textColor: ColorsManager.offWhite,
+                ),
+                SizedBox(width: 12.w),
+                _buildGradientPill(
+                  text: widget.reference??'',
+                  colors: [
+                    ColorsManager.hadithAuthentic.withOpacity(0.7),
+                    ColorsManager.hadithAuthentic.withOpacity(0.5),
+                  ],
+                  textColor: ColorsManager.offWhite,
+                ),
+              ],
+            ),
           ],
         ),
       ),
