@@ -50,16 +50,18 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
     "الشمائل المحمدية": "الإمام الترمذي",
     "حصن المسلم": "سعيد بن علي بن وهف القحطاني",
   };
+  /*
   @override
   void initState() {
     super.initState();
     context.read<GetChapterAhadithsCubit>().emitChapterAhadiths(
 
       bookSlug: widget.bookSlug,
-      hadithLocal: ,
+      hadithLocal:true ,
       chapterId: widget.bookId,
     );
   }
+  */
 
   @override
   Widget build(BuildContext context) {

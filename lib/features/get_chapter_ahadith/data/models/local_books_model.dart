@@ -11,7 +11,7 @@ class LocalHadithResponse {
   LocalHadithResponse({this.status, this.message, this.data});
 
   factory LocalHadithResponse.fromJson(Map<String, dynamic> json) =>
-      _$HadithResponseFromJson(json);
+      _$LocalHadithResponseFromJson(json);
 }
 
 @JsonSerializable()
@@ -32,7 +32,7 @@ class LocalHadithData {
     this.total,
   });
   factory LocalHadithData.fromJson(Map<String, dynamic> json) =>
-      _$HadithDataFromJson(json);
+      _$LocalHadithDataFromJson(json);
 }
 
 @JsonSerializable()
@@ -53,5 +53,5 @@ class LocalHadith {
     this.bookSlug,
   });
   factory LocalHadith.fromJson(Map<String, dynamic> json) =>
-      _$HadithFromJson(json);
+      _$LocalHadithFromJson(json);
 }

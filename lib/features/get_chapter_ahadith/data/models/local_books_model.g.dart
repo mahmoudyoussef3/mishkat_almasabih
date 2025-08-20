@@ -6,7 +6,7 @@ part of 'local_books_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-LocalHadithResponse _$HadithResponseFromJson(Map<String, dynamic> json) =>
+LocalHadithResponse _$LocalHadithResponseFromJson(Map<String, dynamic> json) =>
     LocalHadithResponse(
       status: (json['status'] as num?)?.toInt(),
       message: json['message'] as String?,
@@ -16,14 +16,15 @@ LocalHadithResponse _$HadithResponseFromJson(Map<String, dynamic> json) =>
               : LocalHadithData.fromJson(json['data'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$HadithResponseToJson(LocalHadithResponse instance) =>
-    <String, dynamic>{
-      'status': instance.status,
-      'message': instance.message,
-      'data': instance.data,
-    };
+Map<String, dynamic> _$LocalHadithResponseToJson(
+  LocalHadithResponse instance,
+) => <String, dynamic>{
+  'status': instance.status,
+  'message': instance.message,
+  'data': instance.data,
+};
 
-LocalHadithData _$HadithDataFromJson(Map<String, dynamic> json) =>
+LocalHadithData _$LocalHadithDataFromJson(Map<String, dynamic> json) =>
     LocalHadithData(
       currentPage: (json['currentPage'] as num?)?.toInt(),
       hadiths:
@@ -36,7 +37,7 @@ LocalHadithData _$HadithDataFromJson(Map<String, dynamic> json) =>
       total: (json['total'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$HadithDataToJson(LocalHadithData instance) =>
+Map<String, dynamic> _$LocalHadithDataToJson(LocalHadithData instance) =>
     <String, dynamic>{
       'currentPage': instance.currentPage,
       'hadiths': instance.hadiths,
@@ -46,7 +47,7 @@ Map<String, dynamic> _$HadithDataToJson(LocalHadithData instance) =>
       'total': instance.total,
     };
 
-LocalHadith _$HadithFromJson(Map<String, dynamic> json) => LocalHadith(
+LocalHadith _$LocalHadithFromJson(Map<String, dynamic> json) => LocalHadith(
   id: (json['id'] as num?)?.toInt(),
   hadithEnglish: json['hadithEnglish'] as String?,
   hadithUrdu: json['hadithUrdu'] as String?,
@@ -55,11 +56,12 @@ LocalHadith _$HadithFromJson(Map<String, dynamic> json) => LocalHadith(
   bookSlug: json['bookSlug'] as String?,
 );
 
-Map<String, dynamic> _$HadithToJson(LocalHadith instance) => <String, dynamic>{
-  'id': instance.id,
-  'hadithEnglish': instance.hadithEnglish,
-  'hadithUrdu': instance.hadithUrdu,
-  'hadithArabic': instance.hadithArabic,
-  'chapterId': instance.chapterId,
-  'bookSlug': instance.bookSlug,
-};
+Map<String, dynamic> _$LocalHadithToJson(LocalHadith instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'hadithEnglish': instance.hadithEnglish,
+      'hadithUrdu': instance.hadithUrdu,
+      'hadithArabic': instance.hadithArabic,
+      'chapterId': instance.chapterId,
+      'bookSlug': instance.bookSlug,
+    };
