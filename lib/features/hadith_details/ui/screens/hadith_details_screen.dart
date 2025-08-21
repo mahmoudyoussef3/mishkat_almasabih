@@ -6,28 +6,28 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 
 class HadithDetailScreen extends StatelessWidget {
-  final String hadithText;
-  final String narrator;
-  final String grade;
-  final String bookName;
-  final String author;
-  final String chapter;
-  final String authorDeath;
-  final String hadithNumber;
+  final String? hadithText;
+  final String? narrator;
+  final String? grade;
+  final String? bookName;
+  final String? author;
+  final String? chapter;
+  final String? authorDeath;
+  final String? hadithNumber;
   final VoidCallback? onNext;
   final VoidCallback? onPrev;
   final VoidCallback? onBookmark;
 
   const HadithDetailScreen({
     super.key,
-    required this.hadithText,
-    required this.narrator,
-    required this.grade,
-    required this.bookName,
-    required this.author,
-    required this.chapter,
-    required this.authorDeath,
-    required this.hadithNumber,
+    this.hadithText,
+    this.narrator,
+    this.grade,
+    this.bookName,
+    this.author,
+    this.chapter,
+    this.authorDeath,
+    this.hadithNumber,
     this.onNext,
     this.onPrev,
     this.onBookmark,
@@ -93,7 +93,7 @@ class HadithDetailScreen extends StatelessWidget {
                   ],
                 ),
                 child: Text(
-                  hadithText,
+                  hadithText ?? '',
                   textAlign: TextAlign.right,
                   style: TextStyle(
                     fontSize: 18.sp,
@@ -104,7 +104,7 @@ class HadithDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: _buildInfoTile()),
+           if(grade!=null) SliverToBoxAdapter(child: _buildInfoTile()),
             SliverToBoxAdapter(
               child: Divider(
                 color: ColorsManager.primaryNavy,
@@ -120,13 +120,13 @@ class HadithDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildBookRow("📖 اسم الكتاب", bookName),
+                    _buildBookRow("📖 اسم الكتاب", bookName ?? ''),
                     SizedBox(height: 8.h),
-                    _buildBookRow("✍️ المؤلف", author),
+                    _buildBookRow("✍️ المؤلف", author ?? ""),
                     SizedBox(height: 8.h),
-                    _buildBookRow('وفاة $author', authorDeath),
+                    _buildBookRow('وفاة $author ', authorDeath ?? 'غير متوفر'),
                     SizedBox(height: 8.h),
-                    _buildBookRow("📌 الباب", chapter),
+                    _buildBookRow("📌 الباب", chapter ?? ""),
                   ],
                 ),
               ),
@@ -161,7 +161,9 @@ class HadithDetailScreen extends StatelessWidget {
                         icon: Icons.copy,
                         label: "نسخ",
                         onTap: () {
-                          Clipboard.setData(ClipboardData(text: hadithText));
+                          Clipboard.setData(
+                            ClipboardData(text: hadithText ?? ""),
+                          );
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("تم نسخ الحديث")),
                           );
@@ -170,12 +172,12 @@ class HadithDetailScreen extends StatelessWidget {
                       _buildActionButton(
                         icon: Icons.share,
                         label: "مشاركة",
-                   onTap: () async {
-  await Share.share(
-    hadithText,
-    subject: "شارك الحديث",
-  );
-}
+                        onTap: () async {
+                          await Share.share(
+                            hadithText ?? "",
+                            subject: "شارك الحديث",
+                          );
+                        },
                       ),
                       _buildActionButton(
                         icon: Icons.bookmark,
@@ -279,15 +281,15 @@ class HadithDetailScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
             decoration: BoxDecoration(
-              color: _gradeColor(grade).withOpacity(0.1),
+              color: _gradeColor(grade ?? '').withOpacity(0.1),
               borderRadius: BorderRadius.circular(20.r),
             ),
             child: Text(
-              gradeArabic(grade),
+              gradeArabic(grade ?? ""),
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: _gradeColor(grade),
+                color: _gradeColor(grade ?? ""),
               ),
             ),
           ),

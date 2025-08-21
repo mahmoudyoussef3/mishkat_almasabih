@@ -7,9 +7,13 @@ class LocalHadithCard extends StatefulWidget {
   const LocalHadithCard({
     super.key,
     required this.hadith,
+    required this.bookName,
+    required this.chapterName,
   });
 
   final LocalHadith hadith;
+  final String bookName;
+  final String chapterName;
 
   @override
   State<LocalHadithCard> createState() => _LocalHadithCardState();
@@ -57,7 +61,7 @@ class _LocalHadithCardState extends State<LocalHadithCard> {
                     ),
                     SizedBox(width: 6.w),
                     Text(
-                      'الحديث رقم ${hadith.id ?? ""}',
+                      'نص الحديث',
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w600,
@@ -74,6 +78,7 @@ class _LocalHadithCardState extends State<LocalHadithCard> {
             Text(
               hadith.arabic ?? hadith.english?.text ?? "",
               textAlign: TextAlign.right,
+              maxLines: 4,
               style: TextStyle(
                 fontFamily: 'FodaFree',
                 color: ColorsManager.primaryText,
@@ -86,25 +91,27 @@ class _LocalHadithCardState extends State<LocalHadithCard> {
             // BOOK + REFERENCE PILLS
             Row(
               children: [
-                if (hadith.arabic != null)
-                  _buildGradientPill(
-                    text: hadith.id.toString()!,
+                Flexible(
+                  child: _buildGradientPill(
+                    text: widget.bookName,
                     colors: [
                       ColorsManager.primaryGreen.withOpacity(0.7),
                       ColorsManager.primaryGreen.withOpacity(0.5),
                     ],
                     textColor: ColorsManager.offWhite,
                   ),
+                ),
                 SizedBox(width: 12.w),
-                if (hadith.chapterId != null)
-                  _buildGradientPill(
-                    text: "Chapter ${hadith.chapterId!}",
+                Flexible(
+                  child: _buildGradientPill(
+                    text: widget.chapterName,
                     colors: [
                       ColorsManager.hadithAuthentic.withOpacity(0.7),
                       ColorsManager.hadithAuthentic.withOpacity(0.5),
                     ],
                     textColor: ColorsManager.offWhite,
                   ),
+                ),
               ],
             ),
           ],
@@ -130,6 +137,7 @@ class _LocalHadithCardState extends State<LocalHadithCard> {
       ),
       child: Text(
         text,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: textColor,
           fontWeight: FontWeight.w600,

@@ -9,7 +9,8 @@ class HadithCard extends StatefulWidget {
     required this.text,
     this.narrator,
     this.grade,
-    this.reference, required this.bookName,
+    this.reference,
+    required this.bookName,
   });
 
   final String number;
@@ -113,33 +114,16 @@ class _HadithCardState extends State<HadithCard> {
             ),
             SizedBox(height: 10.h),
 
-            // HADITH TEXT (Expandable)
-            GestureDetector(
-              child: AnimatedCrossFade(
-                duration: const Duration(milliseconds: 300),
-                crossFadeState: CrossFadeState.showFirst,
-                firstChild: Text(
-                  widget.text,
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontFamily: 'FodaFree',
-                    color: ColorsManager.primaryText,
-                    fontSize: 16.sp,
-                    height: 1.8,
-                  ),
-                ),
-                secondChild: Text(
-                  widget.text,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontFamily: 'FodaFree',
-                    color: ColorsManager.primaryText,
-                    fontSize: 16.sp,
-                    height: 1.8,
-                  ),
-                ),
+            Text(
+              widget.text,
+              maxLines: 4,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.right,
+              style: TextStyle(
+                fontFamily: 'FodaFree',
+                color: ColorsManager.primaryText,
+                fontSize: 16.sp,
+                height: 1.8,
               ),
             ),
 
@@ -148,22 +132,26 @@ class _HadithCardState extends State<HadithCard> {
             // BOOK + CHAPTER PILLS
             Row(
               children: [
-                _buildGradientPill(
-                  text:widget.bookName,
-                  colors: [
-                    ColorsManager.primaryGreen.withOpacity(0.7),
-                    ColorsManager.primaryGreen.withOpacity(0.5),
-                  ],
-                  textColor: ColorsManager.offWhite,
+                Flexible(
+                  child: _buildGradientPill(
+                    text: widget.bookName,
+                    colors: [
+                      ColorsManager.primaryGreen.withOpacity(0.7),
+                      ColorsManager.primaryGreen.withOpacity(0.5),
+                    ],
+                    textColor: ColorsManager.offWhite,
+                  ),
                 ),
                 SizedBox(width: 12.w),
-                _buildGradientPill(
-                  text: widget.reference??'',
-                  colors: [
-                    ColorsManager.hadithAuthentic.withOpacity(0.7),
-                    ColorsManager.hadithAuthentic.withOpacity(0.5),
-                  ],
-                  textColor: ColorsManager.offWhite,
+                Flexible(
+                  child: _buildGradientPill(
+                    text: widget.reference ?? '',
+                    colors: [
+                      ColorsManager.hadithAuthentic.withOpacity(0.7),
+                      ColorsManager.hadithAuthentic.withOpacity(0.5),
+                    ],
+                    textColor: ColorsManager.offWhite,
+                  ),
                 ),
               ],
             ),

@@ -1,12 +1,9 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
-import 'package:mishkat_almasabih/core/helpers/extensions.dart';
-import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/ui/widgets/build_chapter_card.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/ui/widgets/chapter_card_shimmer.dart';
 import 'package:mishkat_almasabih/features/get_chapter_ahadith/logic/cubit/get_chapter_ahadiths_cubit.dart';
@@ -29,6 +26,19 @@ class ResponsiveChapterList extends StatelessWidget {
   final String bookName;
   final String writerName;
   final String bookSlug;
+  bool checkBookSlug(String bookSlug) {
+    if (bookSlug == 'sahih-bukhari' ||
+        bookSlug == 'sahih-muslim' ||
+        bookSlug == 'al-tirmidhi' ||
+        bookSlug == 'abu-dawood' ||
+        bookSlug == 'ibn-e-majah' ||
+        bookSlug == 'sunan-nasai' ||
+        bookSlug == 'mishkat') {
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +74,7 @@ class ResponsiveChapterList extends StatelessWidget {
                           (context) =>
                               getIt<GetChapterAhadithsCubit>()
                                 ..emitChapterAhadiths(
-                                  hadithLocal: false,
+                                  hadithLocal: checkBookSlug(bookSlug),
                                   bookSlug: bookSlug,
                                   chapterId: items[index].chapterNumber,
                                 ),

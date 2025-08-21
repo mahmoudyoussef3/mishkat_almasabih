@@ -140,8 +140,11 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                     itemBuilder: (context, index) => const HadithCardShimmer(),
                   );
                 } else if (state is GetLocalChapterAhadithsSuccess) {
-                  log(state.localHadithResponse.hadiths?.data.toString() ?? [].toString());
-final list = state.localHadithResponse.hadiths?.data ?? [];
+                  log(
+                    state.localHadithResponse.hadiths?.data.toString() ??
+                        [].toString(),
+                  );
+                  final list = state.localHadithResponse.hadiths?.data ?? [];
                   debugPrint("Local hadith count: ${list.length}");
                   if (list.isEmpty) {
                     return SliverToBoxAdapter(
@@ -158,10 +161,28 @@ final list = state.localHadithResponse.hadiths?.data ?? [];
                         ),
                     itemBuilder: (context, index) {
                       final hadith = list[index];
-                    //  debugPrint("Hadith ${index + 1}: ${hadith.hadithArabic}");
+                      //  debugPrint("Hadith ${index + 1}: ${hadith.hadithArabic}");
                       return InkWell(
-                        onTap: () {},
-                        child: LocalHadithCard(hadith: hadith),
+                        onTap:
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => HadithDetailScreen(
+                                      hadithText: hadith.arabic ?? '',
+                                      bookName: widget.arabicBookName,
+                                      author: widget.arabicWriterName,
+                                      chapter: widget.arabicChapterName,
+                                      hadithNumber: hadith.idInBook.toString(),
+                                      
+                                    ),
+                              ),
+                            ),
+                        child: LocalHadithCard(
+                          bookName: widget.arabicBookName,
+                          chapterName: widget.arabicChapterName,
+                          hadith: hadith,
+                        ),
                       );
                     },
                   );
