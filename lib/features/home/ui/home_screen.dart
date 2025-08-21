@@ -53,6 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return CustomScrollView(
                 slivers: [
                   BuildHeaderAppBar(
+                    home: true,
                     title: 'مشكاة المصابيح',
                     description: 'مكتبة مشكاة الإسلامية',
                   ),

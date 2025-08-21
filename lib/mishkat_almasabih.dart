@@ -1,15 +1,35 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'core/routing/app_router.dart';
 import 'core/routing/routes.dart';
-import 'core/theming/app_theme.dart';
 
 class MishkatAlmasabih extends StatelessWidget {
   final AppRouter appRouter;
-  const MishkatAlmasabih({super.key, required this.appRouter});
+  final bool isFirstTime;
+  final bool isLoggedIn;
+  const MishkatAlmasabih({
+    super.key,
+    required this.appRouter,
+    required this.isFirstTime,
+    required this.isLoggedIn,
+  });
+  String _getStartScreen() {
+    if (isFirstTime) {
+      return Routes.onBoardingScreen;
+    } else if (!isLoggedIn) {
+      return Routes.loginScreen;
+    } else {
+      return Routes.splashScreen;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    log("isFirstTime is $isFirstTime");
+        log("is logg in $isLoggedIn");
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       minTextAdapt: true,
@@ -17,10 +37,9 @@ class MishkatAlmasabih extends StatelessWidget {
         return MaterialApp(
           title: 'Mishkat Almasabih',
           theme: ThemeData(fontFamily: 'YaModernPro'),
-          //          theme: AppTheme.lightTheme,
-          //        darkTheme: AppTheme.darkTheme,
+
           debugShowCheckedModeBanner: false,
-          initialRoute: Routes.mainNavigationScreen,
+          initialRoute: _getStartScreen(),
           onGenerateRoute: appRouter.generateRoute,
         );
       },

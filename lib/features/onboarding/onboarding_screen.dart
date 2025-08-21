@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 
+import 'sava_date_for_first_time.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
@@ -112,8 +114,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     }
   }
 
-  void _getStarted() {
-    context.pushNamed(Routes.loginScreen);
+  void _getStarted()async {
+      await SaveDataForFirstTime.setNotFirstTime();
+
+    context.pushNamed(Routes.splashScreen);
   }
 
   void _onPageChanged(int index) {

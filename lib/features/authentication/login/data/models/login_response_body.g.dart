@@ -15,11 +15,13 @@ LoginResponseBody _$LoginResponseBodyFromJson(Map<String, dynamic> json) =>
               : UserData.fromJson(json['data'] as Map<String, dynamic>),
       status: json['status'] as bool?,
       code: (json['code'] as num?)?.toInt(),
+      token: json['token'] as String?,
     );
 
 Map<String, dynamic> _$LoginResponseBodyToJson(LoginResponseBody instance) =>
     <String, dynamic>{
       'msg': instance.msg,
+      'token': instance.token,
       'data': instance.userData,
       'status': instance.status,
       'code': instance.code,

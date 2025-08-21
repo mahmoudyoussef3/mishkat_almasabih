@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_request_body.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/repo/login_repo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -11,9 +12,11 @@ class LoginCubit extends Cubit<LoginState> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
-  LoginCubit( this._loginRepo) : super( LoginInitial());
+  LoginCubit(this._loginRepo) : super(LoginInitial());
 
   Future<void> emitLoginStates() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
     emit(LoginLoading());
     final response = await _loginRepo.login(
       LoginRequestBody(
@@ -24,13 +27,19 @@ class LoginCubit extends Cubit<LoginState> {
 
     response.fold(
       (error) => emit(LoginError(error.apiErrorModel.msg.toString())),
-      (data) => emit(LoginSuccess()),
+      (data) async {
+        await sharedPreferences.setString("token", data.token!);
+
+        emit(LoginSuccess(data));
+      },
     );
   }
-  /*
-  Future<void> saveUserToken(String token) async {
-    await SharedPrefHelper.setSecuredString(SharedPrefKeys.userToken, token);
-    DioFactory.setTokenIntoHeaderAfterLogin(token);
+
+  Future<String?> getSavedToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString("token");
   }
-  */
+
+
+
 }
