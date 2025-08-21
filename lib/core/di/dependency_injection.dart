@@ -4,6 +4,8 @@ import 'package:mishkat_almasabih/features/authentication/signup/data/repo/signu
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/book_data/data/repos/book_data_repo.dart';
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/data/repos/book_mark_repo.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/data/repos/book_chapters_repo.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/logic/cubit/get_book_chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/repos/chapter_ahadiths_repo.dart';
@@ -31,21 +33,37 @@ Future<void> setUpGetIt() async {
   getIt.registerLazySingleton<SignupRepo>(() => SignupRepo(getIt()));
   getIt.registerFactory<SignupCubit>(() => SignupCubit(getIt()));
 
+  getIt.registerLazySingleton<GetAllBooksWithCategoriesRepo>(
+    () => GetAllBooksWithCategoriesRepo(getIt()),
+  );
+  getIt.registerFactory<GetAllBooksWithCategoriesCubit>(
+    () => GetAllBooksWithCategoriesCubit(getIt()),
+  );
 
-    getIt.registerLazySingleton<GetAllBooksWithCategoriesRepo>(() => GetAllBooksWithCategoriesRepo(getIt()));
-  getIt.registerFactory<GetAllBooksWithCategoriesCubit>(() => GetAllBooksWithCategoriesCubit(getIt()));
+  getIt.registerLazySingleton<GetLibraryStatisticsRepo>(
+    () => GetLibraryStatisticsRepo(getIt()),
+  );
+  getIt.registerFactory<GetLibraryStatisticsCubit>(
+    () => GetLibraryStatisticsCubit(getIt()),
+  );
 
-      getIt.registerLazySingleton<GetLibraryStatisticsRepo>(() => GetLibraryStatisticsRepo(getIt()));
-  getIt.registerFactory<GetLibraryStatisticsCubit>(() => GetLibraryStatisticsCubit(getIt()));
-
-  
-      getIt.registerLazySingleton<GetBookDataRepo>(() => GetBookDataRepo(getIt()));
+  getIt.registerLazySingleton<GetBookDataRepo>(() => GetBookDataRepo(getIt()));
   getIt.registerFactory<BookDataCubit>(() => BookDataCubit(getIt()));
 
+  getIt.registerLazySingleton<BookChaptersRepo>(
+    () => BookChaptersRepo(getIt()),
+  );
+  getIt.registerFactory<GetBookChaptersCubit>(
+    () => GetBookChaptersCubit(getIt()),
+  );
 
-        getIt.registerLazySingleton<BookChaptersRepo>(() => BookChaptersRepo(getIt()));
-  getIt.registerFactory<GetBookChaptersCubit>(() => GetBookChaptersCubit(getIt()));
+  getIt.registerLazySingleton<ChapterAhadithsRepo>(
+    () => ChapterAhadithsRepo(getIt()),
+  );
+  getIt.registerFactory<GetChapterAhadithsCubit>(
+    () => GetChapterAhadithsCubit(getIt()),
+  );
 
-        getIt.registerLazySingleton<ChapterAhadithsRepo>(() => ChapterAhadithsRepo(getIt()));
-  getIt.registerFactory<GetChapterAhadithsCubit>(() => GetChapterAhadithsCubit(getIt()));
+  getIt.registerLazySingleton<BookMarkRepo>(() => BookMarkRepo(getIt()));
+  getIt.registerFactory<UserBookmarksCubit>(() => UserBookmarksCubit(getIt()));
 }

@@ -169,6 +169,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
+                                      bookSlug: widget.bookSlug,
                                       hadithText: hadith.arabic ?? '',
                                       bookName: widget.arabicBookName,
                                       author: widget.arabicWriterName,

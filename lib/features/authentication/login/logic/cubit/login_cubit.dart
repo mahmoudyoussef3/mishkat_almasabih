@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_request_body.dart';
@@ -29,6 +31,7 @@ class LoginCubit extends Cubit<LoginState> {
       (error) => emit(LoginError(error.apiErrorModel.msg.toString())),
       (data) async {
         await sharedPreferences.setString("token", data.token!);
+        log(data.token ?? '');
 
         emit(LoginSuccess(data));
       },
@@ -39,7 +42,4 @@ class LoginCubit extends Cubit<LoginState> {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString("token");
   }
-
-
-
 }

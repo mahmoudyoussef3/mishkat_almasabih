@@ -3,6 +3,8 @@ import 'package:mishkat_almasabih/features/authentication/login/data/models/logi
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_request_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_response_body.dart';
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
+import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
+import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_response.dart';
 import 'package:mishkat_almasabih/features/get_book_chapters/data/models/book_chapters_model.dart';
 import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/models/chapter_ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/models/local_books_model.dart';
@@ -39,22 +41,36 @@ abstract class ApiService {
   @GET(ApiConstants.getChapterAhadiths)
   Future<HadithResponse> getChapterAhadiths(
     @Path("bookSlug") String bookSlug,
-    @Path("chapterId") int chapterId
+    @Path("chapterId") int chapterId,
   );
 
-
-
-    @GET(ApiConstants.getChapterAhadiths)
+  @GET(ApiConstants.getChapterAhadiths)
   Future<LocalHadithResponse> getLocalChapterAhadiths(
     @Path("bookSlug") String bookSlug,
-    @Path("chapterId") int chapterId
+    @Path("chapterId") int chapterId,
   );
 
-
-
-   @GET(ApiConstants.getLocalChapterAhadiths)
+  @GET(ApiConstants.getLocalChapterAhadiths)
   Future<LocalHadithResponse> getThreeBooksLocalChapterAhadiths(
     @Path("bookSlug") String bookSlug,
-    @Path("chapterId") int chapterId
+    @Path("chapterId") int chapterId,
+  );
+
+  @GET(ApiConstants.getBookmarks)
+  Future<BookmarksResponse> getUserBookmarks(
+    @Header("x-auth-token") String token,
+  );
+
+  @DELETE(ApiConstants.deleteBookmark)
+  Future<AddBookmarkResponse> deleteUserBookmsrk(
+    @Path("bookmarkId") int bookmarkId,
+
+    @Header("x-auth-token") String token,
+  );
+
+  @POST(ApiConstants.addBookmark)
+  Future<AddBookmarkResponse> addBookmark(
+    @Header("x-auth-token") String token,
+    @Body() Bookmark body,
   );
 }

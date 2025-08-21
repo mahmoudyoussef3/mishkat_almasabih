@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/user_bookmarks_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
 
 import '../../core/theming/colors.dart';
 import '../../core/widgets/bottom_navigation_widget.dart';
@@ -61,10 +65,13 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-   HomeScreen(),
     HomeScreen(),
     HomeScreen(),
     HomeScreen(),
+    BlocProvider(
+      create: (context) => getIt<UserBookmarksCubit>()..getUserBookmarks(),
+      child: BookmarkScreen(),
+    ),
   ];
 
   @override
