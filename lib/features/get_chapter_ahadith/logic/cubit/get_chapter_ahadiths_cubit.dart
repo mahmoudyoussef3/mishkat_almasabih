@@ -18,10 +18,20 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
     required String bookSlug,
     required int chapterId,
     required bool hadithLocal,
+    required bool isArbainBooks,
   }) async {
     emit(GetChapterAhadithsLoading());
 
-    if (hadithLocal) {
+    if (isArbainBooks) {
+      final result = await _chapterAhadithsRepo.getThreeBooksLocalAhadith(
+        bookSlug: bookSlug,
+        chapterId: chapterId,
+      );
+      result.fold(
+        (l) => emit(GetChapterAhadithsFailure(l.apiErrorModel.msg!)),
+        (r) => emit(GetLocalChapterAhadithsSuccess(r)),
+      );
+    } else if (hadithLocal) {
       final result = await _chapterAhadithsRepo.getLocalAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
@@ -30,7 +40,6 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
         (l) => emit(GetChapterAhadithsFailure(l.apiErrorModel.msg!)),
         (r) => emit(GetLocalChapterAhadithsSuccess(r)),
       );
-      log(state.toString());
     } else {
       final result = await _chapterAhadithsRepo.getAhadith(
         bookSlug: bookSlug,
@@ -40,7 +49,6 @@ class GetChapterAhadithsCubit extends Cubit<GetChapterAhadithsState> {
         (l) => emit(GetChapterAhadithsFailure(l.apiErrorModel.msg!)),
         (r) => emit(GetChapterAhadithsSuccess(r)),
       );
-      log(state.toString());
     }
   }
 }

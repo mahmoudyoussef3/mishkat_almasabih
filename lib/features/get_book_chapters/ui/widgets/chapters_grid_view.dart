@@ -40,6 +40,16 @@ class ResponsiveChapterList extends StatelessWidget {
     }
   }
 
+  bool checkThreeBooks(String bookSlug) {
+    if (bookSlug == 'qudsi40' ||
+        bookSlug == 'nawawi40' ||
+        bookSlug == 'shahwaliullah40') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -74,6 +84,7 @@ class ResponsiveChapterList extends StatelessWidget {
                           (context) =>
                               getIt<GetChapterAhadithsCubit>()
                                 ..emitChapterAhadiths(
+                                  isArbainBooks: checkThreeBooks(bookSlug),
                                   hadithLocal: checkBookSlug(bookSlug),
                                   bookSlug: bookSlug,
                                   chapterId: items[index].chapterNumber,

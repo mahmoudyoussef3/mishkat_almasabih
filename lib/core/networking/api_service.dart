@@ -49,4 +49,12 @@ abstract class ApiService {
     @Path("bookSlug") String bookSlug,
     @Path("chapterId") int chapterId
   );
+
+
+
+   @GET(ApiConstants.getLocalChapterAhadiths)
+  Future<LocalHadithResponse> getThreeBooksLocalChapterAhadiths(
+    @Path("bookSlug") String bookSlug,
+    @Path("chapterId") int chapterId
+  );
 }

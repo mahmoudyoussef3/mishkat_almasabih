@@ -15,6 +15,9 @@ class ApiConstants {
 
   static const String getChapterAhadiths =
       "/islamic-library/books/{bookSlug}/chapters/{chapterId}/hadiths";
+
+  static const String getLocalChapterAhadiths =
+      "/islamic-library/local-books/{bookSlug}/chapters/{chapterId}/hadiths";
 }
 
 class ApiErrors {

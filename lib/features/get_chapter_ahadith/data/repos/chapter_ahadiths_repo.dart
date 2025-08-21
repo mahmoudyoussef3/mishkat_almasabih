@@ -44,4 +44,22 @@ class ChapterAhadithsRepo {
       return Left(ErrorHandler.handle(e));
     }
   }
+
+
+     Future<Either<ErrorHandler, LocalHadithResponse>> getThreeBooksLocalAhadith({
+    required bookSlug,
+    required chapterId,
+  }) async {
+    try {
+      final response = await _apiService.getThreeBooksLocalChapterAhadiths(
+        bookSlug,
+        chapterId,
+      );
+
+      return Right(response);
+    } catch (e) {
+      log(e.toString());
+      return Left(ErrorHandler.handle(e));
+    }
+  }
 }
