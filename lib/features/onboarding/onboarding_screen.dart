@@ -117,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   void _getStarted()async {
       await SaveDataForFirstTime.setNotFirstTime();
 
-    context.pushNamed(Routes.splashScreen);
+    context.pushNamed(Routes.loginScreen);
   }
 
   void _onPageChanged(int index) {
