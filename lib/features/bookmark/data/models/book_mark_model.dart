@@ -15,55 +15,52 @@ class BookmarksResponse {
 @JsonSerializable()
 class Bookmark {
   final int? id;
-  final int? user_id;
+
+  @JsonKey(name: 'user_id')
+  final int? userId;
+
   final String? type;
-  final String? book_slug;
-  final String? book_name;
-  final String? book_name_en;
-  final String? book_name_ur;
-  final int? chapter_number;
-  final String? chapter_name;
-  final String? chapter_name_en;
-  final String? chapter_name_ur;
-  final String? hadith_id;
-  final String? hadith_number;
-  final String? hadith_text;
-  final String? hadith_text_en;
-  final String? hadith_text_ur;
+
+  final String? bookSlug;
+
+  @JsonKey(name: 'book_name')
+  final String? bookName;
+
+  @JsonKey(name: 'chapter_name')
+  final String? chapterName;
+
+  @JsonKey(name: 'hadith_id')
+  final String? hadithId;
+
+  @JsonKey(name: 'hadith_number')
+  final String? hadithNumber;
+
+  @JsonKey(name: 'hadith_text')
+  final String? hadithText;
+
   final String? collection;
   final String? notes;
-  final int? is_local;
-  final String? created_at;
-  final String? updated_at;
 
   Bookmark({
     this.id,
-    this.user_id,
+    this.userId,
     this.type,
-    this.book_slug,
-    this.book_name,
-    this.book_name_en,
-    this.book_name_ur,
-    this.chapter_number,
-    this.chapter_name,
-    this.chapter_name_en,
-    this.chapter_name_ur,
-    this.hadith_id,
-    this.hadith_number,
-    this.hadith_text,
-    this.hadith_text_en,
-    this.hadith_text_ur,
+    this.bookSlug,
+    this.bookName,
+    this.chapterName,
+    this.hadithId,
+    this.hadithNumber,
+    this.hadithText,
     this.collection,
     this.notes,
-    this.is_local,
-    this.created_at,
-    this.updated_at,
   });
-    Map<String, dynamic> toJson() => _$BookmarkToJson(this);
+
   factory Bookmark.fromJson(Map<String, dynamic> json) =>
       _$BookmarkFromJson(json);
 
+  Map<String, dynamic> toJson() => _$BookmarkToJson(this);
 }
+
 
 @JsonSerializable()
 class Pagination {
@@ -78,6 +75,6 @@ class Pagination {
     this.total_items,
     this.items_per_page,
   });
-    factory Pagination.fromJson(Map<String, dynamic> json) =>
+  factory Pagination.fromJson(Map<String, dynamic> json) =>
       _$PaginationFromJson(json);
 }

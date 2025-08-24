@@ -5,9 +5,9 @@ import 'package:mishkat_almasabih/features/authentication/signup/data/models/sig
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_response.dart';
-import 'package:mishkat_almasabih/features/get_book_chapters/data/models/book_chapters_model.dart';
-import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/models/chapter_ahadiths_model.dart';
-import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/models/local_books_model.dart';
+import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
+import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
+import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:retrofit/retrofit.dart';
@@ -36,7 +36,7 @@ abstract class ApiService {
   Future<CategoryResponse> getBookData(@Path("categoryId") String categoryId);
 
   @GET(ApiConstants.getBookChapters)
-  Future<BookChaptersModel> getBookChapters(@Path("bookSlug") String bookSlug);
+  Future<ChaptersModel> getBookChapters(@Path("bookSlug") String bookSlug);
 
   @GET(ApiConstants.getChapterAhadiths)
   Future<HadithResponse> getChapterAhadiths(

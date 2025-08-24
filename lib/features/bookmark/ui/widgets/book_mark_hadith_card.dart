@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/delete_cubit_cubit.dart';
 
 class BookmarkHadithCard extends StatelessWidget {
   const BookmarkHadithCard({
@@ -13,7 +16,7 @@ class BookmarkHadithCard extends StatelessWidget {
     this.notes,
   });
 
-  final String hadithNumber;
+  final int hadithNumber;
   final String hadithText;
   final String bookName;
   final String? chapterName;
@@ -46,7 +49,6 @@ class BookmarkHadithCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // HEADER
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -68,25 +70,87 @@ class BookmarkHadithCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (collection != null && collection!.isNotEmpty)
-                  _buildGradientPill(
-                    text: collection!,
-                    colors: [
-                      ColorsManager.primaryGreen.withOpacity(0.7),
-                      ColorsManager.primaryGreen.withOpacity(0.5),
-                    ],
-                    textColor: ColorsManager.offWhite,
-                  ),
+
+                BlocConsumer<DeleteCubitCubit, DeleteCubitState>(
+                  listener: (context, state) {
+                    if (state is DeleteLoading) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: ColorsManager.primaryGreen,
+                          content: loadingProgressIndicator(
+                            size: 30,
+                            color: ColorsManager.offWhite,
+                          ),
+                        ),
+                      );
+                    } else if (state is DeleteSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: ColorsManager.primaryGreen,
+                          content: const Text(
+                            'تم حذف الحديث من المحفوظات',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      );
+                    } else if (state is DeleteFaliure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: ColorsManager.primaryGreen,
+                          content: const Text(
+                            'حدث خطأ. حاول مرة اخري',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, state) {
+                    final isLoading = state is DeleteLoading;
+
+                    return InkWell(
+                      onTap:
+                          isLoading
+                              ? null
+                              : () => context.read<DeleteCubitCubit>().delete(
+                                hadithNumber,
+                              ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.delete,
+                            color:
+                                isLoading
+                                    ? ColorsManager.gray
+                                    : ColorsManager.error,
+                            size: 18.r,
+                          ),
+                          SizedBox(width: 6.w),
+                          Text(
+                            isLoading ? 'جارٍ الحذف...' : 'حذف الحديث',
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color:
+                                  isLoading
+                                      ? ColorsManager.gray
+                                      : ColorsManager.error,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
             SizedBox(height: 10.h),
 
-            // HADITH TEXT
             Text(
               hadithText,
               textAlign: TextAlign.right,
               style: TextStyle(
-                fontFamily: 'FodaFree',
+     //           fontFamily: 'FodaFree',
                 color: ColorsManager.primaryText,
                 fontSize: 16.sp,
                 height: 1.8,
@@ -95,7 +159,6 @@ class BookmarkHadithCard extends StatelessWidget {
 
             SizedBox(height: 12.h),
 
-            // BOOK + CHAPTER PILLS
             Wrap(
               spacing: 8.w,
               runSpacing: 8.h,

@@ -5,11 +5,13 @@ import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cu
 import 'package:mishkat_almasabih/features/book_data/data/repos/book_data_repo.dart';
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/repos/book_mark_repo.dart';
-import 'package:mishkat_almasabih/features/bookmark/logic/cubit/user_bookmarks_cubit.dart';
-import 'package:mishkat_almasabih/features/get_book_chapters/data/repos/book_chapters_repo.dart';
-import 'package:mishkat_almasabih/features/get_book_chapters/logic/cubit/get_book_chapters_cubit.dart';
-import 'package:mishkat_almasabih/features/get_chapter_ahadith/data/repos/chapter_ahadiths_repo.dart';
-import 'package:mishkat_almasabih/features/get_chapter_ahadith/logic/cubit/get_chapter_ahadiths_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/delete_cubit_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
+import 'package:mishkat_almasabih/features/chapters/data/repos/chapters_repo.dart';
+import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
+import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
+import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_all_books_with_categories_repo.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistics_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
@@ -53,17 +55,13 @@ Future<void> setUpGetIt() async {
   getIt.registerLazySingleton<BookChaptersRepo>(
     () => BookChaptersRepo(getIt()),
   );
-  getIt.registerFactory<GetBookChaptersCubit>(
-    () => GetBookChaptersCubit(getIt()),
-  );
+  getIt.registerFactory<ChaptersCubit>(() => ChaptersCubit(getIt()));
 
-  getIt.registerLazySingleton<ChapterAhadithsRepo>(
-    () => ChapterAhadithsRepo(getIt()),
-  );
-  getIt.registerFactory<GetChapterAhadithsCubit>(
-    () => GetChapterAhadithsCubit(getIt()),
-  );
+  getIt.registerLazySingleton<AhadithsRepo>(() => AhadithsRepo(getIt()));
+  getIt.registerFactory<AhadithsCubit>(() => AhadithsCubit(getIt()));
 
   getIt.registerLazySingleton<BookMarkRepo>(() => BookMarkRepo(getIt()));
-  getIt.registerFactory<UserBookmarksCubit>(() => UserBookmarksCubit(getIt()));
+  getIt.registerFactory<GetBookmarksCubit>(() => GetBookmarksCubit(getIt()));
+  getIt.registerFactory<AddCubitCubit>(() => AddCubitCubit(getIt()));
+  getIt.registerFactory<DeleteCubitCubit>(() => DeleteCubitCubit(getIt()));
 }

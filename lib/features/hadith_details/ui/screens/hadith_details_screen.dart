@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
-import 'package:mishkat_almasabih/features/bookmark/logic/cubit/user_bookmarks_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -27,17 +25,17 @@ class HadithDetailScreen extends StatelessWidget {
 
   const HadithDetailScreen({
     super.key,
-    this.hadithText,
+    required this.hadithText,
     this.narrator,
     this.grade,
     this.bookName,
     this.author,
-    this.chapter,
+    required this.chapter,
     this.authorDeath,
-    this.hadithNumber,
+    required this.hadithNumber,
     this.onNext,
     this.onPrev,
-    this.bookSlug,
+    required this.bookSlug,
   });
 
   String gradeArabic(String g) {
@@ -69,7 +67,7 @@ class HadithDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<UserBookmarksCubit>(),
+      create: (context) => getIt<AddCubitCubit>(),
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
@@ -78,7 +76,6 @@ class HadithDetailScreen extends StatelessWidget {
             slivers: [
               BuildHeaderAppBar(title: 'تفاصيل الحديث'),
               SliverToBoxAdapter(child: SizedBox(height: 8.h)),
-
               SliverToBoxAdapter(
                 child: Container(
                   padding: EdgeInsets.all(16.w),
@@ -108,7 +105,7 @@ class HadithDetailScreen extends StatelessWidget {
                       fontSize: 18.sp,
                       height: 1.8,
                       color: ColorsManager.primaryText,
-                      fontFamily: 'FodaFree',
+                      fontFamily: 'Amiri',
                     ),
                   ),
                 ),
@@ -191,9 +188,9 @@ class HadithDetailScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        BlocConsumer<UserBookmarksCubit, UserBookmarksState>(
+                        BlocConsumer<AddCubitCubit, AddCubitState>(
                           listener: (context, state) {
-                            if (state is AddBookmarkLoading) {
+                            if (state is AddLoading) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   backgroundColor: ColorsManager.primaryGreen,
@@ -203,7 +200,7 @@ class HadithDetailScreen extends StatelessWidget {
                                   ),
                                 ),
                               );
-                            } else if (state is AddBookmarkSuccess) {
+                            } else if (state is AddSuccess) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   backgroundColor: ColorsManager.primaryGreen,
@@ -213,7 +210,7 @@ class HadithDetailScreen extends StatelessWidget {
                                   ),
                                 ),
                               );
-                            } else if (state is AddBookmarkFailure) {
+                            } else if (state is AddFailure) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   backgroundColor: ColorsManager.primaryGreen,
@@ -231,24 +228,27 @@ class HadithDetailScreen extends StatelessWidget {
                               label: "حفظ",
                               onTap: () async {
                                 print(
-                                  Bookmark(
-                                    book_name: bookName,
-                                    chapter_name: chapter,
-                                    hadith_id: hadithNumber,
-                                    hadith_text: hadithText,
+                                           Bookmark(
+                                    bookName: bookName,
+                                    chapterName: chapter,
+                                    hadithId: hadithNumber,
+                                    hadithText: hadithText,
+                                    
                                     type: 'hadith',
-                                    book_slug: 'sahih-bukhari',
+                                    bookSlug: bookSlug,
+                                    id: int.parse(hadithNumber!),
                                   ),
                                 );
-                                context.read<UserBookmarksCubit>().addBookmark(
+                                context.read<AddCubitCubit>().addBookmark(
                                   Bookmark(
-                                    book_name: bookName,
-                                    chapter_name: chapter,
-                                    hadith_id: hadithNumber,
-                                    hadith_text: hadithText,
+                                    bookName: bookName,
+                                    chapterName: chapter,
+                                    hadithId: hadithNumber,
+                                    hadithText: hadithText,
+
                                     type: 'hadith',
-                                    book_slug: 'sahih-bukhari',
-                                    id: 1
+                                    bookSlug: bookSlug,
+                                    id: int.parse(hadithNumber!),
                                   ),
                                 );
                               },

@@ -61,13 +61,13 @@ flutter:
 
 
   fonts:
-      - family: FodaFree
-        fonts:
-          - asset: assets/fonts/Foda-Free-Font.ttf
 
       - family: YaModernPro
         fonts:
             - asset: assets/fonts/Ya-ModernPro-Bold.otf
+      - family: Amiri
+        fonts:
+            - asset: assets/fonts/Amiri-Regular.ttf     
             
 
 
