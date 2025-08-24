@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/delete_cubit_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 
 class BookmarkHadithCard extends StatelessWidget {
   const BookmarkHadithCard({
@@ -11,7 +13,7 @@ class BookmarkHadithCard extends StatelessWidget {
     required this.hadithNumber,
     required this.hadithText,
     required this.bookName,
-    this.chapterName,
+    required this.chapterName,
     this.collection,
     this.notes,
   });
@@ -25,177 +27,177 @@ class BookmarkHadithCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [ColorsManager.secondaryBackground, ColorsManager.offWhite],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-        ),
-        borderRadius: BorderRadius.circular(22.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+    return BlocProvider(
+      create: (context) => getIt<DeleteCubitCubit>(),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOut,
+        margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [ColorsManager.secondaryBackground, ColorsManager.offWhite],
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
           ),
-        ],
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.bookmark,
-                      color: ColorsManager.primaryGreen,
-                      size: 18.r,
-                    ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      'حديث رقم $hadithNumber',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: ColorsManager.primaryText,
+          borderRadius: BorderRadius.circular(22.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.bookmark,
+                        color: ColorsManager.primaryGreen,
+                        size: 18.r,
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(width: 6.w),
+                      Text(
+                        'حديث رقم $hadithNumber',
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w600,
+                          color: ColorsManager.primaryText,
+                        ),
+                      ),
+                    ],
+                  ),
 
-                BlocConsumer<DeleteCubitCubit, DeleteCubitState>(
-                  listener: (context, state) {
-                    if (state is DeleteLoading) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: ColorsManager.primaryGreen,
-                          content: loadingProgressIndicator(
-                            size: 30,
-                            color: ColorsManager.offWhite,
-                          ),
-                        ),
-                      );
-                    } else if (state is DeleteSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: ColorsManager.primaryGreen,
-                          content: const Text(
-                            'تم حذف الحديث من المحفوظات',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      );
-                    } else if (state is DeleteFaliure) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: ColorsManager.primaryGreen,
-                          content: const Text(
-                            'حدث خطأ. حاول مرة اخري',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    final isLoading = state is DeleteLoading;
+                  BlocConsumer<DeleteCubitCubit, DeleteCubitState>(
+                    listener: (context, state) {
+                      if (state is DeleteLoading) {
+                                                ScaffoldMessenger.of(context).clearSnackBars();
 
-                    return InkWell(
-                      onTap:
-                          isLoading
-                              ? null
-                              : () => context.read<DeleteCubitCubit>().delete(
-                                hadithNumber,
-                              ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.delete,
-                            color:
-                                isLoading
-                                    ? ColorsManager.gray
-                                    : ColorsManager.error,
-                            size: 18.r,
-                          ),
-                          SizedBox(width: 6.w),
-                          Text(
-                            isLoading ? 'جارٍ الحذف...' : 'حذف الحديث',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              color:
-                                  isLoading
-                                      ? ColorsManager.gray
-                                      : ColorsManager.error,
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: ColorsManager.primaryGreen,
+                            content: loadingProgressIndicator(
+                              size: 30,
+                              color: ColorsManager.offWhite,
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 10.h),
+                        );
+                      } else if (state is DeleteSuccess) {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: ColorsManager.primaryGreen,
+                            content: const Text(
+                              'تم حذف الحديث من المحفوظات',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                        context.read<GetBookmarksCubit>().getUserBookmarks();
+                      } else if (state is DeleteFaliure) {
+                                                ScaffoldMessenger.of(context).clearSnackBars();
 
-            Text(
-              hadithText,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-     //           fontFamily: 'FodaFree',
-                color: ColorsManager.primaryText,
-                fontSize: 16.sp,
-                height: 1.8,
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: ColorsManager.primaryGreen,
+                            content: const Text(
+                              'حدث خطأ. حاول مرة اخري',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      return InkWell(
+                        onTap:
+                            () => context.read<DeleteCubitCubit>().delete(
+                              hadithNumber,
+                            ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.delete,
+                              color: ColorsManager.error,
+                              size: 18.r,
+                            ),
+                            SizedBox(width: 6.w),
+                            Text(
+                              'حذف الحديث',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w600,
+                                color: ColorsManager.error,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ),
+              SizedBox(height: 10.h),
 
-            SizedBox(height: 12.h),
-
-            Wrap(
-              spacing: 8.w,
-              runSpacing: 8.h,
-              children: [
-                _buildGradientPill(
-                  text: bookName,
-                  colors: [
-                    ColorsManager.primaryGreen.withOpacity(0.7),
-                    ColorsManager.primaryGreen.withOpacity(0.5),
-                  ],
-                  textColor: ColorsManager.offWhite,
+              Text(
+                maxLines: 4,
+                hadithText,
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontFamily: 'Amiri',
+                  color: ColorsManager.primaryText,
+                  fontSize: 16.sp,
+                  height: 1.8,
                 ),
-                if (chapterName != null && chapterName!.isNotEmpty)
+              ),
+
+              SizedBox(height: 12.h),
+
+              Wrap(
+                spacing: 8.w,
+                runSpacing: 8.h,
+                children: [
                   _buildGradientPill(
-                    text: chapterName!,
+                    text: bookName,
                     colors: [
-                      ColorsManager.hadithAuthentic.withOpacity(0.7),
-                      ColorsManager.hadithAuthentic.withOpacity(0.5),
+                      ColorsManager.primaryGreen.withOpacity(0.7),
+                      ColorsManager.primaryGreen.withOpacity(0.5),
                     ],
                     textColor: ColorsManager.offWhite,
                   ),
-              ],
-            ),
-
-            if (notes != null && notes!.isNotEmpty) ...[
-              SizedBox(height: 12.h),
-              Text(
-                "ملاحظة: ${notes!}",
-                textAlign: TextAlign.right,
-                style: TextStyle(
-                  color: ColorsManager.primaryGreen,
-                  fontSize: 13.sp,
-                  fontWeight: FontWeight.w500,
-                ),
+                  if (chapterName != null && chapterName!.isNotEmpty)
+                    _buildGradientPill(
+                      text: chapterName!,
+                      colors: [
+                        ColorsManager.hadithAuthentic.withOpacity(0.7),
+                        ColorsManager.hadithAuthentic.withOpacity(0.5),
+                      ],
+                      textColor: ColorsManager.offWhite,
+                    ),
+                ],
               ),
+
+              if (notes != null && notes!.isNotEmpty) ...[
+                SizedBox(height: 12.h),
+                Text(
+                  "ملاحظة: ${notes!}",
+                  textAlign: TextAlign.right,
+                  style: TextStyle(
+                    color: ColorsManager.primaryGreen,
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

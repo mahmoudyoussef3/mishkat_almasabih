@@ -443,7 +443,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-         loadingProgressIndicator(),
+            loadingProgressIndicator(),
             SizedBox(height: Spacing.md),
             Text(
               'جاري البحث...',

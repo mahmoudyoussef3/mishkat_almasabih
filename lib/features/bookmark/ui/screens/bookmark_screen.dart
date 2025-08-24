@@ -8,6 +8,7 @@ import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/del
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/book_mark_hadith_card.dart';
+import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 
 class BookmarkScreen extends StatelessWidget {
@@ -67,13 +68,40 @@ class BookmarkScreen extends StatelessWidget {
                           ),
                       itemBuilder: (context, index) {
                         return InkWell(
-                          child: BookmarkHadithCard(
-                            bookName:
-                                mybookmarks[index].bookName ??
-                                'كتاب غير معروف',
-                            hadithNumber: mybookmarks[index].id!,
-                            hadithText:
-                                mybookmarks[index].hadithText ?? 'الحديث فاضي',
+                          onTap:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => HadithDetailScreen(
+                                        bookName:   mybookmarks[index].bookName ??
+                                            'كتاب غير معروف',
+                                        
+
+                                                                      isBookMark:true,
+
+                                        hadithText:
+                                            mybookmarks[index].hadithText ??
+                                            'الحديث غير متوفر ',
+                                        chapter: mybookmarks[index].chapterName,
+                                        hadithNumber:
+                                            mybookmarks[index].id.toString(),
+                                        bookSlug:
+                                            mybookmarks[index].bookName ??
+                                            'كتاب غير معروف',
+                                      ),
+                                ),
+                              ),
+                          child: InkWell(
+                            child: BookmarkHadithCard(
+                              chapterName: mybookmarks[index].chapterName,
+                              bookName:
+                                  mybookmarks[index].bookName ??
+                                  'كتاب غير معروف',
+                              hadithNumber: mybookmarks[index].id!,
+                              hadithText:
+                                  mybookmarks[index].hadithText ?? 'الحديث ',
+                            ),
                           ),
                         );
                       },
@@ -88,6 +116,7 @@ class BookmarkScreen extends StatelessWidget {
                   return const SliverToBoxAdapter(child: SizedBox.shrink());
                 },
               ),
+              SliverToBoxAdapter(child: SizedBox(height: 46.h)),
             ],
           ),
         ),

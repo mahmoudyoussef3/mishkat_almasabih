@@ -22,6 +22,7 @@ class HadithDetailScreen extends StatelessWidget {
   final VoidCallback? onNext;
   final VoidCallback? onPrev;
   final String? bookSlug;
+  final bool isBookMark;
 
   const HadithDetailScreen({
     super.key,
@@ -36,6 +37,7 @@ class HadithDetailScreen extends StatelessWidget {
     this.onNext,
     this.onPrev,
     required this.bookSlug,
+    this.isBookMark = false,
   });
 
   String gradeArabic(String g) {
@@ -128,12 +130,14 @@ class HadithDetailScreen extends StatelessWidget {
                     children: [
                       _buildBookRow("📖 اسم الكتاب", bookName ?? ''),
                       SizedBox(height: 8.h),
-                      _buildBookRow("✍️ المؤلف", author ?? ""),
+                      _buildBookRow("✍️ المؤلف", author ?? "غير متوفر"),
                       SizedBox(height: 8.h),
-                      _buildBookRow(
-                        'وفاة $author ',
-                        authorDeath ?? 'غير متوفر',
-                      ),
+                      author != null
+                          ? _buildBookRow(
+                            'وفاة $author ',
+                            authorDeath ?? 'غير متوفر',
+                          )
+                          : SizedBox.shrink(),
                       SizedBox(height: 8.h),
                       _buildBookRow("📌 الباب", chapter ?? ""),
                     ],
@@ -188,73 +192,69 @@ class HadithDetailScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        BlocConsumer<AddCubitCubit, AddCubitState>(
-                          listener: (context, state) {
-                            if (state is AddLoading) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: ColorsManager.primaryGreen,
-                                  content: loadingProgressIndicator(
-                                    size: 30,
-                                    color: ColorsManager.offWhite,
-                                  ),
-                                ),
-                              );
-                            } else if (state is AddSuccess) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: ColorsManager.primaryGreen,
-                                  content: Text(
-                                    'تم اضافة الحديث إلي المحفوظات',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            } else if (state is AddFailure) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  backgroundColor: ColorsManager.primaryGreen,
-                                  content: Text(
-                                    'حدث خطأ. حاول مرة اخري',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                          builder: (context, state) {
-                            return _buildActionButton(
-                              icon: Icons.bookmark,
-                              label: "حفظ",
-                              onTap: () async {
-                                print(
-                                           Bookmark(
-                                    bookName: bookName,
-                                    chapterName: chapter,
-                                    hadithId: hadithNumber,
-                                    hadithText: hadithText,
-                                    
-                                    type: 'hadith',
-                                    bookSlug: bookSlug,
-                                    id: int.parse(hadithNumber!),
-                                  ),
-                                );
-                                context.read<AddCubitCubit>().addBookmark(
-                                  Bookmark(
-                                    bookName: bookName,
-                                    chapterName: chapter,
-                                    hadithId: hadithNumber,
-                                    hadithText: hadithText,
+                        if (!isBookMark)
+                          BlocConsumer<AddCubitCubit, AddCubitState>(
+                            listener: (context, state) {
+                              if (state is AddLoading) {
+                                ScaffoldMessenger.of(context).clearSnackBars();
 
-                                    type: 'hadith',
-                                    bookSlug: bookSlug,
-                                    id: int.parse(hadithNumber!),
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: ColorsManager.primaryGreen,
+                                    content: loadingProgressIndicator(
+                                      size: 30,
+                                      color: ColorsManager.offWhite,
+                                    ),
                                   ),
                                 );
-                              },
-                            );
-                          },
-                        ),
+                              } else if (state is AddSuccess) {
+                                ScaffoldMessenger.of(context).clearSnackBars();
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: ColorsManager.primaryGreen,
+                                    content: Text(
+                                      'تم اضافة الحديث إلي المحفوظات',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              } else if (state is AddFailure) {
+                                ScaffoldMessenger.of(context).clearSnackBars();
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    backgroundColor: ColorsManager.primaryGreen,
+                                    content: Text(
+                                      'حدث خطأ. حاول مرة اخري',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              return _buildActionButton(
+                                icon: Icons.bookmark,
+                                label: "حفظ",
+                                onTap: () async {
+                              
+                                  context.read<AddCubitCubit>().addBookmark(
+                                    Bookmark(
+                                      bookName: bookName,
+                                      chapterName: chapter,
+                                      hadithId: hadithNumber,
+                                      hadithText: hadithText,
+
+                                      type: 'hadith',
+                                      bookSlug: bookSlug,
+                                      id: int.parse(hadithNumber!),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -271,46 +271,46 @@ class HadithDetailScreen extends StatelessWidget {
                 ),
               ),
               SliverToBoxAdapter(child: SizedBox(height: 10.h)),
-
-              SliverPadding(
-                padding: EdgeInsetsDirectional.symmetric(
-                  horizontal: 16.w,
-                  vertical: 16.h,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: Container(
-                    padding: EdgeInsetsDirectional.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: ColorsManager.primaryPurple.withOpacity(0.1),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.arrow_back_ios),
-                          onPressed: onPrev,
-                        ),
-                        Text(
-                          "الحديث رقم $hadithNumber",
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: ColorsManager.primaryPurple,
+              if (!isBookMark)
+                SliverPadding(
+                  padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: 16.w,
+                    vertical: 16.h,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: Container(
+                      padding: EdgeInsetsDirectional.symmetric(
+                        horizontal: 16.w,
+                        vertical: 16.h,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: ColorsManager.primaryPurple.withOpacity(0.1),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back_ios),
+                            onPressed: onPrev,
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.arrow_forward_ios),
-                          onPressed: onNext,
-                        ),
-                      ],
+                          Text(
+                            "الحديث رقم $hadithNumber",
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: ColorsManager.primaryPurple,
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.arrow_forward_ios),
+                            onPressed: onNext,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
               SliverToBoxAdapter(child: SizedBox(height: 30.h)),
             ],
           ),

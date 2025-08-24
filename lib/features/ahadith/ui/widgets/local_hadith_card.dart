@@ -73,7 +73,7 @@ class LocalHadithCard extends StatelessWidget {
               textAlign: TextAlign.right,
               maxLines: 4,
               style: TextStyle(
-      //          fontFamily: 'FodaFree',
+                fontFamily: 'Amiri',
                 color: ColorsManager.primaryText,
                 fontSize: 16.sp,
                 height: 1.8,

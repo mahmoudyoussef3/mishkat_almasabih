@@ -66,7 +66,7 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    HomeScreen(),
+    SearchScreen(),
     HomeScreen(),
     BlocProvider(
       create: (context) => getIt<GetBookmarksCubit>(),

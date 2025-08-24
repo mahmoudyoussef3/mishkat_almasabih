@@ -116,7 +116,7 @@ class HadithCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.right,
               style: TextStyle(
-           //     fontFamily: 'FodaFree',
+                fontFamily: 'Amiri',
                 color: ColorsManager.primaryText,
                 fontSize: 16.sp,
                 height: 1.8,
