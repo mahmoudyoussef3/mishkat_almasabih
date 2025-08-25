@@ -238,7 +238,6 @@ class HadithDetailScreen extends StatelessWidget {
                                 icon: Icons.bookmark,
                                 label: "حفظ",
                                 onTap: () async {
-                              
                                   context.read<AddCubitCubit>().addBookmark(
                                     Bookmark(
                                       bookName: bookName,

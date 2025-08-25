@@ -14,7 +14,47 @@ class ChaptersCubit extends Cubit<ChaptersState> {
     final result = await _bookChaptersRepo.getBookChapters(bookSlug);
     result.fold(
       (l) => emit(ChaptersFailure(l.apiErrorModel.msg)),
-      (r) => emit(ChaptersSuccess(r)),
+      (r) => emit(
+        ChaptersSuccess(
+          allChapters: r.chapters ?? [],
+          filteredChapters: r.chapters ?? [],
+        ),
+      ),
     );
   }
+    void filterChapters(String query) {
+    if (state is ChaptersSuccess) {
+      final currentState = state as ChaptersSuccess;
+    final normalizedQuery = normalizeArabic(query);
+
+      if (normalizedQuery.isEmpty) {
+        emit(currentState.copyWith(filteredChapters: currentState.allChapters));
+      } else {
+        final filtered = currentState.allChapters
+            .where((chapter) =>
+                chapter.chapterArabic != null &&
+                chapter.chapterArabic!.contains(normalizedQuery))
+            .toList();
+
+        emit(currentState.copyWith(filteredChapters: filtered));
+      }
+    }
+  }
+  String normalizeArabic(String text) {
+  // 1. شيل التشكيل (كل الحركات + التنوين + السكون + الشدة)
+  final diacritics = RegExp(r'[\u0617-\u061A\u064B-\u0652]');
+  String result = text.replaceAll(diacritics, '');
+
+  // 2. توحيد الهمزات: أ إ آ -> ا
+  result = result.replaceAll(RegExp('[إأآ]'), 'ا');
+
+  // 3. شيل المدّة "ـ"
+  result = result.replaceAll('ـ', '');
+
+  // 4. Optional: lowercase (عشان لو فيه انجليزي)
+  result = result.toLowerCase();
+
+  return result;
+}
+
 }

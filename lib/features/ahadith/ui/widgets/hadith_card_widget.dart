@@ -100,7 +100,7 @@ class HadithCard extends StatelessWidget {
                     grade ?? "",
                     style: TextStyle(
                       color: gradeColor,
-                      fontFamily:"Amiri",
+                 //     fontFamily:"Amiri",
                       fontWeight: FontWeight.w700,
                       fontSize: 16.sp,
                     ),

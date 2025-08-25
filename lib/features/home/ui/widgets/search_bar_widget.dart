@@ -35,7 +35,7 @@ class SearchBarWidget extends StatelessWidget {
         controller: controller,
         onSubmitted: onSearch,
         decoration: InputDecoration(
-          hintText: hintText ?? 'ابحث في الأحاديث والكتب...',
+          hintText: hintText ?? 'ابحث في الأحاديث...',
           hintStyle: TextStyles.bodyMedium.copyWith(
             color: ColorsManager.secondaryText,
           ),

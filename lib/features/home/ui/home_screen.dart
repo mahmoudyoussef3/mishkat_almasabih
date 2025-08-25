@@ -1,18 +1,18 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_main_category_card.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
 import '../../../core/helpers/spacing.dart';
-import 'widgets/search_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -32,12 +31,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> getLibraryStatistics() async {
     await context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit();
   }
+  final _controller = TextEditingController();
 
   @override
   void dispose() {
-    _searchController.dispose();
     super.dispose();
+    _controller.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,18 +59,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     description: 'مكتبة مشكاة الإسلامية',
                   ),
                   SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                  // PublicSearchResult(),
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: Spacing.screenHorizontal,
                       ),
                       child: SearchBarWidget(
-                        controller: _searchController,
-                        onSearch: (query) {},
+                        controller: _controller,
+                        onSearch: (query) {
+                          if (query.isNotEmpty) {
+                            context.pushNamed(
+                              Routes.publicSearchSCreen,
+                              arguments: _controller.text,
+                            );
+                          }
+                        },
                       ),
                     ),
                   ),
-
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: EdgeInsets.all(Spacing.screenHorizontal),

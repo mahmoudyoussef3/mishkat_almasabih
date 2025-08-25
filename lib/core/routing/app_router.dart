@@ -10,7 +10,9 @@ import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.da
 import 'package:mishkat_almasabih/features/ahadith/ui/screens/ahadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
+import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
 
+import '../../features/home/ui/widgets/public_search_result.dart';
 import '../../features/main_navigation/main_navigation_screen.dart';
 import '../di/dependency_injection.dart';
 import 'routes.dart';
@@ -74,25 +76,20 @@ class AppRouter {
                 child: BookChaptersScreen(args: args),
               ),
         );
-      /*
-      case Routes.chapterAhadithsScreen:
-        final args = settings.arguments as List<dynamic>;
-        final bookSlug = args[0];
-        final chapterId = args[1];
+      case Routes.publicSearchSCreen:
+        final query = settings.arguments as String;
+        print(query);
+
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
                 create:
                     (context) =>
-                        getIt<GetChapterAhadithsCubit>()
-                          ..emitChapterAhadiths(bookSlug: bookSlug,chapterId:chapterId ),
-                child: ChapterAhadithScreen(
-                  bookId: chapterId,
-                  bookSlug: bookSlug,
-                ),
+                        getIt<PublicSearchCubit>()..emitPublicSearch(query),
+                child: PublicSearchResultScreen(searchQuery: query),
               ),
         );
-        */
+
       default:
         return null;
     }

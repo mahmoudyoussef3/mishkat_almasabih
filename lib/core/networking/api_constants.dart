@@ -18,12 +18,12 @@ class ApiConstants {
 
   static const String getLocalChapterAhadiths =
       "/islamic-library/local-books/{bookSlug}/chapters/{chapterId}/hadiths";
-  static const String getBookmarks =
-      "/islamic-bookmarks/user";
-  static const String addBookmark =
-      "/islamic-bookmarks/add";
-  static const String deleteBookmark =
-      "/islamic-bookmarks/remove/{bookmarkId}";
+  static const String getBookmarks = "/islamic-bookmarks/user";
+  static const String addBookmark = "/islamic-bookmarks/add";
+  static const String deleteBookmark = "/islamic-bookmarks/remove/{bookmarkId}";
+  static const String publicSearch = "/islamic-library/search?q={query}";
+  static const String hadithSearch =
+      "/islamic-library/search?q={query}&book={bookSlug}&chapter={chapter}";
 }
 
 class ApiErrors {

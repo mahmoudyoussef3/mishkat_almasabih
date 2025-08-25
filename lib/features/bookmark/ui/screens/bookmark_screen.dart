@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/delete_cubit_cubit.dart';
@@ -46,13 +48,69 @@ class BookmarkScreen extends StatelessWidget {
 
                     if (mybookmarks.isEmpty) {
                       return SliverToBoxAdapter(
-                        child: Center(
-                          child: Text(
-                            "لا توجد أحاديث محفوظة",
-                            style: TextStyle(
-                              color: ColorsManager.primaryText,
-                              fontSize: 16.sp,
-                            ),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 40.h,
+                            horizontal: 16.w,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.bookmark_border_rounded,
+                                size: 80.sp,
+                                color: ColorsManager.primaryGreen.withOpacity(
+                                  0.7,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              Text(
+                                "لا توجد أحاديث محفوظة",
+                                style: TextStyle(
+                                  color: ColorsManager.primaryText,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 8.h),
+                              Text(
+                                "يمكنك حفظ الأحاديث المفضلة للرجوع إليها لاحقاً",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: ColorsManager.secondaryText,
+                                  fontSize: 14.sp,
+                                ),
+                              ),
+                              SizedBox(height: 20.h),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  context.pushNamed(
+                                    Routes.mainNavigationScreen,
+                                  );
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: ColorsManager.primaryGreen,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20.w,
+                                    vertical: 12.h,
+                                  ),
+                                ),
+                                icon: Icon(
+                                  Icons.search_rounded,
+                                  color: Colors.white,
+                                ),
+                                label: Text(
+                                  "استكشف الأحاديث",
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       );
@@ -74,11 +132,11 @@ class BookmarkScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder:
                                       (context) => HadithDetailScreen(
-                                        bookName:   mybookmarks[index].bookName ??
+                                        bookName:
+                                            mybookmarks[index].bookName ??
                                             'كتاب غير معروف',
-                                        
 
-                                                                      isBookMark:true,
+                                        isBookMark: true,
 
                                         hadithText:
                                             mybookmarks[index].hadithText ??

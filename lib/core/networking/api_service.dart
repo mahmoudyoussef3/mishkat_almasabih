@@ -10,6 +10,7 @@ import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.da
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
+import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../features/authentication/login/data/models/login_request_body.dart';
@@ -72,5 +73,17 @@ abstract class ApiService {
   Future<AddBookmarkResponse> addBookmark(
     @Header("x-auth-token") String token,
     @Body() Bookmark body,
+  );
+
+  @GET(ApiConstants.publicSearch)
+  Future<SearchResponse> getpublicSearch(@Path("query") String query);
+
+  @GET(ApiConstants.hadithSearch)
+  Future<SearchResponse> getHadithSearch(
+    @Path("query") String query,
+
+    @Path("bookSlug") String bookSlug,
+
+    @Path("chapter") String chapterName,
   );
 }

@@ -129,7 +129,10 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                           number: hadith.hadithNumber.toString(),
                           text: hadith.hadithArabic ?? "",
                           narrator: hadith.book?.writerName ?? '',
-                          grade: '${index + 1}',
+                          grade:
+                              hadith.status != null
+                                  ? gradeStringArabic(hadith.status!)
+                                  : '${index + 1}',
                           reference: hadith.chapter?.chapterArabic ?? '',
                         ),
                       );
@@ -162,7 +165,6 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                         ),
                     itemBuilder: (context, index) {
                       final hadith = list[index];
-                      //  debugPrint("Hadith ${index + 1}: ${hadith.hadithArabic}");
                       return InkWell(
                         onTap:
                             () => Navigator.push(
@@ -199,5 +201,37 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
         ),
       ),
     );
+  }
+
+  Color gradeColor(String? g) {
+    switch (g?.toLowerCase()) {
+      case "sahih":
+      case "صحيح":
+        return ColorsManager.hadithAuthentic;
+      case "hasan":
+      case "حسن":
+        return ColorsManager.hadithGood;
+      case "daif":
+      case "ضعيف":
+        return ColorsManager.hadithWeak;
+      default:
+        return ColorsManager.hadithAuthentic;
+    }
+  }
+
+  String gradeStringArabic(String grade) {
+    switch (grade.toLowerCase()) {
+      case "sahih":
+      case "صحيح":
+        return 'صحيح';
+      case "hasan":
+      case "حسن":
+        return "حسن";
+      case "daif":
+      case "ضعيف":
+        return "ضعيف";
+      default:
+        return '';
+    }
   }
 }
