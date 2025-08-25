@@ -24,3 +24,11 @@ class LogoutError extends LoginState {
   final String message;
   LogoutError(this.message);
 }
+class GoogleLoginInitial extends LoginState {}
+
+class GoogleLoginLoading extends LoginState {}
+
+class GoogleLoginSuccess extends LoginState {
+  final LoginResponseBody loginResponseBody;
+  GoogleLoginSuccess(this.loginResponseBody);
+}

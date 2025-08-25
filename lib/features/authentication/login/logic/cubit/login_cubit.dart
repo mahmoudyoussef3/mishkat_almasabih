@@ -42,4 +42,7 @@ class LoginCubit extends Cubit<LoginState> {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString("token");
   }
+
+
+  
 }

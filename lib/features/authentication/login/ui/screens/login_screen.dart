@@ -49,8 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 24.h),
 
                 // Login Button
-              LoginBlocListener()
-,
+                LoginBlocListener(),
                 SizedBox(height: 18.h),
 
                 // Divider
@@ -64,7 +63,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 32.h),
 
                 LoginWithGoogle(),
-
 
                 SizedBox(height: 40.h),
               ],
@@ -81,7 +79,6 @@ class _LoginScreenState extends State<LoginScreen> {
       children: [
         TextButton(
           onPressed: () {
-            // TODO: Navigate to forgot password screen
           },
           child: Text(
             'نسيت كلمة المرور؟',
@@ -96,8 +93,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
-
-
 
   Widget _buildDivider() {
     return Row(
@@ -118,6 +113,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     ).animate().fadeIn(delay: 1000.ms, duration: 300.ms).scaleX(begin: 0.0);
   }
-
-
 }
