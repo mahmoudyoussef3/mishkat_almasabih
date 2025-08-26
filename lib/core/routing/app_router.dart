@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/signup_screen.dart';
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/screens/chapters_screen.dart';
@@ -62,6 +63,11 @@ class AppRouter {
                     create:
                         (context) =>
                             getIt<DailyHadithCubit>(),
+                  ),
+                   BlocProvider(
+                    create:
+                        (context) =>
+                            getIt<AddCubitCubit>(),
                   ),
                 ],
                 child: const MainNavigationScreen(),

@@ -20,6 +20,9 @@ class HadithData {
   final String? grade;
   final String? explanation;
   final List<String>? hints;
+
+
+  @JsonKey(name: 'words_meanings') // مهم جدًا
   final List<WordMeaning>? wordsMeanings;
 
   const HadithData({

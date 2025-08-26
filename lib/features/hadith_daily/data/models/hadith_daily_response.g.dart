@@ -26,7 +26,7 @@ HadithData _$HadithDataFromJson(Map<String, dynamic> json) => HadithData(
   explanation: json['explanation'] as String?,
   hints: (json['hints'] as List<dynamic>?)?.map((e) => e as String).toList(),
   wordsMeanings:
-      (json['wordsMeanings'] as List<dynamic>?)
+      (json['words_meanings'] as List<dynamic>?)
           ?.map((e) => WordMeaning.fromJson(e as Map<String, dynamic>))
           .toList(),
 );
@@ -39,7 +39,7 @@ Map<String, dynamic> _$HadithDataToJson(HadithData instance) =>
       'grade': instance.grade,
       'explanation': instance.explanation,
       'hints': instance.hints,
-      'wordsMeanings': instance.wordsMeanings,
+      'words_meanings': instance.wordsMeanings,
     };
 
 WordMeaning _$WordMeaningFromJson(Map<String, dynamic> json) => WordMeaning(

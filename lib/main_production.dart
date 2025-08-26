@@ -7,11 +7,10 @@ import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.d
 import 'package:mishkat_almasabih/mishkat_almasabih.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:workmanager/workmanager.dart';
 
 import 'core/di/dependency_injection.dart';
 import 'package:device_preview/device_preview.dart';
-
+/*
 const fetchTaskKey = "fetchApiTask";
 @pragma('vm:entry-point')
 void callbackDispatcher() {
@@ -22,7 +21,7 @@ void callbackDispatcher() {
     return Future.value(true);
   });
 }
-
+*/
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -38,7 +37,7 @@ void main() async {
 
   await ScreenUtil.ensureScreenSize();
 
-  await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
+//  await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
 /*  await Workmanager().registerPeriodicTask(
     "fetchTask_24h",
@@ -47,13 +46,13 @@ void main() async {
   );
   */
 
-  // تاسك تجريبي (مش هيشتغل أقل من 15 دقيقة في الواقع)
+  /*// تاسك تجريبي (مش هيشتغل أقل من 15 دقيقة في الواقع)
   await Workmanager().registerPeriodicTask(
     "fetchTask_debug",
     fetchTaskKey,
     frequency: const Duration(minutes: 15),
   );
-
+*/
   runApp(
     DevicePreview(
       enabled: true,
