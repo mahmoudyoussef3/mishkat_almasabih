@@ -8,6 +8,7 @@ import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_respon
 import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
@@ -85,5 +86,10 @@ abstract class ApiService {
     @Path("bookSlug") String bookSlug,
 
     @Path("chapter") String chapterName,
+  );
+
+
+    @GET(ApiConstants.dailyHadith)
+  Future<DailyHadithModel> getDailyHadith(
   );
 }

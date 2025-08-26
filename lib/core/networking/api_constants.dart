@@ -24,6 +24,7 @@ class ApiConstants {
   static const String publicSearch = "/islamic-library/search?q={query}";
   static const String hadithSearch =
       "/islamic-library/search?q={query}&book={bookSlug}&chapter={chapter}";
+  static const String dailyHadith = "/daily-hadith";
 }
 
 class ApiErrors {

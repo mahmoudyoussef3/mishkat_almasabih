@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
+import 'package:mishkat_almasabih/features/notification/test_notification_screen.dart';
 
 import '../../core/theming/colors.dart';
 import '../../core/widgets/bottom_navigation_widget.dart';
@@ -67,7 +68,7 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
     SearchScreen(),
-    HomeScreen(),
+    TestNotificationScreen(),
     BlocProvider(
       create: (context) => getIt<GetBookmarksCubit>(),
       child: BookmarkScreen(),
