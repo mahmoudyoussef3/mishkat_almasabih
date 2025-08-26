@@ -6,6 +6,7 @@ import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/delete_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_shimer.dart';
@@ -22,6 +23,13 @@ class BookmarkScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => getIt<GetBookmarksCubit>()..getUserBookmarks(),
+        ),
+
+        BlocProvider(
+          create:
+              (context) =>
+                  getIt<GetCollectionsBookmarkCubit>()
+                    ..getBookMarkCollections(),
         ),
         BlocProvider(create: (context) => getIt<DeleteCubitCubit>()),
       ],
@@ -44,6 +52,9 @@ class BookmarkScreen extends StatelessWidget {
                       ),
                     );
                   } else if (state is UserBookmarksSuccess) {
+                    context
+                        .read<GetCollectionsBookmarkCubit>()
+                        .getBookMarkCollections();
                     List<Bookmark> mybookmarks = state.bookmarks;
 
                     if (mybookmarks.isEmpty) {

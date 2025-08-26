@@ -25,6 +25,10 @@ class ApiConstants {
   static const String hadithSearch =
       "/islamic-library/search?q={query}&book={bookSlug}&chapter={chapter}";
   static const String dailyHadith = "/daily-hadith";
+  static const String bookmarkCollection = "/islamic-bookmarks/collections";
+
+
+  
 }
 
 class ApiErrors {

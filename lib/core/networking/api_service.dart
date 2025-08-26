@@ -5,6 +5,7 @@ import 'package:mishkat_almasabih/features/authentication/signup/data/models/sig
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_response.dart';
+import 'package:mishkat_almasabih/features/bookmark/data/models/collection_model.dart';
 import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
@@ -91,5 +92,10 @@ abstract class ApiService {
 
     @GET(ApiConstants.dailyHadith)
   Future<DailyHadithModel> getDailyHadith(
+  );
+      @GET(ApiConstants.bookmarkCollection)
+  Future<CollectionsResponse> getBookmarkCollection(
+        @Header("x-auth-token") String token,
+
   );
 }
