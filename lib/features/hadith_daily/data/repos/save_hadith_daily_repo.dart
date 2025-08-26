@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SaveHadithDailyRepo {
   Future<void> saveHadith(DailyHadithModel model) async {
     final prefs = await SharedPreferences.getInstance();
-    final jsonString = jsonEncode(model);
+    final jsonString = jsonEncode(model.toJson());
     await prefs.setString("dailyHadith", jsonString);
   }
 

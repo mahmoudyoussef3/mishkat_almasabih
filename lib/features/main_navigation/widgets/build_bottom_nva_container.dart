@@ -40,13 +40,15 @@ class BuildBottomNavBarContainer extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           BuildNavItem(
-            icon: Icons.home,
+                        icon: Icons.home,
+
             index: 0,
             currentIndex: currentIndex,
             onTap: onTap,
           ),
           BuildNavItem(
-            icon: Icons.search,
+                        icon: Icons.menu_book_sharp,
+
             index: 1,
             currentIndex: currentIndex,
             onTap: onTap,

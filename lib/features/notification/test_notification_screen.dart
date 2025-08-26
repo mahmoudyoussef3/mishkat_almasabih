@@ -30,7 +30,7 @@ class TestNotificationScreen extends StatelessWidget {
                   id: 2,
                   title: 'Reminder',
                   body: 'This will appear after 10 seconds',
-                  duration: Duration(seconds: 3),
+                  duration: Duration(seconds: 5),
                 );
               },
               child: const Text('Show Repeated Notification'),

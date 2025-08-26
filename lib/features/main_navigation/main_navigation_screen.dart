@@ -3,13 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/notification/test_notification_screen.dart';
 
-import '../../core/theming/colors.dart';
-import '../../core/widgets/bottom_navigation_widget.dart';
 import '../home/ui/home_screen.dart';
 import '../search/search_screen.dart';
-import '../library/ui/screens/library_screen.dart';
 import 'widgets/build_bottom_nva_container.dart';
 /*
 class MainNavigationScreen extends StatefulWidget {
@@ -66,8 +64,10 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
-    SearchScreen(),
+        HomeScreen(),
+
+    HadithDailyScreen(),
+   // SearchScreen(),
     TestNotificationScreen(),
     BlocProvider(
       create: (context) => getIt<GetBookmarksCubit>(),

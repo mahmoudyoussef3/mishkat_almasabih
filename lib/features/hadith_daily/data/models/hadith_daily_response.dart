@@ -9,6 +9,8 @@ class DailyHadithModel {
   const DailyHadithModel({this.status, this.data});
   factory DailyHadithModel.fromJson(Map<String, dynamic> json) =>
       _$DailyHadithModelFromJson(json);
+        Map<String,dynamic> toJson()=>_$DailyHadithModelToJson(this);
+
 }
 @JsonSerializable()
 class HadithData {
@@ -31,6 +33,8 @@ class HadithData {
   });
   factory HadithData.fromJson(Map<String, dynamic> json) =>
       _$HadithDataFromJson(json);
+
+             Map<String,dynamic> toJson()=>_$HadithDataToJson(this);
 }
 
 @JsonSerializable()
@@ -41,4 +45,7 @@ class WordMeaning {
   const WordMeaning({this.word, this.meaning});
   factory WordMeaning.fromJson(Map<String, dynamic> json) =>
       _$WordMeaningFromJson(json);
+
+                   Map<String,dynamic> toJson()=>_$WordMeaningToJson(this);
+
 }

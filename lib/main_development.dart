@@ -14,11 +14,10 @@ import 'package:device_preview/device_preview.dart';
 
 const fetchTaskKey = "fetchApiTask";
 
+@pragma('vm:entry-point')
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    print("✅ Background Task Executed: $task");
 
-    // هنا تعمل API Call أو تخزين SharedPreferences
     return Future.value(true);
   });
 }
@@ -38,18 +37,14 @@ void main() async {
 
   await ScreenUtil.ensureScreenSize();
 
-  await Workmanager().initialize(
-    callbackDispatcher,
-    isInDebugMode: true,
-  );
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: true);
 
-  // تاسك حقيقي كل 24 ساعة
-  await Workmanager().registerPeriodicTask(
+  /*  await Workmanager().registerPeriodicTask(
     "fetchTask_24h",
     fetchTaskKey,
     frequency: const Duration(hours: 24),
   );
-
+*/
   // تاسك تجريبي (مش هيشتغل أقل من 15 دقيقة في الواقع)
   await Workmanager().registerPeriodicTask(
     "fetchTask_debug",
@@ -60,11 +55,12 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: true,
-      builder: (context) => MishkatAlmasabih(
-        appRouter: AppRouter(),
-        isFirstTime: isFirstTime,
-        isLoggedIn: isLoggedIn,
-      ),
+      builder:
+          (context) => MishkatAlmasabih(
+            appRouter: AppRouter(),
+            isFirstTime: isFirstTime,
+            isLoggedIn: isLoggedIn,
+          ),
     ),
   );
 }

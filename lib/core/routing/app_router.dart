@@ -6,8 +6,7 @@ import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/screens/chapters_screen.dart';
-import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
-import 'package:mishkat_almasabih/features/ahadith/ui/screens/ahadith_screen.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
@@ -59,6 +58,11 @@ class AppRouter {
                   ),
                   BlocProvider(create: (context) => getIt<BookDataCubit>()),
                   BlocProvider(create: (context) => getIt<GetBookmarksCubit>()),
+                  BlocProvider(
+                    create:
+                        (context) =>
+                            getIt<DailyHadithCubit>(),
+                  ),
                 ],
                 child: const MainNavigationScreen(),
               ),
