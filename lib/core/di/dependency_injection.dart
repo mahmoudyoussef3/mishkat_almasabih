@@ -6,6 +6,7 @@ import 'package:mishkat_almasabih/features/book_data/data/repos/book_data_repo.d
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/repos/book_mark_repo.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/delete_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/data/repos/chapters_repo.dart';
@@ -24,7 +25,6 @@ import '../../features/authentication/login/logic/cubit/login_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
 import '../../features/authentication/login/data/repo/login_repo.dart';
-import '../../features/authentication/login/logic/cubit/login_cubit.dart';
 
 final getIt = GetIt.instance;
 
@@ -66,15 +66,18 @@ Future<void> setUpGetIt() async {
 
   getIt.registerLazySingleton<BookMarkRepo>(() => BookMarkRepo(getIt()));
   getIt.registerFactory<GetBookmarksCubit>(() => GetBookmarksCubit(getIt()));
+  getIt.registerFactory<GetCollectionsBookmarkCubit>(
+    () => GetCollectionsBookmarkCubit(getIt()),
+  );
 
   getIt.registerFactory<AddCubitCubit>(() => AddCubitCubit(getIt()));
   getIt.registerFactory<DeleteCubitCubit>(() => DeleteCubitCubit(getIt()));
 
-
-    getIt.registerLazySingleton<PublicSearchRepo>(() => PublicSearchRepo(getIt()));
+  getIt.registerLazySingleton<PublicSearchRepo>(
+    () => PublicSearchRepo(getIt()),
+  );
   getIt.registerFactory<PublicSearchCubit>(() => PublicSearchCubit(getIt()));
 
-      getIt.registerLazySingleton<HadithDailyRepo>(() => HadithDailyRepo(getIt()));
+  getIt.registerLazySingleton<HadithDailyRepo>(() => HadithDailyRepo(getIt()));
   getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit(getIt()));
 }
-

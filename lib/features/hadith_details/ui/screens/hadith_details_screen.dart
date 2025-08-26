@@ -6,6 +6,7 @@ import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -238,6 +239,11 @@ class HadithDetailScreen extends StatelessWidget {
                                 icon: Icons.bookmark,
                                 label: "حفظ",
                                 onTap: () async {
+                                   showDialog(
+    context: context,
+    builder: (context) => const AddToFavoritesDialog(),
+  );
+                                  /*
                                   context.read<AddCubitCubit>().addBookmark(
                                     Bookmark(
                                       bookName: bookName,
@@ -250,6 +256,7 @@ class HadithDetailScreen extends StatelessWidget {
                                       id: int.parse(hadithNumber!),
                                     ),
                                   );
+                                  */
                                 },
                               );
                             },
