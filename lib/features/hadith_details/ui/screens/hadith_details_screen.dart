@@ -10,6 +10,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_text_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
+import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 
 class HadithDetailScreen extends StatelessWidget {
   final String? hadithText;
@@ -24,10 +25,12 @@ class HadithDetailScreen extends StatelessWidget {
   final VoidCallback? onPrev;
   final String? bookSlug;
   final bool isBookMark;
+  final String chapterNumber;
 
   const HadithDetailScreen({
     super.key,
     required this.hadithText,
+    required this.chapterNumber,
     this.narrator,
     this.grade,
     this.bookName,
@@ -43,8 +46,18 @@ class HadithDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AddCubitCubit>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<AddCubitCubit>()),
+        BlocProvider(
+          create: (context) => getIt<NavigationCubit>()
+            ..emitNavigationStates(
+              hadithNumber.toString(),
+              bookSlug ?? '',
+              chapterNumber,
+            ),
+        ),
+      ],
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
@@ -53,13 +66,15 @@ class HadithDetailScreen extends StatelessWidget {
             slivers: [
               const BuildHeaderAppBar(title: 'تفاصيل الحديث'),
               SliverToBoxAdapter(child: SizedBox(height: 8.h)),
+
               SliverToBoxAdapter(
                 child: HadithTextCard(hadithText: hadithText ?? ""),
               ),
 
               if (grade != null)
-                SliverToBoxAdapter(child: SizedBox(
-                  child: HadithGradeTile(grade: grade!))),
+                SliverToBoxAdapter(
+                  child: SizedBox(child: HadithGradeTile(grade: grade!)),
+                ),
 
               _buildDivider(),
 
@@ -91,6 +106,8 @@ class HadithDetailScreen extends StatelessWidget {
                 SliverToBoxAdapter(
                   child: HadithNavigation(
                     hadithNumber: hadithNumber ?? "",
+                    bookSlug: bookSlug ?? '',
+                    chapterNumber: chapterNumber,
                     onNext: onNext,
                     onPrev: onPrev,
                   ),
