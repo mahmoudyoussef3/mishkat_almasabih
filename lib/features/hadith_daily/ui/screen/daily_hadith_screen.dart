@@ -198,7 +198,11 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                               ClipboardData(text: data?.hadith ?? ""),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("تم نسخ الحديث")),
+                              
+                              const SnackBar(
+                                                                    behavior: SnackBarBehavior.floating,
+
+                                content: Text("تم نسخ الحديث")),
                             );
                           },
                         ),
@@ -219,6 +223,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
 
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
+                                                                        behavior: SnackBarBehavior.floating,
+
                                     backgroundColor: ColorsManager.primaryGreen,
                                     content: loadingProgressIndicator(
                                       size: 30,
@@ -231,6 +237,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
 
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
+                                                                        behavior: SnackBarBehavior.floating,
+
                                     backgroundColor: ColorsManager.primaryGreen,
                                     content: Text(
                                       'تم اضافة الحديث إلي المحفوظات',
@@ -243,6 +251,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
 
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
+                                                                        behavior: SnackBarBehavior.floating,
+
                                     backgroundColor: ColorsManager.primaryGreen,
                                     content: Text(
                                       'حدث خطأ. حاول مرة اخري',

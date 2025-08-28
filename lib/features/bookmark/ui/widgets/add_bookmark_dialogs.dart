@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
@@ -108,40 +109,46 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                   spacing: 10,
                   runSpacing: 10,
                   alignment: WrapAlignment.center,
-              children: collections!.map((c) {
-  final isSelected = selectedCollection == (c.collection ?? "");
+                  children:
+                      collections!.map((c) {
+                        final isSelected =
+                            selectedCollection == (c.collection ?? "");
 
-  return ChoiceChip(
-    label: Text(
-      c.collection?.isEmpty ?? true ? "الإفتراضي" : c.collection!,
-      style: TextStyle(
-        color: isSelected
-            ? ColorsManager.inverseText
-            : ColorsManager.primaryText,
-        fontWeight: FontWeight.w600,
-      ),
-    ),
-    selected: isSelected,
-    selectedColor: ColorsManager.primaryPurple,
-    backgroundColor: ColorsManager.secondaryBackground,
-    elevation: isSelected ? 3 : 0,
-    pressElevation: 2,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-      side: BorderSide(
-        color: isSelected
-            ? ColorsManager.primaryPurple
-            : ColorsManager.mediumGray,
-      ),
-    ),
-    onSelected: (_) {
-      setState(() {
-        selectedCollection = c.collection ?? "";
-      });
-    },
-  );
-}).toList(),
-
+                        return ChoiceChip(
+                          showCheckmark: false,
+                          label: Text(
+                            c.collection?.isEmpty ?? true
+                                ? "الإفتراضي"
+                                : c.collection!,
+                            style: TextStyle(
+                              color:
+                                  isSelected
+                                      ? ColorsManager.inverseText
+                                      : ColorsManager.primaryText,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          selected: isSelected,
+                          selectedColor: ColorsManager.primaryPurple,
+                          backgroundColor: ColorsManager.secondaryBackground,
+                          elevation: isSelected ? 3 : 0,
+                          pressElevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: BorderSide(
+                              color:
+                                  isSelected
+                                      ? ColorsManager.primaryPurple
+                                      : ColorsManager.mediumGray,
+                            ),
+                          ),
+                          onSelected: (_) {
+                            setState(() {
+                              selectedCollection = c.collection ?? "";
+                            });
+                          },
+                        );
+                      }).toList(),
                 ),
               ),
 
@@ -153,6 +160,8 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                     ScaffoldMessenger.of(context).clearSnackBars();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+
                         backgroundColor: ColorsManager.primaryGreen,
                         content: loadingProgressIndicator(
                           size: 30,
@@ -164,7 +173,11 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                     ScaffoldMessenger.of(context).clearSnackBars();
 
                     ScaffoldMessenger.of(context).showSnackBar(
+                      
                       SnackBar(
+            behavior: SnackBarBehavior.floating,
+            showCloseIcon:true ,
+
                         backgroundColor: ColorsManager.primaryGreen,
                         content: Text(
                           'تم اضافة الحديث إلي المحفوظات',
@@ -172,11 +185,14 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                         ),
                       ),
                     );
+                    context.pop();
                   } else if (state is AddFailure) {
                     ScaffoldMessenger.of(context).clearSnackBars();
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+
                         backgroundColor: ColorsManager.primaryGreen,
                         content: Text(
                           "حدث خطأ. حاول مرة أخري",
@@ -298,6 +314,8 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                   ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                                                          behavior: SnackBarBehavior.floating,
+
                       backgroundColor: ColorsManager.primaryGreen,
                       content: loadingProgressIndicator(
                         size: 30,
@@ -310,6 +328,8 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
+                                                          behavior: SnackBarBehavior.floating,
+
                       backgroundColor: ColorsManager.primaryGreen,
                       content: Text(
                         'تم اضافة الحديث إلي المحفوظات',
@@ -367,7 +387,7 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                       );
                     },
                     icon: const Icon(
-                      Icons.check,
+                      Icons.bookmark_add,
                       color: ColorsManager.secondaryBackground,
                     ),
                     label: const Text(

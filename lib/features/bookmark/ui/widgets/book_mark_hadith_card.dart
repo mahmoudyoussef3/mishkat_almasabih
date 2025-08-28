@@ -93,6 +93,8 @@ class BookmarkHadithCard extends StatelessWidget {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
+                                                                behavior: SnackBarBehavior.floating,
+
                             backgroundColor: ColorsManager.primaryGreen,
                             content: const Text(
                               'تم حذف الحديث من المحفوظات',
@@ -106,6 +108,8 @@ class BookmarkHadithCard extends StatelessWidget {
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
+                                                                behavior: SnackBarBehavior.floating,
+
                             backgroundColor: ColorsManager.primaryGreen,
                             content: const Text(
                               'حدث خطأ. حاول مرة اخري',
