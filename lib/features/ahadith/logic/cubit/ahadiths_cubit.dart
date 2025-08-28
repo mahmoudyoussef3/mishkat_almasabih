@@ -98,7 +98,7 @@ class AhadithsCubit extends Cubit<AhadithsState> {
                 .where(
                   (hadith) =>
                       hadith.arabic != null &&
-                      normalizeArabic(hadith.arabic!).contains(normalizedQuery),
+                      normalizeArabic(hadith.arabic!).contains(normalizedQuery.trim()),
                 )
                 .toList();
 

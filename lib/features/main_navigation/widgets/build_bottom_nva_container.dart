@@ -53,15 +53,17 @@ class BuildBottomNavBarContainer extends StatelessWidget {
             currentIndex: currentIndex,
             onTap: onTap,
           ),
+          /*
           BuildNavItem(
             icon: Icons.folder,
             index: 2,
             currentIndex: currentIndex,
             onTap: onTap,
           ),
+          */
           BuildNavItem(
             icon: Icons.bookmark,
-            index: 3,
+            index: 2,
             currentIndex: currentIndex,
             onTap: onTap,
           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
@@ -64,11 +65,11 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-        HomeScreen(),
+    HomeScreen(),
 
     HadithDailyScreen(),
-   // SearchScreen(),
-    TestNotificationScreen(),
+    // SearchScreen(),
+    // TestNotificationScreen(),
     BlocProvider(
       create: (context) => getIt<GetBookmarksCubit>(),
       child: BookmarkScreen(),
@@ -80,6 +81,16 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: ColorsManager.cardBackground,
+
+          child: Icon(Icons.search, color: ColorsManager.primaryGreen),
+
+          onPressed:
+              () => ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text('لسه متعملتش يسطااا'))),
+        ),
         body: _screens[_currentIndex],
         extendBody: true,
         bottomNavigationBar: BuildBottomNavBarContainer(

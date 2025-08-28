@@ -226,7 +226,7 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                           hadithText: widget.hadithText,
                           type: 'hadith',
                           bookSlug: widget.bookSlug,
-                          id: int.parse(widget.hadithNumber),
+                        //  id: int.parse(widget.hadithNumber),
                         ),
                       );
                     },

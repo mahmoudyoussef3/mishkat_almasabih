@@ -37,7 +37,7 @@ class ChaptersCubit extends Cubit<ChaptersState> {
             .where((chapter) {
               final normalizedChapter =
                   normalizeArabic(chapter.chapterArabic ?? '');
-              return normalizedChapter.contains(normalizedQuery);
+              return normalizedChapter.contains(normalizedQuery.trim());
             })
             .toList();
 

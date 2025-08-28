@@ -12,7 +12,7 @@ import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_text
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 
-class HadithDetailScreen extends StatelessWidget {
+class HadithDetailScreen extends StatefulWidget {
   final String? hadithText;
   final String? narrator;
   final String? grade;
@@ -21,8 +21,6 @@ class HadithDetailScreen extends StatelessWidget {
   final String? chapter;
   final String? authorDeath;
   final String? hadithNumber;
-  final VoidCallback? onNext;
-  final VoidCallback? onPrev;
   final String? bookSlug;
   final bool isBookMark;
   final String chapterNumber;
@@ -38,11 +36,22 @@ class HadithDetailScreen extends StatelessWidget {
     required this.chapter,
     this.authorDeath,
     required this.hadithNumber,
-    this.onNext,
-    this.onPrev,
     required this.bookSlug,
     this.isBookMark = false,
   });
+
+  @override
+  State<HadithDetailScreen> createState() => _HadithDetailScreenState();
+}
+
+class _HadithDetailScreenState extends State<HadithDetailScreen> {
+  String? currentHadithText;
+
+  @override
+  void initState() {
+    super.initState();
+    currentHadithText = widget.hadithText;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +61,9 @@ class HadithDetailScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => getIt<NavigationCubit>()
             ..emitNavigationStates(
-              hadithNumber.toString(),
-              bookSlug ?? '',
-              chapterNumber,
+              widget.hadithNumber.toString(),
+              widget.bookSlug ?? '',
+              widget.chapterNumber,
             ),
         ),
       ],
@@ -62,59 +71,68 @@ class HadithDetailScreen extends StatelessWidget {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           backgroundColor: ColorsManager.primaryBackground,
-          body: CustomScrollView(
-            slivers: [
-              const BuildHeaderAppBar(title: 'تفاصيل الحديث'),
-              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
+          body: BlocListener<NavigationCubit, NavigationState>(
+            listener: (context, state) {
+              if (state is NavigationSuccess) {
+                // ✅ هنا بيتم تحديث نص الحديث الجديد
+                setState(() {
+                  currentHadithText = state.navigationHadithResponse.nextHadith!.title??"";
+                });
+              }
+            },
+            child: CustomScrollView(
+              slivers: [
+                const BuildHeaderAppBar(title: 'تفاصيل الحديث'),
+                SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
-              SliverToBoxAdapter(
-                child: HadithTextCard(hadithText: hadithText ?? ""),
-              ),
-
-              if (grade != null)
+                // ✅ عرض الحديث المتغير
                 SliverToBoxAdapter(
-                  child: SizedBox(child: HadithGradeTile(grade: grade!)),
+                  child: HadithTextCard(hadithText: currentHadithText ?? ""),
                 ),
 
-              _buildDivider(),
+                if (widget.grade != null)
+                  SliverToBoxAdapter(
+                    child: SizedBox(child: HadithGradeTile(grade: widget.grade!)),
+                  ),
 
-              SliverToBoxAdapter(
-                child: HadithBookSection(
-                  bookName: bookName ?? '',
-                  author: author,
-                  authorDeath: authorDeath,
-                  chapter: chapter ?? "",
-                ),
-              ),
+                _buildDivider(),
 
-              _buildDivider(),
-
-              SliverToBoxAdapter(
-                child: HadithActions(
-                  hadithText: hadithText ?? "",
-                  isBookMark: isBookMark,
-                  bookName: bookName ?? '',
-                  bookSlug: bookSlug ?? '',
-                  chapter: chapter ?? '',
-                  hadithNumber: hadithNumber ?? '',
-                ),
-              ),
-
-              _buildDivider(),
-
-              if (!isBookMark)
                 SliverToBoxAdapter(
-                  child: HadithNavigation(
-                    hadithNumber: hadithNumber ?? "",
-                    bookSlug: bookSlug ?? '',
-                    chapterNumber: chapterNumber,
-                    onNext: onNext,
-                    onPrev: onPrev,
+                  child: HadithBookSection(
+                    bookName: widget.bookName ?? '',
+                    author: widget.author,
+                    authorDeath: widget.authorDeath,
+                    chapter: widget.chapter ?? "",
                   ),
                 ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 30.h)),
-            ],
+                _buildDivider(),
+
+                SliverToBoxAdapter(
+                  child: HadithActions(
+                    hadithText: currentHadithText ?? "",
+                    isBookMark: widget.isBookMark,
+                    bookName: widget.bookName ?? '',
+                    bookSlug: widget.bookSlug ?? '',
+                    chapter: widget.chapter ?? '',
+                    hadithNumber: widget.hadithNumber ?? '',
+                  ),
+                ),
+
+                _buildDivider(),
+
+                if (!widget.isBookMark)
+                  SliverToBoxAdapter(
+                    child: HadithNavigation(
+                      hadithNumber: widget.hadithNumber ?? "",
+                      bookSlug: widget.bookSlug ?? '',
+                      chapterNumber: widget.chapterNumber,
+                    ),
+                  ),
+
+                SliverToBoxAdapter(child: SizedBox(height: 30.h)),
+              ],
+            ),
           ),
         ),
       ),
