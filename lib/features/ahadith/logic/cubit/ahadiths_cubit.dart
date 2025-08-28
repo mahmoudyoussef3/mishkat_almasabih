@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
@@ -10,7 +9,6 @@ part 'ahadiths_state.dart';
 class AhadithsCubit extends Cubit<AhadithsState> {
   final AhadithsRepo _chapterAhadithsRepo;
   AhadithsCubit(this._chapterAhadithsRepo) : super(AhadithsInitial());
-  late LocalHadithResponse localHadithResponse;
 
   Future<void> emitAhadiths({
     required String bookSlug,
@@ -26,7 +24,9 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         chapterId: chapterId,
       );
       result.fold(
-        (l) => emit(AhadithsFailure(l.apiErrorModel.msg!)),
+        (l) => emit(
+          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
+        ),
         (r) => emit(LocalAhadithsSuccess(r)),
       );
     } else if (hadithLocal) {
@@ -35,7 +35,9 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         chapterId: chapterId,
       );
       result.fold(
-        (l) => emit(AhadithsFailure(l.apiErrorModel.msg!)),
+        (l) => emit(
+          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
+        ),
         (r) => emit(LocalAhadithsSuccess(r)),
       );
     } else {
@@ -44,9 +46,83 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         chapterId: chapterId,
       );
       result.fold(
-        (l) => emit(AhadithsFailure(l.apiErrorModel.msg!)),
-        (r) => emit(AhadithsSuccess(r)),
+        (l) => emit(
+          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
+        ),
+        (r) {
+          final hadithsList = r.hadiths?.data ?? [];
+          emit(
+            AhadithsSuccess(
+              filteredAhadith: hadithsList,
+              allAhadith: hadithsList,
+            ),
+          );
+        },
       );
     }
+  }
+
+  void filterAhadith(String query) {
+    final currentState = state;
+
+    if (currentState is AhadithsSuccess) {
+      final normalizedQuery = normalizeArabic(query);
+
+      if (normalizedQuery.isEmpty) {
+        emit(currentState.copyWith(filteredAhadith: currentState.allAhadith));
+      } else {
+        final filtered =
+            currentState.allAhadith
+                .where(
+                  (hadith) =>
+                      hadith.hadithArabic != null &&
+                      normalizeArabic(
+                        hadith.hadithArabic!,
+                      ).contains(normalizedQuery),
+                )
+                .toList();
+
+        emit(currentState.copyWith(filteredAhadith: filtered));
+      }
+    } else if (currentState is LocalAhadithsSuccess) {
+      // Handle search for local hadiths
+      final normalizedQuery = normalizeArabic(query);
+      final hadithsList = currentState.localHadithResponse.hadiths?.data ?? [];
+
+      if (normalizedQuery.isEmpty) {
+        // Return all hadiths (you might need to store original list in state)
+        emit(currentState);
+      } else {
+        final filtered =
+            hadithsList
+                .where(
+                  (hadith) =>
+                      hadith.arabic != null &&
+                      normalizeArabic(hadith.arabic!).contains(normalizedQuery),
+                )
+                .toList();
+
+        // You might need to create a new state with filtered results
+        // This depends on your LocalAhadithsSuccess state structure
+        emit(currentState);
+      }
+    }
+  }
+
+  String normalizeArabic(String text) {
+    // 1. شيل التشكيل (كل الحركات + التنوين + السكون + الشدة)
+    final diacritics = RegExp(r'[\u0617-\u061A\u064B-\u0652]');
+    String result = text.replaceAll(diacritics, '');
+
+    // 2. توحيد الهمزات: أ إ آ -> ا
+    result = result.replaceAll(RegExp('[إأآ]'), 'ا');
+
+    // 3. شيل المدّة "ـ"
+    result = result.replaceAll('ـ', '');
+
+    // 4. Optional: lowercase (عشان لو فيه انجليزي)
+    result = result.toLowerCase();
+
+    return result.trim();
   }
 }
