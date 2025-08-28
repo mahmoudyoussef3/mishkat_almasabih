@@ -23,7 +23,7 @@ class DailyHadithCubit extends Cubit<DailyHadithState> {
         if (myHadith != null) {
           EasyNotify.showBasicNotification(
           
-            body: myHadith.data!.hadith!,
+            body: myHadith.data!.title!,
             id: 0,
             title: 'حديث اليوم',
             imagePath: 'assets/images/app_logo.png',
