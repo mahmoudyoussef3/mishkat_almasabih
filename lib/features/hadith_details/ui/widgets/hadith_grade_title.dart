@@ -4,7 +4,8 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class HadithGradeTile extends StatelessWidget {
   final String grade;
-  const HadithGradeTile({super.key, required this.grade});
+  final VoidCallback onTap;
+  const HadithGradeTile({super.key, required this.grade, required this.onTap});
 
   String gradeArabic(String g) {
     switch (g.toLowerCase()) {
@@ -36,20 +37,35 @@ class HadithGradeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-        decoration: BoxDecoration(
-          color: gradeColor(grade).withOpacity(0.1),
-          borderRadius: BorderRadius.circular(20.r),
-        ),
-        child: Text(
-          gradeArabic(grade),
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.bold,
-            color: gradeColor(grade),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+            decoration: BoxDecoration(
+              color: gradeColor(grade).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: Text(
+              gradeArabic(grade),
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+                color: gradeColor(grade),
+              ),
+            ),
           ),
-        ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+
+            child: TextButton.icon(
+              onPressed: onTap,
+
+              icon: Icon(Icons.copy),
+              label: Text('نسخ الحديث'),
+            ),
+          ),
+        ],
       ),
     );
   }

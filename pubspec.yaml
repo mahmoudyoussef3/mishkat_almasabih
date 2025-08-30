@@ -59,8 +59,10 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/icons/search_icon.png
     - assets/images/book_covers/
     - assets/images/islamic_pattern.jpg
+    - assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg
 
 
   fonts:

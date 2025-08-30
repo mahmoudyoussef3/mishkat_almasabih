@@ -67,30 +67,7 @@ class HadithActions extends StatelessWidget {
                 icon: Icons.bookmark,
                 label: "حفظ",
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder:
-                        (context) => MultiBlocProvider(
-                          providers: [
-                            BlocProvider(
-                              create:
-                                  (context) =>
-                                      getIt<GetCollectionsBookmarkCubit>(),
-                            ),
-                            BlocProvider(
-                              create: (context) => getIt<AddCubitCubit>(),
-                            ),
-                          ],
-                          child: AddToFavoritesDialog(
-                            bookName: bookName,
-                            bookSlug: bookSlug,
-                            chapter: chapter,
-                            hadithNumber: hadithNumber,
-                            hadithText: hadithText,
-                            id: hadithNumber,
-                          ),
-                        ),
-                  );
+           
                 },
               ),
           ],

@@ -59,15 +59,6 @@ class BuildMainCategoryCard extends StatelessWidget {
               padding: EdgeInsets.all(Spacing.lg),
               child: Row(
                 children: [
-                  Container(
-                    padding: EdgeInsets.all(Spacing.md),
-                    decoration: BoxDecoration(
-                      color: ColorsManager.white.withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(icon, color: ColorsManager.white, size: 32.sp),
-                  ),
-                  SizedBox(width: Spacing.md),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
