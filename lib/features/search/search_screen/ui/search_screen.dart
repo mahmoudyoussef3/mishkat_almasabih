@@ -29,7 +29,9 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _addItemToHistory(HistoryItem historyItem) async {
-    final existingIndex = _items.indexWhere((item) => item.title == historyItem.title);
+    final existingIndex = _items.indexWhere(
+      (item) => item.title == historyItem.title,
+    );
     if (existingIndex != -1) {
       _items[existingIndex] = historyItem;
     } else {
@@ -51,8 +53,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    final date = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
-    final time = "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
+    final date =
+        "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+    final time =
+        "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
     return "$time - $date";
   }
 
@@ -104,10 +108,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   _items = List.from(state.hisoryItems);
                   return _items.isNotEmpty
                       ? HistoryList(
-                          items: _items,
-                          onRemove: _removeItem,
-                          onClearAll: _clearAll,
-                        )
+                        items: _items,
+                        onRemove: _removeItem,
+                        onClearAll: _clearAll,
+                      )
                       : const EmptyHistory();
                 }
                 return const SliverToBoxAdapter(child: SizedBox.shrink());

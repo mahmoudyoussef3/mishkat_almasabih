@@ -22,6 +22,7 @@ class HistoryListItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorsManager.cardBackground,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: ColorsManager.primaryGreen)
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

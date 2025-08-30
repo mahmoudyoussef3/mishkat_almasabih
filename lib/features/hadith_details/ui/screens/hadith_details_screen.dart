@@ -46,6 +46,7 @@ class HadithDetailScreen extends StatefulWidget {
   State<HadithDetailScreen> createState() => _HadithDetailScreenState();
 }
 
+
 class _HadithDetailScreenState extends State<HadithDetailScreen> {
   @override
   Widget build(BuildContext context) {
