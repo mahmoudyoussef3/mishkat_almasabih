@@ -41,26 +41,28 @@ class BuildBottomNavBarContainer extends StatelessWidget {
         children: [
           BuildNavItem(
                         icon: Icons.home,
-
             index: 0,
             currentIndex: currentIndex,
             onTap: onTap,
           ),
+      
+          
           BuildNavItem(
-                        icon: Icons.menu_book_sharp,
-
+            icon: Icons.search
+          ,
             index: 1,
             currentIndex: currentIndex,
-            onTap: onTap,
+            onTap: onTap
           ),
+          
           BuildNavItem(
-            icon: Icons.folder,
+            icon: Icons.bookmark,
             index: 2,
             currentIndex: currentIndex,
             onTap: onTap,
           ),
-          BuildNavItem(
-            icon: Icons.bookmark,
+               BuildNavItem(
+            icon: Icons.person,
             index: 3,
             currentIndex: currentIndex,
             onTap: onTap,

@@ -7,10 +7,15 @@ import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cu
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/screens/chapters_screen.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/ui/search_screen.dart';
 
 import '../../features/home/ui/widgets/public_search_result.dart';
 import '../../features/main_navigation/main_navigation_screen.dart';
@@ -45,7 +50,6 @@ class AppRouter {
               ),
         );
       case Routes.mainNavigationScreen:
-        // Assuming you have a MainNavigationScreen widget
         return MaterialPageRoute(
           builder:
               (_) => MultiBlocProvider(
@@ -59,16 +63,9 @@ class AppRouter {
                   ),
                   BlocProvider(create: (context) => getIt<BookDataCubit>()),
                   BlocProvider(create: (context) => getIt<GetBookmarksCubit>()),
-                  BlocProvider(
-                    create:
-                        (context) =>
-                            getIt<DailyHadithCubit>(),
-                  ),
-                   BlocProvider(
-                    create:
-                        (context) =>
-                            getIt<AddCubitCubit>(),
-                  ),
+                  BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
+                  BlocProvider(create: (context) => getIt<AddCubitCubit>()),
+                  BlocProvider(create: (context) => SearchHistoryCubit()),
                 ],
                 child: const MainNavigationScreen(),
               ),
@@ -97,6 +94,28 @@ class AppRouter {
                     (context) =>
                         getIt<PublicSearchCubit>()..emitPublicSearch(query),
                 child: PublicSearchResultScreen(searchQuery: query),
+              ),
+        );
+
+      case Routes.searchScreen:
+        return MaterialPageRoute(
+          builder:
+              (context) => BlocProvider(
+                create: (context) => SearchHistoryCubit(),
+                child: SearchScreen(),
+              ),
+        );
+      case Routes.hadithOfTheDay:
+        final query = settings.arguments as DailyHadithModel;
+
+        return MaterialPageRoute(
+          builder:
+              (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
+                  BlocProvider(create: (context) => getIt<AddCubitCubit>()),
+                ],
+                child: HadithDailyScreen(dailyHadithModel: query),
               ),
         );
 

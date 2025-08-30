@@ -65,6 +65,7 @@ class PublicSearchResultScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
+                                      chapterNumber: hadith.chapter?.id.toString()??'',
                                       bookSlug: hadith.book?.bookSlug ?? '',
                                       bookName: hadith.book?.bookName ?? '',
                                       author: hadith.book?.writerName ?? '',

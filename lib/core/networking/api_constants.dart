@@ -27,8 +27,8 @@ class ApiConstants {
   static const String dailyHadith = "/daily-hadith";
   static const String bookmarkCollection = "/islamic-bookmarks/collections";
 
-
-  
+  static const String navigationHadith =
+      "/islamic-library/books/sahih-bukhari/chapter/1/hadith/5/navigation";
 }
 
 class ApiErrors {

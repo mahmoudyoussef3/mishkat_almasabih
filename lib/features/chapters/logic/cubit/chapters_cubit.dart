@@ -22,39 +22,44 @@ class ChaptersCubit extends Cubit<ChaptersState> {
       ),
     );
   }
-    void filterChapters(String query) {
+
+  void filterChapters(String query) {
     if (state is ChaptersSuccess) {
       final currentState = state as ChaptersSuccess;
-    final normalizedQuery = normalizeArabic(query);
+      final normalizedQuery = normalizeArabic(query);
 
       if (normalizedQuery.isEmpty) {
-        emit(currentState.copyWith(filteredChapters: currentState.allChapters));
+        emit(
+          currentState.copyWith(filteredChapters: currentState.allChapters),
+        );
       } else {
         final filtered = currentState.allChapters
-            .where((chapter) =>
-                chapter.chapterArabic != null &&
-                chapter.chapterArabic!.contains(normalizedQuery))
+            .where((chapter) {
+              final normalizedChapter =
+                  normalizeArabic(chapter.chapterArabic ?? '');
+              return normalizedChapter.contains(normalizedQuery.trim());
+            })
             .toList();
 
         emit(currentState.copyWith(filteredChapters: filtered));
       }
     }
   }
+
   String normalizeArabic(String text) {
-  // 1. شيل التشكيل (كل الحركات + التنوين + السكون + الشدة)
-  final diacritics = RegExp(r'[\u0617-\u061A\u064B-\u0652]');
-  String result = text.replaceAll(diacritics, '');
+    // 1. شيل التشكيل (كل الحركات + التنوين + السكون + الشدة)
+    final diacritics = RegExp(r'[\u0617-\u061A\u064B-\u0652]');
+    String result = text.replaceAll(diacritics, '');
 
-  // 2. توحيد الهمزات: أ إ آ -> ا
-  result = result.replaceAll(RegExp('[إأآ]'), 'ا');
+    // 2. توحيد الهمزات: أ إ آ -> ا
+    result = result.replaceAll(RegExp('[إأآ]'), 'ا');
 
-  // 3. شيل المدّة "ـ"
-  result = result.replaceAll('ـ', '');
+    // 3. شيل المدّة "ـ"
+    result = result.replaceAll('ـ', '');
 
-  // 4. Optional: lowercase (عشان لو فيه انجليزي)
-  result = result.toLowerCase();
+    // 4. lowercase (لو فيه انجليزي)
+    result = result.toLowerCase();
 
-  return result;
-}
-
+    return result;
+  }
 }

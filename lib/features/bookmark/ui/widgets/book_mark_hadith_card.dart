@@ -93,7 +93,6 @@ class BookmarkHadithCard extends StatelessWidget {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                                                                behavior: SnackBarBehavior.floating,
 
                             backgroundColor: ColorsManager.primaryGreen,
                             content: const Text(
@@ -108,7 +107,6 @@ class BookmarkHadithCard extends StatelessWidget {
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                                                                behavior: SnackBarBehavior.floating,
 
                             backgroundColor: ColorsManager.primaryGreen,
                             content: const Text(

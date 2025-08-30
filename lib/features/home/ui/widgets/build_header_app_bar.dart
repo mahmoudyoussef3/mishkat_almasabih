@@ -12,15 +12,19 @@ class BuildHeaderAppBar extends StatelessWidget {
     this.description,
     required this.title,
     this.home = false,
+    this.pinned = false,
+    this.actions
   });
   final String title;
   final String? description;
   final bool home;
+  final bool pinned;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      //  actions: [IconButton(onPressed: () {}, icon: Icon(Icons.logout,color: Colors.white,))],
+      actions: actions,
       leading: IconButton(
         onPressed:
             home
@@ -100,7 +104,7 @@ class BuildHeaderAppBar extends StatelessWidget {
 
       expandedHeight: 100.h,
       floating: true,
-      pinned: home ? true : false,
+      pinned: pinned,
       backgroundColor: ColorsManager.primaryPurple,
       flexibleSpace: FlexibleSpaceBar(
         title: Column(

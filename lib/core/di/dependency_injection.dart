@@ -19,6 +19,8 @@ import 'package:mishkat_almasabih/features/home/data/repos/get_all_books_with_ca
 import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistics_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
+import 'package:mishkat_almasabih/features/navigation/data/repos/navigation_repo.dart';
+import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/repos/public_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
 import '../../features/authentication/login/logic/cubit/login_cubit.dart';
@@ -80,4 +82,8 @@ Future<void> setUpGetIt() async {
 
   getIt.registerLazySingleton<HadithDailyRepo>(() => HadithDailyRepo(getIt()));
   getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit(getIt()));
+
+  
+  getIt.registerLazySingleton<NavigationRepo>(() => NavigationRepo(getIt()));
+  getIt.registerFactory<NavigationCubit>(() => NavigationCubit(getIt()));
 }

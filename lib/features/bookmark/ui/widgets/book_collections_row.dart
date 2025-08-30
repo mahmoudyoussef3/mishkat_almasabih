@@ -17,7 +17,10 @@ class BookmarkCollectionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetCollectionsBookmarkCubit, GetCollectionsBookmarkState>(
+    return BlocBuilder<
+      GetCollectionsBookmarkCubit,
+      GetCollectionsBookmarkState
+    >(
       builder: (context, state) {
         if (state is GetCollectionsBookmarkLoading) {
           /// 🔹 Shimmer effect while loading
@@ -28,23 +31,27 @@ class BookmarkCollectionsRow extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               itemCount: 5,
               separatorBuilder: (_, __) => SizedBox(width: 10.w),
-              itemBuilder: (_, __) => Shimmer.fromColors(
-           baseColor: Colors.grey.shade300,
-      highlightColor: Colors.grey.shade100,
-                child: Container(
-                  width: 80.w,
-                  height: 36.h,
-                  decoration: BoxDecoration(
-                    color: ColorsManager.lightGray,
-                    borderRadius: BorderRadius.circular(22.r),
+              itemBuilder:
+                  (_, __) => Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: 80.w,
+                      height: 36.h,
+                      decoration: BoxDecoration(
+                        color: ColorsManager.lightGray,
+                        borderRadius: BorderRadius.circular(22.r),
+                      ),
+                    ),
                   ),
-                ),
-              ),
             ),
           );
         } else if (state is GetCollectionsBookmarkSuccess) {
           final collections = state.collectionsResponse.collections;
-          final allCollections = ["الكل", ...collections!.map((e) => e.collection!)];
+          final allCollections = [
+            "الكل",
+            ...collections!.map((e) => e.collection ?? ""),
+          ];
 
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -79,11 +86,12 @@ class BookmarkCollectionsRow extends StatelessWidget {
                     child: ChoiceChip(
                       showCheckmark: false,
                       label: Text(
-                        c,
+                        c ?? "",
                         style: TextStyle(
-                          color: isSelected
-                              ? Colors.white
-                              : ColorsManager.primaryText,
+                          color:
+                              isSelected
+                                  ? Colors.white
+                                  : ColorsManager.primaryText,
                           fontWeight: FontWeight.w600,
                           fontSize: 14.sp,
                         ),

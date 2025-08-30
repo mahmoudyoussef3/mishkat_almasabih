@@ -64,6 +64,7 @@ class BookmarkList extends StatelessWidget {
                       MaterialPageRoute(
                         builder:
                             (_) => HadithDetailScreen(
+                              chapterNumber: hadith.chapterNumber.toString(),
                               bookName: hadith.bookName ?? "كتاب غير معروف",
                               isBookMark: true,
                               hadithText:

@@ -1,442 +1,237 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_title.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_content_card.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_attribution_and_grade.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tab_content.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
-import 'package:share_plus/share_plus.dart';
-
-import '../../../bookmark/data/models/book_mark_model.dart';
-import '../../../bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 
 class HadithDailyScreen extends StatefulWidget {
-  const HadithDailyScreen({super.key});
+  const HadithDailyScreen({super.key, required this.dailyHadithModel});
+  final DailyHadithModel dailyHadithModel;
 
   @override
   State<HadithDailyScreen> createState() => _HadithDailyScreenState();
 }
 
 class _HadithDailyScreenState extends State<HadithDailyScreen> {
-  String selectedTab = "شرح"; // الافتراضي
-
-  @override
-  void initState() {
-    super.initState();
-    getHadithDaily();
-  }
-
-  Future<void> getHadithDaily() async {
-    await context.read<DailyHadithCubit>().emitHadithDaily();
-  }
+  String selectedTab = "شرح";
 
   @override
   Widget build(BuildContext context) {
+    final data = widget.dailyHadithModel.data;
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: ColorsManager.primaryBackground,
-        body: BlocBuilder<DailyHadithCubit, DailyHadithState>(
-          builder: (context, state) {
-            if (state is DailyHaditLoading) {
-              return loadingProgressIndicator();
-            } else if (state is DailyHadithSuccess) {
-              final data = state.dailyHadithModel.data;
+        body: CustomScrollView(
+          slivers: [
+            const BuildHeaderAppBar(
+              title: 'حديث اليوم',
+              description: 'مكتبة مشكاة الإسلامية',
+            ),
 
-              return CustomScrollView(
-                slivers: [
-                  BuildHeaderAppBar(
-                    title: 'حديث اليوم',
-                    description: 'مكتبة مشكاة الإسلامية',
-                  ),
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(Spacing.screenHorizontal),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (data?.title != null)
-                            Text(
-                              data!.title!,
-                              style: const TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: ColorsManager.primaryPurple,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          SizedBox(height: 16.h),
+            // Enhanced header section
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                child: _buildDailyHadithHeader(),
+              ),
+            ),
 
-                          if (data?.hadith != null)
-                            Container(
-                              padding: EdgeInsets.all(16.w),
-                              decoration: BoxDecoration(
-                                color: ColorsManager.secondaryBackground,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ColorsManager.darkPurple.withOpacity(
-                                      0.05,
-                                    ),
-                                    blurRadius: 6,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Text(
-                                data!.hadith!,
-                                style: const TextStyle(
-                                  fontFamily: 'Amiri',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
-                                  height: 1.8,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          SizedBox(height: 8.h),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (data?.title != null)
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20.h),
+                        child: HadithTitle(title: data!.title!),
+                      ),
 
-                          /// Attribution
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            
-                            children: [
-                                if (data?.attribution != null)
-                            Text(
-                              "📖 ${data!.attribution!}",
-                              style: const TextStyle(
-                                fontSize: 16,
-                                color: ColorsManager.accentPurple,
-                                fontStyle: FontStyle.italic,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          /// Grade
-                          if (data?.grade != null)
-                            Center(
-                              child: Chip(
-                                backgroundColor: gradeColor(
-                                  data?.grade!,
-                                ).withOpacity(0.1),
-                                label: Text(
-                                  " ${data!.grade!}",
-                                  style: TextStyle(
-                                    color: gradeColor(data.grade!),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],),
-                      
-                          SizedBox(height: 8.h),
-                           
-                          Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: ColorsManager.primaryGreen)
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                tabButton("شرح"),
-                                tabButton("الدروس المستفادة"),
-                                tabButton("معاني الكلمات"),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 12.h),
+                    if (data?.hadith != null)
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20.h),
+                        child: HadithContentCard(data: widget.dailyHadithModel),
+                      ),
 
-                          /// Container يظهر حسب الاختيار
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.all(16.w),
-                            decoration: BoxDecoration(
-                              color: ColorsManager.secondaryBackground,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ColorsManager.darkPurple.withOpacity(
-                                    0.05,
-                                  ),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: buildSelectedContent(data),
-                          ),
-                        ],
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20.h),
+                      child: HadithAttributionAndGrade(
+                        data: widget.dailyHadithModel,
                       ),
                     ),
-                  ),
-                  SliverToBoxAdapter(child: SizedBox(height: 10.h)),
-                     SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Container(
-                    padding: EdgeInsetsDirectional.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
+
+                    // Enhanced tabs section
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20.h),
+                      child: _buildEnhancedTabsSection(),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: ColorsManager.primaryPurple.withOpacity(0.1),
+
+                    HadithTabContent(
+                      selectedTab: selectedTab,
+                      data: widget.dailyHadithModel,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildActionButton(
-                          icon: Icons.copy,
-                          label: "نسخ",
-                          onTap: () {
-                            Clipboard.setData(
-                              ClipboardData(text: data?.hadith ?? ""),
-                            );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              
-                              const SnackBar(
-                                                                    behavior: SnackBarBehavior.floating,
-
-                                content: Text("تم نسخ الحديث")),
-                            );
-                          },
-                        ),
-                        _buildActionButton(
-                          icon: Icons.share,
-                          label: "مشاركة",
-                          onTap: () async {
-                            await Share.share(
-                              data?.hadith ?? "",
-                              subject: "شارك الحديث",
-                            );
-                          },
-                        ),
-                          BlocConsumer<AddCubitCubit, AddCubitState>(
-                            listener: (context, state) {
-                              if (state is AddLoading) {
-                                ScaffoldMessenger.of(context).clearSnackBars();
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                                                        behavior: SnackBarBehavior.floating,
-
-                                    backgroundColor: ColorsManager.primaryGreen,
-                                    content: loadingProgressIndicator(
-                                      size: 30,
-                                      color: ColorsManager.offWhite,
-                                    ),
-                                  ),
-                                );
-                              } else if (state is AddSuccess) {
-                                ScaffoldMessenger.of(context).clearSnackBars();
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                                                        behavior: SnackBarBehavior.floating,
-
-                                    backgroundColor: ColorsManager.primaryGreen,
-                                    content: Text(
-                                      'تم اضافة الحديث إلي المحفوظات',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              } else if (state is AddFailure) {
-                                ScaffoldMessenger.of(context).clearSnackBars();
-
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                                                        behavior: SnackBarBehavior.floating,
-
-                                    backgroundColor: ColorsManager.primaryGreen,
-                                    content: Text(
-                                      'حدث خطأ. حاول مرة اخري',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              }
-                            },
-                            builder: (context, state) {
-                              return _buildActionButton(
-                                icon: Icons.bookmark,
-                                label: "حفظ",
-                                onTap: () async {
-                                  context.read<AddCubitCubit>().addBookmark(
-                                    Bookmark(
-                                      bookName: '',
-                                      chapterName: '',
-                                      hadithId: '',
-                                      hadithText: data?.hadith,
-                                      type: 'hadith',
-                                      bookSlug: '',
-                                      
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                      ],
-                    ),
-                  ),
+                  ],
                 ),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 100.h,),)
-                ],
-              );
-            }
-            return const SizedBox.shrink();
-          },
+            ),
+
+            // Enhanced actions section
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: _buildEnhancedActionsSection(),
+              ),
+            ),
+
+            SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+          ],
         ),
       ),
     );
   }
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12.r),
-      child: Column(
+
+  Widget _buildDailyHadithHeader() {
+    return Container(
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            ColorsManager.primaryPurple.withOpacity(0.1),
+            ColorsManager.primaryGold.withOpacity(0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(
+          color: ColorsManager.primaryPurple.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
         children: [
-          CircleAvatar(
-            backgroundColor: ColorsManager.primaryPurple.withOpacity(0.1),
-            child: Icon(icon, color: ColorsManager.primaryPurple),
+          Container(
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: ColorsManager.primaryPurple.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Icon(
+              Icons.auto_stories,
+              color: ColorsManager.primaryPurple,
+              size: 24.sp,
+            ),
           ),
-          SizedBox(height: 6.h),
-          Text(
-            label,
-            style: TextStyle(fontSize: 13.sp, color: ColorsManager.darkGray),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'حديث اليوم',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorsManager.primaryText,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'نص حديث نبوي شريف مع شرحه',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: ColorsManager.secondaryText,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
-  /// زر تبويب
-  Widget tabButton(String title) {
-    final isSelected = selectedTab == title;
-    return GestureDetector(
-      onTap: () => setState(() => selectedTab = title),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-        decoration: BoxDecoration(
-          color:
-              isSelected
-                  ? ColorsManager.primaryPurple.withOpacity(0.2)
-                  : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16.sp,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: isSelected ? ColorsManager.primaryPurple : Colors.black87,
+
+  Widget _buildEnhancedTabsSection() {
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorsManager.white,
+        borderRadius: BorderRadius.circular(16.r),
+        boxShadow: [
+          BoxShadow(
+            color: ColorsManager.primaryPurple.withOpacity(0.08),
+            blurRadius: 20.r,
+            offset: const Offset(0, 4),
           ),
-        ),
+        ],
+      ),
+      child: HadithTabs(
+        selectedTab: selectedTab,
+        onTabSelected: (tab) {
+          setState(() => selectedTab = tab);
+        },
       ),
     );
   }
 
-  /// Grade Color Mapping
-  Color gradeColor(String? g) {
-    switch (g?.toLowerCase()) {
-      case "sahih":
-      case "صحيح":
-        return ColorsManager.hadithAuthentic;
-      case "hasan":
-      case "حسن":
-        return ColorsManager.hadithGood;
-      case "daif":
-      case "ضعيف":
-        return ColorsManager.hadithWeak;
-      default:
-        return ColorsManager.hadithAuthentic;
-    }
-  }
-
-  /// محتوى حسب التبويب
-  Widget buildSelectedContent(data) {
-    switch (selectedTab) {
-      case "شرح":
-        return Text(
-          data?.explanation ?? "لا يوجد شرح",
-          style: const TextStyle(fontSize: 16, height: 1.6),
-          textAlign: TextAlign.justify,
-        );
-      case "الدروس المستفادة":
-        if (data?.hints != null && data.hints!.isNotEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                data.hints!
-                    .map<Widget>(
-                      (hint) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: Text(
-                          "• $hint",
-                          style: const TextStyle(fontSize: 16),
-                        ),
-                      ),
-                    )
-                    .toList(),
-          );
-        } else {
-          return const Text("لا توجد فوائد");
-        }
-      case "معاني الكلمات":
-        if (data?.wordsMeanings != null && data.wordsMeanings!.isNotEmpty) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                data.wordsMeanings!
-                    .map<Widget>(
-                      (wm) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: wm.word ?? "",
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorsManager.darkPurple,
-                                ),
-                              ),
-                              const TextSpan(
-                                text: ": ",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: ColorsManager.darkPurple,
-                                ),
-                              ),
-                              TextSpan(
-                                text: wm.meaning ?? "",
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
-                    .toList(),
-          );
-        } else {
-          return const Text("لا توجد معاني");
-        }
-      default:
-        return const SizedBox.shrink();
-    }
+  Widget _buildEnhancedActionsSection() {
+    return Container(
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            ColorsManager.primaryGold.withOpacity(0.1),
+            ColorsManager.primaryPurple.withOpacity(0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(
+          color: ColorsManager.primaryGold.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: ColorsManager.primaryGold.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                child: Icon(
+                  Icons.share,
+                  color: ColorsManager.primaryGold,
+                  size: 20.sp,
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Text(
+                'إجراءات الحديث',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorsManager.primaryText,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.h),
+          HadithActionsRow(hadith: widget.dailyHadithModel.data?.hadith ?? ""),
+        ],
+      ),
+    );
   }
 }
