@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
@@ -90,6 +92,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           time: _formatDateTime(now).split(' - ')[0],
                         ),
                       );
+                      context.pushNamed(Routes.publicSearchSCreen,arguments: trimmedQuery);
                     }
                   },
                 ),

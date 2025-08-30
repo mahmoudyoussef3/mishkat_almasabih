@@ -7,6 +7,7 @@ import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.d
 import 'package:mishkat_almasabih/mishkat_almasabih.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:android_intent_plus/android_intent.dart';
 
 import 'core/di/dependency_injection.dart';
 import 'package:device_preview/device_preview.dart';
@@ -27,6 +28,20 @@ void main() async {
   tz.initializeTimeZones();
   await EasyNotify.init();
   await EasyNotifyPermissions.requestAll();
+  final intentThree = const AndroidIntent(
+  action: 'android.settings.SETTINGS',
+);
+await intentThree.launch();
+  const intent = AndroidIntent(
+  action: 'android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
+  data: 'package:com.yourcompany.yourapp',
+);
+await intent.launch();
+   const intentTwo = AndroidIntent(
+      action: 'android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS',
+    );
+    await intentTwo.launch();  
+
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
   final prefs = await SharedPreferences.getInstance();

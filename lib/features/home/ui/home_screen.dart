@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -56,6 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Loads library statistics from the backend
   Future<void> _loadLibraryStatistics() async {
     await context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit();
+        await context.read<DailyHadithCubit>().emitHadithDaily();
+
+
   }
 
   /// Disposes of resources to prevent memory leaks
