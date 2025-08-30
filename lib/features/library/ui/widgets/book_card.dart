@@ -10,6 +10,7 @@ class BookCard extends StatelessWidget {
   final Book book;
 
   const BookCard({super.key, required this.book});
+
   static const Map<String, String> bookWriters = {
     "Sahih Bukhari": "الإمام البخاري",
     "Sahih Muslim": "الإمام مسلم",
@@ -69,6 +70,7 @@ class BookCard extends StatelessWidget {
     "الشمائل المحمدية": "assets/images/book_covers/shamail_muhammadiyah.jpeg",
     "حصن المسلم": "assets/images/book_covers/hisnul_muslim.jpeg",
   };
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -87,72 +89,221 @@ class BookCard extends StatelessWidget {
           ),
       child: Container(
         decoration: BoxDecoration(
-          color: ColorsManager.white,
-          borderRadius: BorderRadius.circular(20.r),
+          gradient: LinearGradient(
+            colors: [
+              ColorsManager.white,
+              ColorsManager.offWhite.withOpacity(0.8),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          borderRadius: BorderRadius.circular(24.r),
+          border: Border.all(
+            color: ColorsManager.primaryPurple.withOpacity(0.1),
+            width: 1.5,
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8.r,
+              color: ColorsManager.primaryPurple.withOpacity(0.08),
+              blurRadius: 20,
+              offset: Offset(0, 8.h),
+              spreadRadius: 2,
+            ),
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
               offset: Offset(0, 4.h),
             ),
           ],
         ),
-        child: Column(
+        child: Stack(
           children: [
-            Expanded(
+            // Islamic pattern overlay
+            Positioned(
+              top: -20,
+              right: -20,
               child: Container(
+                width: 100.w,
+                height: 100.h,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20.r),
-                  ),
-                  image: DecorationImage(
-                    image: AssetImage(bookImages[book.bookName!] ?? ''),
-                    fit: BoxFit.cover,
-                  ),
+                  color: ColorsManager.primaryPurple.withOpacity(0.02),
+                  borderRadius: BorderRadius.circular(50.r),
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(10.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    bookNamesArabic[book.bookName] ?? '',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.bold,
-                      color: ColorsManager.primaryText,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    bookWriters[book.bookName] ?? '',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: ColorsManager.secondaryText,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 6.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BookStat(
-                        value: '${book.chapters_count} باب',
-                        color: ColorsManager.accentPurple,
+
+            // Main content
+            Column(
+              children: [
+                // Enhanced book cover section
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(24.r),
                       ),
-                      BookStat(
-                        value: '${book.hadiths_count} حديث',
-                        color: ColorsManager.hadithAuthentic,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 8,
+                          offset: Offset(0, 4.h),
+                        ),
+                      ],
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(24.r),
+                      ),
+                      child: Stack(
+                        children: [
+                          // Book cover image
+                          Image.asset(
+                            bookImages[book.bookName!] ?? '',
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+
+                          // Gradient overlay for better text readability
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: 60.h,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.black.withOpacity(0.3),
+                                    Colors.black.withOpacity(0.6),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          // Decorative corner element
+                          Positioned(
+                            top: 12.h,
+                            right: 12.w,
+                            child: Container(
+                              width: 32.w,
+                              height: 32.h,
+                              decoration: BoxDecoration(
+                                color: ColorsManager.primaryPurple.withOpacity(
+                                  0.9,
+                                ),
+                                borderRadius: BorderRadius.circular(16.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ColorsManager.primaryPurple
+                                        .withOpacity(0.3),
+                                    blurRadius: 8,
+                                    offset: Offset(0, 3.h),
+                                  ),
+                                ],
+                              ),
+                              child: Icon(
+                                Icons.book,
+                                color: ColorsManager.white,
+                                size: 18.r,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+
+                // Enhanced book information section
+                Container(
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        ColorsManager.white,
+                        ColorsManager.offWhite.withOpacity(0.6),
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Book title with enhanced styling
+                      Text(
+                        bookNamesArabic[book.bookName] ?? '',
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w800,
+                          color: ColorsManager.primaryText,
+                          fontFamily: 'Amiri',
+                          height: 1.2,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+
+                      SizedBox(height: 6.h),
+
+                      // Author name with enhanced styling
+                      Text(
+                        bookWriters[book.bookName] ?? '',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: ColorsManager.secondaryText,
+                          fontFamily: 'Amiri',
+                          fontWeight: FontWeight.w500,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+
+                      SizedBox(height: 12.h),
+
+                      // Enhanced stats row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: BookStat(
+                              value: '${book.chapters_count} باب',
+                              color: ColorsManager.primaryPurple,
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Expanded(
+                            child: BookStat(
+                              value: '${book.hadiths_count} حديث',
+                              color: ColorsManager.hadithAuthentic,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Decorative bottom line
+                      SizedBox(height: 12.h),
+                      Container(
+                        height: 2.h,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              ColorsManager.primaryPurple.withOpacity(0.4),
+                              ColorsManager.primaryPurple.withOpacity(0.1),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.circular(1.r),
+                        ),
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

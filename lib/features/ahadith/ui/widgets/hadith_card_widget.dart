@@ -43,116 +43,205 @@ class HadithCard extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
-      margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+      margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [ColorsManager.secondaryBackground, ColorsManager.offWhite],
+          colors: [
+            ColorsManager.secondaryBackground,
+            ColorsManager.offWhite,
+            ColorsManager.lightGray.withOpacity(0.3),
+          ],
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
         ),
-        borderRadius: BorderRadius.circular(22.r),
+        borderRadius: BorderRadius.circular(26.r),
+        border: Border.all(color: gradeColor.withOpacity(0.15), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 8,
+            color: gradeColor.withOpacity(0.08),
+            blurRadius: 15,
+            offset: const Offset(0, 6),
+            spreadRadius: 1,
+          ),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.06),
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // HEADER
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
+        children: [
+          // Islamic pattern overlay
+          Positioned(
+            top: -15,
+            right: -15,
+            child: Container(
+              width: 80.w,
+              height: 80.h,
+              decoration: BoxDecoration(
+                color: gradeColor.withOpacity(0.03),
+                borderRadius: BorderRadius.circular(40.r),
+              ),
+            ),
+          ),
+
+          // Main content
+          Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                // Enhanced header with Islamic design
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(
-                      Icons.menu_book,
-                      color: ColorsManager.primaryGreen,
-                      size: 18.r,
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8.w),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                gradeColor.withOpacity(0.1),
+                                gradeColor.withOpacity(0.05),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Icon(
+                            Icons.menu_book,
+                            color: gradeColor,
+                            size: 20.r,
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        Text(
+                          'نص الحديث',
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            fontWeight: FontWeight.w700,
+                            color: ColorsManager.primaryText,
+                            fontFamily: 'Amiri',
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 6.w),
-                    Text(
-                      'نص الحديث',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                        color: ColorsManager.primaryText,
+
+                    // Enhanced grade badge
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            gradeColor.withOpacity(0.15),
+                            gradeColor.withOpacity(0.08),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(
+                          color: gradeColor.withOpacity(0.2),
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        grade ?? "",
+                        style: TextStyle(
+                          color: gradeColor,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16.sp,
+                          fontFamily: 'Amiri',
+                        ),
                       ),
                     ),
                   ],
                 ),
 
+                SizedBox(height: 16.h),
+
+                // Enhanced hadith text
                 Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 6.h,
-                  ),
+                  padding: EdgeInsets.all(16.w),
                   decoration: BoxDecoration(
-                    color: gradeColor.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12.r),
+                    gradient: LinearGradient(
+                      colors: [
+                        ColorsManager.white.withOpacity(0.8),
+                        ColorsManager.offWhite.withOpacity(0.6),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(18.r),
+                    border: Border.all(
+                      color: gradeColor.withOpacity(0.1),
+                      width: 1,
+                    ),
                   ),
                   child: Text(
-                    grade ?? "",
+                    text,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.right,
                     style: TextStyle(
-                      color: gradeColor,
-                 //     fontFamily:"Amiri",
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16.sp,
+                      fontFamily: 'Amiri',
+                      color: ColorsManager.primaryText,
+                      fontSize: 17.sp,
+                      height: 1.8,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 10.h),
 
-            Text(
-              text,
-              maxLines: 4,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.right,
-              style: TextStyle(
-                fontFamily: 'Amiri',
-                color: ColorsManager.primaryText,
-                fontSize: 16.sp,
-                height: 1.8,
-              ),
-            ),
+                SizedBox(height: 18.h),
 
-            SizedBox(height: 12.h),
+                // Enhanced book and chapter pills
+                Row(
+                  children: [
+                    Flexible(
+                      child: _buildGradientPill(
+                        text: bookName,
+                        colors: [
+                          ColorsManager.primaryPurple.withOpacity(0.8),
+                          ColorsManager.primaryPurple.withOpacity(0.6),
+                        ],
+                        textColor: ColorsManager.white,
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Flexible(
+                      child: _buildGradientPill(
+                        text: reference ?? '',
+                        colors: [
+                          gradeColor.withOpacity(0.8),
+                          gradeColor.withOpacity(0.6),
+                        ],
+                        textColor: ColorsManager.white,
+                      ),
+                    ),
+                  ],
+                ),
 
-            // BOOK + CHAPTER PILLS
-            Row(
-              children: [
-                Flexible(
-                  child: _buildGradientPill(
-                    text: bookName,
-                    colors: [
-                      ColorsManager.primaryGreen.withOpacity(0.7),
-                      ColorsManager.primaryGreen.withOpacity(0.5),
-                    ],
-                    textColor: ColorsManager.offWhite,
+                // Decorative bottom line
+                SizedBox(height: 16.h),
+                Container(
+                  height: 2.h,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        gradeColor.withOpacity(0.4),
+                        gradeColor.withOpacity(0.1),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(1.r),
                   ),
                 ),
-                SizedBox(width: 12.w),
-                Flexible(
-                  child: _buildGradientPill(
-                    text: reference ?? '',
-                    colors: [
-                      ColorsManager.hadithAuthentic.withOpacity(0.7),
-                      ColorsManager.hadithAuthentic.withOpacity(0.5),
-                    ],
-                    textColor: ColorsManager.offWhite,
-                  ),
-                ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -163,22 +252,31 @@ class HadithCard extends StatelessWidget {
     required Color textColor,
   }) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: colors,
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(20.r),
+        boxShadow: [
+          BoxShadow(
+            color: colors.first.withOpacity(0.3),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Text(
         text,
         style: TextStyle(
           color: textColor,
-          fontWeight: FontWeight.w600,
-          fontSize: 13.sp,
+          fontWeight: FontWeight.w700,
+          fontSize: 14.sp,
+          fontFamily: 'Amiri',
         ),
+        textAlign: TextAlign.center,
       ),
     );
   }

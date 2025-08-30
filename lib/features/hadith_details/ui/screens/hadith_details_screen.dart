@@ -46,7 +46,6 @@ class HadithDetailScreen extends StatefulWidget {
   State<HadithDetailScreen> createState() => _HadithDetailScreenState();
 }
 
-
 class _HadithDetailScreenState extends State<HadithDetailScreen> {
   @override
   Widget build(BuildContext context) {
@@ -66,66 +65,36 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          appBar: AppBar(
-            foregroundColor: ColorsManager.primaryGreen,
-            centerTitle: true,
-            title: Text('تفاصيل الحديث', style: TextStyle(color: Colors.black)),
-            backgroundColor: ColorsManager.secondaryBackground,
-            elevation: 0,
-
-            actions: [
-              IconButton(
-                color: ColorsManager.primaryGreen,
-                onPressed: () async {
-                  await Share.share(widget.hadithText!, subject: "شارك الحديث");
-                },
-                icon: Icon(Icons.share),
-              ),
-
-              if (!widget.isBookMark)
-                IconButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (context) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create:
-                                    (context) =>
-                                        getIt<GetCollectionsBookmarkCubit>(),
-                              ),
-                              BlocProvider(
-                                create: (context) => getIt<AddCubitCubit>(),
-                              ),
-                            ],
-                            child: AddToFavoritesDialog(
-                              bookName: widget.bookName ?? '',
-                              bookSlug: widget.bookSlug ?? '',
-                              chapter: widget.chapter ?? '',
-                              hadithNumber: widget.hadithNumber ?? '',
-                              hadithText: widget.hadithText ?? '',
-                              id: widget.hadithNumber ?? '',
-                            ),
-                          ),
-                    );
-                  },
-                  icon: Icon(Icons.favorite, color: ColorsManager.primaryGreen),
-                ),
-            ],
-          ),
+          appBar: _buildEnhancedAppBar(),
           backgroundColor: ColorsManager.primaryBackground,
           body: CustomScrollView(
             slivers: [
+              // Enhanced header section
+              SliverToBoxAdapter(
+                child: Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 16.h,
+                  ),
+                  child: _buildHadithHeader(),
+                ),
+              ),
+
               SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
+              // Enhanced hadith text card
               SliverToBoxAdapter(
                 child: HadithTextCard(hadithText: widget.hadithText!),
               ),
 
+              // Enhanced grade section
               if (widget.grade != null)
                 SliverToBoxAdapter(
-                  child: SizedBox(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 16.h,
+                    ),
                     child: HadithGradeTile(
                       grade: widget.grade!,
                       onTap: () {
@@ -133,10 +102,29 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                           ClipboardData(text: widget.hadithText ?? ''),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             behavior: SnackBarBehavior.floating,
-
-                            content: Text("تم نسخ الحديث"),
+                            backgroundColor: ColorsManager.success,
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.white,
+                                  size: 20.sp,
+                                ),
+                                SizedBox(width: 12.w),
+                                Text(
+                                  "تم نسخ الحديث بنجاح",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
                           ),
                         );
                       },
@@ -144,29 +132,43 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   ),
                 ),
 
-              _buildDivider(),
+              _buildEnhancedDivider(),
 
+              // Enhanced book section
               SliverToBoxAdapter(
-                child: HadithBookSection(
-                  bookName: widget.bookName ?? '',
-                  author: widget.author,
-                  authorDeath: widget.authorDeath,
-                  chapter: widget.chapter ?? "",
+                child: Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 16.h,
+                  ),
+                  child: HadithBookSection(
+                    bookName: widget.bookName ?? '',
+                    author: widget.author,
+                    authorDeath: widget.authorDeath,
+                    chapter: widget.chapter ?? "",
+                  ),
                 ),
               ),
 
-              _buildDivider(),
+              _buildEnhancedDivider(),
 
+              // Enhanced navigation section
               if (!widget.isBookMark)
                 SliverToBoxAdapter(
-                  child: HadithNavigation(
-                    hadithNumber: widget.hadithNumber ?? "",
-                    bookSlug: widget.bookSlug ?? '',
-                    chapterNumber: widget.chapterNumber,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 16.h,
+                    ),
+                    child: HadithNavigation(
+                      hadithNumber: widget.hadithNumber ?? "",
+                      bookSlug: widget.bookSlug ?? '',
+                      chapterNumber: widget.chapterNumber,
+                    ),
                   ),
                 ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 30.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 40.h)),
             ],
           ),
         ),
@@ -174,16 +176,208 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
     );
   }
 
-  Widget _buildDivider() {
-    return SliverToBoxAdapter(
-      child: Column(
+  PreferredSizeWidget _buildEnhancedAppBar() {
+    return AppBar(
+      foregroundColor: ColorsManager.primaryPurple,
+      centerTitle: true,
+      title: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        decoration: BoxDecoration(
+          color: ColorsManager.primaryPurple.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
+        child: Text(
+          'تفاصيل الحديث',
+          style: TextStyle(
+            color: ColorsManager.primaryPurple,
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+          ),
+        ),
+      ),
+      backgroundColor: ColorsManager.secondaryBackground,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(24.r),
+          bottomRight: Radius.circular(24.r),
+        ),
+      ),
+      actions: [
+        // Enhanced share button
+        Container(
+          margin: EdgeInsets.only(right: 8.w),
+          decoration: BoxDecoration(
+            color: ColorsManager.primaryGold.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12.r),
+          ),
+          child: IconButton(
+            color: ColorsManager.primaryGold,
+            onPressed: () async {
+              await Share.share(widget.hadithText!, subject: "شارك الحديث");
+            },
+            icon: Icon(Icons.share, size: 22.sp),
+          ),
+        ),
+
+        // Enhanced bookmark button
+        if (!widget.isBookMark)
+          Container(
+            margin: EdgeInsets.only(right: 8.w),
+            decoration: BoxDecoration(
+              color: ColorsManager.primaryPurple.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder:
+                      (context) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create:
+                                (context) =>
+                                    getIt<GetCollectionsBookmarkCubit>(),
+                          ),
+                          BlocProvider(
+                            create: (context) => getIt<AddCubitCubit>(),
+                          ),
+                        ],
+                        child: AddToFavoritesDialog(
+                          bookName: widget.bookName ?? '',
+                          bookSlug: widget.bookSlug ?? '',
+                          chapter: widget.chapter ?? '',
+                          hadithNumber: widget.hadithNumber ?? '',
+                          hadithText: widget.hadithText ?? '',
+                          id: widget.hadithNumber ?? '',
+                        ),
+                      ),
+                );
+              },
+              icon: Icon(
+                Icons.favorite,
+                color: ColorsManager.primaryPurple,
+                size: 22.sp,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildHadithHeader() {
+    return Container(
+      padding: EdgeInsets.all(20.w),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            ColorsManager.primaryPurple.withOpacity(0.1),
+            ColorsManager.secondaryPurple.withOpacity(0.05),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(
+          color: ColorsManager.primaryPurple.withOpacity(0.2),
+          width: 1,
+        ),
+      ),
+      child: Row(
         children: [
-          Divider(
-            color: ColorsManager.primaryNavy,
-            endIndent: 30.h,
-            indent: 30.h,
+          Container(
+            padding: EdgeInsets.all(12.w),
+            decoration: BoxDecoration(
+              color: ColorsManager.primaryPurple.withOpacity(0.15),
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: Icon(
+              Icons.format_quote,
+              color: ColorsManager.primaryPurple,
+              size: 24.sp,
+            ),
+          ),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'حديث رقم ${widget.hadithNumber}',
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorsManager.primaryText,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'من ${widget.bookName ?? "المصدر"}',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: ColorsManager.secondaryText,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildEnhancedDivider() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 24.h),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 2.h,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorsManager.primaryPurple.withOpacity(0.3),
+                      ColorsManager.primaryGold.withOpacity(0.6),
+                      ColorsManager.primaryPurple.withOpacity(0.3),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(1.r),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.all(8.w),
+              decoration: BoxDecoration(
+                color: ColorsManager.primaryGold.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Icon(
+                Icons.star,
+                color: ColorsManager.primaryGold,
+                size: 16.sp,
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 2.h,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorsManager.primaryPurple.withOpacity(0.3),
+                      ColorsManager.primaryGold.withOpacity(0.6),
+                      ColorsManager.primaryPurple.withOpacity(0.3),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(1.r),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

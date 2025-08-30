@@ -34,20 +34,14 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 title: bookData['bookName'],
                 description: bookData['writerName'],
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-              _buildStatsCards(),
-              _buildSearchBar(context, _controller),
-              SliverToBoxAdapter(
-                child: Divider(
-                  color: ColorsManager.primaryNavy,
-                  endIndent: 30.h,
-                  indent: 30.h,
-                ),
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              _buildEnhancedStatsCards(),
+              _buildEnhancedSearchBar(context, _controller),
+              _buildIslamicSeparator(),
               ResponsiveChapterList(
                 isLoading: true,
                 items: [],
-                primaryPurple: ColorsManager.primaryGreen,
+                primaryPurple: ColorsManager.primaryPurple,
                 bookName: '',
                 writerName: '',
                 bookSlug: '',
@@ -67,7 +61,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
 
         if (state is ChaptersSuccess) {
           return RefreshIndicator(
-            color: ColorsManager.primaryGreen,
+            color: ColorsManager.primaryPurple,
             onRefresh: () async {
               context.read<ChaptersCubit>().emitGetBookChapters(bookSlug);
             },
@@ -77,65 +71,17 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                   title: bookData['bookName'],
                   description: bookData['writerName'],
                 ),
-                SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-                _buildStatsCards(),
-                SliverToBoxAdapter(
-                  child: Divider(
-                    color: ColorsManager.primaryNavy,
-                    endIndent: 30.h,
-                    indent: 30.h,
-                  ),
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-                _buildSearchBar(context, _controller),
-                SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+                SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+                _buildEnhancedStatsCards(),
+                _buildIslamicSeparator(),
+                SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+                _buildEnhancedSearchBar(context, _controller),
+                SliverToBoxAdapter(child: SizedBox(height: 16.h)),
                 state.filteredChapters.isEmpty
-                    ? SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: Center(
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.search_off,
-                                  size: 60,
-                                  color: ColorsManager.primaryNavy,
-                                ),
-                                const SizedBox(height: 16),
-                                Text(
-                                  'لا توجد نتائج',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: ColorsManager.primaryNavy,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'حاول بكلمة أبسط أو مختلفة',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.grey.shade600,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
+                    ? _buildEnhancedEmptyState()
                     : ResponsiveChapterList(
                       items: state.filteredChapters,
-                      primaryPurple: ColorsManager.primaryGreen,
+                      primaryPurple: ColorsManager.primaryPurple,
                       bookName: bookData['bookName'],
                       writerName: bookData['writerName'],
                       bookSlug: bookSlug,
@@ -150,10 +96,26 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
     );
   }
 
-  SliverToBoxAdapter _buildStatsCards() {
+  SliverToBoxAdapter _buildEnhancedStatsCards() {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.all(Spacing.screenHorizontal),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: Spacing.screenHorizontal),
+        padding: EdgeInsets.all(20.w),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              ColorsManager.primaryPurple.withOpacity(0.05),
+              ColorsManager.primaryPurple.withOpacity(0.02),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(
+            color: ColorsManager.primaryPurple.withOpacity(0.1),
+            width: 1,
+          ),
+        ),
         child: Row(
           children: [
             Expanded(
@@ -161,7 +123,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 icon: Icons.folder,
                 title: 'الأبواب',
                 value: '${bookData['noOfChapters']}',
-                color: ColorsManager.hadithAuthentic.withOpacity(0.7),
+                color: ColorsManager.primaryPurple.withOpacity(0.8),
               ),
             ),
             SizedBox(width: Spacing.md),
@@ -170,7 +132,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 icon: Icons.format_quote,
                 title: 'الأحاديث',
                 value: '${bookData['noOfHadith']}',
-                color: ColorsManager.primaryGold.withOpacity(0.7),
+                color: ColorsManager.primaryGold.withOpacity(0.8),
               ),
             ),
           ],
@@ -179,19 +141,153 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
     );
   }
 
-  SliverToBoxAdapter _buildSearchBar(
+  SliverToBoxAdapter _buildEnhancedSearchBar(
     BuildContext context,
     TextEditingController controller,
   ) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.screenHorizontal),
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: Spacing.screenHorizontal),
+        padding: EdgeInsets.all(4.w),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              ColorsManager.primaryPurple.withOpacity(0.05),
+              ColorsManager.primaryPurple.withOpacity(0.02),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(20.r),
+        ),
         child: SearchBarWidget(
-          hintText: 'ابحث في الكتب...',
+          hintText: 'ابحث في الأبواب...',
           controller: controller,
           onSearch: (query) {
             context.read<ChaptersCubit>().filterChapters(query);
           },
+        ),
+      ),
+    );
+  }
+
+  SliverToBoxAdapter _buildIslamicSeparator() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 30.w, vertical: 8.h),
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 2.h,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorsManager.primaryPurple.withOpacity(0.3),
+                      ColorsManager.primaryPurple.withOpacity(0.1),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(1.r),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 16.w),
+              padding: EdgeInsets.all(8.w),
+              decoration: BoxDecoration(
+                color: ColorsManager.primaryPurple.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+              child: Icon(
+                Icons.menu_book,
+                color: ColorsManager.primaryPurple,
+                size: 20.r,
+              ),
+            ),
+            Expanded(
+              child: Container(
+                height: 2.h,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorsManager.primaryPurple.withOpacity(0.1),
+                      ColorsManager.primaryPurple.withOpacity(0.3),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(1.r),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEnhancedEmptyState() {
+    return SliverFillRemaining(
+      hasScrollBody: false,
+      child: Center(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 40.w),
+          padding: EdgeInsets.all(32.w),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                ColorsManager.white,
+                ColorsManager.offWhite.withOpacity(0.8),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(24.r),
+            border: Border.all(
+              color: ColorsManager.primaryPurple.withOpacity(0.1),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: ColorsManager.primaryPurple.withOpacity(0.08),
+                blurRadius: 20,
+                offset: Offset(0, 8.h),
+                spreadRadius: 2,
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 80.w,
+                height: 80.h,
+                decoration: BoxDecoration(
+                  color: ColorsManager.primaryPurple.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(40.r),
+                ),
+                child: Icon(
+                  Icons.search_off,
+                  size: 40.r,
+                  color: ColorsManager.primaryPurple,
+                ),
+              ),
+              SizedBox(height: 24.h),
+              Text(
+                'لا توجد نتائج',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w800,
+                  color: ColorsManager.primaryText,
+                  fontFamily: 'Amiri',
+                ),
+              ),
+              SizedBox(height: 12.h),
+              Text(
+                'حاول بكلمة أبسط أو مختلفة',
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: ColorsManager.secondaryText,
+                  fontFamily: 'Amiri',
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

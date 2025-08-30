@@ -21,11 +21,11 @@ class HadithOfTheDayCard extends StatelessWidget {
             highlightColor: Colors.grey.shade100,
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-              height: 180.h,
+              height: 200.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: ColorsManager.primaryGreen,
-                borderRadius: BorderRadius.circular(20.r),
+                color: ColorsManager.primaryPurple,
+                borderRadius: BorderRadius.circular(24.r),
               ),
             ),
           );
@@ -37,116 +37,203 @@ class HadithOfTheDayCard extends StatelessWidget {
                   arguments: state.dailyHadithModel,
                 ),
             child: Container(
-              margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-              height: 200.h,
+              margin: EdgeInsets.symmetric(vertical: 16.h, horizontal: 20.w),
+              height: 220.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.r),
-                color: ColorsManager.accentPurple,
+                borderRadius: BorderRadius.circular(24.r),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    ColorsManager.primaryPurple,
+                    ColorsManager.secondaryPurple,
+                    ColorsManager.accentPurple,
+                  ],
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    blurRadius: 8.r,
-                    offset: const Offset(0, 4),
+                    color: ColorsManager.primaryPurple.withOpacity(0.3),
+                    blurRadius: 20.r,
+                    offset: const Offset(0, 8),
                   ),
                 ],
               ),
               child: Stack(
                 children: [
-                  // 🔹 صورة بخلفية شفافة
-                  Opacity(
-                    opacity: 0.7,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20.r),
-                      child: Image.asset(
-                        "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
-                        fit: BoxFit.cover,
-                        height: double.infinity,
-                        width: double.infinity,
+                  // Islamic pattern overlay
+                  Positioned.fill(
+                    child: Opacity(
+                      opacity: 0.1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24.r),
+                        child: Image.asset(
+                          "assets/images/islamic_pattern.jpg",
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
 
-                  // محتوى البطاقة
+                  // Decorative Islamic elements
+                  Positioned(
+                    top: 16.h,
+                    right: 16.w,
+                    child: Container(
+                      padding: EdgeInsets.all(8.w),
+                      decoration: BoxDecoration(
+                        color: ColorsManager.primaryGold.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(
+                          color: ColorsManager.primaryGold.withOpacity(0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.auto_stories,
+                        color: ColorsManager.primaryGold,
+                        size: 24.sp,
+                      ),
+                    ),
+                  ),
+
+                  // Main content
                   Padding(
-                    padding: EdgeInsets.all(16.w),
+                    padding: EdgeInsets.all(20.w),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // عنوان فرعي
+                        // Header with enhanced styling
                         Row(
                           children: [
-                            Icon(
-                              Icons.auto_stories,
-                              color: Colors.white,
-                              size: 22.sp,
-                            ),
-                            SizedBox(width: 6.w),
-                            Text(
-                              "حديث اليوم",
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                shadows: [
-                                  Shadow(
-                                    color: Colors.black54,
-                                    blurRadius: 4.r,
-                                    offset: const Offset(1, 1),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 6.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: ColorsManager.primaryGold.withOpacity(
+                                  0.2,
+                                ),
+                                borderRadius: BorderRadius.circular(20.r),
+                                border: Border.all(
+                                  color: ColorsManager.primaryGold.withOpacity(
+                                    0.4,
+                                  ),
+                                  width: 1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.auto_stories,
+                                    color: ColorsManager.primaryGold,
+                                    size: 18.sp,
+                                  ),
+                                  SizedBox(width: 6.w),
+                                  Text(
+                                    "حديث اليوم",
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorsManager.primaryGold,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           ],
                         ),
-                        const Spacer(),
 
-                        // نص الحديث
-                        Text(
-                          state.dailyHadithModel.data?.title ?? "حديث اليوم",
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            height: 1.4,
-                            shadows: [
-                              Shadow(
-                                color: Colors.black54,
-                                blurRadius: 6.r,
-                                offset: const Offset(1, 2),
-                              ),
-                            ],
+                        SizedBox(height: 20.h),
+
+                        // Hadith title with enhanced typography
+                        Expanded(
+                          child: Text(
+                            state.dailyHadithModel.data?.title ?? "حديث اليوم",
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              fontSize: 22.sp,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                              height: 1.4,
+                              shadows: [
+                                Shadow(
+                                  color: Colors.black54,
+                                  blurRadius: 8.r,
+                                  offset: const Offset(2, 2),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        SizedBox(height: 12.h),
 
-                        // زر للعرض
+                        // Enhanced call-to-action button
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 14.w,
-                              vertical: 8.h,
+                              horizontal: 20.w,
+                              vertical: 12.h,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(14.r),
-                              border: Border.all(color: Colors.white70),
+                              color: ColorsManager.primaryGold.withOpacity(0.9),
+                              borderRadius: BorderRadius.circular(20.r),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 8.r,
+                                  offset: const Offset(0, 4),
+                                ),
+                              ],
                             ),
-                            child: Text(
-                              "اضغط للعرض",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "اقرأ الحديث",
+                                  style: TextStyle(
+                                    color: ColorsManager.primaryText,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                Icon(
+                                  Icons.arrow_back_ios,
+                                  color: ColorsManager.primaryText,
+                                  size: 16.sp,
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ],
+                    ),
+                  ),
+
+                  // Decorative corner element
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: Container(
+                      width: 60.w,
+                      height: 60.h,
+                      decoration: BoxDecoration(
+                        color: ColorsManager.primaryGold.withOpacity(0.1),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(24.r),
+                          bottomLeft: Radius.circular(24.r),
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.format_quote,
+                        color: ColorsManager.primaryGold.withOpacity(0.6),
+                        size: 28.sp,
+                      ),
                     ),
                   ),
                 ],
