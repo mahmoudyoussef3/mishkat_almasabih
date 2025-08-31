@@ -14,64 +14,105 @@ class HadithTabContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int count = 1;
+
     switch (selectedTab) {
       case "شرح":
-        return Text(
-          data?.data?.explanation ?? "لا يوجد شرح",
-          style: const TextStyle(fontSize: 16, height: 1.6),
-          textAlign: TextAlign.justify,
+        return RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: data?.data?.explanation ?? "لا يوجد شرح",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w800,
+                  color: ColorsManager.black,
+                  height: 1.6,
+                ),
+              ),
+            ],
+          ),
         );
 
       case "الدروس المستفادة":
         if (data?.data?.hints != null && data!.data!.hints!.isNotEmpty) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: data!.data!.hints!.map<Widget>(
-              (hint) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text("• $hint", style: const TextStyle(fontSize: 16)),
-              ),
-            ).toList(),
+            children:
+                data!.data!.hints!
+                    .map<Widget>(
+                      (hint) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "${count++}- ".toString(),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorsManager.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: hint,
+                                
+                                style: TextStyle(
+                                  
+                                                    fontWeight: FontWeight.w800,
+
+                                  color: ColorsManager.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                    .toList(),
           );
         }
         return const Text("لا توجد فوائد");
 
       case "معاني الكلمات":
-        if (data?.data?.wordsMeanings != null && data!.data!.wordsMeanings!.isNotEmpty) {
+        if (data?.data?.wordsMeanings != null &&
+            data!.data!.wordsMeanings!.isNotEmpty) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: data!.data!.wordsMeanings!.map<Widget>(
-              (wm) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: wm.word ?? "",
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: ColorsManager.darkPurple,
+            children:
+                data!.data!.wordsMeanings!
+                    .map<Widget>(
+                      (wm) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: wm.word ?? "",
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorsManager.darkPurple,
+                                ),
+                              ),
+                              const TextSpan(
+                                text: ": ",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorsManager.darkPurple,
+                                ),
+                              ),
+                              TextSpan(
+                                text: wm.meaning ?? "",
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                                    fontWeight: FontWeight.w800,
+
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      const TextSpan(
-                        text: ": ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: ColorsManager.darkPurple,
-                        ),
-                      ),
-                      TextSpan(
-                        text: wm.meaning ?? "",
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.black87,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ).toList(),
+                    )
+                    .toList(),
           );
         }
         return const Text("لا توجد معاني");

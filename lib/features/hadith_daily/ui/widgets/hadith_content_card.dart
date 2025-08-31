@@ -17,8 +17,8 @@ class HadithContentCard extends StatelessWidget {
           end: Alignment.bottomLeft,
           colors: [
             ColorsManager.secondaryBackground,
-            ColorsManager.primaryPurple.withOpacity(0.03),
-            ColorsManager.primaryGold.withOpacity(0.02),
+            ColorsManager.primaryPurple.withOpacity(0.2),
+         //   ColorsManager.primaryGold.withOpacity(0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(20.r),
