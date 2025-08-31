@@ -21,16 +21,19 @@ class BuildBookDataStateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(Spacing.md),
-      decoration: BoxDecoration(
+  decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [color.withOpacity(0.9), color.withOpacity(0.6)],
+          colors: [
+            color.withOpacity(0.95),
+            ColorsManager.primaryPurple.withOpacity(0.8),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withOpacity(0.25),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),

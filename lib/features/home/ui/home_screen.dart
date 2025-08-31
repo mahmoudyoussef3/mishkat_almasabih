@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
           icon: Icons.book,
           title: 'إجمالي الكتب',
           value: state.statisticsResponse.statistics.totalBooks.toString(),
-          color: ColorsManager.primaryPurple,
+          color: const Color.fromARGB(255, 51, 13, 128),
         ),
         SizedBox(width: Spacing.md),
         _buildStatisticsCard(
