@@ -64,35 +64,13 @@ class HadithOfTheDayCard extends StatelessWidget {
                   // Islamic pattern overlay
                   Positioned.fill(
                     child: Opacity(
-                      opacity: 0.1,
+                      opacity: 0.5,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(24.r),
                         child: Image.asset(
-                          "assets/images/islamic_pattern.jpg",
+                          "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
                           fit: BoxFit.cover,
                         ),
-                      ),
-                    ),
-                  ),
-
-                  // Decorative Islamic elements
-                  Positioned(
-                    top: 16.h,
-                    right: 16.w,
-                    child: Container(
-                      padding: EdgeInsets.all(8.w),
-                      decoration: BoxDecoration(
-                        color: ColorsManager.primaryGold.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(
-                          color: ColorsManager.primaryGold.withOpacity(0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: Icon(
-                        Icons.auto_stories,
-                        color: ColorsManager.primaryGold,
-                        size: 24.sp,
                       ),
                     ),
                   ),
@@ -180,15 +158,9 @@ class HadithOfTheDayCard extends StatelessWidget {
                               vertical: 12.h,
                             ),
                             decoration: BoxDecoration(
-                              color: ColorsManager.primaryGold.withOpacity(0.9),
-                              borderRadius: BorderRadius.circular(20.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 8.r,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(14.r),
+                              border: Border.all(color: Colors.white70),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
@@ -196,15 +168,15 @@ class HadithOfTheDayCard extends StatelessWidget {
                                 Text(
                                   "اقرأ الحديث",
                                   style: TextStyle(
-                                    color: ColorsManager.primaryText,
                                     fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
+                                    color: ColorsManager.secondaryBackground,
                                   ),
                                 ),
                                 SizedBox(width: 8.w),
                                 Icon(
-                                  Icons.arrow_back_ios,
-                                  color: ColorsManager.primaryText,
+                                  Icons.arrow_forward_ios,
+                                  color: ColorsManager.secondaryBackground,
                                   size: 16.sp,
                                 ),
                               ],

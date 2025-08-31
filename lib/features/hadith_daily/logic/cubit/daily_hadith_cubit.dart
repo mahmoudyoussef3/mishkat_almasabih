@@ -21,12 +21,11 @@ class DailyHadithCubit extends Cubit<DailyHadithState> {
         await SaveHadithDailyRepo().saveHadith(r);
         DailyHadithModel? myHadith = await SaveHadithDailyRepo().getHadith();
         if (myHadith != null) {
-          EasyNotify.showBasicNotification(
+          EasyNotify.showRepeatedNotification(
           
             body: myHadith.data!.title!,
             id: 0,
             title: 'حديث اليوم',
-            imagePath: 'assets/images/app_logo.png',
           );
         }
 
