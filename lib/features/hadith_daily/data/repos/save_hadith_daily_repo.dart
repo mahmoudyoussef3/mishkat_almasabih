@@ -10,6 +10,11 @@ class SaveHadithDailyRepo {
     await prefs.setString("dailyHadith", jsonString);
   }
 
+    Future<void> deleteHadith() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove("dailyHadith");
+  }
+
   Future<DailyHadithModel?> getHadith() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString("dailyHadith");

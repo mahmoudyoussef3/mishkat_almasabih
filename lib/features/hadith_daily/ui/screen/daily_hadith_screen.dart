@@ -33,9 +33,9 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           slivers: [
             const BuildHeaderAppBar(
               title: 'حديث اليوم',
-              description: 'مكتبة مشكاة الإسلامية',
+              description: 'نص حديث نبوي شريف مع شرحه',
             ),
-
+/*
             // Enhanced header section
             SliverToBoxAdapter(
               child: Container(
@@ -43,31 +43,49 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                 child: _buildDailyHadithHeader(),
               ),
             ),
+            */
+            SliverToBoxAdapter(child: SizedBox(height: 16.h,)),
 
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.all(20.w),
+                padding: EdgeInsets.symmetric(horizontal:  20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     if (data?.title != null)
                       Container(
-                        margin: EdgeInsets.only(bottom: 20.h),
+                        margin: EdgeInsets.only(bottom: 10.h),
                         child: HadithTitle(title: data!.title!),
                       ),
 
                     if (data?.hadith != null)
                       Container(
-                        margin: EdgeInsets.only(bottom: 20.h),
+                        margin: EdgeInsets.only(bottom: 10.h),
                         child: HadithContentCard(data: widget.dailyHadithModel),
                       ),
+                     Column(
+                       children: [
+                        SizedBox(height: 5.h),
+                         Divider(endIndent: 30.w,indent: 30.w,color: ColorsManager.gray,),
+                                                 SizedBox(height: 5.h),
 
+                       ],
+                     )
+,
                     Container(
                       margin: EdgeInsets.only(bottom: 20.h),
                       child: HadithAttributionAndGrade(
                         data: widget.dailyHadithModel,
                       ),
                     ),
+                       Column(
+                       children: [
+                        SizedBox(height: 5.h),
+                         Divider(endIndent: 30.w,indent: 30.w,color: ColorsManager.gray,),
+                                                 SizedBox(height: 5.h),
+
+                       ],
+                     ),
 
                     // Enhanced tabs section
                     Container(
@@ -75,9 +93,18 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                       child: _buildEnhancedTabsSection(),
                     ),
 
-                    HadithTabContent(
-                      selectedTab: selectedTab,
-                      data: widget.dailyHadithModel,
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 8.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(
+                          color: ColorsManager.gray
+                        )
+                      ),
+                      child: HadithTabContent(
+                        selectedTab: selectedTab,
+                        data: widget.dailyHadithModel,
+                      ),
                     ),
                   ],
                 ),
@@ -92,7 +119,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
               ),
             ),
 
-            SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+            SliverToBoxAdapter(child: SizedBox(height: 50.h)),
           ],
         ),
       ),
@@ -162,8 +189,10 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
 
   Widget _buildEnhancedTabsSection() {
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 8,horizontal: 0),
       decoration: BoxDecoration(
         color: ColorsManager.white,
+      
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(

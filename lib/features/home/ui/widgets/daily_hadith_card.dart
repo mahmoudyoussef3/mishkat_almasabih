@@ -12,7 +12,7 @@ class HadithOfTheDayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<DailyHadithCubit>().emitHadithDaily();
+    context.read<DailyHadithCubit>().loadOrFetchHadith();
     return BlocBuilder<DailyHadithCubit, DailyHadithState>(
       builder: (context, state) {
         if (state is DailyHaditLoading) {

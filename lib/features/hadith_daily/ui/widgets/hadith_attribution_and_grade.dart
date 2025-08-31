@@ -25,6 +25,7 @@ class HadithAttributionAndGrade extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (data.data?.attribution != null)
@@ -36,7 +37,7 @@ class HadithAttributionAndGrade extends StatelessWidget {
                 color: ColorsManager.accentPurple,
                 fontStyle: FontStyle.italic,
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.start,
             ),
           ),
         if (data.data?.grade != null)

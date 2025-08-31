@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Loads library statistics from the backend
   Future<void> _loadLibraryStatistics() async {
     await context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit();
-        await context.read<DailyHadithCubit>().emitHadithDaily();
+        await context.read<DailyHadithCubit>().loadOrFetchHadith();
 
 
   }
@@ -73,9 +73,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: ColorsManager.primaryBackground,
-        body: _buildBody(),
+      child: RefreshIndicator(
+        onRefresh: () => context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
+        child: Scaffold(
+          backgroundColor: ColorsManager.primaryBackground,
+          body: _buildBody(),
+        ),
       ),
     );
   }

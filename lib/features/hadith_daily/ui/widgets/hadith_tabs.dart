@@ -16,19 +16,18 @@ class HadithTabs extends StatelessWidget {
   Widget build(BuildContext context) {
     final tabs = ["شرح", "الدروس المستفادة", "معاني الكلمات"];
     return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: ColorsManager.primaryGreen),
+      padding:  EdgeInsets.symmetric(vertical: 8.h,
+      horizontal: 8.w
       ),
+      
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: tabs.map((tab) {
           final isSelected = selectedTab == tab;
           return GestureDetector(
             onTap: () => onTabSelected(tab),
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 5.h),
               decoration: BoxDecoration(
                 color: isSelected
                     ? ColorsManager.primaryPurple.withOpacity(0.2)
