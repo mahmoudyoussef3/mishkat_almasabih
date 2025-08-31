@@ -162,11 +162,11 @@ class HadithCard extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 8.h),
 
                 // Enhanced hadith text
                 Container(
-                  padding: EdgeInsets.all(16.w),
+                  padding: EdgeInsets.all(8.w),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [

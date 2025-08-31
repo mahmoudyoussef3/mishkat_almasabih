@@ -35,20 +35,12 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
               title: 'حديث اليوم',
               description: 'نص حديث نبوي شريف مع شرحه',
             ),
-/*
-            // Enhanced header section
-            SliverToBoxAdapter(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-                child: _buildDailyHadithHeader(),
-              ),
-            ),
-            */
-            SliverToBoxAdapter(child: SizedBox(height: 16.h,)),
+    
+            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
             SliverToBoxAdapter(
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal:  20.w),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -63,29 +55,31 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                         margin: EdgeInsets.only(bottom: 10.h),
                         child: HadithContentCard(data: widget.dailyHadithModel),
                       ),
-                     Column(
-                       children: [
+                    Column(
+                      children: [
                         SizedBox(height: 5.h),
-                         Divider(endIndent: 30.w,indent: 30.w,color: ColorsManager.gray,),
-                                                 SizedBox(height: 5.h),
-
-                       ],
-                     )
-,
-                    Container(
-                      margin: EdgeInsets.only(bottom: 20.h),
-                      child: HadithAttributionAndGrade(
+                        Divider(
+                          endIndent: 30.w,
+                          indent: 30.w,
+                          color: ColorsManager.gray,
+                        ),
+                        SizedBox(height: 5.h),
+                      ],
+                    ),
+                   HadithAttributionAndGrade(
                         data: widget.dailyHadithModel,
                       ),
-                    ),
-                       Column(
-                       children: [
+                    Column(
+                      children: [
                         SizedBox(height: 5.h),
-                         Divider(endIndent: 30.w,indent: 30.w,color: ColorsManager.gray,),
-                                                 SizedBox(height: 5.h),
-
-                       ],
-                     ),
+                        Divider(
+                          endIndent: 30.w,
+                          indent: 30.w,
+                          color: ColorsManager.gray,
+                        ),
+                        SizedBox(height: 5.h),
+                      ],
+                    ),
 
                     // Enhanced tabs section
                     Container(
@@ -94,12 +88,13 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                     ),
 
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w,vertical: 8.h),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
+                      ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(
-                          color: ColorsManager.gray
-                        )
+                        border: Border.all(color: ColorsManager.gray),
                       ),
                       child: HadithTabContent(
                         selectedTab: selectedTab,
@@ -189,10 +184,10 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
 
   Widget _buildEnhancedTabsSection() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8,horizontal: 0),
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       decoration: BoxDecoration(
         color: ColorsManager.white,
-      
+
         borderRadius: BorderRadius.circular(16.r),
         boxShadow: [
           BoxShadow(
@@ -219,7 +214,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
-            ColorsManager.primaryGold.withOpacity(0.1),
+            ColorsManager.primaryGreen.withOpacity(0.1),
             ColorsManager.primaryPurple.withOpacity(0.05),
           ],
         ),
@@ -229,38 +224,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           width: 1,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.all(8.w),
-                decoration: BoxDecoration(
-                  color: ColorsManager.primaryGold.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Icon(
-                  Icons.share,
-                  color: ColorsManager.primaryGold,
-                  size: 20.sp,
-                ),
-              ),
-              SizedBox(width: 12.w),
-              Text(
-                'إجراءات الحديث',
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorsManager.primaryText,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16.h),
-          HadithActionsRow(hadith: widget.dailyHadithModel.data?.hadith ?? ""),
-        ],
-      ),
+      child:           HadithActionsRow(hadith: widget.dailyHadithModel.data?.hadith ?? ""),
+
     );
   }
 }

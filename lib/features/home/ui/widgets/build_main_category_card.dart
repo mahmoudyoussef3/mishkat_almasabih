@@ -80,12 +80,13 @@ class BuildMainCategoryCard extends StatelessWidget {
 
             // Main content
             Padding(
-              padding: EdgeInsets.all(Spacing.lg),
+              padding: EdgeInsets.symmetric(vertical:  Spacing.md2,horizontal: Spacing.lg),
               child: Row(
                 children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         // Title with enhanced styling
                         Text(
@@ -101,7 +102,7 @@ class BuildMainCategoryCard extends StatelessWidget {
                         SizedBox(height: Spacing.xs),
 
                         // Subtitle with enhanced styling
-                        Container(
+                  /*      Container(
                           padding: EdgeInsets.symmetric(
                             horizontal: 8.w,
                             vertical: 4.h,
@@ -122,15 +123,17 @@ class BuildMainCategoryCard extends StatelessWidget {
                             ),
                           ),
                         ),
+                        */
                         SizedBox(height: Spacing.xs),
 
                         // Description with enhanced styling
-                        Expanded(
+                        Flexible(
                           child: Text(
                             description,
                             style: TextStyles.bodySmall.copyWith(
+                              fontSize: 18.sp,
                               color: ColorsManager.white.withOpacity(0.85),
-                              height: 1.3,
+                            //  height: 1.5,
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,

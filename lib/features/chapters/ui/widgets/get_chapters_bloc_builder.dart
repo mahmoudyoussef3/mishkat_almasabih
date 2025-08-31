@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/features/chapters/ui/widgets/build_statistics_container.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/chapters_grid_view.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
@@ -156,23 +157,26 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
         padding: EdgeInsets.all(Spacing.screenHorizontal),
         child: Row(
           children: [
-            Expanded(
-              child: BuildBookDataStateCard(
-                icon: Icons.folder,
-                title: 'الأبواب',
-                value: '${bookData['noOfChapters']}',
-                color: ColorsManager.hadithAuthentic.withOpacity(0.7),
+          
+              Expanded(
+                child: BuildStatisticsContainer(
+                  icon: Icons.folder,
+                  title: 'الأبواب',
+                  value: '${bookData['noOfChapters']}',
+                  color: ColorsManager.hadithAuthentic.withOpacity(0.7),
+                ),
               ),
-            ),
+            
             SizedBox(width: Spacing.md),
-            Expanded(
-              child: BuildBookDataStateCard(
-                icon: Icons.format_quote,
-                title: 'الأحاديث',
-                value: '${bookData['noOfHadith']}',
-                color: ColorsManager.primaryGold.withOpacity(0.7),
-              ),
-            ),
+           Expanded(
+             child: BuildStatisticsContainer(
+                  icon: Icons.auto_stories,
+                  title: 'الأحاديث',
+                  value: '${bookData['noOfHadith']}',
+                  color: ColorsManager.hadithAuthentic.withOpacity(0.7),
+                ),
+           ),
+            
           ],
         ),
       ),
@@ -184,16 +188,25 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
     TextEditingController controller,
   ) {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: Spacing.screenHorizontal),
-        child: SearchBarWidget(
-          hintText: 'ابحث في الكتب...',
-          controller: controller,
-          onSearch: (query) {
-            context.read<ChaptersCubit>().filterChapters(query);
-          },
+      child: Container(
+           margin: EdgeInsets.symmetric(horizontal: Spacing.screenHorizontal),
+      padding: EdgeInsets.all(4.w),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            ColorsManager.primaryPurple.withOpacity(0.05),
+            ColorsManager.primaryPurple.withOpacity(0.02),
+          ],
         ),
+        borderRadius: BorderRadius.circular(20.r),
       ),
+        child:  SearchBarWidget(
+        hintText: 'ابحث في الكتب...',
+        controller: controller,
+        onSearch: (query) {
+          context.read<ChaptersCubit>().filterChapters(query);
+        },
+      )),
     );
   }
 }

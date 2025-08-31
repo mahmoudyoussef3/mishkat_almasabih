@@ -18,7 +18,7 @@ class HadithContentCard extends StatelessWidget {
           colors: [
             ColorsManager.secondaryBackground,
             ColorsManager.primaryPurple.withOpacity(0.2),
-         //   ColorsManager.primaryGold.withOpacity(0.02),
+            //   ColorsManager.primaryGold.withOpacity(0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(20.r),
@@ -39,7 +39,7 @@ class HadithContentCard extends StatelessWidget {
           // Islamic pattern overlay
           Positioned.fill(
             child: Opacity(
-              opacity: 0.03,
+              opacity: 0.07,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.r),
                 child: Image.asset(

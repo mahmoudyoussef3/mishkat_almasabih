@@ -130,11 +130,7 @@ class BuildHeaderAppBar extends StatelessWidget {
         centerTitle: true,
         background: Container(
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [ColorsManager.primaryPurple, ColorsManager.primaryGreen],
-            ),
+        
           ),
           child: Stack(
             children: [

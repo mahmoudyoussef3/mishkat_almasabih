@@ -33,7 +33,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // ==================== LIFECYCLE METHODS ====================
 
   @override
   void initState() {
@@ -43,18 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    _disposeResources();
     super.dispose();
   }
 
-  // ==================== INITIALIZATION ====================
-
-  /// Initializes the screen by loading library statistics
   Future<void> _initializeScreen() async {
     await _loadLibraryStatistics();
   }
 
-  /// Loads library statistics from the backend
   Future<void> _loadLibraryStatistics() async {
     await context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit();
         await context.read<DailyHadithCubit>().loadOrFetchHadith();
@@ -62,12 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   }
 
-  /// Disposes of resources to prevent memory leaks
-  void _disposeResources() {
-    // Add any cleanup logic here if needed
-  }
-
-  // ==================== BUILD METHOD ====================
+  
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Builds the main body of the home screen
   Widget _buildBody() {
     return BlocBuilder<GetLibraryStatisticsCubit, GetLibraryStatisticsState>(
       builder: (context, state) {
@@ -97,9 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // ==================== STATE BUILDERS ====================
 
-  /// Builds the loading state with progress indicator
   Widget _buildLoadingState() {
     return loadingProgressIndicator();
   }
@@ -110,7 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
       slivers: [
         _buildHeaderSection(),
         _buildDailyHadithSection(),
-        _buildStatisticsSection(state),
+        _buildDividerSection(),      
+  _buildStatisticsSection(state),
         _buildDividerSection(),
         _buildCategoriesSection(state),
         _buildBottomSpacing(),
@@ -118,14 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Builds the empty state when no data is available
   Widget _buildEmptyState() {
     return const SizedBox.shrink();
   }
 
-  // ==================== SECTION BUILDERS ====================
 
-  /// Builds the header section with app bar
   Widget _buildHeaderSection() {
     return const BuildHeaderAppBar(
       home: true,
@@ -134,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Builds the daily hadith section
   Widget _buildDailyHadithSection() {
     return const SliverToBoxAdapter(child: HadithOfTheDayCard());
   }
@@ -146,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
           children: [
-            SizedBox(height: 24.h),
             _buildStatisticsHeader(),
             SizedBox(height: 16.h),
             _buildStatisticsCards(state),
@@ -160,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildDividerSection() {
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 32.h),
+        margin: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
         child: _buildIslamicSeparator(),
       ),
     );
@@ -185,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   /// Builds the bottom spacing for proper scrolling
   Widget _buildBottomSpacing() {
-    return SliverToBoxAdapter(child: SizedBox(height: 40.h));
+    return SliverToBoxAdapter(child: SizedBox(height: 80.h));
   }
 
   // ==================== COMPONENT BUILDERS ====================
@@ -275,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         SizedBox(width: Spacing.md),
         _buildStatisticsCard(
-          icon: Icons.format_quote,
+          icon: Icons.auto_stories,
           title: 'الأحاديث',
           value: state.statisticsResponse.statistics.totalHadiths.toString(),
           color: ColorsManager.primaryGold,
@@ -329,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Builds the categories header icon
   Widget _buildCategoriesHeaderIcon() {
     return Container(
-      padding: EdgeInsets.all(12.w),
+      padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
         color: ColorsManager.primaryGold.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12.r),
@@ -439,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [ColorsManager.primaryPurple, ColorsManager.secondaryPurple],
+      colors: [ColorsManager.primaryGreen, ColorsManager.darkPurple],
     );
   }
 
@@ -448,7 +430,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [ColorsManager.primaryGold, ColorsManager.hadithAuthentic],
+      colors: [ColorsManager.primaryGreen, ColorsManager.darkPurple],
     );
   }
 
@@ -457,7 +439,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
-      colors: [ColorsManager.hadithGood, ColorsManager.accentPurple],
+      colors: [ColorsManager.primaryGreen, ColorsManager.darkPurple],
     );
   }
 
