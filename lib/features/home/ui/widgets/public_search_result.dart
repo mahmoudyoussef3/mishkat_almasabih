@@ -6,6 +6,7 @@ import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_shimer
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_widget.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import '../../../search/home_screen/logic/cubit/public_search_cubit.dart';
 
 class PublicSearchResultScreen extends StatelessWidget {
@@ -25,18 +26,19 @@ class PublicSearchResultScreen extends StatelessWidget {
               description: searchQuery,
             ),
             SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-            BlocBuilder<PublicSearchCubit, PublicSearchState>(
+            //            BlocBuilder<PublicSearchCubit, PublicSearchState>(
+            BlocBuilder<SearchWithFiltersCubit, SearchWithFiltersState>(
               builder: (context, state) {
-                if (state is PublicSearchLoading) {
+                if (state is SearchWithFiltersLoading) {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => const HadithCardShimmer(),
                       childCount: 6,
                     ),
                   );
-                } else if (state is PublicSearchSuccess) {
+                } else if (state is SearchWithFiltersSuccess) {
                   final hadiths =
-                      state.searchResponse.search?.results?.data ?? [];
+                      state.searchWithFiltersModel.search?.results?.data ?? [];
                   if (hadiths.isEmpty) {
                     return SliverToBoxAdapter(
                       child: Center(
@@ -65,9 +67,12 @@ class PublicSearchResultScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
+                                      isBookMark: false,
                                       showNavigation: true,
+                                    
                                       isLocal: false,
-                                      chapterNumber: hadith.chapter?.id.toString()??'',
+                                      chapterNumber:
+                                          hadith.chapter?.chapterNumber ?? '',
                                       bookSlug: hadith.book?.bookSlug ?? '',
                                       bookName: hadith.book?.bookName ?? '',
                                       author: hadith.book?.writerName ?? '',
@@ -75,7 +80,7 @@ class PublicSearchResultScreen extends StatelessWidget {
                                           hadith.chapter?.chapterArabic ?? '',
                                       hadithNumber: hadith.hadithNumber ?? '',
                                       hadithText: hadith.hadithArabic ?? '',
-                                      narrator: hadith.englishNarrator ?? '',
+                                      narrator: hadith.book?.aboutWriter ?? '',
                                       grade: hadith.status ?? '',
                                       authorDeath:
                                           hadith.book?.writerDeath ?? '',
@@ -83,22 +88,23 @@ class PublicSearchResultScreen extends StatelessWidget {
                               ),
                             ),
                         child: HadithCard(
+                        
                           bookName: hadith.book?.bookName ?? '',
                           number: hadith.hadithNumber ?? '',
                           text: hadith.hadithArabic ?? '',
                           narrator: hadith.book?.writerName ?? '',
                           grade:
                               hadith.status != null
-                                  ? gradeStringArabic(hadith.status!)
+                                  ? gradeStringArabic(hadith.status??'')
                                   : '${index + 1}',
                           reference: hadith.chapter?.chapterArabic ?? '',
                         ),
                       );
                     },
                   );
-                } else if (state is PublicSearchFailure) {
+                } else if (state is SearchWithFiltersFailure) {
                   return SliverToBoxAdapter(
-                    child: Center(child: Text("خطأ: ${state.message}")),
+                    child: Center(child: Text("خطأ: ${state.errMessage}")),
                   );
                 }
 

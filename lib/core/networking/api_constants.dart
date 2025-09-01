@@ -30,11 +30,12 @@ class ApiConstants {
   static const String navigationHadith =
       "/islamic-library/books/{bookSlug}/chapter/{chapterNumber}/hadith/{hadithNumber}/navigation";
 
-
-        static const String localNavigationHadith =
+  static const String localNavigationHadith =
       "/islamic-library/local-books/{bookSlug}/hadiths/{hadithNumber}/navigation";
-}
 
+  static const String searchWithFilters =
+      "/islamic-library/search?q={searchQuery}&book={bookSlug}&narrator={narrator}&status={grade}&category={category}&chapter={chapter}&includeLocal=true&includeAPI=true";
+}
 
 class ApiErrors {
   static const String badRequestError = "badRequestError";

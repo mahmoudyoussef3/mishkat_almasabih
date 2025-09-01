@@ -535,6 +535,40 @@ class _ApiService implements ApiService {
     return _value;
   }
 
+  @override
+  Future<SearchWithFiltersModel> searchWithFilters(
+    String searchQuery,
+    String bookSlug,
+    String narrator,
+    String grade,
+    String chapter,
+    String category,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<SearchWithFiltersModel>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/islamic-library/search?q=${searchQuery}&book=${bookSlug}&narrator=${narrator}&status=${grade}&category=${category}&chapter=${chapter}&includeLocal=true&includeAPI=true',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late SearchWithFiltersModel _value;
+    try {
+      _value = SearchWithFiltersModel.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

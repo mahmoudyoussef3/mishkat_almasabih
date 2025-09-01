@@ -15,6 +15,7 @@ import 'package:mishkat_almasabih/features/home/data/models/library_statistics_m
 import 'package:mishkat_almasabih/features/navigation/data/models/local_hadith_navigation_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/navigation_hadith_model.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../features/authentication/login/data/models/login_request_body.dart';
@@ -111,5 +112,20 @@ abstract class ApiService {
     @Path("hadithNumber") String hadithNumber,
 
     @Path("bookSlug") String bookSlug,
+  );
+
+   @GET(ApiConstants.searchWithFilters)
+  Future<SearchWithFiltersModel> searchWithFilters(
+    @Path("searchQuery") String searchQuery,
+
+    @Path("bookSlug") String bookSlug,
+        @Path("narrator") String narrator,
+    @Path("grade") String grade,
+    @Path("chapter") String chapter,
+    @Path("category") String category,
+
+    
+
+
   );
 }

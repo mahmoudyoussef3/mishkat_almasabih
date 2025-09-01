@@ -16,6 +16,7 @@ import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public
 import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/search_screen.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 
 import '../../features/home/ui/widgets/public_search_result.dart';
 import '../../features/main_navigation/main_navigation_screen.dart';
@@ -92,7 +93,18 @@ class AppRouter {
               (_) => BlocProvider(
                 create:
                     (context) =>
-                        getIt<PublicSearchCubit>()..emitPublicSearch(query),
+                                            getIt<SearchWithFiltersCubit>()..emitSearchWithFilters(
+                                              
+                                              bookSlug: '',
+                                              category: '',
+                                              chapterNumber: '',
+                                              grade: '',
+                                              narrator: '',
+                                              searchQuery: query,
+                                              ),
+
+//                        getIt<PublicSearchCubit>()..emitPublicSearch(query),
+                        
                 child: PublicSearchResultScreen(searchQuery: query),
               ),
         );
