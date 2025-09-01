@@ -90,7 +90,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                                   MaterialPageRoute(
                                     builder:
                                         (context) => HadithDetailScreen(
-                                          isLocal:false,
+                                          isLocal: false,
                                           chapterNumber:
                                               hadith.chapterId.toString(),
                                           bookSlug: widget.bookSlug,
@@ -112,8 +112,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                                           chapter:
                                               hadith.chapter?.chapterArabic ??
                                               '',
-                                          hadithNumber:
-                                              hadith.id.toString(),
+                                          hadithNumber: hadith.id.toString(),
                                         ),
                                   ),
                                 ),
@@ -160,7 +159,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
-                                                                                isLocal:true,
+                                      isLocal: true,
 
                                       chapterNumber:
                                           hadith.chapterId.toString(),
