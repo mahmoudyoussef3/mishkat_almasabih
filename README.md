@@ -5,7 +5,6 @@
 ![Flutter](https://img.shields.io/badge/Flutter-3.7+-blue.svg)
 ![Dart](https://img.shields.io/badge/Dart-3.7+-blue.svg)
 ![BLoC](https://img.shields.io/badge/BLoC-8.1.4-green.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 **A beautifully designed, feature-rich Islamic Hadith library application built with Flutter**
 
@@ -25,10 +24,8 @@
 - [🛠️ Tech Stack](#️-tech-stack)
 - [📁 Project Structure](#-project-structure)
 - [🚀 Getting Started](#-getting-started)
-- [🧪 Testing](#-testing)
 - [📚 Documentation](#-documentation)
 - [🤝 Contributing](#-contributing)
-- [📄 License](#-license)
 
 ---
 
