@@ -12,14 +12,14 @@ class HadithTextCard extends StatelessWidget {
       padding: EdgeInsets.all(24.w),
       margin: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            ColorsManager.secondaryPurple.withOpacity(0.08),
-            ColorsManager.white,
-            ColorsManager.primaryPurple.withOpacity(0.05),
-          ],
+     gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
+          colors: [
+            ColorsManager.secondaryBackground,
+            ColorsManager.primaryPurple.withOpacity(0.2),
+            //   ColorsManager.primaryGold.withOpacity(0.02),
+          ],
         ),
         borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
@@ -36,6 +36,18 @@ class HadithTextCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
+             Positioned.fill(
+            child: Opacity(
+              opacity: 0.06,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.r),
+                child: Image.asset(
+                  'assets/images/islamic_pattern.jpg',
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
           // Decorative corner elements
           Positioned(
             top: 0,
@@ -59,9 +71,7 @@ class HadithTextCard extends StatelessWidget {
           ),
 
           // Main text content
-          Padding(
-            padding: EdgeInsets.only(top: 8.h, bottom: 8.h),
-            child: Column(
+        Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Hadith label
@@ -106,7 +116,7 @@ class HadithTextCard extends StatelessWidget {
                   hadithText,
                   textAlign: TextAlign.right,
                   style: TextStyle(
-                    fontSize: 18.sp,
+                    fontSize: 20.sp,
                     height: 1.8,
                     color: ColorsManager.primaryText,
                     fontFamily: 'Amiri',
@@ -115,29 +125,8 @@ class HadithTextCard extends StatelessWidget {
                 ),
               ],
             ),
-          ),
+          
 
-          // Bottom decorative element
-          Positioned(
-            bottom: 0,
-            left: 0,
-            child: Container(
-              width: 50.w,
-              height: 50.h,
-              decoration: BoxDecoration(
-                color: ColorsManager.primaryGold.withOpacity(0.08),
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(24.r),
-                  bottomLeft: Radius.circular(24.r),
-                ),
-              ),
-              child: Icon(
-                Icons.star,
-                color: ColorsManager.primaryGold.withOpacity(0.5),
-                size: 24.sp,
-              ),
-            ),
-          ),
         ],
       ),
     );
