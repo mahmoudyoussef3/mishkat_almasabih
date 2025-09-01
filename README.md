@@ -165,21 +165,7 @@ hadithWeak: #FF9800       // ضعيف - Orange
 
 ---
 
-## 📱 Screenshots
 
-<div align="center">
-
-### 🏠 Home Screen
-![Home Screen](assets/images/screenshots/home_screen.png)
-
-### 📖 Daily Hadith
-![Daily Hadith](assets/images/screenshots/daily_hadith.png)
-
-### 🔍 Search Interface
-![Search](assets/images/screenshots/search_screen.png)
-
-### 📚 Library View
-![Library](assets/images/screenshots/library_screen.png)
 
 </div>
 
@@ -277,23 +263,7 @@ feature_name/
 - Android Studio / VS Code
 - Git
 
-### **Installation**
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/mishkat_almasabih.git
-   cd mishkat_almasabih
-   ```
-
-2. **Install dependencies**
-   ```bash
-   flutter pub get
-   ```
-
-3. **Run the app**
-   ```bash
-   flutter run
-   ```
 
 ### **Environment Setup**
 
@@ -317,49 +287,10 @@ flutter build web
 
 ---
 
-## 🧪 Testing
 
-### **Test Structure**
-
-- **Unit Tests**: Business logic and utility functions
-- **Widget Tests**: UI component testing
-- **Integration Tests**: Feature workflow testing
-- **Mock Services**: Isolated testing environment
-
-### **Running Tests**
-
-```bash
-# Run all tests
-flutter test
-
-# Run specific test file
-flutter test test/feature_name_test.dart
-
-# Run with coverage
-flutter test --coverage
-```
-
-### **Test Coverage Goals**
-
-- **Business Logic**: >90%
-- **UI Components**: >70%
-- **Integration**: >50%
-- **Critical Paths**: 100%
-
----
 
 ## 📚 Documentation
 
-### **Architecture Documentation**
-- [🏗️ Architecture Overview](ARCHITECTURE_OVERVIEW.md)
-- [🔧 Code Refactoring Guide](CODE_REFACTORING_GUIDE.md)
-- [🎨 Islamic Design Enhancements](ISLAMIC_DESIGN_ENHANCEMENTS.md)
-
-### **Development Guides**
-- [📱 Home Screen Design](ISLAMIC_HOME_SCREEN_DESIGN.md)
-- [📚 Library Structure](17_BOOKS_STRUCTURE.md)
-- [🚀 Development Tasks](DEVELOPMENT_TASKS.md)
-- [👋 Onboarding Screens](ONBOARDING_SCREENS_DESIGN.md)
 
 ### **API Documentation**
 - [🔗 Library Endpoints](ISLAMIC_LIBRARY_17_BOOKS_ENDPOINTS.md)
@@ -399,11 +330,7 @@ We welcome contributions from the community! Please read our contributing guidel
 
 ---
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgments
 
