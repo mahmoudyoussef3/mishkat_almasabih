@@ -28,8 +28,13 @@ class ApiConstants {
   static const String bookmarkCollection = "/islamic-bookmarks/collections";
 
   static const String navigationHadith =
-      "/islamic-library/books/sahih-bukhari/chapter/1/hadith/5/navigation";
+      "/islamic-library/books/{bookSlug}/chapter/{chapterNumber}/hadith/{hadithNumber}/navigation";
+
+
+        static const String localNavigationHadith =
+      "/islamic-library/local-books/{bookSlug}/hadiths/{hadithNumber}/navigation";
 }
+
 
 class ApiErrors {
   static const String badRequestError = "badRequestError";

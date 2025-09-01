@@ -1,20 +1,18 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
-import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
+import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_books_section.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_grade_title.dart';
-import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_navigation.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_text_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
-import 'package:share_plus/share_plus.dart';
 
 class HadithDetailScreen extends StatefulWidget {
   final String? hadithText;
@@ -28,8 +26,10 @@ class HadithDetailScreen extends StatefulWidget {
   final String? bookSlug;
   final bool isBookMark;
   final String chapterNumber;
+  final bool isLocal;
+  bool showNavigation;
 
-  const HadithDetailScreen({
+  HadithDetailScreen({
     super.key,
     required this.hadithText,
     required this.chapterNumber,
@@ -42,6 +42,8 @@ class HadithDetailScreen extends StatefulWidget {
     required this.hadithNumber,
     required this.bookSlug,
     this.isBookMark = false,
+    required this.isLocal,
+    this.showNavigation = true,
   });
 
   @override
@@ -49,29 +51,24 @@ class HadithDetailScreen extends StatefulWidget {
 }
 
 class _HadithDetailScreenState extends State<HadithDetailScreen> {
+  bool prev = false;
+  bool isNavigated = false;
+  String newTextOfHadith = '';
+  String newHadithId = '';
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<AddCubitCubit>()),
-        BlocProvider(
-          create:
-              (context) =>
-                  getIt<NavigationCubit>()..emitNavigationStates(
-                    widget.hadithNumber.toString(),
-                    widget.bookSlug ?? '',
-                    widget.chapterNumber,
-                  ),
-        ),
+        BlocProvider(create: (context) => getIt<NavigationCubit>()),
       ],
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          //  appBar: _buildIslamicAppBar(),
           backgroundColor: ColorsManager.secondaryBackground,
           body: CustomScrollView(
             slivers: [
-              // Header
               const BuildHeaderAppBar(title: 'تفاصيل الحديث'),
               SliverToBoxAdapter(
                 child: Padding(
@@ -85,13 +82,16 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
 
               SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
-              // Hadith Text
               SliverToBoxAdapter(
-                child: HadithTextCard(hadithText: widget.hadithText ?? ''),
+                child: HadithTextCard(
+                  hadithText:
+                      isNavigated
+                          ? newTextOfHadith
+                          : widget.hadithText ?? "الحديث غير متوفر",
+                ),
               ),
               _buildDividerSection(),
 
-              // Grade Section
               if (widget.grade != null)
                 SliverToBoxAdapter(
                   child: Padding(
@@ -170,10 +170,433 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                       horizontal: 16.w,
                       vertical: 16.h,
                     ),
-                    child: HadithNavigation(
-                      hadithNumber: widget.hadithNumber ?? '',
-                      bookSlug: widget.bookSlug ?? '',
-                      chapterNumber: widget.chapterNumber,
+                    child:
+                    widget.isLocal?
+                     BlocConsumer<NavigationCubit, NavigationState>(
+                      listener: (context, state) {
+                        if (state is  LocalNavigationFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: ColorsManager.error,
+
+                              behavior: SnackBarBehavior.floating,
+                              content: Text(
+                                state.errMessage,
+                                style: TextStyle(
+                                  color: ColorsManager.secondaryBackground,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                        if (state is LocalNavigationSuccess) {
+                          setState(() {
+                            isNavigated = true;
+                            final hadith =
+                                prev
+                                    ? state.navigationHadithResponse.prevHadith
+                                    : state.navigationHadithResponse.nextHadith;
+
+                            newTextOfHadith =
+                                hadith?.title ?? "الحديث غير متوفر";
+                            newHadithId = hadith?.id.toString() ?? "الحديث غير متوفر";
+                          });
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is NavigationLoading) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 16.h,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 16.h,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: ColorsManager.primaryPurple.withOpacity(
+                                  0.1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back_ios),
+                                    onPressed: () {},
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      loadingProgressIndicator(size: 16),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        "الحديث رقم $newHadithId",
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorsManager.primaryPurple,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_forward_ios),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else if (state is LocalNavigationSuccess) {
+                          isNavigated = true;
+                          final localHadith =
+                              prev
+                                  ? state.navigationHadithResponse.prevHadith
+                                  : state.navigationHadithResponse.nextHadith;
+
+                          newTextOfHadith = localHadith?.title ?? "الحديث غير متوفر";
+                          newHadithId = localHadith?.id.toString() ?? "الحديث غير متوفر";
+
+                          log(newTextOfHadith);
+
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 16.h,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 16.h,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: ColorsManager.primaryPurple.withOpacity(
+                                  0.1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back_ios),
+                                    onPressed: () {
+                                      prev = true;
+                                      context
+                                          .read<NavigationCubit>()
+                                          .emitLocalNavigation(
+                                            localHadith?.id.toString() ??
+                                                widget.hadithNumber ??
+                                                "",
+                                            widget.bookSlug ?? "",
+                                          );
+                                    },
+                                  ),
+                                  Text(
+                                    "الحديث رقم ${localHadith?.id ?? 'غير متوفر'}",
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorsManager.primaryPurple,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_forward_ios),
+                                    onPressed: () {
+                                      prev = false;
+                                      context
+                                          .read<NavigationCubit>()
+                                          .emitNavigationStates(
+                                            localHadith?.id.toString() ??
+                                                widget.hadithNumber ??
+                                                "",
+                                            widget.bookSlug ?? "",
+                                            widget.chapterNumber,
+                                          );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 16.h,
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 16.h,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: ColorsManager.primaryPurple.withOpacity(
+                                0.1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.arrow_back_ios),
+                                  onPressed: () {
+                                    prev = true;
+                                    context
+                                        .read<NavigationCubit>()
+                                        .emitLocalNavigation(
+                                          widget.hadithNumber ?? "",
+                                          widget.bookSlug ?? "",
+                                        );
+                                  },
+                                ),
+                                Text(
+                                  "الحديث رقم ",
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorsManager.primaryPurple,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.arrow_forward_ios),
+                                  onPressed: () {
+                                    prev = false;
+                                    context
+                                        .read<NavigationCubit>()
+                                        .emitLocalNavigation(
+                                          widget.hadithNumber ?? "",
+                                          widget.bookSlug ?? "",
+                                        );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                    :
+                     BlocConsumer<NavigationCubit, NavigationState>(
+                      listener: (context, state) {
+                        if (state is NavigationFailure) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: ColorsManager.error,
+
+                              behavior: SnackBarBehavior.floating,
+                              content: Text(
+                                state.errMessage,
+                                style: TextStyle(
+                                  color: ColorsManager.secondaryBackground,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                        if (state is NavigationSuccess) {
+                          setState(() {
+                            isNavigated = true;
+                            final hadith =
+                                prev
+                                    ? state.navigationHadithResponse.prevHadith
+                                    : state.navigationHadithResponse.nextHadith;
+
+                            newTextOfHadith =
+                                hadith?.title ?? "الحديث غير متوفر";
+                            newHadithId = hadith?.id ?? "الحديث غير متوفر";
+                          });
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is NavigationLoading) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 16.h,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 16.h,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: ColorsManager.primaryPurple.withOpacity(
+                                  0.1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back_ios),
+                                    onPressed: () {},
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      loadingProgressIndicator(size: 16),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        "الحديث رقم $newHadithId",
+                                        style: TextStyle(
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: ColorsManager.primaryPurple,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_forward_ios),
+                                    onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else if (state is NavigationSuccess) {
+                          isNavigated = true;
+                          final hadith =
+                              prev
+                                  ? state.navigationHadithResponse.prevHadith
+                                  : state.navigationHadithResponse.nextHadith;
+
+                          newTextOfHadith = hadith?.title ?? "الحديث غير متوفر";
+                          newHadithId = hadith?.id ?? "الحديث غير متوفر";
+
+                          log(newTextOfHadith);
+
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 16.h,
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 16.h,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color: ColorsManager.primaryPurple.withOpacity(
+                                  0.1,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_back_ios),
+                                    onPressed: () {
+                                      prev = true;
+                                      context
+                                          .read<NavigationCubit>()
+                                          .emitNavigationStates(
+                                            hadith?.id ??
+                                                widget.hadithNumber ??
+                                                "",
+                                            widget.bookSlug ?? "",
+                                            widget.chapterNumber,
+                                          );
+                                    },
+                                  ),
+                                  Text(
+                                    "الحديث رقم ${hadith?.id ?? 'غير متوفر'}",
+                                    style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: ColorsManager.primaryPurple,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.arrow_forward_ios),
+                                    onPressed: () {
+                                      prev = false;
+                                      context
+                                          .read<NavigationCubit>()
+                                          .emitNavigationStates(
+                                            hadith?.id ??
+                                                widget.hadithNumber ??
+                                                "",
+                                            widget.bookSlug ?? "",
+                                            widget.chapterNumber,
+                                          );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 16.h,
+                          ),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 16.h,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: ColorsManager.primaryPurple.withOpacity(
+                                0.1,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.arrow_back_ios),
+                                  onPressed: () {
+                                    prev = true;
+                                    context
+                                        .read<NavigationCubit>()
+                                        .emitNavigationStates(
+                                          widget.hadithNumber ?? "",
+                                          widget.bookSlug ?? "",
+                                          widget.chapterNumber,
+                                        );
+                                  },
+                                ),
+                                Text(
+                                  "الحديث رقم ",
+                                  style: TextStyle(
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: ColorsManager.primaryPurple,
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.arrow_forward_ios),
+                                  onPressed: () {
+                                    prev = false;
+                                    context
+                                        .read<NavigationCubit>()
+                                        .emitNavigationStates(
+                                          widget.hadithNumber ?? "",
+                                          widget.bookSlug ?? "",
+                                          widget.chapterNumber,
+                                        );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -231,7 +654,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'حديث رقم ${widget.hadithNumber}',
+                  isNavigated
+                      ? 'حديث رقم $newHadithId'
+                      : 'حديث رقم ${widget.hadithNumber}',
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
@@ -269,7 +694,6 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       ),
     );
   }
-
 
   Widget _buildDividerSection() {
     return SliverToBoxAdapter(

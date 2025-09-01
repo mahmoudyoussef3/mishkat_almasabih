@@ -90,6 +90,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                                   MaterialPageRoute(
                                     builder:
                                         (context) => HadithDetailScreen(
+                                          isLocal:false,
                                           chapterNumber:
                                               hadith.chapterId.toString(),
                                           bookSlug: widget.bookSlug,
@@ -112,7 +113,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                                               hadith.chapter?.chapterArabic ??
                                               '',
                                           hadithNumber:
-                                              hadith.hadithNumber.toString(),
+                                              hadith.id.toString(),
                                         ),
                                   ),
                                 ),
@@ -159,6 +160,8 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
+                                                                                isLocal:true,
+
                                       chapterNumber:
                                           hadith.chapterId.toString(),
                                       bookSlug: widget.bookSlug,
@@ -166,7 +169,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                                       bookName: widget.arabicBookName,
                                       author: widget.arabicWriterName,
                                       chapter: widget.arabicChapterName,
-                                      hadithNumber: hadith.idInBook.toString(),
+                                      hadithNumber: hadith.id.toString(),
                                     ),
                               ),
                             ),

@@ -414,11 +414,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 Contact
 
-- **Project Link**: [https://github.com/yourusername/mishkat_almasabih](https://github.com/yourusername/mishkat_almasabih)
-- **Issues**: [GitHub Issues](https://github.com/yourusername/mishkat_almasabih/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/mishkat_almasabih/discussions)
 
 ---
 
