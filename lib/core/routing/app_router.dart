@@ -12,12 +12,9 @@ import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
-import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/search_screen.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
-
 import '../../features/home/ui/widgets/public_search_result.dart';
 import '../../features/main_navigation/main_navigation_screen.dart';
 import '../di/dependency_injection.dart';
@@ -93,19 +90,18 @@ class AppRouter {
               (_) => BlocProvider(
                 create:
                     (context) =>
-                                            getIt<SearchWithFiltersCubit>()..emitSearchWithFilters(
-                                              
-                                              bookSlug: query['book'] ?? '',
-                                              category: query['category'] ?? '',
-                                              chapterNumber: query['chapter'] ?? '',
-                                              grade: query['grade'] ?? '',
-                                              narrator: query['narrator'] ?? '',
-                                              searchQuery: query['search'] ?? '',
-                                              ),
+                        getIt<SearchWithFiltersCubit>()..emitSearchWithFilters(
+                          bookSlug: query['book'] ?? '',
+                          category: query['category'] ?? '',
+                          chapterNumber: query['chapter'] ?? '',
+                          grade: query['grade'] ?? '',
+                          narrator: query['narrator'] ?? '',
+                          searchQuery: query['search'] ?? '',
+                        ),
 
-//                        getIt<PublicSearchCubit>()..emitPublicSearch(query),
-                        
-                child: PublicSearchResultScreen(searchQuery: query['search']??''),
+                child: PublicSearchResultScreen(
+                  searchQuery: query['search'] ?? '',
+                ),
               ),
         );
 

@@ -89,6 +89,10 @@ class ResponsiveChapterList extends StatelessWidget {
                                 chapterId: items[index].chapterNumber,
                               ),
                       child: ChapterAhadithScreen(
+                        authorDeath:  "",
+                        grade: "",
+                        narrator:  "",
+
                         bookSlug: bookSlug,
                         bookId: items[index].chapterNumber,
                         arabicBookName: bookName,

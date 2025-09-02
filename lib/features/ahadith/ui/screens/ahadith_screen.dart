@@ -7,6 +7,7 @@ import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_widget.dart';
+import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
@@ -22,6 +23,9 @@ class ChapterAhadithScreen extends StatefulWidget {
     required this.arabicBookName,
     required this.arabicWriterName,
     required this.arabicChapterName,
+    required this.narrator,
+    required this.grade,
+    required this.authorDeath,
   });
 
   final String bookSlug;
@@ -29,6 +33,10 @@ class ChapterAhadithScreen extends StatefulWidget {
   final String arabicWriterName;
   final String arabicChapterName;
   final int bookId;
+  final String? narrator;
+  final String? grade;
+  final String? authorDeath;
+
 
   @override
   State<ChapterAhadithScreen> createState() => _ChapterAhadithScreenState();
@@ -159,6 +167,11 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
+                                      authorDeath:
+                                      
+                                       widget.authorDeath ?? "",
+                                      grade: widget.grade ?? "",
+                                      narrator: widget.narrator ?? "",
                                       isLocal: true,
 
                                       chapterNumber:

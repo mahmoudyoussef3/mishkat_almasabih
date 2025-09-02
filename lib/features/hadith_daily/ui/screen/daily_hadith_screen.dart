@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
@@ -35,7 +38,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
               title: 'حديث اليوم',
               description: 'نص حديث نبوي شريف مع شرحه',
             ),
-    
+
             SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
             SliverToBoxAdapter(
@@ -66,9 +69,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                         SizedBox(height: 5.h),
                       ],
                     ),
-                   HadithAttributionAndGrade(
-                        data: widget.dailyHadithModel,
-                      ),
+                    HadithAttributionAndGrade(data: widget.dailyHadithModel),
                     Column(
                       children: [
                         SizedBox(height: 5.h),
@@ -224,8 +225,18 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           width: 1,
         ),
       ),
-      child:           HadithActionsRow(hadith: widget.dailyHadithModel.data?.hadith ?? ""),
+      child: HadithActionsRow(
+        author: widget.dailyHadithModel.data?.attribution ?? "",
+        authorDeath: '',
+        grade: widget.dailyHadithModel.data?.grade ?? '',
 
+        chapter: "",
+        bookSlug: "",
+        hadithNumber: "",
+        id: (Random().nextInt(10000000) + 1).toString(),
+        bookName: "",
+        hadith: widget.dailyHadithModel.data?.hadith ?? "",
+      ),
     );
   }
 }

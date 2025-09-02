@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
@@ -21,12 +22,11 @@ class HistoryList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListView.separated(
-            separatorBuilder: (context, index) => buildIslamicSeparator(),
+          ListView.builder(
             itemCount: items.length,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
@@ -36,13 +36,14 @@ class HistoryList extends StatelessWidget {
                 onTap:
                     () => context.pushNamed(
                       Routes.publicSearchSCreen,
-                      arguments: items[index].title,
+                      arguments: {'search': items[index].title},
                     ),
                 item: items[index],
                 onRemove: () => onRemove(index),
               );
             },
           ),
+          SizedBox(height: Spacing.xl)
         ],
       ),
     );

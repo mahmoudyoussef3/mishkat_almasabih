@@ -272,8 +272,8 @@ class HadithCard extends StatelessWidget {
         text,
         style: TextStyle(
           color: textColor,
-          fontWeight: FontWeight.w700,
-          fontSize: 14.sp,
+          fontWeight: FontWeight.w600,
+          fontSize: 12.sp,
           fontFamily: 'Amiri',
         ),
         textAlign: TextAlign.center,

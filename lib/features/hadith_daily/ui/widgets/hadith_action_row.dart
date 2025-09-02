@@ -12,12 +12,36 @@ import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 
 class HadithActionsRow extends StatelessWidget {
   final String hadith;
-  const HadithActionsRow({super.key, required this.hadith});
+  final String bookName;
+  final String bookSlug;
+  final String chapter;
+  final String hadithNumber;
+  final String id;
+  final String? author;
+  final String? authorDeath;
+  final String? grade;
+  bool isBookmarked;
+  HadithActionsRow({
+    super.key,
+    required this.hadith,
+    required this.bookName,
+    required this.bookSlug,
+    required this.chapter,
+    required this.hadithNumber,
+    required this.id,
+    this.isBookmarked = false,
+   required this.author,
+   required this.authorDeath,
+   required this.grade,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 16.w, vertical: 16.h),
+      padding: EdgeInsetsDirectional.symmetric(
+        horizontal: 16.w,
+        vertical: 16.h,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: ColorsManager.primaryPurple.withOpacity(0.1),
@@ -45,65 +69,68 @@ class HadithActionsRow extends StatelessWidget {
               await Share.share(hadith, subject: "شارك الحديث");
             },
           ),
-          BlocConsumer<AddCubitCubit, AddCubitState>(
-            listener: (context, state) {
-              ScaffoldMessenger.of(context).clearSnackBars();
-              if (state is AddLoading) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    backgroundColor: ColorsManager.primaryGreen,
-                    content: loadingProgressIndicator(
-                      size: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                );
-              } else if (state is AddSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: Colors.green,
-                    content: Text("تم حفظ الحديث"),
-                  ),
-                );
-              } else if (state is AddFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    backgroundColor: Colors.red,
-                    content: Text("حدث خطأ. حاول مرة أخرى"),
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              return _buildActionButton(
-                icon: Icons.bookmark,
-                label: "حفظ",
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (_) => MultiBlocProvider(
-                      providers: [
-                        BlocProvider(
-                          create: (_) => getIt<GetCollectionsBookmarkCubit>(),
-                        ),
-                        BlocProvider(
-                          create: (_) => getIt<AddCubitCubit>(),
-                        ),
-                      ],
-                      child: AddToFavoritesDialog(
-                        bookName: '',
-                        bookSlug: '',
-                        chapter: '',
-                        hadithNumber: '',
-                        hadithText: hadith,
-                        id: '1',
+          if (!isBookmarked)
+            BlocConsumer<AddCubitCubit, AddCubitState>(
+              listener: (context, state) {
+                ScaffoldMessenger.of(context).clearSnackBars();
+                if (state is AddLoading) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: ColorsManager.primaryGreen,
+                      content: loadingProgressIndicator(
+                        size: 30,
+                        color: Colors.white,
                       ),
                     ),
                   );
-                },
-              );
-            },
-          ),
+                } else if (state is AddSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Colors.green,
+                      content: Text("تم حفظ الحديث"),
+                    ),
+                  );
+                } else if (state is AddFailure) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      backgroundColor: Colors.red,
+                      content: Text("حدث خطأ. حاول مرة أخرى"),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return _buildActionButton(
+                  icon: Icons.bookmark,
+                  label: "حفظ",
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (_) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create:
+                                    (_) => getIt<GetCollectionsBookmarkCubit>(),
+                              ),
+                              BlocProvider(
+                                create: (_) => getIt<AddCubitCubit>(),
+                              ),
+                            ],
+                            child: AddToFavoritesDialog(
+                              bookName: bookName,
+                              bookSlug: bookSlug,
+                              chapter: chapter,
+                              hadithNumber: hadithNumber,
+                              hadithText: hadith,
+                              id: id,
+                            ),
+                          ),
+                    );
+                  },
+                );
+              },
+            ),
         ],
       ),
     );

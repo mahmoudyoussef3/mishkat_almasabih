@@ -11,7 +11,7 @@ import '../../../search/home_screen/logic/cubit/public_search_cubit.dart';
 
 class PublicSearchResultScreen extends StatelessWidget {
   const PublicSearchResultScreen({super.key, required this.searchQuery});
-  final String searchQuery;
+  final String? searchQuery;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class PublicSearchResultScreen extends StatelessWidget {
           slivers: [
             BuildHeaderAppBar(
               title: "نتائج البحث عن",
-              description: searchQuery,
+              description: searchQuery??"",
             ),
             SliverToBoxAdapter(child: SizedBox(height: 12.h)),
             //            BlocBuilder<PublicSearchCubit, PublicSearchState>(
