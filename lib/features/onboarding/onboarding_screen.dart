@@ -33,7 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description:
           'استكشف أعظم كتب الحديث الشريف مع واجهة عربية جميلة وتصميم عصري يجمع بين الأصالة والحداثة',
       imageUrl:
-          'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=400&fit=crop',
+          'assets/images/first_onboardin.jpeg',
       icon: Icons.auto_stories_outlined,
       gradient: LinearGradient(
         begin: Alignment.topRight,
@@ -47,7 +47,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description:
           'صحيح البخاري، صحيح مسلم، سنن أبي داود، الترمذي، النسائي، ابن ماجه، والمزيد من كتب الحديث المعتمدة',
       imageUrl:
-          'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=400&fit=crop',
+          'assets/images/first_onboardin.jpeg',
       icon: Icons.library_books_outlined,
       gradient: LinearGradient(
         begin: Alignment.topLeft,
@@ -61,7 +61,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       description:
           'ابحث في نصوص الأحاديث، أسماء الرواة، الأبواب، والكتب مع خيارات فلترة متقدمة ونتائج دقيقة',
       imageUrl:
-          'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=400&h=400&fit=crop',
+          'assets/images/first_onboardin.jpeg',
       icon: Icons.search_outlined,
       gradient: LinearGradient(
         begin: Alignment.topCenter,
@@ -374,7 +374,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                 //    height: double.infinity,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(page.imageUrl),
+                                    image: AssetImage(page.imageUrl),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
