@@ -51,9 +51,9 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 ),
               ),
 
-        
-              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-
+              SliverToBoxAdapter(child: SizedBox(height: 4.h)),
+              _buildDividerSection(),
+              SliverToBoxAdapter(child: SizedBox(height: 4.h)),
               BookmarkList(selectedCollection: selectedCollection),
 
               SliverToBoxAdapter(child: SizedBox(height: 50.h)),
@@ -63,5 +63,29 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       ),
     );
   }
-   
+
+  Widget _buildIslamicSeparator() {
+    return Container(
+      height: 1.h,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            ColorsManager.primaryPurple.withOpacity(0.3),
+            ColorsManager.primaryGold.withOpacity(0.6),
+            ColorsManager.primaryPurple.withOpacity(0.3),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(1.r),
+      ),
+    );
+  }
+
+  Widget _buildDividerSection() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
+        child: _buildIslamicSeparator(),
+      ),
+    );
+  }
 }
