@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: RefreshIndicator(
         onRefresh: () => context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
         child: Scaffold(
-          backgroundColor: ColorsManager.primaryBackground,
+          backgroundColor: ColorsManager.secondaryBackground,
           body: _buildBody(),
         ),
       ),

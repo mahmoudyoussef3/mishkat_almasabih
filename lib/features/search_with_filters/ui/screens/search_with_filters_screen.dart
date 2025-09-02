@@ -1,219 +1,337 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
-import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
-import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/empty_history.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_list.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 
-// ignore: must_be_immutable
 class SearchWithFiltersScreen extends StatefulWidget {
-  SearchWithFiltersScreen({super.key});
+  const SearchWithFiltersScreen({super.key});
 
   @override
-  State<SearchWithFiltersScreen> createState() =>
-      _SearchWithFiltersScreenState();
+  State<SearchWithFiltersScreen> createState() => _SearchWithFiltersScreenState();
 }
 
 class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
-  // Filter states
+  List<HistoryItem> _items = [];
+
   String? _selectedBook;
-
-  String? _selectedNarrator;
-
   String? _selectedAuthenticity;
-
-  // Mock data
-  final List<String> _books = [
-    'صحيح البخاري',
-    'صحيح مسلم',
-    'سنن أبي داود',
-    'سنن الترمذي',
-    'سنن النسائي',
-    'سنن ابن ماجة',
-    'موطأ مالك',
-    'مسند أحمد',
-  ];
-
-  final List<String> _authenticityGrades = ['صحيح', 'حسن', 'ضعيف'];
+  String? _selectedCategory;
 
   final TextEditingController searchController = TextEditingController();
+  final TextEditingController chapterController = TextEditingController();
+  final TextEditingController narratorController = TextEditingController();
+
+  // الكتب
+  final Map<String, String> booksMap = {
+    'صحيح البخاري': 'sahih-bukhari',
+    'صحيح مسلم': 'sahih-muslim',
+    'سنن أبي داود': 'abu-dawood',
+    'سنن الترمذي': 'al-tirmidhi',
+    'سنن النسائي': 'sunan-nasai',
+    'سنن ابن ماجة': 'ibn-e-majah',
+    'موطأ مالك': 'malik',
+    'مسند أحمد': 'musnad-ahmad',
+    'سنن الدارمي': 'darimi',
+    'بلوغ المرام': 'bulugh_al_maram',
+    'رياض الصالحين': 'riyad_assalihin',
+    'مشكات المصابيح': 'mishkat',
+    'الأربعون النووية': 'nawawi40',
+    'الأربعون القدسية': 'qudsi40',
+    'أربعون ولي الله الدهلوي': 'shahwaliullah40',
+    'الأدب المفرد': 'aladab_almufrad',
+    'الشمائل المحمدية': 'shamail_muhammadiyah',
+    'حصن المسلم': 'hisnul_muslim',
+  };
+
+  // الدرجات
+  final Map<String, String> gradesMap = {
+    'صحيح': 'sahih',
+    'حسن': 'hasan',
+    'ضعيف': 'daif',
+  };
+
+  // الأقسام
+  final Map<String, String> categoriesMap = {
+    'الأربعون': 'arbaain',
+    'الكتب التسعة': 'kutub_tisaa',
+    'الأدب والآداب': 'adab',
+  };
+
+  Future<void> _addItemToHistory(HistoryItem historyItem) async {
+    final existingIndex = _items.indexWhere((item) => item.title == historyItem.title);
+    if (existingIndex != -1) {
+      _items[existingIndex] = historyItem;
+    } else {
+      _items.add(historyItem);
+    }
+    await HistoryPrefs.saveHistory(_items);
+    context.read<SearchHistoryCubit>().emitHistorySearch();
+  }
+
+  Future<void> _removeItem(int index) async {
+    _items.removeAt(index);
+    await HistoryPrefs.saveHistory(_items);
+    context.read<SearchHistoryCubit>().emitHistorySearch();
+  }
+
+  Future<void> _clearAll() async {
+    await HistoryPrefs.clearHistory();
+    context.read<SearchHistoryCubit>().emitHistorySearch();
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    final date = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+    final time = "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
+    return "$time - $date";
+  }
+
+  bool showFilters = false;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorsManager.primaryBackground,
+    context.read<SearchHistoryCubit>().emitHistorySearch();
 
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.all(Spacing.screenHorizontal),
-                  decoration: BoxDecoration(
-                    color: ColorsManager.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorsManager.primaryPurple.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: TextField(
-                    controller: searchController,
-                    onSubmitted: (query) {
-                      context.pushNamed(Routes.publicSearchSCreen,arguments:query.trim());
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'ابحث في الأحاديث...',
-                      hintStyle: TextStyles.bodyMedium.copyWith(
-                        color: ColorsManager.secondaryText,
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: ColorsManager.primaryPurple,
-                        size: 24,
-                      ),
-                      suffixIcon:
-                          searchController.text.isNotEmpty
-                              ? IconButton(
-                                icon: Icon(
-                                  Icons.clear,
-                                  color: ColorsManager.gray,
-                                  size: 20,
-                                ),
-                                onPressed:
-                                    () => setState(() {
-                                      searchController.text = '';
-                                    }),
-                              )
-                              : null,
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: Spacing.md,
-                        vertical: Spacing.md,
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: ColorsManager.secondaryBackground,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              /// Header
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 20.h),
+                decoration: BoxDecoration(color: ColorsManager.primaryPurple),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "البحث",
+                      style: TextStyles.displaySmall.copyWith(
+                        color: ColorsManager.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28.sp,
                       ),
                     ),
-                    style: TextStyles.bodyMedium,
-                    textInputAction: TextInputAction.search,
-                  ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      "ابحث باستخدام الفلاتر المتقدمة",
+                      style: TextStyles.bodyMedium.copyWith(
+                        color: ColorsManager.white.withOpacity(0.9),
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ],
                 ),
+              ),
 
-                // Filters Section
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: Spacing.screenHorizontal,
-                  ),
-                  padding: EdgeInsets.all(Spacing.md),
-                  decoration: BoxDecoration(
-                    color: ColorsManager.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: ColorsManager.primaryPurple.withOpacity(0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'خيارات البحث',
-                        style: TextStyles.titleMedium.copyWith(
-                          color: ColorsManager.primaryText,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: Spacing.md),
+              SizedBox(height: 20.h),
 
-                      // Book and Chapter Selection
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildFilterDropdown(
-                              value: _selectedBook,
-                              items: ['جميع الكتب', ..._books],
-                              label: 'اختر الكتاب',
-                              onChanged: (value) {
-                                _selectedBook = value;
-                              },
-                            ),
+              /// Search Bar
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12.w),
+                child: Column(
+                  children: [
+                    SearchBarWidget(
+                      hintText: 'ابحث في الأحاديث...',
+                      controller: searchController,
+                      onSearch: (query) {
+                        final now = DateTime.now();
+                        _addItemToHistory(
+                          HistoryItem(
+                            title: query.trim(),
+                            date: _formatDateTime(now).split(' - ')[1],
+                            time: _formatDateTime(now).split(' - ')[0],
                           ),
-                          SizedBox(width: Spacing.md),
-                        ],
-                      ),
+                        );
+                
 
-                      SizedBox(height: Spacing.md),
+                            context.pushNamed(Routes.publicSearchSCreen, arguments: {
+                              'book': booksMap[_selectedBook] ?? '',
+                              'category': categoriesMap[_selectedCategory] ?? '',
+                              'chapter': chapterController.text.trim(),
+                              'grade': gradesMap[_selectedAuthenticity] ?? '',
+                              'narrator': narratorController.text.trim(),
+                              'search': query.trim(),
+                            });
+                      },
+                    ),
 
-                      // Narrator and Authenticity
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _buildFilterDropdown(
-                              value: _selectedAuthenticity,
-                              items: ['جميع الدرجات', ..._authenticityGrades],
-                              label: 'درجة الصحة',
-                              onChanged: (value) {
-                                setState(() {
-                                  _selectedAuthenticity = value;
-                                });
-                              },
-                            ),
+                    SizedBox(height: 20.h),
+
+                    /// Filters Card
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(Spacing.md),
+                      decoration: BoxDecoration(
+                        color: ColorsManager.white,
+                        borderRadius: BorderRadius.circular(16.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                ),
-
-                // Recent Searches Section
-                Container(
-                  margin: EdgeInsets.all(Spacing.screenHorizontal),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'البحث الأخير',
-                            style: TextStyles.titleMedium.copyWith(
-                              color: ColorsManager.primaryText,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'مسح الكل',
-                              style: TextStyles.bodyMedium.copyWith(
-                                color: ColorsManager.primaryPurple,
-                                fontWeight: FontWeight.w600,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'خيارات البحث',
+                                style: TextStyles.titleMedium.copyWith(
+                                  color: ColorsManager.primaryText,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
+                              TextButton.icon(
+                                onPressed: () {
+                                  setState(() {
+                                    showFilters = !showFilters;
+                                  });
+                                },
+                                label: Text(showFilters ? 'إخفاء الفلاتر' : 'إظهار الفلاتر'),
+                                icon: Icon(showFilters ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                              ),
+                            ],
                           ),
+                          if (showFilters) ...[
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildDropdown(
+                                        value: _selectedBook,
+                                        items: ['جميع الكتب', ...booksMap.keys],
+                                        label: 'اختر الكتاب',
+                                        onChanged: (val) => setState(() => _selectedBook = val),
+                                      ),
+                                    ),
+                                    SizedBox(width: 12.w),
+                                    Expanded(
+                                      child: _buildDropdown(
+                                        value: _selectedAuthenticity,
+                                        items: ['جميع الدرجات', ...gradesMap.keys],
+                                        label: 'درجة الصحة',
+                                        onChanged: (val) => setState(() => _selectedAuthenticity = val),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(height: Spacing.md),
+                                _buildDropdown(
+                                  value: _selectedCategory,
+                                  items: ['جميع التصنيفات', ...categoriesMap.keys],
+                                  label: 'التصنيف',
+                                  onChanged: (val) => setState(() => _selectedCategory = val),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: _buildTextField(
+                                        controller: chapterController,
+                                        label: 'رقم الباب',
+                                        hint: 'أدخل رقم الباب',
+                                      ),
+                                    ),
+                                    SizedBox(width: Spacing.md),
+                                    Expanded(
+                                      child: _buildTextField(
+                                        controller: narratorController,
+                                        label: 'اسم الراوي',
+                                        hint: 'أدخل اسم الراوي',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
-                      SizedBox(height: Spacing.md),
-                    ],
-                  ),
+                    ),
+
+                    SizedBox(height: 20.h),
+
+                    /// Divider
+                    buildIslamicSeparator(),
+                    SizedBox(height: 12.h),
+
+                    /// Recent Searches Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'البحث الأخير',
+                          style: TextStyles.titleMedium.copyWith(
+                            color: ColorsManager.primaryText,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: _clearAll,
+                          child: Text(
+                            'مسح الكل',
+                            style: TextStyles.bodyMedium.copyWith(
+                              color: ColorsManager.primaryPurple,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 8.h),
+                  ],
                 ),
-              ],
-            ),
+              ),
+
+              /// Recent Searches List
+              BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
+                builder: (context, state) {
+                  if (state is SearchHistoryLoading) {
+                    return const HistoryShimmer();
+                  } else if (state is SearchHistoryError) {
+                    return const Center(child: Text("خطأ أثناء تحميل السجل"));
+                  } else if (state is SearchHistorySuccess) {
+                    _items = List.from(state.hisoryItems);
+                    return _items.isNotEmpty
+                        ? HistoryList(
+                            items: _items,
+                            onRemove: _removeItem,
+                            onClearAll: _clearAll,
+                          )
+                        : const EmptyHistory();
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Widget _buildFilterDropdown({
+  Widget _buildDropdown({
     required String? value,
     required List<String> items,
     required String label,
@@ -229,12 +347,12 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
             fontWeight: FontWeight.w500,
           ),
         ),
-        SizedBox(height: Spacing.xs),
+        SizedBox(height: 6.h),
         Container(
           padding: EdgeInsets.symmetric(horizontal: Spacing.md),
           decoration: BoxDecoration(
             color: ColorsManager.offWhite,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r),
             border: Border.all(
               color: ColorsManager.mediumGray.withOpacity(0.3),
             ),
@@ -249,17 +367,12 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                   color: ColorsManager.secondaryText,
                 ),
               ),
-              items:
-                  items.map((String item) {
-                    return DropdownMenuItem<String>(
-                      value: item,
-                      child: Text(
-                        item,
-                        style: TextStyles.bodyMedium,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    );
-                  }).toList(),
+              items: items
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(item, style: TextStyles.bodyMedium),
+                      ))
+                  .toList(),
               onChanged: onChanged,
               icon: Icon(
                 Icons.keyboard_arrow_down,
@@ -269,6 +382,57 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: TextStyles.labelMedium.copyWith(
+            color: ColorsManager.primaryText,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        SizedBox(height: 6.h),
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hint,
+            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(
+                color: ColorsManager.mediumGray.withOpacity(0.3),
+              ),
+            ),
+            filled: true,
+            fillColor: ColorsManager.offWhite,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget buildIslamicSeparator() {
+    return Container(
+      height: 2.h,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            ColorsManager.primaryPurple.withOpacity(0.3),
+            ColorsManager.primaryGold.withOpacity(0.6),
+            ColorsManager.primaryPurple.withOpacity(0.3),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(1.r),
+      ),
     );
   }
 }

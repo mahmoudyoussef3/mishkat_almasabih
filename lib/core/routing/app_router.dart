@@ -85,7 +85,7 @@ class AppRouter {
               ),
         );
       case Routes.publicSearchSCreen:
-        final query = settings.arguments as String;
+        final query = settings.arguments as Map<String, String>;
         print(query);
 
         return MaterialPageRoute(
@@ -95,17 +95,17 @@ class AppRouter {
                     (context) =>
                                             getIt<SearchWithFiltersCubit>()..emitSearchWithFilters(
                                               
-                                              bookSlug: '',
-                                              category: '',
-                                              chapterNumber: '',
-                                              grade: '',
-                                              narrator: '',
-                                              searchQuery: query,
+                                              bookSlug: query['book'] ?? '',
+                                              category: query['category'] ?? '',
+                                              chapterNumber: query['chapter'] ?? '',
+                                              grade: query['grade'] ?? '',
+                                              narrator: query['narrator'] ?? '',
+                                              searchQuery: query['search'] ?? '',
                                               ),
 
 //                        getIt<PublicSearchCubit>()..emitPublicSearch(query),
                         
-                child: PublicSearchResultScreen(searchQuery: query),
+                child: PublicSearchResultScreen(searchQuery: query['search']??''),
               ),
         );
 

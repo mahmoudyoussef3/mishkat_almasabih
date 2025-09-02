@@ -5,6 +5,7 @@ import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmar
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
 
 import 'package:mishkat_almasabih/features/profile/ui/profile_screen.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/search_with_filters_screen.dart';
 
@@ -25,8 +26,11 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
 
-    BlocProvider(
-      create: (context) => getIt<SearchWithFiltersCubit>(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<SearchWithFiltersCubit>()),
+        BlocProvider(create: (context) => SearchHistoryCubit()),
+      ],
       child: SearchWithFiltersScreen(),
     ),
     BlocProvider(

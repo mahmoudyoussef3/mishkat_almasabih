@@ -15,15 +15,16 @@ class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
     required String narrator,
     required String grade,
     required String chapterNumber,
-    required String category
+    required String category,
   }) async {
+    emit(SearchWithFiltersLoading());
     final result = await _filtersRepo.searchWithFilters(
       searchQuery: searchQuery,
       bookSlug: bookSlug,
       narrator: narrator,
       grade: grade,
       chapter: chapterNumber,
-      category : category
+      category: category,
     );
     result.fold(
       (l) => emit(

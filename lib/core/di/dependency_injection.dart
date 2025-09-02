@@ -24,6 +24,7 @@ import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cub
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/repos/public_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/repos/search_with_filters_repo.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import '../../features/authentication/login/logic/cubit/login_cubit.dart';
@@ -95,4 +96,6 @@ Future<void> setUpGetIt() async {
 
     getIt.registerLazySingleton<SearchWithFiltersRepo>(() => SearchWithFiltersRepo(getIt()));
   getIt.registerFactory<SearchWithFiltersCubit>(() => SearchWithFiltersCubit(getIt()));
+
+
 }
