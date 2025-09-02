@@ -34,12 +34,12 @@ class HadithDetailScreen extends StatefulWidget {
     super.key,
     required this.hadithText,
     required this.chapterNumber,
-    this.narrator,
-    this.grade,
-    this.bookName,
-    this.author,
+   required this.narrator,
+   required this.grade,
+   required this.bookName,
+   required this.author,
     required this.chapter,
-    this.authorDeath,
+  required  this.authorDeath,
     required this.hadithNumber,
     required this.bookSlug,
     this.isBookMark = false,
@@ -346,7 +346,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                                             onPressed: () {
                                               prev = false;
                                               context
-                                                  .read<LocalHadithNavigationCubit>()
+                                                  .read<
+                                                    LocalHadithNavigationCubit
+                                                  >()
                                                   .emitLocalNavigation(
                                                     localHadith?.id
                                                             .toString() ??
@@ -697,7 +699,19 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           width: 1,
         ),
       ),
-      child: HadithActionsRow(hadith: widget.hadithText ?? ""),
+      child: HadithActionsRow(
+        author: widget.author ?? "",
+        authorDeath: widget.authorDeath ?? "",
+        grade: widget.grade ?? "",
+        isBookmarked: widget.isBookMark,
+        bookName: widget.bookName ?? "",
+        bookSlug: widget.bookSlug ?? "",
+        chapter: widget.chapterNumber,
+        hadithNumber: widget.hadithNumber ?? "",
+        id: widget.hadithNumber ?? "",
+        hadith: widget.hadithText ?? "",
+
+      ),
     );
   }
 
