@@ -44,7 +44,6 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
               SliverToBoxAdapter(
                 child: BookmarkCollectionsRow(
-                  
                   selectedCollection: selectedCollection,
                   onCollectionSelected: (collection) {
                     setState(() => selectedCollection = collection);
@@ -52,6 +51,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 ),
               ),
 
+        
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
               BookmarkList(selectedCollection: selectedCollection),
@@ -63,4 +63,5 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
       ),
     );
   }
+   
 }

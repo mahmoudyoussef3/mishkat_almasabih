@@ -13,13 +13,13 @@ import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/sear
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/empty_history.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_list.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
-import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 
 class SearchWithFiltersScreen extends StatefulWidget {
   const SearchWithFiltersScreen({super.key});
 
   @override
-  State<SearchWithFiltersScreen> createState() => _SearchWithFiltersScreenState();
+  State<SearchWithFiltersScreen> createState() =>
+      _SearchWithFiltersScreenState();
 }
 
 class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
@@ -70,7 +70,9 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
   };
 
   Future<void> _addItemToHistory(HistoryItem historyItem) async {
-    final existingIndex = _items.indexWhere((item) => item.title == historyItem.title);
+    final existingIndex = _items.indexWhere(
+      (item) => item.title == historyItem.title,
+    );
     if (existingIndex != -1) {
       _items[existingIndex] = historyItem;
     } else {
@@ -92,8 +94,10 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
   }
 
   String _formatDateTime(DateTime dateTime) {
-    final date = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
-    final time = "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
+    final date =
+        "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+    final time =
+        "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
     return "$time - $date";
   }
 
@@ -111,28 +115,35 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// Header
               Container(
+                height: 100.h,
                 width: double.infinity,
-                padding: EdgeInsets.symmetric(vertical: 20.h),
                 decoration: BoxDecoration(color: ColorsManager.primaryPurple),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    Text(
-                      "البحث",
-                      style: TextStyles.displaySmall.copyWith(
-                        color: ColorsManager.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 28.sp,
+                    // الخلفية
+                    Positioned.fill(
+                      child: Opacity(
+                        opacity: 0.05,
+                        child: Image.asset(
+                          'assets/images/islamic_pattern.jpg',
+                          repeat: ImageRepeat.repeat,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                    SizedBox(height: 4.h),
-                    Text(
-                      "ابحث باستخدام الفلاتر المتقدمة",
-                      style: TextStyles.bodyMedium.copyWith(
-                        color: ColorsManager.white.withOpacity(0.9),
-                        fontSize: 14.sp,
+
+                    Center(
+                      child: Text(
+                        "البحث",
+                        style: TextStyles.displaySmall.copyWith(
+                          color: ColorsManager.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 32.sp,
+                          letterSpacing: 1.2,
+                        ),
                       ),
                     ),
                   ],
@@ -158,16 +169,18 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                             time: _formatDateTime(now).split(' - ')[0],
                           ),
                         );
-                
 
-                            context.pushNamed(Routes.publicSearchSCreen, arguments: {
-                              'book': booksMap[_selectedBook] ?? '',
-                              'category': categoriesMap[_selectedCategory] ?? '',
-                              'chapter': chapterController.text.trim(),
-                              'grade': gradesMap[_selectedAuthenticity] ?? '',
-                              'narrator': narratorController.text.trim(),
-                              'search': query.trim(),
-                            });
+                        context.pushNamed(
+                          Routes.publicSearchSCreen,
+                          arguments: {
+                            'book': booksMap[_selectedBook] ?? '',
+                            'category': categoriesMap[_selectedCategory] ?? '',
+                            'chapter': chapterController.text.trim(),
+                            'grade': gradesMap[_selectedAuthenticity] ?? '',
+                            'narrator': narratorController.text.trim(),
+                            'search': query.trim(),
+                          },
+                        );
                       },
                     ),
 
@@ -207,8 +220,16 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                     showFilters = !showFilters;
                                   });
                                 },
-                                label: Text(showFilters ? 'إخفاء الفلاتر' : 'إظهار الفلاتر'),
-                                icon: Icon(showFilters ? Icons.arrow_drop_up : Icons.arrow_drop_down),
+                                label: Text(
+                                  showFilters
+                                      ? 'إخفاء الفلاتر'
+                                      : 'إظهار الفلاتر',
+                                ),
+                                icon: Icon(
+                                  showFilters
+                                      ? Icons.arrow_drop_up
+                                      : Icons.arrow_drop_down,
+                                ),
                               ),
                             ],
                           ),
@@ -222,16 +243,25 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                         value: _selectedBook,
                                         items: ['جميع الكتب', ...booksMap.keys],
                                         label: 'اختر الكتاب',
-                                        onChanged: (val) => setState(() => _selectedBook = val),
+                                        onChanged:
+                                            (val) => setState(
+                                              () => _selectedBook = val,
+                                            ),
                                       ),
                                     ),
                                     SizedBox(width: 12.w),
                                     Expanded(
                                       child: _buildDropdown(
                                         value: _selectedAuthenticity,
-                                        items: ['جميع الدرجات', ...gradesMap.keys],
+                                        items: [
+                                          'جميع الدرجات',
+                                          ...gradesMap.keys,
+                                        ],
                                         label: 'درجة الصحة',
-                                        onChanged: (val) => setState(() => _selectedAuthenticity = val),
+                                        onChanged:
+                                            (val) => setState(
+                                              () => _selectedAuthenticity = val,
+                                            ),
                                       ),
                                     ),
                                   ],
@@ -239,10 +269,17 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                 SizedBox(height: Spacing.md),
                                 _buildDropdown(
                                   value: _selectedCategory,
-                                  items: ['جميع التصنيفات', ...categoriesMap.keys],
+                                  items: [
+                                    'جميع التصنيفات',
+                                    ...categoriesMap.keys,
+                                  ],
                                   label: 'التصنيف',
-                                  onChanged: (val) => setState(() => _selectedCategory = val),
+                                  onChanged:
+                                      (val) => setState(
+                                        () => _selectedCategory = val,
+                                      ),
                                 ),
+                                SizedBox(height: Spacing.md),
                                 Row(
                                   children: [
                                     Expanded(
@@ -272,7 +309,10 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                     SizedBox(height: 20.h),
 
                     /// Divider
-                    buildIslamicSeparator(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      child: buildIslamicSeparator(),
+                    ),
                     SizedBox(height: 12.h),
 
                     /// Recent Searches Header
@@ -292,14 +332,14 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                             'مسح الكل',
                             style: TextStyles.bodyMedium.copyWith(
                               color: ColorsManager.primaryPurple,
+                              decoration: TextDecoration.underline,
+                              decorationColor: ColorsManager.primaryPurple,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                         ),
                       ],
                     ),
-
-                    SizedBox(height: 8.h),
                   ],
                 ),
               ),
@@ -315,10 +355,10 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                     _items = List.from(state.hisoryItems);
                     return _items.isNotEmpty
                         ? HistoryList(
-                            items: _items,
-                            onRemove: _removeItem,
-                            onClearAll: _clearAll,
-                          )
+                          items: _items,
+                          onRemove: _removeItem,
+                          onClearAll: _clearAll,
+                        )
                         : const EmptyHistory();
                   }
                   return const SizedBox.shrink();
@@ -367,12 +407,15 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                   color: ColorsManager.secondaryText,
                 ),
               ),
-              items: items
-                  .map((item) => DropdownMenuItem<String>(
-                        value: item,
-                        child: Text(item, style: TextStyles.bodyMedium),
-                      ))
-                  .toList(),
+              items:
+                  items
+                      .map(
+                        (item) => DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(item, style: TextStyles.bodyMedium),
+                        ),
+                      )
+                      .toList(),
               onChanged: onChanged,
               icon: Icon(
                 Icons.keyboard_arrow_down,
@@ -405,7 +448,10 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,
-            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 12.w,
+              vertical: 12.h,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(

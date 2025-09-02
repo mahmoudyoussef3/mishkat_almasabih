@@ -18,13 +18,13 @@ class HistoryListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.h),
+      padding: EdgeInsets.symmetric(vertical: 8.h),
       child: Container(
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
           color: ColorsManager.cardBackground,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: ColorsManager.primaryGreen),
+          border: Border.all(color: ColorsManager.mediumGray),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,7 +48,7 @@ class HistoryListItem extends StatelessWidget {
               ),
             ),
             IconButton(
-              icon: const Icon(Icons.close, color: ColorsManager.darkPurple),
+              icon: const Icon(Icons.close, color: ColorsManager.primaryGreen),
               onPressed: onRemove,
             ),
           ],
