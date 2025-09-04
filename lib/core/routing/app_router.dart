@@ -12,6 +12,7 @@ import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
+import 'package:mishkat_almasabih/features/search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/search_screen.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
@@ -87,18 +88,25 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider(
-                create:
-                    (context) =>
-                        getIt<SearchWithFiltersCubit>()..emitSearchWithFilters(
-                          bookSlug: query['book'] ?? '',
-                          category: query['category'] ?? '',
-                          chapterNumber: query['chapter'] ?? '',
-                          grade: query['grade'] ?? '',
-                          narrator: query['narrator'] ?? '',
-                          searchQuery: query['search'] ?? '',
-                        ),
-
+              (_) => MultiBlocProvider(
+                providers: [
+                  /*
+                  BlocProvider(
+                    create:
+                        (context) =>
+                            getIt<SearchWithFiltersCubit>()
+                              ..emitSearchWithFilters(
+                                bookSlug: query['book'] ?? '',
+                                category: query['category'] ?? '',
+                                chapterNumber: query['chapter'] ?? '',
+                                grade: query['grade'] ?? '',
+                                narrator: query['narrator'] ?? '',
+                                searchQuery: query['search'] ?? '',
+                              ),
+                  ),
+                  */
+                  BlocProvider(create: (context) => getIt<EnhancedSearchCubit>()..fetchEnhancedSearchResults(query['search'] !)),
+                ],
                 child: PublicSearchResultScreen(
                   searchQuery: query['search'] ?? '',
                 ),

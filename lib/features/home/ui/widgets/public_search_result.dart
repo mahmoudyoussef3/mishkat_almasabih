@@ -6,6 +6,7 @@ import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_shimer
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_widget.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
+import 'package:mishkat_almasabih/features/search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import '../../../search/home_screen/logic/cubit/public_search_cubit.dart';
 
@@ -27,18 +28,18 @@ class PublicSearchResultScreen extends StatelessWidget {
             ),
             SliverToBoxAdapter(child: SizedBox(height: 12.h)),
             //            BlocBuilder<PublicSearchCubit, PublicSearchState>(
-            BlocBuilder<SearchWithFiltersCubit, SearchWithFiltersState>(
+            BlocBuilder<EnhancedSearchCubit, EnhancedSearchState>(
               builder: (context, state) {
-                if (state is SearchWithFiltersLoading) {
+                if (state is EnhancedSearchLoading) {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => const HadithCardShimmer(),
                       childCount: 6,
                     ),
                   );
-                } else if (state is SearchWithFiltersSuccess) {
+                } else if (state is EnhancedSearchLoaded) {
                   final hadiths =
-                      state.searchWithFiltersModel.search?.results?.data ?? [];
+                      state.enhancedSearch.results??[];
                   if (hadiths.isEmpty) {
                     return SliverToBoxAdapter(
                       child: Center(
@@ -72,39 +73,39 @@ class PublicSearchResultScreen extends StatelessWidget {
                                     
                                       isLocal: false,
                                       chapterNumber:
-                                          hadith.chapter?.chapterNumber ?? '',
-                                      bookSlug: hadith.book?.bookSlug ?? '',
-                                      bookName: hadith.book?.bookName ?? '',
-                                      author: hadith.book?.writerName ?? '',
+                                        '',
+                                      bookSlug:'',
+                                      bookName:  '',
+                                      author: '',
                                       chapter:
-                                          hadith.chapter?.chapterArabic ?? '',
-                                      hadithNumber: hadith.hadithNumber ?? '',
-                                      hadithText: hadith.hadithArabic ?? '',
-                                      narrator: hadith.book?.aboutWriter ?? '',
-                                      grade: hadith.status ?? '',
+                                    '',
+                                      hadithNumber: '',
+                                      hadithText: hadith.hadeeth ?? '',
+                                      narrator: hadith.attribution ?? '',
+                                      grade: hadith.grade ?? '',
                                       authorDeath:
-                                          hadith.book?.writerDeath ?? '',
+                                        '',
                                     ),
                               ),
                             ),
                         child: HadithCard(
+                          number: hadith.id??'',
+                          bookName: hadith.reference??'',
                         
-                          bookName: hadith.book?.bookName ?? '',
-                          number: hadith.hadithNumber ?? '',
-                          text: hadith.hadithArabic ?? '',
-                          narrator: hadith.book?.writerName ?? '',
+                          text: hadith.hadeeth ?? '',
+                          narrator: hadith.attribution ?? '',
                           grade:
-                              hadith.status != null
-                                  ? gradeStringArabic(hadith.status??'')
+                              hadith.grade != null
+                                  ? gradeStringArabic(hadith.grade??'')
                                   : '${index + 1}',
-                          reference: hadith.chapter?.chapterArabic ?? '',
+                          reference: hadith.reference ??'',
                         ),
                       );
                     },
                   );
-                } else if (state is SearchWithFiltersFailure) {
+                } else if (state is EnhancedSearchError) {
                   return SliverToBoxAdapter(
-                    child: Center(child: Text("خطأ: ${state.errMessage}")),
+                    child: Center(child: Text("خطأ: ${state.message}")),
                   );
                 }
 

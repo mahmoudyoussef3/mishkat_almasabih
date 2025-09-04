@@ -270,6 +270,8 @@ class HadithCard extends StatelessWidget {
       ),
       child: Text(
         text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
         style: TextStyle(
           color: textColor,
           fontWeight: FontWeight.w600,

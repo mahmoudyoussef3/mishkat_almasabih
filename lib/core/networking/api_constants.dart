@@ -35,6 +35,8 @@ class ApiConstants {
 
   static const String searchWithFilters =
       "/islamic-library/search?q={searchQuery}&book={bookSlug}&narrator={narrator}&status={grade}&category={category}&chapter={chapter}&includeLocal=true&includeAPI=true";
+
+      static const String enhancedSearch = "/search";
 }
 
 class ApiErrors {

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
@@ -8,6 +10,7 @@ import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_main_category_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/daily_hadith_card.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
@@ -33,6 +36,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _controller = TextEditingController();
 
   @override
   void initState() {
@@ -95,9 +99,36 @@ class _HomeScreenState extends State<HomeScreen> {
     return CustomScrollView(
       slivers: [
         _buildHeaderSection(),
-        _buildDailyHadithSection(),
-        _buildDividerSection(),      
-  _buildStatisticsSection(state),
+        
+        SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: SearchBarWidget(
+                  controller: _controller,
+                  onSearch: (query) {
+                    final trimmedQuery = query.trim();
+                    if (trimmedQuery.isNotEmpty) {
+                      final now = DateTime.now();
+                      /*
+                      _addItemToHistory(
+                        HistoryItem(
+                          title: trimmedQuery,
+                          date: _formatDateTime(now).split(' - ')[1],
+                          time: _formatDateTime(now).split(' - ')[0],
+                        ),
+                      );
+                      */
+                      context.pushNamed(Routes.publicSearchSCreen,arguments: {
+                        "search":query
+                      });
+                    }
+                  },
+                ),
+              ),
+            ),
+                _buildDailyHadithSection(),
+        _buildDividerSection(),  
+              _buildStatisticsSection(state),
         _buildDividerSection(),
         _buildCategoriesSection(state),
         _buildBottomSpacing(),
