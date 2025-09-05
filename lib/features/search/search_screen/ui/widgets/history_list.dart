@@ -35,7 +35,7 @@ class HistoryList extends StatelessWidget {
               return HistoryListItem(
                 onTap:
                     () => context.pushNamed(
-                      Routes.publicSearchSCreen,
+                      Routes.filterResultSearch,
                       arguments: {'search': items[index].title},
                     ),
                 item: items[index],
@@ -43,7 +43,7 @@ class HistoryList extends StatelessWidget {
               );
             },
           ),
-          SizedBox(height: Spacing.xl)
+          SizedBox(height: Spacing.xl),
         ],
       ),
     );

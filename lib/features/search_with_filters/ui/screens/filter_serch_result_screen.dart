@@ -4,14 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
-import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
+import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
-import 'package:mishkat_almasabih/features/home/ui/widgets/hadith_result_details_screen.dart';
-import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
-import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/screens/hadith_result_details.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 
-class PublicSearchResult extends StatelessWidget {
-  const PublicSearchResult({super.key, required this.searchQuery});
+class FilterSerchResultScreen extends StatelessWidget {
+  const FilterSerchResultScreen({super.key, required this.searchQuery});
   final String? searchQuery;
 
   @override
@@ -27,17 +25,18 @@ class PublicSearchResult extends StatelessWidget {
               description: searchQuery ?? "",
             ),
             SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-            BlocBuilder<EnhancedSearchCubit, EnhancedSearchState>(
+            BlocBuilder<SearchWithFiltersCubit, SearchWithFiltersState>(
               builder: (context, state) {
-                if (state is EnhancedSearchLoading) {
+                if (state is SearchWithFiltersLoading) {
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) => const HadithCardShimmer(),
                       childCount: 6,
                     ),
                   );
-                } else if (state is EnhancedSearchLoaded) {
-                  final hadiths = state.enhancedSearch.results ?? [];
+                } else if (state is SearchWithFiltersSuccess) {
+                  final hadiths =
+                      state.searchWithFiltersModel.search?.results?.data ?? [];
                   if (hadiths.isEmpty) {
                     return SliverToBoxAdapter(
                       child: Center(
@@ -52,7 +51,11 @@ class PublicSearchResult extends StatelessWidget {
                   return SliverList.separated(
                     itemCount: hadiths.length,
                     separatorBuilder:
-                        (_, __) => IslamicSeparator(),
+                        (_, __) => Divider(
+                          color: ColorsManager.primaryNavy,
+                          endIndent: 30.h,
+                          indent: 30.h,
+                        ),
                     itemBuilder: (context, index) {
                       final hadith = hadiths[index];
                       return InkWell(
@@ -61,34 +64,44 @@ class PublicSearchResult extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                 builder:
-                                    (context) => HadithResultDetails(
-                                    
-                                      enhancedHadithModel: hadith,
+                                    (context) => HadithDetailScreen(
+                                      isBookMark: false,
+                                      showNavigation: true,
+
+                                      isLocal: false,
+                                      chapterNumber:
+                                          hadith.chapter?.chapterNumber ?? '',
+                                      bookSlug: hadith.book?.bookSlug ?? '',
+                                      bookName: hadith.book?.bookName ?? '',
+                                      author: hadith.book?.writerName ?? '',
+                                      chapter:
+                                          hadith.chapter?.chapterArabic ?? '',
+                                      hadithNumber: hadith.hadithNumber ?? '',
+                                      hadithText: hadith.hadithArabic ?? '',
+                                      narrator: hadith.book?.aboutWriter ?? '',
+                                      grade: hadith.status ?? '',
+                                      authorDeath:
+                                          hadith.book?.writerDeath ?? '',
                                     ),
                               ),
                             ),
-
-                            
                         child: ChapterAhadithCard(
-                          number: hadith.id ?? '',
-                          bookName: hadith.reference ?? '',
-                          
-                        
-
-                          text: hadith.hadeeth ?? '',
-                          narrator: hadith.attribution ?? '',
+                          bookName: hadith.book?.bookName ?? '',
+                          number: hadith.hadithNumber ?? '',
+                          text: hadith.hadithArabic ?? '',
+                          narrator: hadith.book?.writerName ?? '',
                           grade:
-                              hadith.grade != null
-                                  ? gradeStringArabic(hadith.grade ?? '')
+                              hadith.status != null
+                                  ? gradeStringArabic(hadith.status ?? '')
                                   : '${index + 1}',
-                          reference: hadith.reference ?? '',
+                          reference: hadith.chapter?.chapterArabic ?? '',
                         ),
                       );
                     },
                   );
-                } else if (state is EnhancedSearchError) {
+                } else if (state is SearchWithFiltersFailure) {
                   return SliverToBoxAdapter(
-                    child: Center(child: Text("خطأ: ${state.message}")),
+                    child: Center(child: Text("خطأ: ${state.errMessage}")),
                   );
                 }
 

@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_widget.dart';
+import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
-import 'package:mishkat_almasabih/features/ahadith/ui/widgets/hadith_card_shimer.dart';
+import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/bookmark_empty_state.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 
@@ -143,7 +143,7 @@ class BookmarkList extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HadithCard(
+                    ChapterAhadithCard(
                       grade: "${index + 1}".toString(),
                       reference: formatDateArabic(createdAT),
                       number: hadith.hadithNumber ?? '',

@@ -4,20 +4,22 @@ import 'package:mishkat_almasabih/features/search/search_screen/data/models/hist
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryPrefs {
-  static const String _key = "history_items";
+  static const String filteredSearch = "filteredSearch";
+    static const String enhancedPublicSearch = "enhancedPublicSearch";
 
-  // Save list
-  static Future<void> saveHistory(List<HistoryItem> items) async {
+
+  // Save lista
+  static Future<void> saveHistory(List<HistoryItem> items,String searchCategory) async {
     final prefs = await SharedPreferences.getInstance();
     final List<String> encoded =
         items.map((item) => jsonEncode(item.toMap())).toList();
-    await prefs.setStringList(_key, encoded);
+    await prefs.setStringList(searchCategory, encoded);
   }
 
-static Future<Either<dynamic, List<HistoryItem>>> loadHistory() async {
+static Future<Either<dynamic, List<HistoryItem>>> loadHistory(String searchCategor) async {
   try {
     final prefs = await SharedPreferences.getInstance();
-    final List<String>? encoded = prefs.getStringList(_key);
+    final List<String>? encoded = prefs.getStringList(searchCategor);
 
     if (encoded == null) {
       return const Right([]); 
@@ -34,9 +36,9 @@ static Future<Either<dynamic, List<HistoryItem>>> loadHistory() async {
 }
 
 
-  // Clear all
-  static Future<void> clearHistory() async {
+  
+  static Future<void> clearHistory(String searchCategory) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(_key);
+    await prefs.remove(searchCategory);
   }
 }

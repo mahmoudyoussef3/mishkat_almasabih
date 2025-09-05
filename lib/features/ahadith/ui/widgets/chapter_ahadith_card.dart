@@ -1,9 +1,12 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/functions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 
-class HadithCard extends StatelessWidget {
-  const HadithCard({
+class ChapterAhadithCard extends StatelessWidget {
+  const ChapterAhadithCard({
     super.key,
     required this.number,
     required this.text,
@@ -20,25 +23,11 @@ class HadithCard extends StatelessWidget {
   final String? reference;
   final String bookName;
 
-  Color _gradeColor(String? g) {
-    switch (g?.toLowerCase()) {
-      case "sahih":
-      case "صحيح":
-        return ColorsManager.hadithAuthentic;
-      case "hasan":
-      case "حسن":
-        return ColorsManager.hadithGood;
-      case "daif":
-      case "ضعيف":
-        return ColorsManager.hadithWeak;
-      default:
-        return ColorsManager.hadithAuthentic;
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
-    final gradeColor = _gradeColor(grade);
+    final gradeColor = getGradeColor(grade);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
@@ -211,7 +200,7 @@ class HadithCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 12.w),
-                    Flexible(
+                   if(reference == null ) Flexible(
                       child: _buildGradientPill(
                         text: reference ?? '',
                         colors: [

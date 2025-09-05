@@ -11,7 +11,9 @@ EnhancedSearch _$EnhancedSearchFromJson(Map<String, dynamic> json) =>
       success: json['success'] as bool?,
       results:
           (json['results'] as List<dynamic>?)
-              ?.map((e) => HadithModel.fromJson(e as Map<String, dynamic>))
+              ?.map(
+                (e) => EnhancedHadithModel.fromJson(e as Map<String, dynamic>),
+              )
               .toList(),
       pagination:
           json['pagination'] == null
@@ -26,7 +28,9 @@ Map<String, dynamic> _$EnhancedSearchToJson(EnhancedSearch instance) =>
       'pagination': instance.pagination,
     };
 
-HadithModel _$HadithModelFromJson(Map<String, dynamic> json) => HadithModel(
+EnhancedHadithModel _$EnhancedHadithModelFromJson(
+  Map<String, dynamic> json,
+) => EnhancedHadithModel(
   id: json['id'] as String?,
   title: json['title'] as String?,
   hadeeth: json['hadeeth'] as String?,
@@ -37,27 +41,28 @@ HadithModel _$HadithModelFromJson(Map<String, dynamic> json) => HadithModel(
   categories:
       (json['categories'] as List<dynamic>?)?.map((e) => e as String).toList(),
   hadeethIntro: json['hadeethIntro'] as String?,
-  wordsMeanings:
-      (json['wordsMeanings'] as List<dynamic>?)
+  words_meanings:
+      (json['words_meanings'] as List<dynamic>?)
           ?.map((e) => WordMeaning.fromJson(e as Map<String, dynamic>))
           .toList(),
   reference: json['reference'] as String?,
 );
 
-Map<String, dynamic> _$HadithModelToJson(HadithModel instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'hadeeth': instance.hadeeth,
-      'attribution': instance.attribution,
-      'grade': instance.grade,
-      'explanation': instance.explanation,
-      'hints': instance.hints,
-      'categories': instance.categories,
-      'hadeethIntro': instance.hadeethIntro,
-      'wordsMeanings': instance.wordsMeanings,
-      'reference': instance.reference,
-    };
+Map<String, dynamic> _$EnhancedHadithModelToJson(
+  EnhancedHadithModel instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'title': instance.title,
+  'hadeeth': instance.hadeeth,
+  'attribution': instance.attribution,
+  'grade': instance.grade,
+  'explanation': instance.explanation,
+  'hints': instance.hints,
+  'categories': instance.categories,
+  'hadeethIntro': instance.hadeethIntro,
+  'words_meanings': instance.words_meanings,
+  'reference': instance.reference,
+};
 
 WordMeaning _$WordMeaningFromJson(Map<String, dynamic> json) => WordMeaning(
   word: json['word'] as String?,

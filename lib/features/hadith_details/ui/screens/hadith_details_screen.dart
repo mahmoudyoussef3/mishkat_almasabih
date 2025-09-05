@@ -34,12 +34,12 @@ class HadithDetailScreen extends StatefulWidget {
     super.key,
     required this.hadithText,
     required this.chapterNumber,
-   required this.narrator,
-   required this.grade,
-   required this.bookName,
-   required this.author,
+    required this.narrator,
+    required this.grade,
+    required this.bookName,
+    required this.author,
     required this.chapter,
-  required  this.authorDeath,
+    required this.authorDeath,
     required this.hadithNumber,
     required this.bookSlug,
     this.isBookMark = false,
@@ -57,6 +57,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   String newTextOfHadith = '';
   String newHadithId = '';
 
+  bool _isValid(String? text) => text != null && text.trim().isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -72,29 +74,31 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           body: CustomScrollView(
             slivers: [
               const BuildHeaderAppBar(title: 'تفاصيل الحديث'),
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 22.w,
-                    vertical: 16.h,
+
+              /// Header
+              if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 22.w,
+                      vertical: 16.h,
+                    ),
+                    child: _buildHadithHeader(),
                   ),
-                  child: _buildHadithHeader(),
                 ),
-              ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
-
-              SliverToBoxAdapter(
-                child: HadithTextCard(
-                  hadithText:
-                      isNavigated
-                          ? newTextOfHadith
-                          : widget.hadithText ?? "الحديث غير متوفر",
+              if (_isValid(widget.hadithText))
+                SliverToBoxAdapter(
+                  child: HadithTextCard(
+                    hadithText: isNavigated
+                        ? newTextOfHadith
+                        : widget.hadithText ?? "الحديث غير متوفر",
+                  ),
                 ),
-              ),
-              _buildDividerSection(),
 
-              if (widget.grade != null)
+              if (_isValid(widget.grade)) _buildDividerSection(),
+
+              if (_isValid(widget.grade))
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -110,11 +114,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                             backgroundColor: ColorsManager.success,
                             content: Row(
                               children: [
-                                Icon(
-                                  Icons.check_circle,
-                                  color: Colors.white,
-                                  size: 20.sp,
-                                ),
+                                Icon(Icons.check_circle,
+                                    color: Colors.white, size: 20.sp),
                                 SizedBox(width: 12.w),
                                 Text(
                                   "تم نسخ الحديث بنجاح",
@@ -134,542 +135,45 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     ),
                   ),
                 ),
-              _buildDividerSection(),
 
-              // Book Section
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 0.h,
-                  ),
-                  child: HadithBookSection(
-                    bookName: widget.bookName ?? '',
-                    author: widget.author,
-                    authorDeath: widget.authorDeath,
-                    chapter: widget.chapter ?? '',
+              if (_isValid(widget.bookName) ||
+                  _isValid(widget.author) ||
+                  _isValid(widget.chapter)) _buildDividerSection(),
+
+              if (_isValid(widget.bookName) ||
+                  _isValid(widget.author) ||
+                  _isValid(widget.chapter))
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: HadithBookSection(
+                      bookName: widget.bookName ?? '',
+                      author: widget.author,
+                      authorDeath: widget.authorDeath,
+                      chapter: widget.chapter ?? '',
+                    ),
                   ),
                 ),
-              ),
 
               _buildDividerSection(),
+
+              /// Actions Section
               SliverToBoxAdapter(
                 child: Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                    vertical: 20.h,
-                  ),
+                  margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   child: _buildEnhancedActionsSection(),
                 ),
               ),
-              _buildDividerSection(),
 
-              // Navigation Section
-              if (!widget.isBookMark)
+              /// Navigation Section
+              if (widget.showNavigation && !widget.isBookMark)
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
-                    ),
-                    child:
-                        widget.isLocal
-                            ? BlocConsumer<
-                              LocalHadithNavigationCubit,
-                              LocalHadithNavigationState
-                            >(
-                              listener: (context, state) {
-                                if (state is LocalHadithNavigationFailure) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: ColorsManager.error,
-
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                        state.errMessage,
-                                        style: TextStyle(
-                                          color:
-                                              ColorsManager.secondaryBackground,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                                if (state is LocalHadithNavigationSuccess) {
-                                  setState(() {
-                                    isNavigated = true;
-                                    final hadith =
-                                        prev
-                                            ? state
-                                                .navigationHadithResponse
-                                                .prevHadith
-                                            : state
-                                                .navigationHadithResponse
-                                                .nextHadith;
-
-                                    newTextOfHadith =
-                                        hadith?.title ?? "الحديث غير متوفر";
-                                    newHadithId =
-                                        hadith?.id.toString() ??
-                                        "الحديث غير متوفر";
-                                  });
-                                }
-                              },
-                              builder: (context, state) {
-                                if (state is NavigationLoading) {
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 16.h,
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
-                                        vertical: 16.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: ColorsManager.primaryPurple
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_back_ios,
-                                            ),
-                                            onPressed: () {},
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              loadingProgressIndicator(
-                                                size: 16,
-                                              ),
-                                              SizedBox(width: 8.w),
-                                              Text(
-                                                "الحديث رقم $newHadithId",
-                                                style: TextStyle(
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color:
-                                                      ColorsManager
-                                                          .primaryPurple,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_forward_ios,
-                                            ),
-                                            onPressed: () {},
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                } else if (state
-                                    is LocalHadithNavigationSuccess) {
-                                  isNavigated = true;
-                                  final localHadith =
-                                      prev
-                                          ? state
-                                              .navigationHadithResponse
-                                              .prevHadith
-                                          : state
-                                              .navigationHadithResponse
-                                              .nextHadith;
-
-                                  newTextOfHadith =
-                                      localHadith?.title ?? "الحديث غير متوفر";
-                                  newHadithId =
-                                      localHadith?.id.toString() ??
-                                      "الحديث غير متوفر";
-
-                                  log(newTextOfHadith);
-
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 16.h,
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
-                                        vertical: 16.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: ColorsManager.primaryPurple
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_back_ios,
-                                            ),
-                                            onPressed: () {
-                                              prev = true;
-                                              context
-                                                  .read<
-                                                    LocalHadithNavigationCubit
-                                                  >()
-                                                  .emitLocalNavigation(
-                                                    localHadith?.id
-                                                            .toString() ??
-                                                        widget.hadithNumber ??
-                                                        "",
-                                                    widget.bookSlug ?? "",
-                                                  );
-                                            },
-                                          ),
-                                          Text(
-                                            "الحديث رقم ${localHadith?.id ?? 'غير متوفر'}",
-                                            style: TextStyle(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  ColorsManager.primaryPurple,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_forward_ios,
-                                            ),
-                                            onPressed: () {
-                                              prev = false;
-                                              context
-                                                  .read<
-                                                    LocalHadithNavigationCubit
-                                                  >()
-                                                  .emitLocalNavigation(
-                                                    localHadith?.id
-                                                            .toString() ??
-                                                        widget.hadithNumber ??
-                                                        "",
-                                                    widget.bookSlug ?? "",
-                                                  );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 16.w,
-                                    vertical: 16.h,
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 16.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: ColorsManager.primaryPurple
-                                          .withOpacity(0.1),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.arrow_back_ios,
-                                          ),
-                                          onPressed: () {
-                                            prev = true;
-                                            context
-                                                .read<
-                                                  LocalHadithNavigationCubit
-                                                >()
-                                                .emitLocalNavigation(
-                                                  widget.hadithNumber ?? "",
-                                                  widget.bookSlug ?? "",
-                                                );
-                                          },
-                                        ),
-                                        Text(
-                                          "الحديث رقم ",
-                                          style: TextStyle(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: ColorsManager.primaryPurple,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios,
-                                          ),
-                                          onPressed: () {
-                                            prev = false;
-                                            context
-                                                .read<
-                                                  LocalHadithNavigationCubit
-                                                >()
-                                                .emitLocalNavigation(
-                                                  widget.hadithNumber ?? "",
-                                                  widget.bookSlug ?? "",
-                                                );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
-                            : BlocConsumer<NavigationCubit, NavigationState>(
-                              listener: (context, state) {
-                                if (state is NavigationFailure) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: ColorsManager.error,
-
-                                      behavior: SnackBarBehavior.floating,
-                                      content: Text(
-                                        state.errMessage,
-                                        style: TextStyle(
-                                          color:
-                                              ColorsManager.secondaryBackground,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                                if (state is NavigationSuccess) {
-                                  setState(() {
-                                    isNavigated = true;
-                                    final hadith =
-                                        prev
-                                            ? state
-                                                .navigationHadithResponse
-                                                .prevHadith
-                                            : state
-                                                .navigationHadithResponse
-                                                .nextHadith;
-
-                                    newTextOfHadith =
-                                        hadith?.title ?? "الحديث غير متوفر";
-                                    newHadithId =
-                                        hadith?.id ?? "الحديث غير متوفر";
-                                  });
-                                }
-                              },
-                              builder: (context, state) {
-                                if (state is NavigationLoading) {
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 16.h,
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
-                                        vertical: 16.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: ColorsManager.primaryPurple
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_back_ios,
-                                            ),
-                                            onPressed: () {},
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              loadingProgressIndicator(
-                                                size: 16,
-                                              ),
-                                              SizedBox(width: 8.w),
-                                              Text(
-                                                "الحديث رقم $newHadithId",
-                                                style: TextStyle(
-                                                  fontSize: 16.sp,
-                                                  fontWeight: FontWeight.bold,
-                                                  color:
-                                                      ColorsManager
-                                                          .primaryPurple,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_forward_ios,
-                                            ),
-                                            onPressed: () {},
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                } else if (state is NavigationSuccess) {
-                                  isNavigated = true;
-                                  final hadith =
-                                      prev
-                                          ? state
-                                              .navigationHadithResponse
-                                              .prevHadith
-                                          : state
-                                              .navigationHadithResponse
-                                              .nextHadith;
-
-                                  newTextOfHadith =
-                                      hadith?.title ?? "الحديث غير متوفر";
-                                  newHadithId =
-                                      hadith?.id ?? "الحديث غير متوفر";
-
-                                  log(newTextOfHadith);
-
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 16.h,
-                                    ),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 16.w,
-                                        vertical: 16.h,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(12),
-                                        color: ColorsManager.primaryPurple
-                                            .withOpacity(0.1),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_back_ios,
-                                            ),
-                                            onPressed: () {
-                                              prev = true;
-                                              context
-                                                  .read<NavigationCubit>()
-                                                  .emitNavigationStates(
-                                                    hadith?.id ??
-                                                        widget.hadithNumber ??
-                                                        "",
-                                                    widget.bookSlug ?? "",
-                                                    widget.chapterNumber,
-                                                  );
-                                            },
-                                          ),
-                                          Text(
-                                            "الحديث رقم ${hadith?.id ?? 'غير متوفر'}",
-                                            style: TextStyle(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  ColorsManager.primaryPurple,
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.arrow_forward_ios,
-                                            ),
-                                            onPressed: () {
-                                              prev = false;
-                                              context
-                                                  .read<NavigationCubit>()
-                                                  .emitNavigationStates(
-                                                    hadith?.id ??
-                                                        widget.hadithNumber ??
-                                                        "",
-                                                    widget.bookSlug ?? "",
-                                                    widget.chapterNumber,
-                                                  );
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 16.w,
-                                    vertical: 16.h,
-                                  ),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 16.w,
-                                      vertical: 16.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: ColorsManager.primaryPurple
-                                          .withOpacity(0.1),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.arrow_back_ios,
-                                          ),
-                                          onPressed: () {
-                                            prev = true;
-                                            context
-                                                .read<NavigationCubit>()
-                                                .emitNavigationStates(
-                                                  widget.hadithNumber ?? "",
-                                                  widget.bookSlug ?? "",
-                                                  widget.chapterNumber,
-                                                );
-                                          },
-                                        ),
-                                        Text(
-                                          "الحديث رقم ",
-                                          style: TextStyle(
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: ColorsManager.primaryPurple,
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios,
-                                          ),
-                                          onPressed: () {
-                                            prev = false;
-                                            context
-                                                .read<NavigationCubit>()
-                                                .emitNavigationStates(
-                                                  widget.hadithNumber ?? "",
-                                                  widget.bookSlug ?? "",
-                                                  widget.chapterNumber,
-                                                );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                    child: widget.isLocal
+                        ? _buildLocalNavigation()
+                        : _buildRemoteNavigation(),
                   ),
                 ),
 
@@ -710,13 +214,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         hadithNumber: widget.hadithNumber ?? "",
         id: widget.hadithNumber ?? "",
         hadith: widget.hadithText ?? "",
-
       ),
     );
   }
 
-  /// Header أنيق وبسيط
-  ///
   Widget _buildHadithHeader() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12),
@@ -727,34 +228,31 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.format_quote,
-            color: ColorsManager.primaryGreen,
-            size: 28.sp,
-          ),
+          Icon(Icons.format_quote, color: ColorsManager.primaryGreen, size: 28.sp),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  isNavigated
-                      ? 'حديث رقم $newHadithId'
-                      : 'حديث رقم ${widget.hadithNumber}',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: ColorsManager.primaryText,
+                if (_isValid(widget.hadithNumber) || isNavigated)
+                  Text(
+                    isNavigated
+                        ? 'حديث رقم $newHadithId'
+                        : 'حديث رقم ${widget.hadithNumber}',
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      color: ColorsManager.primaryText,
+                    ),
                   ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  'من ${widget.bookName ?? "المصدر"}',
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    color: ColorsManager.secondaryText,
+                if (_isValid(widget.bookName))
+                  Text(
+                    'من ${widget.bookName}',
+                    style: TextStyle(
+                      fontSize: 13.sp,
+                      color: ColorsManager.secondaryText,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -784,6 +282,145 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
         child: _buildIslamicSeparator(),
+      ),
+    );
+  }
+
+  /// Local Navigation
+  Widget _buildLocalNavigation() {
+    return BlocConsumer<LocalHadithNavigationCubit, LocalHadithNavigationState>(
+      listener: (context, state) {
+        if (state is LocalHadithNavigationFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: ColorsManager.error,
+              behavior: SnackBarBehavior.floating,
+              content: Text(state.errMessage,
+                  style: TextStyle(color: ColorsManager.secondaryBackground)),
+            ),
+          );
+        }
+        if (state is LocalHadithNavigationSuccess) {
+          setState(() {
+            isNavigated = true;
+            final hadith =
+                prev ? state.navigationHadithResponse.prevHadith : state.navigationHadithResponse.nextHadith;
+
+            newTextOfHadith = hadith?.title ?? "الحديث غير متوفر";
+            newHadithId = hadith?.id.toString() ?? "الحديث غير متوفر";
+          });
+        }
+      },
+      builder: (context, state) {
+        return _buildNavigationContainer(
+          isLoading: state is NavigationLoading,
+          hadithId: newHadithId,
+          onPrev: () {
+            prev = true;
+            context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
+                  widget.hadithNumber ?? "",
+                  widget.bookSlug ?? "",
+                );
+          },
+          onNext: () {
+            prev = false;
+            context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
+                  widget.hadithNumber ?? "",
+                  widget.bookSlug ?? "",
+                );
+          },
+        );
+      },
+    );
+  }
+
+  /// Remote Navigation
+  Widget _buildRemoteNavigation() {
+    return BlocConsumer<NavigationCubit, NavigationState>(
+      listener: (context, state) {
+        if (state is NavigationFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: ColorsManager.error,
+              behavior: SnackBarBehavior.floating,
+              content: Text(state.errMessage,
+                  style: TextStyle(color: ColorsManager.secondaryBackground)),
+            ),
+          );
+        }
+        if (state is NavigationSuccess) {
+          setState(() {
+            isNavigated = true;
+            final hadith =
+                prev ? state.navigationHadithResponse.prevHadith : state.navigationHadithResponse.nextHadith;
+
+            newTextOfHadith = hadith?.title ?? "الحديث غير متوفر";
+            newHadithId = hadith?.id ?? "الحديث غير متوفر";
+          });
+        }
+      },
+      builder: (context, state) {
+        return _buildNavigationContainer(
+          isLoading: state is NavigationLoading,
+          hadithId: newHadithId,
+          onPrev: () {
+            prev = true;
+            context.read<NavigationCubit>().emitNavigationStates(
+                  widget.hadithNumber ?? "",
+                  widget.bookSlug ?? "",
+                  widget.chapterNumber,
+                );
+          },
+          onNext: () {
+            prev = false;
+            context.read<NavigationCubit>().emitNavigationStates(
+                  widget.hadithNumber ?? "",
+                  widget.bookSlug ?? "",
+                  widget.chapterNumber,
+                );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildNavigationContainer({
+    required bool isLoading,
+    required String hadithId,
+    required VoidCallback onPrev,
+    required VoidCallback onNext,
+  }) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: ColorsManager.primaryPurple.withOpacity(0.1),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: onPrev),
+          isLoading
+              ? Row(
+                  children: [
+                    loadingProgressIndicator(size: 16),
+                    SizedBox(width: 8.w),
+                    Text("جاري التحميل...",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: ColorsManager.primaryPurple,
+                        )),
+                  ],
+                )
+              : Text("الحديث رقم $hadithId",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorsManager.primaryPurple,
+                  )),
+          IconButton(icon: const Icon(Icons.arrow_forward_ios), onPressed: onNext),
+        ],
       ),
     );
   }

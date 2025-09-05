@@ -69,7 +69,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
     'الأدب والآداب': 'adab',
   };
 
-  Future<void> _addItemToHistory(HistoryItem historyItem) async {
+  Future<void> addItemToHistory(HistoryItem historyItem) async {
     final existingIndex = _items.indexWhere(
       (item) => item.title == historyItem.title,
     );
@@ -78,22 +78,22 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
     } else {
       _items.add(historyItem);
     }
-    await HistoryPrefs.saveHistory(_items);
-    context.read<SearchHistoryCubit>().emitHistorySearch();
+    await HistoryPrefs.saveHistory(_items,HistoryPrefs.filteredSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch( searchCategory: HistoryPrefs.filteredSearch);
   }
 
-  Future<void> _removeItem(int index) async {
+  Future<void> removeItem(int index) async {
     _items.removeAt(index);
-    await HistoryPrefs.saveHistory(_items);
-    context.read<SearchHistoryCubit>().emitHistorySearch();
+    await HistoryPrefs.saveHistory(_items,HistoryPrefs.filteredSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch( searchCategory: HistoryPrefs.filteredSearch);
   }
 
-  Future<void> _clearAll() async {
-    await HistoryPrefs.clearHistory();
-    context.read<SearchHistoryCubit>().emitHistorySearch();
+  Future<void> clearAll() async {
+    await HistoryPrefs.clearHistory(HistoryPrefs.filteredSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch( searchCategory: HistoryPrefs.filteredSearch);
   }
 
-  String _formatDateTime(DateTime dateTime) {
+  String formatDateTime(DateTime dateTime) {
     final date =
         "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
     final time =
@@ -105,7 +105,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<SearchHistoryCubit>().emitHistorySearch();
+    context.read<SearchHistoryCubit>().emitHistorySearch(searchCategory: HistoryPrefs.filteredSearch);
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -162,16 +162,16 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                       controller: searchController,
                       onSearch: (query) {
                         final now = DateTime.now();
-                        _addItemToHistory(
+                        addItemToHistory(
                           HistoryItem(
                             title: query.trim(),
-                            date: _formatDateTime(now).split(' - ')[1],
-                            time: _formatDateTime(now).split(' - ')[0],
+                            date: formatDateTime(now).split(' - ')[1],
+                            time: formatDateTime(now).split(' - ')[0],
                           ),
                         );
 
                         context.pushNamed(
-                          Routes.publicSearchSCreen,
+                          Routes.filterResultSearch,
                           arguments: {
                             'book': booksMap[_selectedBook] ?? '',
                             'category': categoriesMap[_selectedCategory] ?? '',
@@ -327,7 +327,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                           ),
                         ),
                         TextButton(
-                          onPressed: _clearAll,
+                          onPressed: clearAll,
                           child: Text(
                             'مسح الكل',
                             style: TextStyles.bodyMedium.copyWith(
@@ -356,8 +356,8 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                     return _items.isNotEmpty
                         ? HistoryList(
                           items: _items,
-                          onRemove: _removeItem,
-                          onClearAll: _clearAll,
+                          onRemove: removeItem,
+                          onClearAll: clearAll,
                         )
                         : const EmptyHistory();
                   }

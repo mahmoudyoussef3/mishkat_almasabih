@@ -7,7 +7,8 @@ class Routes {
   static const String bookChaptersScreen = '/bookChaptersScreen';
   static const String chapterAhadithsScreen = '/chapterAhadithsScreen';
   static const String publicSearchSCreen = '/publicSearchSCreen';
-    static const String searchScreen = '/searchScreen';
+
+    static const String filterResultSearch = '/filterResultSearch';
 
 
         static const String hadithOfTheDay = '/hadithOfTheDay';

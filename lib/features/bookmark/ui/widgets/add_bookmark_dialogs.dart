@@ -26,6 +26,7 @@ class AddToFavoritesDialog extends StatefulWidget {
 
   String bookSlug;
   String id;
+  String? grade;
   @override
   State<AddToFavoritesDialog> createState() => _AddToFavoritesDialogState();
 }
@@ -37,7 +38,8 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
-  final TextEditingController newCollectionNotesController = TextEditingController();
+  final TextEditingController newCollectionNotesController =
+      TextEditingController();
 
   @override
   void initState() {
@@ -86,7 +88,7 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
               children: [
                 _dialogHeader("إضافة للمفضلة"),
                 const SizedBox(height: 8),
-            
+
                 Text(
                   "اختر مجموعة من الإشارات المرجعية",
                   textAlign: TextAlign.center,
@@ -96,9 +98,9 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-            
+
                 const SizedBox(height: 20),
-            
+
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
@@ -113,7 +115,7 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                         collections!.map((c) {
                           final isSelected =
                               selectedCollection == (c.collection ?? "");
-            
+
                           return ChoiceChip(
                             showCheckmark: false,
                             label: Text(
@@ -151,23 +153,26 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                         }).toList(),
                   ),
                 ),
-                        const SizedBox(height: 6),
-            
-               _inputLabel("ملاحظات (اختياري)"),
-                    const SizedBox(height: 6),
-                    _styledTextField(notesController, "أدخل الملاحظات", maxLines: 3),
-            
-            
+                const SizedBox(height: 6),
+
+                _inputLabel("ملاحظات (اختياري)"),
+                const SizedBox(height: 6),
+                _styledTextField(
+                  notesController,
+                  "أدخل الملاحظات",
+                  maxLines: 3,
+                ),
+
                 const SizedBox(height: 28),
-            
+
                 BlocConsumer<AddCubitCubit, AddCubitState>(
                   listener: (context, state) {
                     if (state is AddLoading) {
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-            
+                          behavior: SnackBarBehavior.floating,
+
                           backgroundColor: ColorsManager.primaryGreen,
                           content: loadingProgressIndicator(
                             size: 30,
@@ -177,13 +182,12 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                       );
                     } else if (state is AddSuccess) {
                       ScaffoldMessenger.of(context).clearSnackBars();
-            
+
                       ScaffoldMessenger.of(context).showSnackBar(
-                        
                         SnackBar(
-              behavior: SnackBarBehavior.floating,
-              showCloseIcon:true ,
-            
+                          behavior: SnackBarBehavior.floating,
+                          showCloseIcon: true,
+
                           backgroundColor: ColorsManager.primaryGreen,
                           content: Text(
                             'تم اضافة الحديث إلي المحفوظات',
@@ -194,11 +198,11 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                       context.pop();
                     } else if (state is AddFailure) {
                       ScaffoldMessenger.of(context).clearSnackBars();
-            
+
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-            
+                          behavior: SnackBarBehavior.floating,
+
                           backgroundColor: ColorsManager.primaryGreen,
                           content: Text(
                             "حدث خطأ. حاول مرة أخري",
@@ -232,11 +236,11 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                             hadithText: widget.hadithText,
                             type: 'hadith',
                             bookSlug: widget.bookSlug,
-                          //  id: int.parse(widget.hadithNumber),
+                            //  id: int.parse(widget.hadithNumber),
                           ),
                         );
                       },
-            
+
                       icon: const Icon(Icons.bookmark_add_outlined),
                       label: const Text(
                         "حفظ",
@@ -248,9 +252,9 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                     );
                   },
                 ),
-            
+
                 const SizedBox(height: 20),
-            
+
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
                     foregroundColor: ColorsManager.primaryPurple,
@@ -270,9 +274,9 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                     style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
-            
+
                 const SizedBox(height: 12),
-            
+
                 // 🔹 Cancel
                 TextButton(
                   onPressed: () => Navigator.pop(context),
@@ -308,7 +312,11 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
 
         _inputLabel("ملاحظات (اختياري)"),
         const SizedBox(height: 6),
-        _styledTextField(newCollectionNotesController, "أدخل الملاحظات", maxLines: 3),
+        _styledTextField(
+          newCollectionNotesController,
+          "أدخل الملاحظات",
+          maxLines: 3,
+        ),
 
         const SizedBox(height: 20),
 
@@ -321,7 +329,7 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                   ScaffoldMessenger.of(context).clearSnackBars();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                                                          behavior: SnackBarBehavior.floating,
+                      behavior: SnackBarBehavior.floating,
 
                       backgroundColor: ColorsManager.primaryGreen,
                       content: loadingProgressIndicator(
@@ -335,7 +343,7 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                                                          behavior: SnackBarBehavior.floating,
+                      behavior: SnackBarBehavior.floating,
 
                       backgroundColor: ColorsManager.primaryGreen,
                       content: Text(

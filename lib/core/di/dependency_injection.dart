@@ -22,11 +22,11 @@ import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statisti
 import 'package:mishkat_almasabih/features/navigation/data/repos/navigation_repo.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
-import 'package:mishkat_almasabih/features/search/data/models/enhanced_search_response_model.dart';
-import 'package:mishkat_almasabih/features/search/data/repos/enhanced_search_repo.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/repos/public_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
-import 'package:mishkat_almasabih/features/search/logic/cubit/enhanced_search_cubit.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/repos/search_with_filters_repo.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';

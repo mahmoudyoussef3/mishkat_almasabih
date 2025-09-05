@@ -12,22 +12,15 @@ import 'package:mishkat_almasabih/features/home/ui/widgets/build_main_category_c
 import 'package:mishkat_almasabih/features/home/ui/widgets/daily_hadith_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/empty_history.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
 import '../../../core/helpers/spacing.dart';
 
-/// HomeScreen is the main dashboard of the Mishkat Al-Masabih app.
-///
-/// This screen displays:
-/// - Daily hadith card
-/// - Library statistics
-/// - Main book categories
-/// - Navigation to other sections
-///
-/// The screen follows a clean architecture pattern with:
-/// - UI layer (this file)
-/// - Business logic (BLoC cubit)
-/// - Data layer (repository)
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -55,19 +48,56 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadLibraryStatistics() async {
     await context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit();
-        await context.read<DailyHadithCubit>().loadOrFetchHadith();
-
-
+    await context.read<DailyHadithCubit>().loadOrFetchHadith();
   }
 
-  
+  final List<HistoryItem> _items = [];
+
+  Future<void> addItemToHistory(HistoryItem historyItem) async {
+    final existingIndex = _items.indexWhere(
+      (item) => item.title == historyItem.title,
+    );
+    if (existingIndex != -1) {
+      _items[existingIndex] = historyItem;
+    } else {
+      _items.add(historyItem);
+    }
+    await HistoryPrefs.saveHistory(_items, HistoryPrefs.enhancedPublicSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch(
+      searchCategory: HistoryPrefs.enhancedPublicSearch,
+    );
+  }
+
+  Future<void> removeItem(int index) async {
+    _items.removeAt(index);
+    await HistoryPrefs.saveHistory(_items, HistoryPrefs.enhancedPublicSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch(
+      searchCategory: HistoryPrefs.enhancedPublicSearch,
+    );
+  }
+
+  Future<void> clearAll() async {
+    await HistoryPrefs.clearHistory(HistoryPrefs.enhancedPublicSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch(
+      searchCategory: HistoryPrefs.enhancedPublicSearch,
+    );
+  }
+
+  String formatDateTime(DateTime dateTime) {
+    final date =
+        "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+    final time =
+        "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
+    return "$time - $date";
+  }
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: RefreshIndicator(
-        onRefresh: () => context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
+        onRefresh:
+            () => context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
         child: Scaffold(
           backgroundColor: ColorsManager.secondaryBackground,
           body: _buildBody(),
@@ -89,7 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
   Widget _buildLoadingState() {
     return loadingProgressIndicator();
   }
@@ -99,36 +128,123 @@ class _HomeScreenState extends State<HomeScreen> {
     return CustomScrollView(
       slivers: [
         _buildHeaderSection(),
-        
+        SliverToBoxAdapter(child: SizedBox(height: 12.h)),
         SliverToBoxAdapter(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: SearchBarWidget(
-                  controller: _controller,
-                  onSearch: (query) {
-                    final trimmedQuery = query.trim();
-                    if (trimmedQuery.isNotEmpty) {
-                      final now = DateTime.now();
-                      /*
-                      _addItemToHistory(
-                        HistoryItem(
-                          title: trimmedQuery,
-                          date: _formatDateTime(now).split(' - ')[1],
-                          time: _formatDateTime(now).split(' - ')[0],
-                        ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
+            child: Card(
+              color: ColorsManager.secondaryBackground,
+              elevation: 5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SearchBarWidget(
+                    onTap: () {
+                      context.read<SearchHistoryCubit>().emitHistorySearch(
+                        searchCategory: HistoryPrefs.enhancedPublicSearch,
                       );
-                      */
-                      context.pushNamed(Routes.publicSearchSCreen,arguments: {
-                        "search":query
-                      });
-                    }
-                  },
-                ),
+                    },
+                    controller: _controller,
+                    onSearch: (query) {
+                      final trimmedQuery = query.trim();
+                      if (trimmedQuery.isNotEmpty) {
+                        final now = DateTime.now();
+                        final historyItem = HistoryItem(
+                          title: trimmedQuery,
+                          date: "${now.year}-${now.month}-${now.day}",
+                          time:
+                              "${now.hour}:${now.minute.toString().padLeft(2, '0')}",
+                        );
+
+                        context.read<SearchHistoryCubit>().addItem(
+                          historyItem,
+                          searchCategory: HistoryPrefs.enhancedPublicSearch,
+                        );
+
+                        context.pushNamed(
+                          Routes.publicSearchSCreen,
+                          arguments: trimmedQuery,
+                        );
+                      }
+                    },
+                  ),
+
+                  BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
+                    builder: (context, state) {
+                      if (state is SearchHistoryLoading) {
+                        return const HistoryShimmer();
+                      } else if (state is SearchHistoryError) {
+                        return const Center(
+                          child: Text("خطأ أثناء تحميل السجل"),
+                        );
+                      } else if (state is SearchHistorySuccess) {
+                        if (state.hisoryItems.isEmpty) {
+                          return const SizedBox.shrink();
+                        }
+                        return ListView.separated(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.hisoryItems.length,
+                          separatorBuilder:
+                              (context, index) => Divider(
+                                endIndent: 30.w,
+                                indent: 30.w,
+                                height: 1.h,
+                                color: Colors.grey[300],
+                              ),
+                          itemBuilder: (context, index) {
+                            final item = state.hisoryItems[index];
+                            return ListTile(
+                              tileColor: Colors.white,
+                              title: Text(
+                                item.title,
+                                style: TextStyles.bodyMedium.copyWith(
+                                  color: ColorsManager.primaryText,
+                                ),
+                              ),
+                              subtitle: Text(
+                                item.date,
+                                style: TextStyles.bodySmall.copyWith(
+                                  color: ColorsManager.secondaryText,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  size: 22.r,
+                                  color: ColorsManager.primaryGreen,
+                                ),
+                                onPressed:
+                                    () => context
+                                        .read<SearchHistoryCubit>()
+                                        .removeItem(
+                                          index,
+                                          searchCategory:
+                                              HistoryPrefs.enhancedPublicSearch,
+                                        ),
+                              ),
+                              onTap:
+                                  () => context.pushNamed(
+                                    Routes.publicSearchSCreen,
+                                    arguments: item.title,
+                                  ),
+                            );
+                          },
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ],
               ),
             ),
-                _buildDailyHadithSection(),
-        _buildDividerSection(),  
-              _buildStatisticsSection(state),
+          ),
+        ),
+        _buildDailyHadithSection(),
+        _buildDividerSection(),
+        _buildStatisticsSection(state),
         _buildDividerSection(),
         _buildCategoriesSection(state),
         _buildBottomSpacing(),
@@ -139,7 +255,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildEmptyState() {
     return const SizedBox.shrink();
   }
-
 
   Widget _buildHeaderSection() {
     return const BuildHeaderAppBar(

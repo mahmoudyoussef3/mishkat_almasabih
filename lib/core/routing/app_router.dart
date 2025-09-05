@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
@@ -12,10 +14,11 @@ import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
-import 'package:mishkat_almasabih/features/search/logic/cubit/enhanced_search_cubit.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/search_screen.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/filter_serch_result_screen.dart';
 import '../../features/home/ui/widgets/public_search_result.dart';
 import '../../features/main_navigation/main_navigation_screen.dart';
 import '../di/dependency_injection.dart';
@@ -60,6 +63,7 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => getIt<GetLibraryStatisticsCubit>(),
                   ),
+                  
                   BlocProvider(create: (context) => getIt<BookDataCubit>()),
                   BlocProvider(create: (context) => getIt<GetBookmarksCubit>()),
                   BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
@@ -83,15 +87,24 @@ class AppRouter {
               ),
         );
       case Routes.publicSearchSCreen:
-        final query = settings.arguments as Map<String, String>;
-        print(query);
+        final query = settings.arguments as String ;
+        log(query);
 
         return MaterialPageRoute(
           builder:
-              (_) => MultiBlocProvider(
-                providers: [
-                  /*
-                  BlocProvider(
+              (_) =>                   BlocProvider(create: (context) => getIt<EnhancedSearchCubit>()..fetchEnhancedSearchResults(query),
+
+                child: PublicSearchResult(
+                  searchQuery: query,
+                ),
+              ),
+        );
+        
+case Routes.filterResultSearch:
+        final query = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder:
+              (_) =>       BlocProvider(
                     create:
                         (context) =>
                             getIt<SearchWithFiltersCubit>()
@@ -103,16 +116,10 @@ class AppRouter {
                                 narrator: query['narrator'] ?? '',
                                 searchQuery: query['search'] ?? '',
                               ),
+                              child: FilterSerchResultScreen(searchQuery: query['search'] ?? ''),
                   ),
-                  */
-                  BlocProvider(create: (context) => getIt<EnhancedSearchCubit>()..fetchEnhancedSearchResults(query['search'] !)),
-                ],
-                child: PublicSearchResultScreen(
-                  searchQuery: query['search'] ?? '',
-                ),
-              ),
         );
-
+        /*
       case Routes.searchScreen:
         return MaterialPageRoute(
           builder:
@@ -121,6 +128,7 @@ class AppRouter {
                 child: SearchScreen(),
               ),
         );
+        */
       case Routes.hadithOfTheDay:
         final query = settings.arguments as DailyHadithModel;
 

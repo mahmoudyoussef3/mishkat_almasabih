@@ -24,7 +24,7 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    HomeScreen(),
+    BlocProvider(create: (context) => SearchHistoryCubit(), child: HomeScreen()),
 
     MultiBlocProvider(
       providers: [

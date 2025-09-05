@@ -10,7 +10,7 @@ class EnhancedSearch {
   final bool? success;
 
   @HiveField(1)
-  final List<HadithModel>? results;
+  final List<EnhancedHadithModel>? results;
 
   @HiveField(2)
   final Pagination? pagination;
@@ -25,7 +25,7 @@ class EnhancedSearch {
 
 @HiveType(typeId: 1)
 @JsonSerializable()
-class HadithModel {
+class EnhancedHadithModel {
   @HiveField(0)
   final String? id;
 
@@ -54,12 +54,12 @@ class HadithModel {
   final String? hadeethIntro;
 
   @HiveField(9)
-  final List<WordMeaning>? wordsMeanings;
+  final List<WordMeaning>? words_meanings;
 
   @HiveField(10)
   final String? reference;
 
-  HadithModel({
+  EnhancedHadithModel({
     this.id,
     this.title,
     this.hadeeth,
@@ -69,14 +69,14 @@ class HadithModel {
     this.hints,
     this.categories,
     this.hadeethIntro,
-    this.wordsMeanings,
+    this.words_meanings,
     this.reference,
   });
 
-  factory HadithModel.fromJson(Map<String, dynamic> json) =>
-      _$HadithModelFromJson(json);
+  factory EnhancedHadithModel.fromJson(Map<String, dynamic> json) =>
+      _$EnhancedHadithModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$HadithModelToJson(this);
+  Map<String, dynamic> toJson() => _$EnhancedHadithModelToJson(this);
 }
 
 @HiveType(typeId: 2)

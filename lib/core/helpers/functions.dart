@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
 import '../theming/styles.dart';
 
 void setupErrorState(BuildContext context, String error) {
@@ -22,3 +23,18 @@ void setupErrorState(BuildContext context, String error) {
         ),
   );
 }
+  Color getGradeColor(String? g) {
+    switch (g?.toLowerCase()) {
+      case "sahih":
+      case "صحيح":
+        return ColorsManager.hadithAuthentic;
+      case "hasan":
+      case "حسن":
+        return ColorsManager.hadithGood;
+      case "daif":
+      case "ضعيف":
+        return ColorsManager.hadithWeak;
+      default:
+        return ColorsManager.hadithAuthentic;
+    }
+  }

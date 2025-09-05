@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:mishkat_almasabih/features/search/data/models/enhanced_search_response_model.dart';
-import 'package:mishkat_almasabih/features/search/data/repos/enhanced_search_repo.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
 
 part 'enhanced_search_state.dart';
 
