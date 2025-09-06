@@ -22,6 +22,8 @@ import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statisti
 import 'package:mishkat_almasabih/features/navigation/data/repos/navigation_repo.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
+import 'package:mishkat_almasabih/features/profile/data/repos/user_response_repo.dart';
+import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/repos/public_search_repo.dart';
@@ -104,4 +106,10 @@ Future<void> setUpGetIt() async {
 
     getIt.registerLazySingleton<EnhancedSearchRepo>(() => EnhancedSearchRepo(getIt()));
   getIt.registerFactory<EnhancedSearchCubit>(() => EnhancedSearchCubit(getIt()));
+
+
+
+  
+    getIt.registerLazySingleton<UserResponseRepo>(() => UserResponseRepo(getIt()));
+  getIt.registerFactory<ProfileCubit>(() => ProfileCubit(getIt()));
 }

@@ -14,6 +14,7 @@ import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/local_hadith_navigation_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/navigation_hadith_model.dart';
+import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
@@ -131,6 +132,12 @@ abstract class ApiService {
      @POST(ApiConstants.enhancedSearch)
   Future<EnhancedSearch> getEnhancedSearch(
         @Body() Map<String,dynamic> body,
+  );
+
+   @GET(ApiConstants.getUserProfile)
+  Future<UserResponseModel> getUserProfile(
+            @Header("x-auth-token") String token,
+
   );
   
 }

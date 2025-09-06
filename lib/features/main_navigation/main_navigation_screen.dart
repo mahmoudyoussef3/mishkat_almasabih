@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
+import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
 
 import 'package:mishkat_almasabih/features/profile/ui/profile_screen.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
@@ -37,7 +38,10 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
       create: (context) => getIt<GetBookmarksCubit>(),
       child: BookmarkScreen(),
     ),
-    ProfileScreen(),
+    BlocProvider(
+      create: (context) => getIt<ProfileCubit>(),
+      child: ProfileScreen(),
+    ),
   ];
 
   @override
