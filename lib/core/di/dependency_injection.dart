@@ -23,6 +23,8 @@ import 'package:mishkat_almasabih/features/navigation/data/repos/navigation_repo
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/profile/data/repos/user_response_repo.dart';
+import 'package:mishkat_almasabih/features/profile/edit_profile/data/repos/edit_profile_repo.dart';
+import 'package:mishkat_almasabih/features/profile/edit_profile/logic/cubit/edit_profile_cubit.dart';
 import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
@@ -112,4 +114,8 @@ Future<void> setUpGetIt() async {
   
     getIt.registerLazySingleton<UserResponseRepo>(() => UserResponseRepo(getIt()));
   getIt.registerFactory<ProfileCubit>(() => ProfileCubit(getIt()));
+
+
+      getIt.registerLazySingleton<EditProfileRepo>(() => EditProfileRepo(getIt()));
+  getIt.registerFactory<EditProfileCubit>(() => EditProfileCubit(getIt()));
 }

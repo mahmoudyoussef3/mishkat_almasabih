@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_response_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_request_body.dart';
@@ -116,28 +118,30 @@ abstract class ApiService {
     @Path("bookSlug") String bookSlug,
   );
 
-   @GET(ApiConstants.searchWithFilters)
+  @GET(ApiConstants.searchWithFilters)
   Future<SearchWithFiltersModel> searchWithFilters(
     @Path("searchQuery") String searchQuery,
 
     @Path("bookSlug") String bookSlug,
-        @Path("narrator") String narrator,
+    @Path("narrator") String narrator,
     @Path("grade") String grade,
     @Path("chapter") String chapter,
     @Path("category") String category,
   );
 
+  @POST(ApiConstants.enhancedSearch)
+  Future<EnhancedSearch> getEnhancedSearch(@Body() Map<String, dynamic> body);
 
-
-     @POST(ApiConstants.enhancedSearch)
-  Future<EnhancedSearch> getEnhancedSearch(
-        @Body() Map<String,dynamic> body,
-  );
-
-   @GET(ApiConstants.getUserProfile)
+  @GET(ApiConstants.getUserProfile)
   Future<UserResponseModel> getUserProfile(
-            @Header("x-auth-token") String token,
-
+    @Header("x-auth-token") String token,
   );
-  
+@PUT(ApiConstants.updateUserProfile)
+@MultiPart()
+Future<UserResponseModel> updateUserProfile(
+  @Header("x-auth-token") String token,
+  @Part(name: "username") String username,
+  @Part(name: "avatar") File? avatar, // 👈 خليها File مش MultipartFile
+);
+
 }
