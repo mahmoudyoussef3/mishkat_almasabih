@@ -122,7 +122,7 @@ class _AnalyzeButtonState extends State<_AnalyzeButton> {
           color: _pressed
               ? ColorsManager.primaryGreen.withOpacity(0.85)
               : ColorsManager.primaryGreen,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
               color: ColorsManager.primaryGreen.withOpacity(0.4),
@@ -174,15 +174,20 @@ class _ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(12.r),
+              color: ColorsManager.primaryGreen.withOpacity(0.05),
+
+      /*
           gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
+                        ColorsManager.secondaryBackground,
+
                         ColorsManager.lightBlue.withOpacity(0.2),
 
-            ColorsManager.secondaryBackground,
           ],
         ),
+        */
     ),
       child: Padding(
         padding: EdgeInsets.all(18.w),
