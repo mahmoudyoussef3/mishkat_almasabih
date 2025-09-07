@@ -11,6 +11,9 @@ import 'package:mishkat_almasabih/features/bookmark/data/models/collection_model
 import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_request.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_response.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/data/repos/hadith_analysis_repo.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
@@ -141,7 +144,18 @@ abstract class ApiService {
 Future<UserResponseModel> updateUserProfile(
   @Header("x-auth-token") String token,
   @Part(name: "username") String username,
-  @Part(name: "avatar") File? avatar, // 👈 خليها File مش MultipartFile
+  @Part(name: "avatar") File? avatar, 
 );
+
+
+
+@POST(ApiConstants.hadithAnalysis)
+Future<HadithAnalysisResponse> hadithAnalysis(
+  @Body() HadithAnalysisRequest hadithAnalysisRequest,
+  @Header("x-auth-token") String token,
+
+
+);
+
 
 }

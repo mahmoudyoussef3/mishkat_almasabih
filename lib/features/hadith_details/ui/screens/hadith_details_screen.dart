@@ -4,7 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/ui/widgets/hadith_analysis.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_books_section.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_grade_title.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
@@ -63,6 +65,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+                BlocProvider(create: (context) => getIt<HadithAnalysisCubit>()),
+
         BlocProvider(create: (context) => getIt<AddCubitCubit>()),
         BlocProvider(create: (context) => getIt<NavigationCubit>()),
         BlocProvider(create: (context) => getIt<LocalHadithNavigationCubit>()),
@@ -75,7 +79,6 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
             slivers: [
               const BuildHeaderAppBar(title: 'تفاصيل الحديث'),
 
-              /// Header
               if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
                 SliverToBoxAdapter(
                   child: Padding(
@@ -94,6 +97,16 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                         ? newTextOfHadith
                         : widget.hadithText ?? "الحديث غير متوفر",
                   ),
+                ),
+
+                SliverToBoxAdapter(
+                  child: SizedBox(height: 20.h),
+                ),
+                HadithAnalysis(
+                  attribution: widget.narrator ?? '',
+                  hadith: widget.hadithText ?? '',
+                  grade: widget.grade ?? '',
+                  reference: widget.bookName ?? '',
                 ),
 
               if (_isValid(widget.grade)) _buildDividerSection(),

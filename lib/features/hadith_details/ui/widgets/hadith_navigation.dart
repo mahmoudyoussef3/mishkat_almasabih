@@ -104,6 +104,7 @@ class _HadithNavigationState extends State<HadithNavigation> {
                                         data.nextHadith!.id.toString(),
                                         widget.bookSlug,
                                         widget.chapterNumber,
+                                        
                                       );
                                 }
                                 : null,

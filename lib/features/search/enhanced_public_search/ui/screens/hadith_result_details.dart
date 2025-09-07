@@ -38,7 +38,7 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
           body: CustomScrollView(
             slivers: [
               const BuildHeaderAppBar(
-                title: 'معلومات عن الجديث',
+                title: 'معلومات عن الحديث',
               ),
 
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
@@ -49,7 +49,7 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      if (data?.title != null)
+                      if (data.title != null)
                         Container(
                           margin: EdgeInsets.only(bottom: 10.h),
                           child: HadithTitle(title: data.title!),

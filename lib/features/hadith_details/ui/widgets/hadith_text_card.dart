@@ -12,12 +12,12 @@ class HadithTextCard extends StatelessWidget {
       padding: EdgeInsets.all(24.w),
       margin: EdgeInsets.symmetric(horizontal: 20.w),
       decoration: BoxDecoration(
-     gradient: LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
             ColorsManager.secondaryBackground,
-            ColorsManager.primaryPurple.withOpacity(0.2),
+            ColorsManager.primaryPurple.withOpacity(0.1),
             //   ColorsManager.primaryGold.withOpacity(0.02),
           ],
         ),
@@ -36,9 +36,9 @@ class HadithTextCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-             Positioned.fill(
+          Positioned.fill(
             child: Opacity(
-              opacity: 0.06,
+              opacity: 0.0005,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.r),
                 child: Image.asset(
@@ -71,62 +71,57 @@ class HadithTextCard extends StatelessWidget {
           ),
 
           // Main text content
-        Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Hadith label
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 6.h,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Hadith label
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                decoration: BoxDecoration(
+                  color: ColorsManager.primaryPurple.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(16.r),
+                  border: Border.all(
+                    color: ColorsManager.primaryPurple.withOpacity(0.2),
+                    width: 1,
                   ),
-                  decoration: BoxDecoration(
-                    color: ColorsManager.primaryPurple.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(16.r),
-                    border: Border.all(
-                      color: ColorsManager.primaryPurple.withOpacity(0.2),
-                      width: 1,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.auto_stories,
+                      color: ColorsManager.primaryPurple,
+                      size: 16.sp,
                     ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.auto_stories,
+                    SizedBox(width: 6.w),
+                    Text(
+                      "نص الحديث",
+                      style: TextStyle(
                         color: ColorsManager.primaryPurple,
-                        size: 16.sp,
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
                       ),
-                      SizedBox(width: 6.w),
-                      Text(
-                        "نص الحديث",
-                        style: TextStyle(
-                          color: ColorsManager.primaryPurple,
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              ),
 
-                SizedBox(height: 20.h),
+              SizedBox(height: 20.h),
 
-                // Hadith text with enhanced typography
-                Text(
-                  hadithText,
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    height: 1.8,
-                    color: ColorsManager.primaryText,
-                    fontFamily: 'Amiri',
-                    fontWeight: FontWeight.w500,
-                  ),
+              // Hadith text with enhanced typography
+              Text(
+                hadithText,
+                textAlign: TextAlign.right,
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  height: 1.8,
+                  color: ColorsManager.primaryText,
+                  fontFamily: 'Amiri',
+                  fontWeight: FontWeight.w500,
                 ),
-              ],
-            ),
-          
-
+              ),
+            ],
+          ),
         ],
       ),
     );
