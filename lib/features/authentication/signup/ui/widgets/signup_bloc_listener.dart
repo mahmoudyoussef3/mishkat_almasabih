@@ -26,8 +26,7 @@ class SignupBlocListener extends StatelessWidget {
         if (state is SignupLoading) {
           showDialog(
             context: context,
-            builder:
-                (context) =>loadingProgressIndicator()
+            builder: (context) => loadingProgressIndicator(),
           );
         } else if (state is SignupSuccess) {
           context.pop();
@@ -42,8 +41,11 @@ class SignupBlocListener extends StatelessWidget {
             buttonText: 'إنشاء الحساب',
 
             onPressed: () {
-              if (context.read<SignupCubit>().formKey.currentState!.validate()) {
-
+              if (context
+                  .read<SignupCubit>()
+                  .formKey
+                  .currentState!
+                  .validate()) {
                 context.read<SignupCubit>().emitSignUpStates();
               }
             },
@@ -70,7 +72,8 @@ class SignupBlocListener extends StatelessWidget {
           content: const SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('تم إنشاء حسابك بنجاح. استمتع بتجربتك الجديدة!'),              ],
+                Text('تم إنشاء حسابك بنجاح. استمتع بتجربتك الجديدة!'),
+              ],
             ),
           ),
           actions: <Widget>[

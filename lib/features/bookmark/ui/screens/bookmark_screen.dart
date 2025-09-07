@@ -21,19 +21,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => getIt<GetBookmarksCubit>()..getUserBookmarks(),
-        ),
-        BlocProvider(
-          create:
-              (_) =>
-                  getIt<GetCollectionsBookmarkCubit>()
-                    ..getBookMarkCollections(),
-        ),
-      ],
-      child: Directionality(
+    return  Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
           backgroundColor: ColorsManager.secondaryBackground,
@@ -60,7 +48,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
             ],
           ),
         ),
-      ),
+
     );
   }
 

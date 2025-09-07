@@ -17,7 +17,10 @@ class BookmarkCollectionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetCollectionsBookmarkCubit, GetCollectionsBookmarkState>(
+    return BlocBuilder<
+      GetCollectionsBookmarkCubit,
+      GetCollectionsBookmarkState
+    >(
       builder: (context, state) {
         if (state is GetCollectionsBookmarkLoading) {
           return SizedBox(
@@ -27,18 +30,19 @@ class BookmarkCollectionsRow extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               itemCount: 5,
               separatorBuilder: (_, __) => SizedBox(width: 12.w),
-              itemBuilder: (_, __) => Shimmer.fromColors(
-                baseColor: Colors.grey.shade300,
-                highlightColor: Colors.grey.shade100,
-                child: Container(
-                  width: 80.w,
-                  height: 32.h,
-                  decoration: BoxDecoration(
-                    color: ColorsManager.lightGray,
-                    borderRadius: BorderRadius.circular(20.r),
+              itemBuilder:
+                  (_, __) => Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: 80.w,
+                      height: 32.h,
+                      decoration: BoxDecoration(
+                        color: ColorsManager.lightGray,
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                    ),
                   ),
-                ),
-              ),
             ),
           );
         } else if (state is GetCollectionsBookmarkSuccess) {
@@ -47,9 +51,9 @@ class BookmarkCollectionsRow extends StatelessWidget {
             "الكل",
             ...collections!.map((e) => e.collection ?? ""),
           ];
-    
+
           return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 6.h),
               decoration: BoxDecoration(
@@ -66,43 +70,53 @@ class BookmarkCollectionsRow extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final c = allCollections[index];
                     final isSelected = selectedCollection == c;
-                  
+
                     return Padding(
-                      padding:  EdgeInsets.only(left: 16.w),
+                      padding: EdgeInsets.only(left: 16.w),
                       child: GestureDetector(
                         onTap: () => onCollectionSelected(c),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 250),
                           curve: Curves.easeInOut,
-                          padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 18.w,
+                            vertical: 8.h,
+                          ),
                           decoration: BoxDecoration(
-                            color: isSelected
-                                ? ColorsManager.primaryPurple
-                                : Colors.transparent,
+                            color:
+                                isSelected
+                                    ? ColorsManager.primaryPurple
+                                    : Colors.transparent,
                             borderRadius: BorderRadius.circular(16.r),
                             border: Border.all(
-                              color: isSelected
-                                  ? ColorsManager.primaryPurple
-                                  : ColorsManager.mediumGray.withOpacity(0.4),
+                              color:
+                                  isSelected
+                                      ? ColorsManager.primaryPurple
+                                      : ColorsManager.mediumGray.withOpacity(
+                                        0.4,
+                                      ),
                               width: 1.2,
                             ),
-                            boxShadow: isSelected
-                                ? [
-                                    BoxShadow(
-                                      color: ColorsManager.primaryPurple.withOpacity(0.25),
-                                      blurRadius: 6,
-                                      offset: const Offset(0, 3),
-                                    )
-                                  ]
-                                : [],
+                            boxShadow:
+                                isSelected
+                                    ? [
+                                      BoxShadow(
+                                        color: ColorsManager.primaryPurple
+                                            .withOpacity(0.25),
+                                        blurRadius: 6,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ]
+                                    : [],
                           ),
                           child: Center(
                             child: Text(
                               c,
                               style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
-                                    : ColorsManager.primaryText,
+                                color:
+                                    isSelected
+                                        ? Colors.white
+                                        : ColorsManager.primaryText,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 14.sp,
                               ),
@@ -116,7 +130,6 @@ class BookmarkCollectionsRow extends StatelessWidget {
               ),
             ),
           );
-          
         }
         return const SizedBox.shrink();
       },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
 import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
@@ -25,7 +26,10 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    BlocProvider(create: (context) => SearchHistoryCubit(), child: HomeScreen()),
+    BlocProvider(
+      create: (context) => SearchHistoryCubit(),
+      child: HomeScreen(),
+    ),
 
     MultiBlocProvider(
       providers: [
@@ -34,8 +38,18 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
       ],
       child: SearchWithFiltersScreen(),
     ),
-    BlocProvider(
-      create: (context) => getIt<GetBookmarksCubit>(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => getIt<GetBookmarksCubit>()..getUserBookmarks(),
+        ),
+        BlocProvider(
+          create:
+              (_) =>
+                  getIt<GetCollectionsBookmarkCubit>()
+                    ..getBookMarkCollections(),
+        ),
+      ],
       child: BookmarkScreen(),
     ),
     BlocProvider(
