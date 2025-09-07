@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_response_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_request_body.dart';
@@ -14,6 +16,7 @@ import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/local_hadith_navigation_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/navigation_hadith_model.dart';
+import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
@@ -115,22 +118,30 @@ abstract class ApiService {
     @Path("bookSlug") String bookSlug,
   );
 
-   @GET(ApiConstants.searchWithFilters)
+  @GET(ApiConstants.searchWithFilters)
   Future<SearchWithFiltersModel> searchWithFilters(
     @Path("searchQuery") String searchQuery,
 
     @Path("bookSlug") String bookSlug,
-        @Path("narrator") String narrator,
+    @Path("narrator") String narrator,
     @Path("grade") String grade,
     @Path("chapter") String chapter,
     @Path("category") String category,
   );
 
+  @POST(ApiConstants.enhancedSearch)
+  Future<EnhancedSearch> getEnhancedSearch(@Body() Map<String, dynamic> body);
 
-
-     @POST(ApiConstants.enhancedSearch)
-  Future<EnhancedSearch> getEnhancedSearch(
-        @Body() Map<String,dynamic> body,
+  @GET(ApiConstants.getUserProfile)
+  Future<UserResponseModel> getUserProfile(
+    @Header("x-auth-token") String token,
   );
-  
+@PUT(ApiConstants.updateUserProfile)
+@MultiPart()
+Future<UserResponseModel> updateUserProfile(
+  @Header("x-auth-token") String token,
+  @Part(name: "username") String username,
+  @Part(name: "avatar") File? avatar, // 👈 خليها File مش MultipartFile
+);
+
 }
