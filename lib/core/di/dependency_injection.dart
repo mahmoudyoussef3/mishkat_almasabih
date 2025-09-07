@@ -13,6 +13,8 @@ import 'package:mishkat_almasabih/features/chapters/data/repos/chapters_repo.dar
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/data/repos/hadith_analysis_repo.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_all_books_with_categories_repo.dart';
@@ -118,4 +120,10 @@ Future<void> setUpGetIt() async {
 
       getIt.registerLazySingleton<EditProfileRepo>(() => EditProfileRepo(getIt()));
   getIt.registerFactory<EditProfileCubit>(() => EditProfileCubit(getIt()));
+
+
+
+  
+      getIt.registerLazySingleton<HadithAnalysisRepo>(() => HadithAnalysisRepo(getIt()));
+  getIt.registerFactory<HadithAnalysisCubit>(() => HadithAnalysisCubit(getIt()));
 }

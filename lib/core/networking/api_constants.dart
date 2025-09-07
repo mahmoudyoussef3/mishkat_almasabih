@@ -42,6 +42,9 @@ class ApiConstants {
       "/islamic-library/search?q={searchQuery}&book={bookSlug}&narrator={narrator}&status={grade}&category={category}&chapter={chapter}&includeLocal=true&includeAPI=true";
 
       static const String enhancedSearch = "/search";
+      static const String hadithAnalysis = "/ai/analyze-hadith";
+
+
 }
 
 class ApiErrors {
