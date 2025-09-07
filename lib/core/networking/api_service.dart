@@ -23,6 +23,8 @@ import 'package:mishkat_almasabih/features/profile/data/models/user_response_mod
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../features/authentication/login/data/models/login_request_body.dart';
@@ -157,5 +159,12 @@ Future<HadithAnalysisResponse> hadithAnalysis(
 
 );
 
+@POST(ApiConstants.serag)
+Future<SeragResponseModel> serag(
+  @Body() SeragRequestModel seragRequistModel,
+  @Header("x-auth-token") String token,
+
+
+);
 
 }
