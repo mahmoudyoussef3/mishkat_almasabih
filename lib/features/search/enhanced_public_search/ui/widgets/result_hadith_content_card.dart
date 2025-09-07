@@ -12,12 +12,12 @@ class ResultHadithContentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+       gradient: LinearGradient(
           begin: Alignment.topRight,
           end: Alignment.bottomLeft,
           colors: [
             ColorsManager.secondaryBackground,
-            ColorsManager.primaryPurple.withOpacity(0.2),
+            ColorsManager.primaryPurple.withOpacity(0.1),
             //   ColorsManager.primaryGold.withOpacity(0.02),
           ],
         ),
@@ -39,7 +39,7 @@ class ResultHadithContentCard extends StatelessWidget {
           // Islamic pattern overlay
           Positioned.fill(
             child: Opacity(
-              opacity: 0.07,
+              opacity: 0.0005,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.r),
                 child: Image.asset(

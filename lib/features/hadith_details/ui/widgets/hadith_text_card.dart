@@ -38,7 +38,7 @@ class HadithTextCard extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Opacity(
-              opacity: 0.005,
+              opacity: 0.0005,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20.r),
                 child: Image.asset(
