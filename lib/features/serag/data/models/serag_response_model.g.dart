@@ -7,7 +7,7 @@ part of 'serag_response_model.dart';
 // **************************************************************************
 
 SeragResponseModel _$SeragResponseModelFromJson(Map<String, dynamic> json) =>
-    SeragResponseModel(json['message'] as String);
+    SeragResponseModel(response: json['response'] as String);
 
 Map<String, dynamic> _$SeragResponseModelToJson(SeragResponseModel instance) =>
-    <String, dynamic>{'message': instance.message};
+    <String, dynamic>{'response': instance.response};
