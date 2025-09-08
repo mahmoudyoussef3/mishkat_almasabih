@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import '../theming/styles.dart';
@@ -37,4 +38,16 @@ void setupErrorState(BuildContext context, String error) {
       default:
         return ColorsManager.hadithAuthentic;
     }
+    
   }
+  void showToast(String msg, Color? color) {
+  Fluttertoast.cancel();
+  Fluttertoast.showToast(
+      msg: msg,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.TOP,
+      timeInSecForIosWeb: 8,
+      backgroundColor: color,
+      textColor: Colors.white,
+      fontSize: 16.0);
+}

@@ -2,40 +2,54 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'serag_request_model.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class SeragRequestModel {
-  final String hadeeth;
-  final String attribution;
-  final String grade_ar;
-  final String source;
-  final String takhrig_ar;
-  final String reference;
-
-  // message لوحدها برّه
-  final String message;
+  final Hadith hadith;
+  final List<Message> messages;
 
   SeragRequestModel({
-    required this.hadeeth,
-    required this.attribution,
-    required this.grade_ar,
-    required this.takhrig_ar,
-    required this.source,
-    required this.reference,
-    required this.message,
+    required this.hadith,
+    required this.messages,
   });
 
   factory SeragRequestModel.fromJson(Map<String, dynamic> json) =>
       _$SeragRequestModelFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        "hadith": {
-          "hadeeth": hadeeth,
-          "attribution": attribution,
-          "grade_ar": grade_ar,
-          "source": source,
-          "takhrig_ar": takhrig_ar,
-          "reference": reference,
-        },
-        "message": message,
-      };
+  Map<String, dynamic> toJson() => _$SeragRequestModelToJson(this);
+}
+
+@JsonSerializable()
+class Hadith {
+  final String hadeeth;
+  final String grade_ar;
+  final String source;
+  final String takhrij_ar;
+
+  Hadith({
+    required this.hadeeth,
+    required this.grade_ar,
+    required this.source,
+    required this.takhrij_ar,
+  });
+
+  factory Hadith.fromJson(Map<String, dynamic> json) =>
+      _$HadithFromJson(json);
+
+  Map<String, dynamic> toJson() => _$HadithToJson(this);
+}
+
+@JsonSerializable()
+class Message {
+  final String role;
+  final String content;
+
+  Message({
+    required this.role,
+    required this.content,
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      _$MessageFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MessageToJson(this);
 }
