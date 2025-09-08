@@ -18,6 +18,7 @@ import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_text
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
 class HadithDetailScreen extends StatefulWidget {
   final String? hadithText;
@@ -77,7 +78,19 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           floatingActionButton: FloatingActionButton(
-            onPressed: () => context.pushNamed(Routes.serag),
+            onPressed:
+                () => context.pushNamed(
+                  Routes.serag,
+                  arguments: SeragRequestModel(
+                    hadith: Hadith(
+                      hadeeth: widget.hadithText??'',
+                      grade_ar: widget.grade??'',
+                      source: widget.bookName??'',
+                      takhrij_ar: widget.narrator??'',
+                    ),
+                    messages:[Message(role: 'user', content: '')],
+                  ),
+                ),
             backgroundColor: ColorsManager.primaryPurple,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18),

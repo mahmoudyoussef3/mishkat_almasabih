@@ -143,4 +143,7 @@ Future<void> setUpGetIt() async {
 
   getIt.registerLazySingleton<SeragRepo>(() => SeragRepo(getIt()));
   getIt.registerFactory<SeragCubit>(() => SeragCubit(getIt()));
+
+
+  
 }

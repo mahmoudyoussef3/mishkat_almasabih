@@ -747,7 +747,7 @@ class _ApiService implements ApiService {
     _headers.removeWhere((k, v) => v == null);
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<RmainingQuestionsResponse>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+      Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
             '/ai/remaining-questions',

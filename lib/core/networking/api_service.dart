@@ -166,7 +166,7 @@ Future<SeragResponseModel> serag(
 
 
 );
-@POST(ApiConstants.remainingQuestions)
+@GET(ApiConstants.remainingQuestions)
 Future<RmainingQuestionsResponse> getReaminingQuestions(
   @Header("x-auth-token") String token,
 );
