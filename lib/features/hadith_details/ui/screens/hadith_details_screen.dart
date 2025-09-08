@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
@@ -16,6 +18,7 @@ import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_text
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
 class HadithDetailScreen extends StatefulWidget {
   final String? hadithText;
@@ -65,7 +68,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-                BlocProvider(create: (context) => getIt<HadithAnalysisCubit>()),
+        BlocProvider(create: (context) => getIt<HadithAnalysisCubit>()),
 
         BlocProvider(create: (context) => getIt<AddCubitCubit>()),
         BlocProvider(create: (context) => getIt<NavigationCubit>()),
@@ -74,6 +77,32 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed:
+                () => context.pushNamed(
+                  Routes.serag,
+                  arguments: SeragRequestModel(
+                    hadith: Hadith(
+                      hadeeth: widget.hadithText??'',
+                      grade_ar: widget.grade??'',
+                      source: widget.bookName??'',
+                      takhrij_ar: widget.narrator??'',
+                    ),
+                    messages:[Message(role: 'user', content: '')],
+                  ),
+                ),
+            backgroundColor: ColorsManager.primaryPurple,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+            elevation: 6,
+            child: const Icon(
+              Icons.chat_bubble_outline,
+              color: Colors.white,
+              size: 28,
+            ),
+          ),
+
           backgroundColor: ColorsManager.secondaryBackground,
           body: CustomScrollView(
             slivers: [
@@ -93,21 +122,20 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               if (_isValid(widget.hadithText))
                 SliverToBoxAdapter(
                   child: HadithTextCard(
-                    hadithText: isNavigated
-                        ? newTextOfHadith
-                        : widget.hadithText ?? "الحديث غير متوفر",
+                    hadithText:
+                        isNavigated
+                            ? newTextOfHadith
+                            : widget.hadithText ?? "الحديث غير متوفر",
                   ),
                 ),
 
-                SliverToBoxAdapter(
-                  child: SizedBox(height: 20.h),
-                ),
-                HadithAnalysis(
-                  attribution: widget.narrator ?? '',
-                  hadith: widget.hadithText ?? '',
-                  grade: widget.grade ?? '',
-                  reference: widget.bookName ?? '',
-                ),
+              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+              HadithAnalysis(
+                attribution: widget.narrator ?? '',
+                hadith: widget.hadithText ?? '',
+                grade: widget.grade ?? '',
+                reference: widget.bookName ?? '',
+              ),
 
               if (_isValid(widget.grade)) _buildDividerSection(),
 
@@ -127,8 +155,11 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                             backgroundColor: ColorsManager.success,
                             content: Row(
                               children: [
-                                Icon(Icons.check_circle,
-                                    color: Colors.white, size: 20.sp),
+                                Icon(
+                                  Icons.check_circle,
+                                  color: Colors.white,
+                                  size: 20.sp,
+                                ),
                                 SizedBox(width: 12.w),
                                 Text(
                                   "تم نسخ الحديث بنجاح",
@@ -151,7 +182,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
 
               if (_isValid(widget.bookName) ||
                   _isValid(widget.author) ||
-                  _isValid(widget.chapter)) _buildDividerSection(),
+                  _isValid(widget.chapter))
+                _buildDividerSection(),
 
               if (_isValid(widget.bookName) ||
                   _isValid(widget.author) ||
@@ -173,7 +205,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               /// Actions Section
               SliverToBoxAdapter(
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 20.w,
+                    vertical: 20.h,
+                  ),
                   child: _buildEnhancedActionsSection(),
                 ),
               ),
@@ -182,11 +217,14 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               if (widget.showNavigation && !widget.isBookMark)
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                    child: widget.isLocal
-                        ? _buildLocalNavigation()
-                        : _buildRemoteNavigation(),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 16.h,
+                    ),
+                    child:
+                        widget.isLocal
+                            ? _buildLocalNavigation()
+                            : _buildRemoteNavigation(),
                   ),
                 ),
 
@@ -241,7 +279,11 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       ),
       child: Row(
         children: [
-          Icon(Icons.format_quote, color: ColorsManager.primaryGreen, size: 28.sp),
+          Icon(
+            Icons.format_quote,
+            color: ColorsManager.primaryGreen,
+            size: 28.sp,
+          ),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -308,8 +350,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
             SnackBar(
               backgroundColor: ColorsManager.error,
               behavior: SnackBarBehavior.floating,
-              content: Text(state.errMessage,
-                  style: TextStyle(color: ColorsManager.secondaryBackground)),
+              content: Text(
+                state.errMessage,
+                style: TextStyle(color: ColorsManager.secondaryBackground),
+              ),
             ),
           );
         }
@@ -317,7 +361,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           setState(() {
             isNavigated = true;
             final hadith =
-                prev ? state.navigationHadithResponse.prevHadith : state.navigationHadithResponse.nextHadith;
+                prev
+                    ? state.navigationHadithResponse.prevHadith
+                    : state.navigationHadithResponse.nextHadith;
 
             newTextOfHadith = hadith?.title ?? "الحديث غير متوفر";
             newHadithId = hadith?.id.toString() ?? "الحديث غير متوفر";
@@ -331,16 +377,16 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           onPrev: () {
             prev = true;
             context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
-                  widget.hadithNumber ?? "",
-                  widget.bookSlug ?? "",
-                );
+              widget.hadithNumber ?? "",
+              widget.bookSlug ?? "",
+            );
           },
           onNext: () {
             prev = false;
             context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
-                  widget.hadithNumber ?? "",
-                  widget.bookSlug ?? "",
-                );
+              widget.hadithNumber ?? "",
+              widget.bookSlug ?? "",
+            );
           },
         );
       },
@@ -356,8 +402,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
             SnackBar(
               backgroundColor: ColorsManager.error,
               behavior: SnackBarBehavior.floating,
-              content: Text(state.errMessage,
-                  style: TextStyle(color: ColorsManager.secondaryBackground)),
+              content: Text(
+                state.errMessage,
+                style: TextStyle(color: ColorsManager.secondaryBackground),
+              ),
             ),
           );
         }
@@ -365,7 +413,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           setState(() {
             isNavigated = true;
             final hadith =
-                prev ? state.navigationHadithResponse.prevHadith : state.navigationHadithResponse.nextHadith;
+                prev
+                    ? state.navigationHadithResponse.prevHadith
+                    : state.navigationHadithResponse.nextHadith;
 
             newTextOfHadith = hadith?.title ?? "الحديث غير متوفر";
             newHadithId = hadith?.id ?? "الحديث غير متوفر";
@@ -379,18 +429,18 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           onPrev: () {
             prev = true;
             context.read<NavigationCubit>().emitNavigationStates(
-                  widget.hadithNumber ?? "",
-                  widget.bookSlug ?? "",
-                  widget.chapterNumber,
-                );
+              widget.hadithNumber ?? "",
+              widget.bookSlug ?? "",
+              widget.chapterNumber,
+            );
           },
           onNext: () {
             prev = false;
             context.read<NavigationCubit>().emitNavigationStates(
-                  widget.hadithNumber ?? "",
-                  widget.bookSlug ?? "",
-                  widget.chapterNumber,
-                );
+              widget.hadithNumber ?? "",
+              widget.bookSlug ?? "",
+              widget.chapterNumber,
+            );
           },
         );
       },
@@ -415,24 +465,31 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: onPrev),
           isLoading
               ? Row(
-                  children: [
-                    loadingProgressIndicator(size: 16),
-                    SizedBox(width: 8.w),
-                    Text("جاري التحميل...",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: ColorsManager.primaryPurple,
-                        )),
-                  ],
-                )
-              : Text("الحديث رقم $hadithId",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: ColorsManager.primaryPurple,
-                  )),
-          IconButton(icon: const Icon(Icons.arrow_forward_ios), onPressed: onNext),
+                children: [
+                  loadingProgressIndicator(size: 16),
+                  SizedBox(width: 8.w),
+                  Text(
+                    "جاري التحميل...",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: ColorsManager.primaryPurple,
+                    ),
+                  ),
+                ],
+              )
+              : Text(
+                "الحديث رقم $hadithId",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorsManager.primaryPurple,
+                ),
+              ),
+          IconButton(
+            icon: const Icon(Icons.arrow_forward_ios),
+            onPressed: onNext,
+          ),
         ],
       ),
     );

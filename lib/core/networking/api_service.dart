@@ -13,16 +13,18 @@ import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.da
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_request.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_response.dart';
-import 'package:mishkat_almasabih/features/hadith_analysis/data/repos/hadith_analysis_repo.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/local_hadith_navigation_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/navigation_hadith_model.dart';
 import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
+import 'package:mishkat_almasabih/features/remaining_questions/data/models/remaining_questions_response_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../features/authentication/login/data/models/login_request_body.dart';
@@ -156,6 +158,21 @@ Future<HadithAnalysisResponse> hadithAnalysis(
 
 
 );
+
+@POST(ApiConstants.serag)
+Future<SeragResponseModel> serag(
+  @Body() SeragRequestModel seragRequistModel,
+  @Header("x-auth-token") String token,
+
+
+);
+@GET(ApiConstants.remainingQuestions)
+Future<RmainingQuestionsResponse> getReaminingQuestions(
+  @Header("x-auth-token") String token,
+);
+
+
+
 
 
 }

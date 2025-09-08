@@ -43,6 +43,8 @@ class ApiConstants {
 
       static const String enhancedSearch = "/search";
       static const String hadithAnalysis = "/ai/analyze-hadith";
+            static const String serag = "/ai/chat";
+            static const String remainingQuestions = "/ai/remaining-questions";
 
 
 }
