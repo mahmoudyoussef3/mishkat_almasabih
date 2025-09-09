@@ -256,12 +256,11 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
         author: widget.dailyHadithModel.data?.attribution ?? "",
         authorDeath: '',
         grade: widget.dailyHadithModel.data?.grade ?? '',
-
         chapter: "",
         bookSlug: "",
         hadithNumber: "",
         id: (Random().nextInt(10000000) + 1).toString(),
-        bookName: "",
+        bookName:'',
         hadith: widget.dailyHadithModel.data?.hadith ?? "",
       ),
     );

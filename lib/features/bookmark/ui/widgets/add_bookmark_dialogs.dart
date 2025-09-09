@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/collections_view.dart';
+import 'package:mishkat_almasabih/features/bookmark/ui/widgets/create_collection_view.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 
 class AddToFavoritesDialog extends StatefulWidget {
@@ -52,19 +53,59 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
           duration: const Duration(milliseconds: 300),
           padding: const EdgeInsets.all(20),
           width: dialogWidth,
-          child: CollectionsView(
-            bookName: widget.bookName,
-            bookSlug: widget.bookSlug,
-            chapter: widget.chapter,
-            hadithNumber: widget.hadithNumber,
-            hadithText: widget.hadithText,
-            notesController: notesController,
-            selectedCollection: selectedCollection,
-            onCollectionSelected:
-                (value) => setState(() => selectedCollection = value),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: showCreateNew ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeInOut,
+                )),
+                child: child,
+              );
+            },
+            child: showCreateNew
+                ? CreateCollectionView(
+                    key: const ValueKey('create'),
+                    bookName: widget.bookName,
+                    bookSlug: widget.bookSlug,
+                    chapter: widget.chapter,
+                    hadithNumber: widget.hadithNumber,
+                    hadithText: widget.hadithText,
+                    onBack: () {
+                      setState(() {
+                        showCreateNew = false;
+                      });
+                    },
+                  )
+                : CollectionsView(
+                    key: const ValueKey('collections'),
+                    bookName: widget.bookName,
+                    bookSlug: widget.bookSlug,
+                    chapter: widget.chapter,
+                    hadithNumber: widget.hadithNumber,
+                    hadithText: widget.hadithText,
+                    notesController: notesController,
+                    selectedCollection: selectedCollection,
+                    onCollectionSelected: (value) => setState(() => selectedCollection = value),
+                    onCreateNewPressed: () {
+                      setState(() {
+                        showCreateNew = true;
+                      });
+                    },
+                  ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    notesController.dispose();
+    super.dispose();
   }
 }

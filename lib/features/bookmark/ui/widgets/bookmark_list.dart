@@ -123,20 +123,17 @@ class BookmarkList extends StatelessWidget {
                       MaterialPageRoute(
                         builder:
                             (_) => HadithDetailScreen(
-                              author: '',
-                              authorDeath: '',
-                              grade: '',
-                              narrator: '',
+                      
                               isLocal: false,
                               showNavigation: false,
                               chapterNumber: hadith.chapterNumber.toString(),
-                              bookName: hadith.bookName ?? "كتاب غير معروف",
+                              bookName: hadith.bookName,
                               isBookMark: true,
                               hadithText:
-                                  hadith.hadithText ?? "الحديث غير متوفر",
+                                  hadith.hadithText,
                               chapter: hadith.chapterName,
                               hadithNumber: hadith.id.toString(),
-                              bookSlug: hadith.bookSlug ?? "كتاب غير معروف",
+                              bookSlug: hadith.bookSlug, narrator: '', grade: '', author: '', authorDeath: '' ,
                             ),
                       ),
                     ),

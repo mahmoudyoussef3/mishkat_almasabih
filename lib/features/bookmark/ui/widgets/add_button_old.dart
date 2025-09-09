@@ -7,16 +7,16 @@ import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 
-class AddCreationButton extends StatelessWidget {
+class AddButton extends StatelessWidget {
   final String bookName;
   final String bookSlug;
   final String chapter;
   final String hadithNumber;
   final String hadithText;
   final TextEditingController notesController;
-  final TextEditingController collection;
+  final String collection;
 
-  const AddCreationButton({
+  const AddButton({
     required this.bookName,
     required this.bookSlug,
     required this.chapter,
@@ -74,7 +74,7 @@ class AddCreationButton extends StatelessWidget {
             context.read<AddCubitCubit>().addBookmark(
               Bookmark(
                 notes: notesController.text,
-                collection: collection.text,
+                collection: collection,
                 bookName: bookName,
                 chapterName: chapter,
                 hadithId: hadithNumber,

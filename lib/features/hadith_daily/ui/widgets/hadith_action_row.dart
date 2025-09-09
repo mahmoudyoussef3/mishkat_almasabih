@@ -120,6 +120,7 @@ class HadithActionsRow extends StatelessWidget {
                             child: AddToFavoritesDialog(
                               bookName: bookName,
                               bookSlug: bookSlug,
+                              
                               chapter: chapter,
                               hadithNumber: hadithNumber,
                               hadithText: hadith,
