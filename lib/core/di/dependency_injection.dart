@@ -42,10 +42,18 @@ import '../../features/authentication/login/logic/cubit/login_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
 import '../../features/authentication/login/data/repo/login_repo.dart';
+import '../cache/cache_service.dart';
+import '../theming/theme_manager.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> setUpGetIt() async {
+  // Initialize cache service
+  await CacheService.initialize();
+
+  // Register theme manager
+  getIt.registerLazySingleton<ThemeManager>(() => ThemeManager());
+
   Dio dio = await DioFactory.getDio();
 
   getIt.registerLazySingleton<ApiService>(() => ApiService(dio));
@@ -143,7 +151,4 @@ Future<void> setUpGetIt() async {
 
   getIt.registerLazySingleton<SeragRepo>(() => SeragRepo(getIt()));
   getIt.registerFactory<SeragCubit>(() => SeragCubit(getIt()));
-
-
-  
 }

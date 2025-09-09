@@ -8,10 +8,9 @@ final class GetAllBooksWithCategoriesInitial
 
 final class GetAllBooksWithCategoriesSuccess
     extends GetAllBooksWithCategoriesState {
+  final BooksResponse booksResponse;
 
-  GetAllBooksWithCategoriesSuccess(
-
-  );
+  GetAllBooksWithCategoriesSuccess(this.booksResponse);
 }
 
 final class GetAllBooksWithCategoriesLoading

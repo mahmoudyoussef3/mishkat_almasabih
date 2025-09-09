@@ -1,25 +1,47 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:mishkat_almasabih/core/cache/cache_mixin.dart';
+import 'package:mishkat_almasabih/core/cache/cache_service.dart';
 import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
 import 'package:mishkat_almasabih/features/chapters/data/repos/chapters_repo.dart';
 
 part 'chapters_state.dart';
 
-class ChaptersCubit extends Cubit<ChaptersState> {
+class ChaptersCubit extends Cubit<ChaptersState> with CacheMixin {
   final BookChaptersRepo _bookChaptersRepo;
   ChaptersCubit(this._bookChaptersRepo) : super(ChaptersInitial());
 
-  Future<void> emitGetBookChapters(String bookSlug) async {
-    emit(ChaptersLoading());
-    final result = await _bookChaptersRepo.getBookChapters(bookSlug);
-    result.fold(
-      (l) => emit(ChaptersFailure(l.apiErrorModel.msg)),
-      (r) => emit(
-        ChaptersSuccess(
-          allChapters: r.chapters ?? [],
-          filteredChapters: r.chapters ?? [],
-        ),
-      ),
+  Future<void> emitGetBookChapters(
+    String bookSlug, {
+    bool forceRefresh = false,
+  }) async {
+    final cacheKey = CacheService.generateCacheKey('book_chapters', {
+      'bookSlug': bookSlug,
+    });
+
+    await loadWithCacheAndRefresh<ChaptersModel>(
+      cacheKey: cacheKey,
+      apiCall: () async {
+        final result = await _bookChaptersRepo.getBookChapters(bookSlug);
+        return result.fold(
+          (error) =>
+              throw Exception(error.apiErrorModel.msg ?? 'Unknown error'),
+          (data) => data,
+        );
+      },
+      fromJson: (json) => ChaptersModel.fromJson(json),
+      toJson: (data) => data.toJson(),
+      onSuccess:
+          (data) => emit(
+            ChaptersSuccess(
+              allChapters: data.chapters ?? [],
+              filteredChapters: data.chapters ?? [],
+            ),
+          ),
+      onError: (error) => emit(ChaptersFailure(error)),
+      loadingState: () => ChaptersLoading(),
+      forceRefresh: forceRefresh,
+      customCacheDuration: 60, // 1 hour cache for chapters
     );
   }
 
@@ -29,17 +51,15 @@ class ChaptersCubit extends Cubit<ChaptersState> {
       final normalizedQuery = normalizeArabic(query);
 
       if (normalizedQuery.isEmpty) {
-        emit(
-          currentState.copyWith(filteredChapters: currentState.allChapters),
-        );
+        emit(currentState.copyWith(filteredChapters: currentState.allChapters));
       } else {
-        final filtered = currentState.allChapters
-            .where((chapter) {
-              final normalizedChapter =
-                  normalizeArabic(chapter.chapterArabic ?? '');
+        final filtered =
+            currentState.allChapters.where((chapter) {
+              final normalizedChapter = normalizeArabic(
+                chapter.chapterArabic ?? '',
+              );
               return normalizedChapter.contains(normalizedQuery.trim());
-            })
-            .toList();
+            }).toList();
 
         emit(currentState.copyWith(filteredChapters: filtered));
       }

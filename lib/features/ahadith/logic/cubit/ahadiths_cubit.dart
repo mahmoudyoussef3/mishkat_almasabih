@@ -1,12 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:mishkat_almasabih/core/cache/cache_mixin.dart';
+import 'package:mishkat_almasabih/core/cache/cache_service.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
 
 part 'ahadiths_state.dart';
 
-class AhadithsCubit extends Cubit<AhadithsState> {
+class AhadithsCubit extends Cubit<AhadithsState> with CacheMixin {
   final AhadithsRepo _chapterAhadithsRepo;
   AhadithsCubit(this._chapterAhadithsRepo) : super(AhadithsInitial());
 
@@ -15,51 +17,130 @@ class AhadithsCubit extends Cubit<AhadithsState> {
     required int chapterId,
     required bool hadithLocal,
     required bool isArbainBooks,
+    bool forceRefresh = false,
   }) async {
     emit(AhadithsLoading());
 
     if (isArbainBooks) {
-      final result = await _chapterAhadithsRepo.getThreeBooksLocalAhadith(
-        bookSlug: bookSlug,
-        chapterId: chapterId,
-      );
-      result.fold(
-        (l) => emit(
-          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
-        ),
-        (r) => emit(LocalAhadithsSuccess(r)),
-      );
+      await _loadArbainBooks(bookSlug, chapterId, forceRefresh);
     } else if (hadithLocal) {
-      final result = await _chapterAhadithsRepo.getLocalAhadith(
-        bookSlug: bookSlug,
-        chapterId: chapterId,
-      );
-      result.fold(
-        (l) => emit(
-          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
-        ),
-        (r) => emit(LocalAhadithsSuccess(r)),
-      );
+      await _loadLocalAhadith(bookSlug, chapterId, forceRefresh);
     } else {
-      final result = await _chapterAhadithsRepo.getAhadith(
-        bookSlug: bookSlug,
-        chapterId: chapterId,
-      );
-      result.fold(
-        (l) => emit(
-          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
-        ),
-        (r) {
-          final hadithsList = r.hadiths?.data ?? [];
-          emit(
-            AhadithsSuccess(
-              filteredAhadith: hadithsList,
-              allAhadith: hadithsList,
-            ),
-          );
-        },
-      );
+      await _loadRegularAhadith(bookSlug, chapterId, forceRefresh);
     }
+  }
+
+  Future<void> _loadArbainBooks(
+    String bookSlug,
+    int chapterId,
+    bool forceRefresh,
+  ) async {
+    final cacheKey = CacheService.generateCacheKey('arbain_ahadith', {
+      'bookSlug': bookSlug,
+      'chapterId': chapterId.toString(),
+    });
+
+    await loadWithCacheAndRefresh<LocalHadithResponse>(
+      cacheKey: cacheKey,
+      apiCall: () async {
+        final result = await _chapterAhadithsRepo.getThreeBooksLocalAhadith(
+          bookSlug: bookSlug,
+          chapterId: chapterId,
+        );
+        return result.fold(
+          (error) =>
+              throw Exception(
+                error.apiErrorModel.msg ?? 'Unknown error occurred',
+              ),
+          (data) => data,
+        );
+      },
+      fromJson: (json) => LocalHadithResponse.fromJson(json),
+      toJson: (data) => data.toJson(),
+      onSuccess: (data) => emit(LocalAhadithsSuccess(data)),
+      onError: (error) => emit(AhadithsFailure(error)),
+      loadingState: () => AhadithsLoading(),
+      forceRefresh: forceRefresh,
+      customCacheDuration: 30, // 30 minutes cache for ahadith
+    );
+  }
+
+  Future<void> _loadLocalAhadith(
+    String bookSlug,
+    int chapterId,
+    bool forceRefresh,
+  ) async {
+    final cacheKey = CacheService.generateCacheKey('local_ahadith', {
+      'bookSlug': bookSlug,
+      'chapterId': chapterId.toString(),
+    });
+
+    await loadWithCacheAndRefresh<LocalHadithResponse>(
+      cacheKey: cacheKey,
+      apiCall: () async {
+        final result = await _chapterAhadithsRepo.getLocalAhadith(
+          bookSlug: bookSlug,
+          chapterId: chapterId,
+        );
+        return result.fold(
+          (error) =>
+              throw Exception(
+                error.apiErrorModel.msg ?? 'Unknown error occurred',
+              ),
+          (data) => data,
+        );
+      },
+      fromJson: (json) => LocalHadithResponse.fromJson(json),
+      toJson: (data) => data.toJson(),
+      onSuccess: (data) => emit(LocalAhadithsSuccess(data)),
+      onError: (error) => emit(AhadithsFailure(error)),
+      loadingState: () => AhadithsLoading(),
+      forceRefresh: forceRefresh,
+      customCacheDuration: 30, // 30 minutes cache for ahadith
+    );
+  }
+
+  Future<void> _loadRegularAhadith(
+    String bookSlug,
+    int chapterId,
+    bool forceRefresh,
+  ) async {
+    final cacheKey = CacheService.generateCacheKey('regular_ahadith', {
+      'bookSlug': bookSlug,
+      'chapterId': chapterId.toString(),
+    });
+
+    await loadWithCacheAndRefresh<HadithResponse>(
+      cacheKey: cacheKey,
+      apiCall: () async {
+        final result = await _chapterAhadithsRepo.getAhadith(
+          bookSlug: bookSlug,
+          chapterId: chapterId,
+        );
+        return result.fold(
+          (error) =>
+              throw Exception(
+                error.apiErrorModel.msg ?? 'Unknown error occurred',
+              ),
+          (data) => data,
+        );
+      },
+      fromJson: (json) => HadithResponse.fromJson(json),
+      toJson: (data) => data.toJson(),
+      onSuccess: (data) {
+        final hadithsList = data.hadiths?.data ?? [];
+        emit(
+          AhadithsSuccess(
+            filteredAhadith: hadithsList,
+            allAhadith: hadithsList,
+          ),
+        );
+      },
+      onError: (error) => emit(AhadithsFailure(error)),
+      loadingState: () => AhadithsLoading(),
+      forceRefresh: forceRefresh,
+      customCacheDuration: 30, // 30 minutes cache for ahadith
+    );
   }
 
   void filterAhadith(String query) {
@@ -96,10 +177,11 @@ class AhadithsCubit extends Cubit<AhadithsState> {
                 .where(
                   (hadith) =>
                       hadith.arabic != null &&
-                      normalizeArabic(hadith.arabic!).contains(normalizedQuery.trim()),
+                      normalizeArabic(
+                        hadith.arabic!,
+                      ).contains(normalizedQuery.trim()),
                 )
                 .toList();
-
 
         emit(currentState);
       }

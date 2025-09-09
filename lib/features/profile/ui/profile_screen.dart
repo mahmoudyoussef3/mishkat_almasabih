@@ -26,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
           myScaffoldScreen: Directionality(
             textDirection: TextDirection.rtl,
             child: Scaffold(
-              backgroundColor: ColorsManager.primaryBackground,
+              backgroundColor: ColorsManager.getBackgroundColor(context),
               body: BlocBuilder<ProfileCubit, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
@@ -47,12 +47,12 @@ class ProfileScreen extends StatelessWidget {
                     );
                   } else if (state is ProfileLoaded) {
                     final user = state.user;
-            
+
                     return CustomScrollView(
                       slivers: [
                         /// User Info Header
                         ProfileHeader(user: user),
-            
+
                         /// Content Sections
                         SliverToBoxAdapter(
                           child: Padding(
@@ -73,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                                       "مشروع متخصص في نشر العلوم الإسلامية والحديثية بأسلوب معاصر وسلس. نهدف إلى تقريب تراث الإسلام وعلومه للمسلمين والمهتمين بطريقة سهلة وموثوقة",
                                 ),
                                 SizedBox(height: 16.h),
-            
+
                                 const SectionTitle(title: "رؤيتنا"),
                                 SizedBox(height: 16.h),
                                 _buildSection(
@@ -83,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
                                       "أن نكون المرجع الأول والأكثر موثوقية في تقديم العلوم الحديثية بشكل سهل ومفهوم للجميع.",
                                 ),
                                 SizedBox(height: 16.h),
-            
+
                                 const SectionTitle(title: "رسالتنا"),
                                 SizedBox(height: 16.h),
                                 _buildSection(
@@ -93,7 +93,7 @@ class ProfileScreen extends StatelessWidget {
                                       "توفير مصادر علمية دقيقة للأحاديث النبوية وشروحها، مع الحرص على الوضوح والدقة العلمية.",
                                 ),
                                 SizedBox(height: 16.h),
-            
+
                                 const SectionTitle(title: "قيمنا"),
                                 SizedBox(height: 16.h),
                                 _buildSection(
@@ -106,7 +106,7 @@ class ProfileScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-            
+
                         /// Footer
                         SliverToBoxAdapter(
                           child: Container(
@@ -137,7 +137,7 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ),
                                 SizedBox(height: 5.h),
-            
+
                                 Text(
                                   style: TextStyle(
                                     color: ColorsManager.secondaryBackground,
@@ -145,14 +145,14 @@ class ProfileScreen extends StatelessWidget {
                                   'منصة رقمية متكاملة لدراسة الأحاديث النبوية الشريفة مع تحليل ذكي وفوائد عملية',
                                 ),
                                 SizedBox(height: 5.h),
-            
+
                                 Divider(
                                   color: ColorsManager.gray,
                                   endIndent: 50.w,
                                   indent: 50.w,
                                 ),
                                 SizedBox(height: 5.h),
-            
+
                                 /// Social Media Icons
                                 Wrap(
                                   alignment: WrapAlignment.center,
@@ -166,7 +166,7 @@ class ProfileScreen extends StatelessWidget {
                                   ],
                                 ),
                                 SizedBox(height: 10.h),
-            
+
                                 /// Links
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -188,7 +188,7 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-            
+
                                 SizedBox(height: 10.h),
                                 Text(
                                   "© جميع الحقوق محفوظة لتطبيق مشكاة المصابيح 2025",
@@ -224,12 +224,15 @@ class ProfileScreen extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: ColorsManager.cardBackground,
+        color: ColorsManager.getCardBackgroundColor(context),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: ColorsManager.mediumGray, width: 1),
+        border: Border.all(
+          color: ColorsManager.getBorderColor(context),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: ColorsManager.black.withOpacity(0.05),
+            color: ColorsManager.getShadowColor(context),
             blurRadius: 10,
             offset: const Offset(0, 2),
           ),
@@ -247,7 +250,7 @@ class ProfileScreen extends StatelessWidget {
                   text,
                   style: TextStyle(
                     fontSize: 14.sp,
-                    color: ColorsManager.secondaryText,
+                    color: ColorsManager.getSecondaryTextColor(context),
                   ),
                 ),
               ],

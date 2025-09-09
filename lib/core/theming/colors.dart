@@ -12,12 +12,9 @@ import 'package:flutter/material.dart';
 /// All colors are designed to work together harmoniously and provide
 /// excellent contrast for accessibility.
 class ColorsManager {
-
   static const Color primaryPurple = Color(0xFF7440E9);
 
-
   static const Color secondaryPurple = Color(0xFF9D7BF0);
-
 
   static const Color primaryGold = Color(0xFFFFB300);
 
@@ -158,6 +155,87 @@ class ColorsManager {
   /// @deprecated Use darkPurple instead
   static const Color darkBlue = darkPurple;
 
+  // ==================== DARK MODE COLORS ====================
+
+  /// Dark mode primary background - Deep dark gray
+  static const Color darkPrimaryBackground = Color(0xFF121212);
+
+  /// Dark mode secondary background - Slightly lighter dark gray
+  static const Color darkSecondaryBackground = Color(0xFF1E1E1E);
+
+  /// Dark mode card background - Dark gray for cards
+  static const Color darkCardBackground = Color(0xFF2D2D2D);
+
+  /// Dark mode surface color - For elevated surfaces
+  static const Color darkSurface = Color(0xFF2D2D2D);
+
+  /// Dark mode primary text - Light gray for readability
+  static const Color darkPrimaryText = Color(0xFFE0E0E0);
+
+  /// Dark mode secondary text - Medium light gray
+  static const Color darkSecondaryText = Color(0xFFB0B0B0);
+
+  /// Dark mode disabled text - Dark gray for disabled elements
+  static const Color darkDisabledText = Color(0xFF757575);
+
+  /// Dark mode border color - Subtle gray for borders
+  static const Color darkBorder = Color(0xFF404040);
+
+  /// Dark mode divider color - Subtle separator
+  static const Color darkDivider = Color(0xFF333333);
+
+  /// Dark mode shadow color - Dark shadow for depth
+  static const Color darkShadow = Color(0x40000000);
+
+  /// Dark mode overlay background - Semi-transparent dark
+  static const Color darkOverlayBackground = Color(0x80000000);
+
+  // ==================== THEME-AWARE COLOR METHODS ====================
+
+  /// Get background color based on theme brightness
+  static Color getBackgroundColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark
+        ? darkPrimaryBackground
+        : primaryBackground;
+  }
+
+  /// Get card background color based on theme brightness
+  static Color getCardBackgroundColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? darkCardBackground : cardBackground;
+  }
+
+  /// Get primary text color based on theme brightness
+  static Color getPrimaryTextColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? darkPrimaryText : primaryText;
+  }
+
+  /// Get secondary text color based on theme brightness
+  static Color getSecondaryTextColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? darkSecondaryText : secondaryText;
+  }
+
+  /// Get border color based on theme brightness
+  static Color getBorderColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? darkBorder : mediumGray;
+  }
+
+  /// Get divider color based on theme brightness
+  static Color getDividerColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? darkDivider : lightGray;
+  }
+
+  /// Get shadow color based on theme brightness
+  static Color getShadowColor(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? darkShadow : black.withOpacity(0.1);
+  }
+
   // ==================== UTILITY METHODS ====================
 
   /// Creates a color with opacity for overlays and backgrounds
@@ -186,5 +264,14 @@ class ColorsManager {
     primaryGold,
     hadithAuthentic,
     hadithGood,
+  ];
+
+  /// Gets a list of dark mode colors for gradients
+  ///
+  /// Returns a list of colors suitable for dark mode gradients
+  static List<Color> get darkModeColors => [
+    darkPrimaryBackground,
+    darkSecondaryBackground,
+    darkCardBackground,
   ];
 }
