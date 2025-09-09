@@ -61,7 +61,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
         backgroundColor: ColorsManager.primaryBackground,
         body: CustomScrollView(
           slivers: [
-            const BuildHeaderAppBar(
+             BuildHeaderAppBar(
               title: 'حديث اليوم',
               description: 'نص حديث نبوي شريف مع شرحه',
             ),

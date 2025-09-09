@@ -23,8 +23,6 @@ class ChapterAhadithCard extends StatelessWidget {
   final String? reference;
   final String bookName;
 
-
-
   @override
   Widget build(BuildContext context) {
     final gradeColor = getGradeColor(grade);
@@ -118,98 +116,102 @@ class ChapterAhadithCard extends StatelessWidget {
                     ),
 
                     // Enhanced grade badge
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 8.h,
-                      ),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            gradeColor.withOpacity(0.15),
-                            gradeColor.withOpacity(0.08),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
+                    if (grade!=null && grade!.isNotEmpty)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 8.h,
                         ),
-                        borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(
-                          color: gradeColor.withOpacity(0.2),
-                          width: 1,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              gradeColor.withOpacity(0.15),
+                              gradeColor.withOpacity(0.08),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(
+                            color: gradeColor.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(
+                          grade! ,
+                          style: TextStyle(
+                            color: gradeColor,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16.sp,
+                            fontFamily: 'Amiri',
+                          ),
                         ),
                       ),
-                      child: Text(
-                        grade ?? "",
-                        style: TextStyle(
-                          color: gradeColor,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16.sp,
-                          fontFamily: 'Amiri',
-                        ),
-                      ),
-                    ),
                   ],
                 ),
 
                 SizedBox(height: 8.h),
 
                 // Enhanced hadith text
-                Container(
-                  padding: EdgeInsets.all(8.w),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        ColorsManager.white.withOpacity(0.8),
-                        ColorsManager.offWhite.withOpacity(0.6),
-                      ],
+                if (text.isNotEmpty)
+                  Container(
+                    padding: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          ColorsManager.white.withOpacity(0.8),
+                          ColorsManager.offWhite.withOpacity(0.6),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(18.r),
+                      border: Border.all(
+                        color: gradeColor.withOpacity(0.1),
+                        width: 1,
+                      ),
                     ),
-                    borderRadius: BorderRadius.circular(18.r),
-                    border: Border.all(
-                      color: gradeColor.withOpacity(0.1),
-                      width: 1,
+                    child: Text(
+                      text,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontFamily: 'Amiri',
+                        color: ColorsManager.primaryText,
+                        fontSize: 17.sp,
+                        height: 1.8,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                  child: Text(
-                    text,
-                    maxLines: 4,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontFamily: 'Amiri',
-                      color: ColorsManager.primaryText,
-                      fontSize: 17.sp,
-                      height: 1.8,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
 
                 SizedBox(height: 18.h),
 
                 // Enhanced book and chapter pills
                 Row(
                   children: [
-                    Flexible(
-                      child: _buildGradientPill(
-                        text: bookName,
-                        colors: [
-                          ColorsManager.primaryPurple.withOpacity(0.8),
-                          ColorsManager.primaryPurple.withOpacity(0.6),
-                        ],
-                        textColor: ColorsManager.white,
+                    if (bookName.isNotEmpty)
+                      Flexible(
+                        child: _buildGradientPill(
+                          text: bookName,
+                          colors: [
+                            ColorsManager.primaryPurple.withOpacity(0.8),
+                            ColorsManager.primaryPurple.withOpacity(0.6),
+                          ],
+                          textColor: ColorsManager.white,
+                        ),
                       ),
-                    ),
                     SizedBox(width: 12.w),
-                   if(reference == null ) Flexible(
-                      child: _buildGradientPill(
-                        text: reference ?? '',
-                        colors: [
-                          gradeColor.withOpacity(0.8),
-                          gradeColor.withOpacity(0.6),
-                        ],
-                        textColor: ColorsManager.white,
+                    if (reference != null && reference!.isNotEmpty)
+                      Flexible(
+                        child: _buildGradientPill(
+                          text: reference!,
+                          colors: [
+                            gradeColor.withOpacity(0.8),
+                            gradeColor.withOpacity(0.6),
+                          ],
+                          textColor: ColorsManager.white,
+                        ),
                       ),
-                    ),
                   ],
                 ),
 

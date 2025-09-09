@@ -17,34 +17,10 @@ class BookmarkCollectionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<
-      GetCollectionsBookmarkCubit,
-      GetCollectionsBookmarkState
-    >(
+    return BlocBuilder<GetCollectionsBookmarkCubit, GetCollectionsBookmarkState>(
       builder: (context, state) {
         if (state is GetCollectionsBookmarkLoading) {
-          return SizedBox(
-            height: 46.h,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              itemCount: 5,
-              separatorBuilder: (_, __) => SizedBox(width: 12.w),
-              itemBuilder:
-                  (_, __) => Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: Container(
-                      width: 80.w,
-                      height: 32.h,
-                      decoration: BoxDecoration(
-                        color: ColorsManager.lightGray,
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                    ),
-                  ),
-            ),
-          );
+          return _buildLoadingShimmer();
         } else if (state is GetCollectionsBookmarkSuccess) {
           final collections = state.collectionsResponse.collections;
           final allCollections = [
@@ -53,7 +29,7 @@ class BookmarkCollectionsRow extends StatelessWidget {
           ];
 
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 6.h),
               decoration: BoxDecoration(
@@ -62,64 +38,50 @@ class BookmarkCollectionsRow extends StatelessWidget {
               ),
               child: SizedBox(
                 height: 50.h,
-                child: ListView.builder(
+                child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
                   itemCount: allCollections.length,
+                  separatorBuilder: (_, __) => SizedBox(width: 8.w),
                   itemBuilder: (context, index) {
                     final c = allCollections[index];
                     final isSelected = selectedCollection == c;
 
-                    return Padding(
-                      padding: EdgeInsets.only(left: 16.w),
-                      child: GestureDetector(
-                        onTap: () => onCollectionSelected(c),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          curve: Curves.easeInOut,
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 18.w,
-                            vertical: 8.h,
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(16.r),
+                      onTap: () => onCollectionSelected(c),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 10.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? ColorsManager.primaryPurple
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(
+                            color: isSelected
+                                ? ColorsManager.primaryPurple
+                                : ColorsManager.mediumGray.withOpacity(0.35),
+                            width: 1,
                           ),
-                          decoration: BoxDecoration(
-                            color:
-                                isSelected
-                                    ? ColorsManager.primaryPurple
-                                    : Colors.transparent,
-                            borderRadius: BorderRadius.circular(16.r),
-                            border: Border.all(
-                              color:
-                                  isSelected
-                                      ? ColorsManager.primaryPurple
-                                      : ColorsManager.mediumGray.withOpacity(
-                                        0.4,
-                                      ),
-                              width: 1.2,
-                            ),
-                            boxShadow:
-                                isSelected
-                                    ? [
-                                      BoxShadow(
-                                        color: ColorsManager.primaryPurple
-                                            .withOpacity(0.25),
-                                        blurRadius: 6,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ]
-                                    : [],
-                          ),
-                          child: Center(
-                            child: Text(
-                              c,
-                              style: TextStyle(
-                                color:
-                                    isSelected
-                                        ? Colors.white
-                                        : ColorsManager.primaryText,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14.sp,
-                              ),
+                        
+                        ),
+                        child: Center(
+                          child: Text(
+                            c,
+                            style: TextStyle(
+                              color: isSelected
+                                  ? Colors.white
+                                  : ColorsManager.primaryText,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ),
@@ -133,6 +95,31 @@ class BookmarkCollectionsRow extends StatelessWidget {
         }
         return const SizedBox.shrink();
       },
+    );
+  }
+
+  /// shimmer أثناء التحميل
+  Widget _buildLoadingShimmer() {
+    return SizedBox(
+      height: 50.h,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        itemCount: 5,
+        separatorBuilder: (_, __) => SizedBox(width: 10.w),
+        itemBuilder: (_, __) => Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            width: 90.w,
+            height: 34.h,
+            decoration: BoxDecoration(
+              color: ColorsManager.lightGray,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -45,7 +45,7 @@ void setupErrorState(BuildContext context, String error) {
   Fluttertoast.showToast(
       msg: msg,
       toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.TOP,
+      gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 8,
       backgroundColor: color,
       textColor: Colors.white,

@@ -84,39 +84,50 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          floatingActionButton: Builder(
-            builder: (context) {
-              return FloatingActionButton(
-                onPressed:
-                    () => context.pushNamed(
-                      Routes.serag,
-                      arguments: SeragRequestModel(
-                        hadith: Hadith(
-                          sharh: context.read<HadithAnalysisCubit>().sharhHadith,
-                          hadeeth: widget.hadithText ?? '',
-                          grade_ar: widget.grade ?? '',
-                          source: widget.bookName ?? '',
-                          takhrij_ar: widget.narrator ?? '',
-                        ),
-                        messages: [Message(role: 'user', content: '')],
-                      ),
-                    ),
-                backgroundColor: ColorsManager.primaryPurple,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
-                ),
-                elevation: 10,
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/images/serag_logo.jpg'),
-                ),
-              );
-            }
+   floatingActionButton: Builder(
+  builder: (context) {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        context.pushNamed(
+          Routes.serag,
+          arguments: SeragRequestModel(
+            hadith: Hadith(
+              sharh: context.read<HadithAnalysisCubit>().sharhHadith,
+              hadeeth: widget.hadithText ?? '',
+              grade_ar: widget.grade ?? '',
+              source: widget.bookName ?? '',
+              takhrij_ar: widget.narrator ?? '',
+            ),
+            messages: [Message(role: 'user', content: '')],
           ),
+        );
+      },
+      backgroundColor: ColorsManager.primaryPurple,
+      elevation: 10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      icon: CircleAvatar(
+        radius: 20.r, 
+        backgroundImage: const AssetImage('assets/images/serag_logo.jpg'),
+        backgroundColor: Colors.transparent,
+      ),
+      label: Text(
+        "اسأل سراج",
+        style: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.bold,
+          color: ColorsManager.secondaryBackground,
+        ),
+      ),
+    );
+  },
+),
 
           backgroundColor: ColorsManager.secondaryBackground,
           body: CustomScrollView(
             slivers: [
-              const BuildHeaderAppBar(title: 'تفاصيل الحديث'),
+              BuildHeaderAppBar(title: 'تفاصيل الحديث'),
 
               if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
                 SliverToBoxAdapter(
@@ -147,7 +158,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                 reference: widget.bookName ?? '',
               ),
 
-              if (_isValid(widget.grade)) _buildDividerSection(),
+              if (_isValid(widget.grade))
+               _buildDividerSection(),
 
               if (_isValid(widget.grade))
                 SliverToBoxAdapter(
@@ -265,16 +277,17 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         ),
       ),
       child: HadithActionsRow(
-        author: widget.author ?? "غير متوفر",
-        authorDeath: widget.authorDeath ??  "غير متوفر",
-        grade: widget.grade ?? "غير متوفر",
+      
+        author: widget.author ?? "",
+        authorDeath: widget.authorDeath ?? "",
+        grade: widget.grade ?? "",
         isBookmarked: widget.isBookMark,
-        bookName: widget.bookName ??  "غير متوفر",
-        bookSlug: widget.bookSlug ?? "غير متوفر",
+        bookName: widget.bookName ?? "",
+        bookSlug: widget.bookSlug ?? "",
         chapter: widget.chapterNumber,
-        hadithNumber: widget.hadithNumber ?? "غير متوفر",
-        id: widget.hadithNumber ?? "غير متوفر",
-        hadith: widget.hadithText ?? "غير متوفر",
+        hadithNumber: widget.hadithNumber ?? "",
+        id: widget.hadithNumber ?? "",
+        hadith: widget.hadithText ?? "",
       ),
     );
   }
@@ -311,12 +324,19 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     ),
                   ),
                 if (_isValid(widget.bookName))
-                  Text(
-                    'من ${widget.bookName}',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      color: ColorsManager.secondaryText,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                                        Divider(endIndent: 60.w),
+
+                      Text(
+                        'من ${widget.bookName}',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: ColorsManager.secondaryText,
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ),

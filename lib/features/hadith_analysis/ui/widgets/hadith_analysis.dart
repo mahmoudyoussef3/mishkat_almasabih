@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HadithAnalysis extends StatelessWidget {
   HadithAnalysis({
@@ -49,12 +50,7 @@ class HadithAnalysis extends StatelessWidget {
                       curr is HadithAnalysisError,
               builder: (context, state) {
                 if (state is HadithAnalysisLoading) {
-                  return const Center(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: CircularProgressIndicator(),
-                    ),
-                  );
+                  return _ShimmerResultCard();
                 } else if (state is HadithAnalysisLoaded) {
                   return tapped
                       ? _ResultCard(
@@ -226,5 +222,67 @@ class _ResultCard extends StatelessWidget {
         ),
       ),
     );
+  }}
+  class _ShimmerResultCard extends StatelessWidget {
+  const _ShimmerResultCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade300,
+      highlightColor: Colors.grey.shade100,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.r),
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: EdgeInsets.all(18.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: 20.sp,
+                    height: 20.sp,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(6.r),
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Container(
+                    width: 120.w,
+                    height: 18.h,
+                    color: Colors.grey.shade300,
+                  ),
+                ],
+              ),
+              SizedBox(height: 12.h),
+              Container(
+                width: double.infinity,
+                height: 14.h,
+                color: Colors.grey.shade300,
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: double.infinity,
+                height: 14.h,
+                color: Colors.grey.shade300,
+              ),
+              SizedBox(height: 8.h),
+              Container(
+                width: 200.w,
+                height: 14.h,
+                color: Colors.grey.shade300,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
+
+

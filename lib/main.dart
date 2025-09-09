@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:easy_notify/easy_notify.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/networking/api_constants.dart';
@@ -108,8 +109,7 @@ void main() async {
     fetchTaskKey,
     frequency: const Duration(minutes: 15),
   );
-  */
-
+ */
   runApp(
     DevicePreview(
       enabled: true,

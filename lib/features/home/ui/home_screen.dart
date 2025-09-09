@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
+import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
@@ -93,14 +94,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: RefreshIndicator(
-        onRefresh:
-            () => context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
-        child: Scaffold(
-          backgroundColor: ColorsManager.secondaryBackground,
-          body: _buildBody(),
+    return SafeArea(
+
+      child: DoubleTapToExitApp(
+        myScaffoldScreen: Directionality(
+          textDirection: TextDirection.rtl,
+          child: RefreshIndicator(
+            onRefresh:
+                () => context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
+            child: Scaffold(
+              backgroundColor: ColorsManager.secondaryBackground,
+              body: _buildBody(),
+            ),
+          ),
         ),
       ),
     );
@@ -247,7 +253,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildStatisticsSection(state),
         _buildDividerSection(),
         _buildCategoriesSection(state),
-        _buildBottomSpacing(),
       ],
     );
   }
@@ -257,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildHeaderSection() {
-    return const BuildHeaderAppBar(
+    return  BuildHeaderAppBar(
       home: true,
       title: 'مشكاة المصابيح',
       description: 'مكتبة مشكاة الإسلامية',
@@ -311,10 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Builds the bottom spacing for proper scrolling
-  Widget _buildBottomSpacing() {
-    return SliverToBoxAdapter(child: SizedBox(height: 80.h));
-  }
+ 
 
   // ==================== COMPONENT BUILDERS ====================
 
@@ -391,7 +393,9 @@ class _HomeScreenState extends State<HomeScreen> {
         _buildStatisticsCard(
           icon: Icons.book,
           title: 'إجمالي الكتب',
-          value: state.statisticsResponse.statistics.totalBooks.toString(),
+          value:
+          
+           state.statisticsResponse.statistics.totalBooks.toString(),
           color: const Color.fromARGB(255, 51, 13, 128),
         ),
         SizedBox(width: Spacing.md),

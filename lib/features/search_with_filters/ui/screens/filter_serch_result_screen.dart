@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
+import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
@@ -51,11 +52,7 @@ class FilterSerchResultScreen extends StatelessWidget {
                   return SliverList.separated(
                     itemCount: hadiths.length,
                     separatorBuilder:
-                        (_, __) => Divider(
-                          color: ColorsManager.primaryNavy,
-                          endIndent: 30.h,
-                          indent: 30.h,
-                        ),
+                        (_, __) => IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = hadiths[index];
                       return InkWell(

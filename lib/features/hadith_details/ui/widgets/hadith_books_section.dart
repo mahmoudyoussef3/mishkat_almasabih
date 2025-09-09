@@ -20,19 +20,26 @@ class HadithBookSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SectionCard(
-      title: "عن الكتاب",
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildBookRow("📖 اسم الكتاب", bookName),
-          SizedBox(height: 8.h),
-          _buildBookRow("✍️ المؤلف", author ?? "غير متوفر"),
-          if (author != null) ...[
+          if (bookName.isNotEmpty)
+            _buildBookRow("📖 اسم الكتاب", bookName),
+
+          if ((author ?? "").isNotEmpty) ...[
             SizedBox(height: 8.h),
-            _buildBookRow('وفاة $author ', authorDeath ?? 'غير متوفر'),
+            _buildBookRow("✍️ المؤلف", author!),
           ],
-          SizedBox(height: 8.h),
-          _buildBookRow("📌 الباب", chapter),
+
+          if ((author ?? "").isNotEmpty && (authorDeath ?? "").isNotEmpty) ...[
+            SizedBox(height: 8.h),
+            _buildBookRow("وفاة $author", authorDeath!),
+          ],
+
+          if (chapter.isNotEmpty) ...[
+            SizedBox(height: 8.h),
+            _buildBookRow("📌 الباب", chapter),
+          ],
         ],
       ),
     );

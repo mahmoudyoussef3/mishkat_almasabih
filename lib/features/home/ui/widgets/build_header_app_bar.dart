@@ -7,18 +7,20 @@ import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BuildHeaderAppBar extends StatelessWidget {
-  const BuildHeaderAppBar({
+   BuildHeaderAppBar({
     super.key,
     this.description,
     required this.title,
     this.home = false,
     this.pinned = false,
-    this.actions
+    this.actions,
+    this.bottomNav = false,
   });
   final String title;
   final String? description;
   final bool home;
   final bool pinned;
+   bool bottomNav;
   final List<Widget>? actions;
 
   @override
@@ -95,10 +97,10 @@ class BuildHeaderAppBar extends StatelessWidget {
                     },
                   );
                 }
-                : null,
+                : () => context.pop(),
         icon: Icon(
-          Icons.logout,
-          color: home ? Colors.white : Colors.transparent,
+          home ? Icons.logout : Icons.arrow_back,
+          color: bottomNav ? Colors.transparent : Colors.white,
         ),
       ),
 
@@ -129,9 +131,7 @@ class BuildHeaderAppBar extends StatelessWidget {
         ),
         centerTitle: true,
         background: Container(
-          decoration: BoxDecoration(
-        
-          ),
+          decoration: BoxDecoration(),
           child: Stack(
             children: [
               Positioned.fill(

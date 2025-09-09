@@ -16,7 +16,7 @@ class DoubleTapToExitApp extends StatelessWidget {
           if (lastBackPressed == null ||
               now.difference(lastBackPressed!) > Duration(seconds: 2)) {
             lastBackPressed = now;
-            showToast('', Colors.grey);
+            showToast('اضغط مرة اخري للخروج من التطبيق', Colors.grey);
 
             return false;
           }

@@ -37,7 +37,7 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
           backgroundColor: ColorsManager.primaryBackground,
           body: CustomScrollView(
             slivers: [
-              const BuildHeaderAppBar(
+               BuildHeaderAppBar(
                 title: 'معلومات عن الحديث',
               ),
 
