@@ -123,9 +123,9 @@ class ProfileScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           CircleAvatar(
-                            radius: 38.r,
+                            radius: 46.r,
                             backgroundImage: const AssetImage(
-                              "assets/images/app_logo_1.png",
+                              "assets/images/app_logo_1.jpg",
                             ),
                           ),
                           SizedBox(height: 5.h),
