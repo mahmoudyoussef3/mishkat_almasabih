@@ -36,7 +36,7 @@ class MishkatAlmasabih extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           title: 'Mishkat Almasabih',
-          theme: ThemeData(fontFamily: 'YaModernPro'),
+          theme: ThemeData(fontFamily: 'Cairo'),
 
           debugShowCheckedModeBanner: false,
           initialRoute: _getStartScreen(),

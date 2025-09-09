@@ -73,12 +73,13 @@ flutter:
 
   fonts:
 
-      - family: YaModernPro
-        fonts:
-            - asset: assets/fonts/Ya-ModernPro-Bold.otf
+
       - family: Amiri
         fonts:
             - asset: assets/fonts/Amiri-Regular.ttf     
+      - family: Cairo
+        fonts:
+            - asset: assets/fonts/Cairo-Regular.ttf   
             
 
 
