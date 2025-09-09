@@ -6,7 +6,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 
 class HadithAnalysis extends StatelessWidget {
-  const HadithAnalysis({
+  HadithAnalysis({
     super.key,
     required this.attribution,
     required this.hadith,
@@ -18,7 +18,7 @@ class HadithAnalysis extends StatelessWidget {
   final String hadith;
   final String grade;
   final String reference;
-
+  bool tapped = false;
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -29,31 +29,24 @@ class HadithAnalysis extends StatelessWidget {
           children: [
             _AnalyzeButton(
               onTap: () {
+                tapped = true;
                 context.read<HadithAnalysisCubit>().analyzeHadith(
-                      attribution: attribution,
-                      hadith: hadith,
-                      grade: grade,
-                      reference: reference,
-                    );
+                  attribution: attribution,
+                  hadith: hadith,
+                  grade: grade,
+                  reference: reference,
+                );
               },
             ),
             SizedBox(height: 20.h),
             BlocConsumer<HadithAnalysisCubit, HadithAnalysisState>(
               listenWhen: (prev, curr) => curr is HadithAnalysisError,
-              listener: (context, state) {
-                if (state is HadithAnalysisError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              },
-              buildWhen: (prev, curr) =>
-                  curr is HadithAnalysisLoading ||
-                  curr is HadithAnalysisLoaded ||
-                  curr is HadithAnalysisError,
+              listener: (context, state) {},
+              buildWhen:
+                  (prev, curr) =>
+                      curr is HadithAnalysisLoading ||
+                      curr is HadithAnalysisLoaded ||
+                      curr is HadithAnalysisError,
               builder: (context, state) {
                 if (state is HadithAnalysisLoading) {
                   return const Center(
@@ -63,20 +56,39 @@ class HadithAnalysis extends StatelessWidget {
                     ),
                   );
                 } else if (state is HadithAnalysisLoaded) {
-                  return _ResultCard(
-                    icon: FontAwesomeIcons.bookOpen,
-                    title: "تحليل الحديث",
-                    text: state.response.analysis ??
-                        "لا يوجد تحليل متاح في الوقت الحالي.",
-                  );
+                  return tapped
+                      ? _ResultCard(
+                        icon: FontAwesomeIcons.bookOpen,
+                        title: "تحليل الحديث",
+                        text:
+                            state.response.analysis ??
+                            "لا يوجد تحليل متاح في الوقت الحالي.",
+                      )
+                      : _ResultCard(
+                        icon: FontAwesomeIcons.lightbulb,
+                        title: "معلومة",
+                        text:
+                            "يمكنك الآن الحصول على تحليل سريع للحديث باستخدام الذكاء الاصطناعي.\nاضغط على الزر أعلاه للبدء.",
+                        color: ColorsManager.lightPurple,
+                        textColor: Colors.black87,
+                      );
                 } else if (state is HadithAnalysisError) {
-                  return _ResultCard(
-                    icon: FontAwesomeIcons.circleExclamation,
-                    title: "خطأ",
-                    text: state.message,
-                    color: Colors.red.withOpacity(0.08),
-                    textColor: Colors.red.shade700,
-                  );
+                  return tapped
+                      ? _ResultCard(
+                        icon: FontAwesomeIcons.circleExclamation,
+                        title: "خطأ",
+                        text: state.message,
+                        color: Colors.red.withOpacity(0.08),
+                        textColor: Colors.red.shade700,
+                      )
+                      : _ResultCard(
+                        icon: FontAwesomeIcons.lightbulb,
+                        title: "معلومة",
+                        text:
+                            "يمكنك الآن الحصول على تحليل سريع للحديث باستخدام الذكاء الاصطناعي.\nاضغط على الزر أعلاه للبدء.",
+                        color: ColorsManager.lightPurple,
+                        textColor: Colors.black87,
+                      );
                 } else {
                   return _ResultCard(
                     icon: FontAwesomeIcons.lightbulb,
@@ -119,9 +131,10 @@ class _AnalyzeButtonState extends State<_AnalyzeButton> {
         curve: Curves.easeOut,
         padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 20.w),
         decoration: BoxDecoration(
-          color: _pressed
-              ? ColorsManager.primaryGreen.withOpacity(0.85)
-              : ColorsManager.primaryGreen,
+          color:
+              _pressed
+                  ? ColorsManager.primaryGreen.withOpacity(0.85)
+                  : ColorsManager.primaryGreen,
           borderRadius: BorderRadius.circular(16.r),
           boxShadow: [
             BoxShadow(
@@ -143,10 +156,10 @@ class _AnalyzeButtonState extends State<_AnalyzeButton> {
             Text(
               "تحليل سريع للحديث",
               style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                    color: ColorsManager.secondaryBackground,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: ColorsManager.secondaryBackground,
+                fontSize: 16.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -172,23 +185,11 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12.r),
-              color: ColorsManager.primaryGreen.withOpacity(0.05),
-
-      /*
-          gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-                        ColorsManager.secondaryBackground,
-
-                        ColorsManager.lightBlue.withOpacity(0.2),
-
-          ],
-        ),
-        */
-    ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.r),
+        color: ColorsManager.primaryGreen.withOpacity(0.05),
+      ),
       child: Padding(
         padding: EdgeInsets.all(18.w),
         child: Column(
@@ -196,16 +197,19 @@ class _ResultCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon,
-                    size: 20.sp, color: textColor ?? ColorsManager.primaryGreen),
+                Icon(
+                  icon,
+                  size: 20.sp,
+                  color: textColor ?? ColorsManager.primaryGreen,
+                ),
                 SizedBox(width: 8.w),
                 Text(
                   title,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w600,
-                        color: textColor ?? ColorsManager.primaryGreen,
-                      ),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                    color: textColor ?? ColorsManager.primaryGreen,
+                  ),
                 ),
               ],
             ),
@@ -213,10 +217,10 @@ class _ResultCard extends StatelessWidget {
             Text(
               text,
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontSize: 16.sp,
-                    height: 1.5,
-                    color: textColor ?? Colors.black87,
-                  ),
+                fontSize: 16.sp,
+                height: 1.5,
+                color: textColor ?? Colors.black87,
+              ),
             ),
           ],
         ),

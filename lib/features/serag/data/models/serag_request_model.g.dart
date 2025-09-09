@@ -25,6 +25,7 @@ Hadith _$HadithFromJson(Map<String, dynamic> json) => Hadith(
   hadeeth: json['hadeeth'] as String,
   grade_ar: json['grade_ar'] as String,
   source: json['source'] as String,
+  sharh: json['sharh'] as String,
   takhrij_ar: json['takhrij_ar'] as String,
 );
 
@@ -33,6 +34,7 @@ Map<String, dynamic> _$HadithToJson(Hadith instance) => <String, dynamic>{
   'grade_ar': instance.grade_ar,
   'source': instance.source,
   'takhrij_ar': instance.takhrij_ar,
+  'sharh': instance.sharh,
 };
 
 Message _$MessageFromJson(Map<String, dynamic> json) =>

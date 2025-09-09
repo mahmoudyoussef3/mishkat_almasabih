@@ -10,6 +10,8 @@ class RemainingQuestionsCubit extends Cubit<RemainingQuestionsState> {
   RemainingQuestionsCubit(this._remainingQuestionsRepo)
     : super(RemainingQuestionsInitial());
 
+  int remaining = 0;
+
   Future<void> emitRemainingQuestions() async {
     emit(RemainingQuestionsLoading());
     final result = await _remainingQuestionsRepo.getRemainingQuestions();
@@ -20,7 +22,11 @@ class RemainingQuestionsCubit extends Cubit<RemainingQuestionsState> {
           l.apiErrorModel.msg ?? "حدث خطأ. حاول مرة أخري",
         ),
       ),
-      (r) => emit(RemainingQuestionsSuccess(r)),
+      (r) {
+        remaining = r.remaining!;
+        emit(RemainingQuestionsSuccess(r));
+        
+      },
     );
   }
 }
