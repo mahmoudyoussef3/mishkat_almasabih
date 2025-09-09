@@ -34,12 +34,12 @@ android {
     productFlavors {
         production {
             dimension "default"
-            resValue "string", "app_name", "mishkat_almasabih Production"
+            resValue "string", "app_name", "مكتبة مشكاة الإسلامية"
         }
         development {
             dimension "default"
             applicationIdSuffix ".dev"
-            resValue "string", "app_name", "mishkat_almasabih Development"
+            resValue "string", "app_name", "مكتبة مشكاة الإسلامية Development"
         }
     }
 

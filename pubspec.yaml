@@ -52,7 +52,7 @@ dev_dependencies:
   json_serializable: ^6.6.1
 
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: "ic_launcher.png"
   ios: true
   image_path: "assets/images/app_logo_1.jpg"   
   min_sdk_android: 21  
