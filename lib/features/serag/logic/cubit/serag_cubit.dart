@@ -15,12 +15,14 @@ class SeragCubit extends Cubit<SeragState> {
     required String source,
     required String takhrij_ar,
     required String content,
+    required String sharh
   }) async {
     emit(SeragLoading());
 
     final result = await _seragRepo.serag(
       SeragRequestModel(
         hadith: Hadith(
+          sharh: sharh,
           hadeeth: hadeeth,
           grade_ar: grade_ar,
           source: source,

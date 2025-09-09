@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,39 +67,50 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<HadithAnalysisCubit>()),
-
         BlocProvider(create: (context) => getIt<AddCubitCubit>()),
         BlocProvider(create: (context) => getIt<NavigationCubit>()),
         BlocProvider(create: (context) => getIt<LocalHadithNavigationCubit>()),
+        BlocProvider(
+          create:
+              (context) =>
+                  getIt<HadithAnalysisCubit>()..analyzeHadith(
+                    hadith: widget.hadithText ?? '',
+                    attribution: widget.author ?? '',
+                    grade: widget.grade ?? '',
+                    reference: widget.bookName ?? '',
+                  ),
+        ),
       ],
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-          floatingActionButton: FloatingActionButton(
-            onPressed:
-                () => context.pushNamed(
-                  Routes.serag,
-                  arguments: SeragRequestModel(
-                    hadith: Hadith(
-                      hadeeth: widget.hadithText??'',
-                      grade_ar: widget.grade??'',
-                      source: widget.bookName??'',
-                      takhrij_ar: widget.narrator??'',
+          floatingActionButton: Builder(
+            builder: (context) {
+              return FloatingActionButton(
+                onPressed:
+                    () => context.pushNamed(
+                      Routes.serag,
+                      arguments: SeragRequestModel(
+                        hadith: Hadith(
+                          sharh: context.read<HadithAnalysisCubit>().sharhHadith,
+                          hadeeth: widget.hadithText ?? '',
+                          grade_ar: widget.grade ?? '',
+                          source: widget.bookName ?? '',
+                          takhrij_ar: widget.narrator ?? '',
+                        ),
+                        messages: [Message(role: 'user', content: '')],
+                      ),
                     ),
-                    messages:[Message(role: 'user', content: '')],
-                  ),
+                backgroundColor: ColorsManager.primaryPurple,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
                 ),
-            backgroundColor: ColorsManager.primaryPurple,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-            elevation: 6,
-            child: const Icon(
-              Icons.chat_bubble_outline,
-              color: Colors.white,
-              size: 28,
-            ),
+                elevation: 10,
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/serag_logo.jpg'),
+                ),
+              );
+            }
           ),
 
           backgroundColor: ColorsManager.secondaryBackground,

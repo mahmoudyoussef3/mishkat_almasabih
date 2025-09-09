@@ -7,10 +7,7 @@ class SeragRequestModel {
   final Hadith hadith;
   final List<Message> messages;
 
-  SeragRequestModel({
-    required this.hadith,
-    required this.messages,
-  });
+  SeragRequestModel({required this.hadith, required this.messages});
 
   factory SeragRequestModel.fromJson(Map<String, dynamic> json) =>
       _$SeragRequestModelFromJson(json);
@@ -24,16 +21,17 @@ class Hadith {
   final String grade_ar;
   final String source;
   final String takhrij_ar;
+  final String sharh;
 
   Hadith({
     required this.hadeeth,
     required this.grade_ar,
     required this.source,
+    required this.sharh,
     required this.takhrij_ar,
   });
 
-  factory Hadith.fromJson(Map<String, dynamic> json) =>
-      _$HadithFromJson(json);
+  factory Hadith.fromJson(Map<String, dynamic> json) => _$HadithFromJson(json);
 
   Map<String, dynamic> toJson() => _$HadithToJson(this);
 }
@@ -43,10 +41,7 @@ class Message {
   final String role;
   final String content;
 
-  Message({
-    required this.role,
-    required this.content,
-  });
+  Message({required this.role, required this.content});
 
   factory Message.fromJson(Map<String, dynamic> json) =>
       _$MessageFromJson(json);
