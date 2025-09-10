@@ -21,13 +21,11 @@ class Hadith {
   final String grade_ar;
   final String source;
   final String takhrij_ar;
-  final String sharh;
 
   Hadith({
     required this.hadeeth,
     required this.grade_ar,
     required this.source,
-    required this.sharh,
     required this.takhrij_ar,
   });
 

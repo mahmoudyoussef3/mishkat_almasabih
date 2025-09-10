@@ -33,7 +33,7 @@ class SocilaMediaIcons extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 45.r,
-                    backgroundImage: const AssetImage("assets/images/app_logo.png"),
+                    backgroundImage: const AssetImage("assets/images/app_logo_1.jpg"),
                   ),
                   SizedBox(height: 12.h),
                   Text(

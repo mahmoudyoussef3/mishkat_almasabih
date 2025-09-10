@@ -40,7 +40,6 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                   Routes.serag,
                   arguments: SeragRequestModel(
                     hadith: Hadith(
-                      sharh: widget.dailyHadithModel.data?.explanation??"",
                       hadeeth: widget.dailyHadithModel.data?.hadith ?? '',
                       grade_ar: widget.dailyHadithModel.data?.grade ?? '',
                       source:   '',

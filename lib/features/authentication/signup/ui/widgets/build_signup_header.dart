@@ -28,7 +28,7 @@ class BuildSignupHeader extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(16.w),
             child: Image.asset(
-              'assets/images/app_logo.png',
+              'assets/images/app_logo_1.jpg',
               fit: BoxFit.contain,
             ),
           ),

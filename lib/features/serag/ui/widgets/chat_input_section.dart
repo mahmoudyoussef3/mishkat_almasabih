@@ -214,9 +214,7 @@ class ChatInputSection extends StatelessWidget {
       context.read<ChatHistoryCubit>().addMessage(
         Message(role: "user", content: text),
       );
-      context.read<SeragCubit>().sendMessage(
-        sharh: model.hadith.sharh,
-        hadeeth: model.hadith.hadeeth,
+      context.read<SeragCubit>().sendMessage(        hadeeth: model.hadith.hadeeth,
         grade_ar: model.hadith.grade_ar,
         source: model.hadith.source,
         takhrij_ar: model.hadith.takhrij_ar,

@@ -92,7 +92,6 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           Routes.serag,
           arguments: SeragRequestModel(
             hadith: Hadith(
-              sharh: context.read<HadithAnalysisCubit>().sharhHadith,
               hadeeth: widget.hadithText ?? '',
               grade_ar: widget.grade ?? '',
               source: widget.bookName ?? '',
