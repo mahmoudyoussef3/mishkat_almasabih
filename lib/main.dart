@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:mishkat_almasabih/core/networking/api_constants.dart';
 import 'package:mishkat_almasabih/core/networking/api_service.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
@@ -67,7 +68,8 @@ void callbackDispatcher() {
 
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+
+/*  WidgetsFlutterBinding.ensureInitialized();
 
   await setUpGetIt();
   tz.initializeTimeZones();
@@ -110,6 +112,20 @@ void main() async {
     frequency: const Duration(minutes: 15),
   );
  */
+*/
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Hive
+  await Hive.initFlutter();
+  
+  // Initialize EasyNotify
+  await EasyNotify.init();
+  
+  // Initialize Cyclic Service
+  await CyclicDataService.initialize();
+  
+  runApp(const CyclicDataApp());
+  /*
   runApp(
     DevicePreview(
       enabled: true,
@@ -121,4 +137,5 @@ void main() async {
           ),
     ),
   );
+  */
 }
