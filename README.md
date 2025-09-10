@@ -8,7 +8,7 @@
 
 **A beautifully designed, feature-rich Islamic Hadith library application built with Flutter**
 
-[![App Screenshot](assets/images/app_logo.png)](https://github.com/yourusername/mishkat_almasabih)
+[![App Screenshot](assets/images/app_logo_1.jpg)](https://github.com/yourusername/mishkat_almasabih)
 
 </div>
 

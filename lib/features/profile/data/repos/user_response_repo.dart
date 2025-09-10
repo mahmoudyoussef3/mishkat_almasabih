@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
 import 'package:mishkat_almasabih/core/networking/api_service.dart';
+import 'package:mishkat_almasabih/core/networking/caching_helper.dart';
 import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,17 +10,28 @@ class UserResponseRepo {
 
   UserResponseRepo(this.apiService);
 
-  Future<Either<ErrorHandler,UserResponseModel>> getUserProfile() async {
+  final _userProfileCache = GenericCache<UserResponseModel>(
+    cacheKey: "user_profile",
+    fromJson: (json) => UserResponseModel.fromJson(json),
+  );
+
+  Future<Either<ErrorHandler, UserResponseModel>> getUserProfile() async {
     try {
-      final  String token = await _getUserToken();
+      final String token = await _getUserToken();
+      final cache = await _userProfileCache.getData();
+      if (cache != null) {
+        return Right(cache);
+      }
+
       final response = await apiService.getUserProfile(token);
+      await _userProfileCache.saveData(response);
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e));
     }
   }
 
-    Future<String> _getUserToken() async {
+  Future<String> _getUserToken() async {
     final sharedPref = await SharedPreferences.getInstance();
     final token = sharedPref.getString('token');
 
