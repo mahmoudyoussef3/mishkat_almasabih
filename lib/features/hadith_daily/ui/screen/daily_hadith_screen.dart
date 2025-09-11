@@ -34,33 +34,51 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-           floatingActionButton: FloatingActionButton(
-            onPressed:
-                () => context.pushNamed(
+        floatingActionButton: Builder(
+          builder: (context) {
+            return FloatingActionButton.extended(
+              onPressed: () {
+                context.pushNamed(
                   Routes.serag,
                   arguments: SeragRequestModel(
                     hadith: Hadith(
                       hadeeth: widget.dailyHadithModel.data?.hadith ?? '',
                       grade_ar: widget.dailyHadithModel.data?.grade ?? '',
-                      source:   '',
-                      takhrij_ar: widget.dailyHadithModel.data?.attribution ?? '',
+                      source: '',
+                      takhrij_ar:
+                          widget.dailyHadithModel.data?.attribution ?? '',
                     ),
                     messages: [Message(role: 'user', content: '')],
                   ),
+                );
+              },
+              backgroundColor: ColorsManager.primaryPurple,
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              icon: CircleAvatar(
+                radius: 20.r,
+                backgroundImage: const AssetImage(
+                  'assets/images/serag_logo.jpg',
                 ),
-            backgroundColor: ColorsManager.primaryPurple,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
-            elevation: 10,
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/serag_logo.jpg'),
-            )
-          ),
+                backgroundColor: Colors.transparent,
+              ),
+              label: Text(
+                "اسأل سراج",
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorsManager.secondaryBackground,
+                ),
+              ),
+            );
+          },
+        ),
         backgroundColor: ColorsManager.primaryBackground,
         body: CustomScrollView(
           slivers: [
-             BuildHeaderAppBar(
+            BuildHeaderAppBar(
               title: 'حديث اليوم',
               description: 'نص حديث نبوي شريف مع شرحه',
             ),
@@ -259,7 +277,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
         bookSlug: "",
         hadithNumber: "",
         id: (Random().nextInt(10000000) + 1).toString(),
-        bookName:'',
+        bookName: '',
         hadith: widget.dailyHadithModel.data?.hadith ?? "",
       ),
     );

@@ -5,14 +5,15 @@ import 'package:mishkat_almasabih/core/routing/app_router.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_preview/device_preview.dart';
-
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'mishkat_almasabih.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await setUpGetIt();
-
+await initializeDateFormatting('ar', null);
   final prefs = await SharedPreferences.getInstance();
   final String? token = prefs.getString('token');
   final bool isLoggedIn = token != null;

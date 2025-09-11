@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_title.dart';
@@ -13,6 +15,7 @@ import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widg
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widgets/result_hadith_content_card.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widgets/result_hadith_tab_content.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widgets/search_hadith_attribution_and_grade.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
 class HadithResultDetails extends StatefulWidget {
   const HadithResultDetails({super.key, required this.enhancedHadithModel});
@@ -34,6 +37,47 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
+              floatingActionButton: Builder(
+          builder: (context) {
+            return FloatingActionButton.extended(
+              onPressed: () {
+                context.pushNamed(
+                  Routes.serag,
+                  arguments: SeragRequestModel(
+                    hadith: Hadith(
+                      hadeeth: widget.enhancedHadithModel.hadeeth ?? '',
+                      grade_ar: widget.enhancedHadithModel.grade ?? '',
+                      source:widget.enhancedHadithModel.reference??"",
+                      takhrij_ar:
+                          widget.enhancedHadithModel.attribution ?? '',
+                    ),
+                    messages: [Message(role: 'user', content: '')],
+                  ),
+                );
+              },
+              backgroundColor: ColorsManager.primaryPurple,
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              icon: CircleAvatar(
+                radius: 20.r,
+                backgroundImage: const AssetImage(
+                  'assets/images/serag_logo.jpg',
+                ),
+                backgroundColor: Colors.transparent,
+              ),
+              label: Text(
+                "اسأل سراج",
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorsManager.secondaryBackground,
+                ),
+              ),
+            );
+          },
+        ),
           backgroundColor: ColorsManager.primaryBackground,
           body: CustomScrollView(
             slivers: [
