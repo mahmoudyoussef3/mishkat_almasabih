@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
@@ -150,7 +149,7 @@ class AppRouter {
               ),
         );
       case Routes.serag:
-              final query = settings.arguments as SeragRequestModel;
+        final query = settings.arguments as SeragRequestModel;
 
         return MaterialPageRoute(
           builder:
@@ -166,7 +165,7 @@ class AppRouter {
                   BlocProvider(create: (context) => getIt<SeragCubit>()),
                   BlocProvider(create: (context) => ChatHistoryCubit()),
                 ],
-                child: SeragChatScreen(model :query),
+                child: SeragChatScreen(model: query),
               ),
         );
 

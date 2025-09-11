@@ -5,12 +5,6 @@ plugins {
 }
 
 android {
-    ndkVersion flutter.ndkVersion
-}
-
-
-
-android {
     namespace = "com.example.mishkat_almasabih"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
@@ -18,7 +12,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-        coreLibraryDesugaringEnabled = true 
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -27,19 +21,28 @@ android {
 
     defaultConfig {
         applicationId = "com.example.mishkat_almasabih"
-
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file(project.findProperty("MY_STORE_FILE") as String)
+            storePassword = project.findProperty("MY_STORE_PASSWORD") as String
+            keyAlias = project.findProperty("MY_KEY_ALIAS") as String
+            keyPassword = project.findProperty("MY_KEY_PASSWORD") as String
+        }
+    }
 
-
-    buildTypes {
+buildTypes {
     release {
         minifyEnabled false
         shrinkResources false
+        signingConfig signingConfigs.release
+    }
+    debug {
         signingConfig signingConfigs.debug
     }
 }
@@ -49,6 +52,7 @@ android {
 flutter {
     source = "../.."
 }
+
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

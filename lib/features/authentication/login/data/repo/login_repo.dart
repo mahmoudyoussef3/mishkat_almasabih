@@ -26,6 +26,9 @@ class LoginRepo {
   Future<Either<ErrorHandler, LoginResponseBody>> googleLogin() async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn(
+
+
+
         scopes: ['email', 'profile', 'openid'],
                serverClientId:
               "479373165372-d9vr3f1c1b2aodv4kjngi5ra1diug1v6.apps.googleusercontent.com",
