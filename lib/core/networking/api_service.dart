@@ -42,6 +42,9 @@ abstract class ApiService {
   Future<SignUpResponseBody> signup(
     @Body() SignupRequestBody signupRequestBody,
   );
+
+  @POST(ApiConstants.googleLogin)
+  Future<LoginResponseBody> googleLogin(@Body() Map<String, dynamic> data);
   @GET(ApiConstants.getAllBooksWithCategories)
   Future<BooksResponse> getAllBooksWithCategories();
   @GET(ApiConstants.getLibraryStatistics)
@@ -141,38 +144,27 @@ abstract class ApiService {
   Future<UserResponseModel> getUserProfile(
     @Header("x-auth-token") String token,
   );
-@PUT(ApiConstants.updateUserProfile)
-@MultiPart()
-Future<UserResponseModel> updateUserProfile(
-  @Header("x-auth-token") String token,
-  @Part(name: "username") String username,
-  @Part(name: "avatar") File? avatar, 
-);
+  @PUT(ApiConstants.updateUserProfile)
+  @MultiPart()
+  Future<UserResponseModel> updateUserProfile(
+    @Header("x-auth-token") String token,
+    @Part(name: "username") String username,
+    @Part(name: "avatar") File? avatar,
+  );
 
+  @POST(ApiConstants.hadithAnalysis)
+  Future<HadithAnalysisResponse> hadithAnalysis(
+    @Body() HadithAnalysisRequest hadithAnalysisRequest,
+    @Header("x-auth-token") String token,
+  );
 
-
-@POST(ApiConstants.hadithAnalysis)
-Future<HadithAnalysisResponse> hadithAnalysis(
-  @Body() HadithAnalysisRequest hadithAnalysisRequest,
-  @Header("x-auth-token") String token,
-
-
-);
-
-@POST(ApiConstants.serag)
-Future<SeragResponseModel> serag(
-  @Body() SeragRequestModel seragRequistModel,
-  @Header("x-auth-token") String token,
-
-
-);
-@GET(ApiConstants.remainingQuestions)
-Future<RmainingQuestionsResponse> getReaminingQuestions(
-  @Header("x-auth-token") String token,
-);
-
-
-
-
-
+  @POST(ApiConstants.serag)
+  Future<SeragResponseModel> serag(
+    @Body() SeragRequestModel seragRequistModel,
+    @Header("x-auth-token") String token,
+  );
+  @GET(ApiConstants.remainingQuestions)
+  Future<RmainingQuestionsResponse> getReaminingQuestions(
+    @Header("x-auth-token") String token,
+  );
 }

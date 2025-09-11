@@ -7,6 +7,7 @@ class ApiConstants {
   static const String signup = "auth/register";
   static const String getUserProfile = "auth/profile";
   static const String updateUserProfile = "auth/update-profile";
+  static const String googleLogin = "auth/google-login";
 
 
 

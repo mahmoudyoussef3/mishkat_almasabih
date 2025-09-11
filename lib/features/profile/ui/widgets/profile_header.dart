@@ -13,6 +13,7 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      foregroundColor: ColorsManager.secondaryBackground,
       expandedHeight: 180,
       pinned: true,
       backgroundColor: Colors.transparent,
