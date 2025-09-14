@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
@@ -12,11 +14,15 @@ import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
-import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
+import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/ui/search_screen.dart';
-
+import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/filter_serch_result_screen.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
+import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history_cubit.dart';
+import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
+import 'package:mishkat_almasabih/features/serag/ui/serag_chat_screen.dart';
 import '../../features/home/ui/widgets/public_search_result.dart';
 import '../../features/main_navigation/main_navigation_screen.dart';
 import '../di/dependency_injection.dart';
@@ -61,6 +67,7 @@ class AppRouter {
                   BlocProvider(
                     create: (context) => getIt<GetLibraryStatisticsCubit>(),
                   ),
+
                   BlocProvider(create: (context) => getIt<BookDataCubit>()),
                   BlocProvider(create: (context) => getIt<GetBookmarksCubit>()),
                   BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
@@ -85,18 +92,41 @@ class AppRouter {
         );
       case Routes.publicSearchSCreen:
         final query = settings.arguments as String;
-        print(query);
+        log(query);
 
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
                 create:
                     (context) =>
-                        getIt<PublicSearchCubit>()..emitPublicSearch(query),
-                child: PublicSearchResultScreen(searchQuery: query),
+                        getIt<EnhancedSearchCubit>()
+                          ..fetchEnhancedSearchResults(query),
+
+                child: PublicSearchResult(searchQuery: query),
               ),
         );
 
+      case Routes.filterResultSearch:
+        final query = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create:
+                    (context) =>
+                        getIt<SearchWithFiltersCubit>()..emitSearchWithFilters(
+                          bookSlug: query['book'] ?? '',
+                          category: query['category'] ?? '',
+                          chapterNumber: query['chapter'] ?? '',
+                          grade: query['grade'] ?? '',
+                          narrator: query['narrator'] ?? '',
+                          searchQuery: query['search'] ?? '',
+                        ),
+                child: FilterSerchResultScreen(
+                  searchQuery: query['search'] ?? '',
+                ),
+              ),
+        );
+      /*
       case Routes.searchScreen:
         return MaterialPageRoute(
           builder:
@@ -105,6 +135,7 @@ class AppRouter {
                 child: SearchScreen(),
               ),
         );
+        */
       case Routes.hadithOfTheDay:
         final query = settings.arguments as DailyHadithModel;
 
@@ -116,6 +147,26 @@ class AppRouter {
                   BlocProvider(create: (context) => getIt<AddCubitCubit>()),
                 ],
                 child: HadithDailyScreen(dailyHadithModel: query),
+              ),
+        );
+      case Routes.serag:
+              final query = settings.arguments as SeragRequestModel;
+
+        return MaterialPageRoute(
+          builder:
+              (context) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create:
+                        (context) =>
+                            getIt<RemainingQuestionsCubit>()
+                              ..emitRemainingQuestions(),
+                  ),
+
+                  BlocProvider(create: (context) => getIt<SeragCubit>()),
+                  BlocProvider(create: (context) => ChatHistoryCubit()),
+                ],
+                child: SeragChatScreen(model :query),
               ),
         );
 

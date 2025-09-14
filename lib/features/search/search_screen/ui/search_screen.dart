@@ -12,8 +12,7 @@ import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/sear
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_list.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/empty_history.dart';
-
-class SearchScreen extends StatefulWidget {
+/*class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
   @override
@@ -125,4 +124,4 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
     );
   }
-}
+}*/

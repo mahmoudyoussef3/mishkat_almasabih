@@ -104,8 +104,6 @@ class LocalHadithCard extends StatelessWidget {
                         ),
                       ],
                     ),
-
-        
                   ],
                 ),
 
@@ -128,7 +126,7 @@ class LocalHadithCard extends StatelessWidget {
                     ),
                   ),
                   child: Text(
-                    hadith.arabic??'',
+                    hadith.arabic ?? '',
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.right,

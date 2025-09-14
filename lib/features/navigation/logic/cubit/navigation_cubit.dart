@@ -9,7 +9,6 @@ part 'navigation_state.dart';
 class NavigationCubit extends Cubit<NavigationState> {
   final NavigationRepo _navigationRepo;
   NavigationCubit(this._navigationRepo) : super(NavigationInitial());
-  String newHadith = '';
 
   Future<void> emitNavigationStates(
     String hadithNumber,
@@ -31,19 +30,5 @@ class NavigationCubit extends Cubit<NavigationState> {
     );
   }
 
-  Future<void> emitLocalNavigation(String hadithNumber, String bookSlug) async {
-        emit(NavigationLoading());
 
-    final result = await _navigationRepo.localNavigation(
-      hadithNumber,
-      bookSlug,
-    );
-
-    result.fold(
-      (l) => emit(
-        LocalNavigationFailure(l.apiErrorModel.msg ?? 'حدث خطأ حاول مرة أخري'),
-      ),
-      (r) => emit(LocalNavigationSuccess(r)),
-    );
-  }
 }

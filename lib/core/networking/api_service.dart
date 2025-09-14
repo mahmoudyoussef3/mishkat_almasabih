@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_response_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_request_body.dart';
@@ -9,12 +11,20 @@ import 'package:mishkat_almasabih/features/bookmark/data/models/collection_model
 import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_request.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_response.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/local_hadith_navigation_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/navigation_hadith_model.dart';
+import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
+import 'package:mishkat_almasabih/features/remaining_questions/data/models/remaining_questions_response_model.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/models/public_search_model.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
 import '../../features/authentication/login/data/models/login_request_body.dart';
@@ -112,4 +122,57 @@ abstract class ApiService {
 
     @Path("bookSlug") String bookSlug,
   );
+
+  @GET(ApiConstants.searchWithFilters)
+  Future<SearchWithFiltersModel> searchWithFilters(
+    @Path("searchQuery") String searchQuery,
+
+    @Path("bookSlug") String bookSlug,
+    @Path("narrator") String narrator,
+    @Path("grade") String grade,
+    @Path("chapter") String chapter,
+    @Path("category") String category,
+  );
+
+  @POST(ApiConstants.enhancedSearch)
+  Future<EnhancedSearch> getEnhancedSearch(@Body() Map<String, dynamic> body);
+
+  @GET(ApiConstants.getUserProfile)
+  Future<UserResponseModel> getUserProfile(
+    @Header("x-auth-token") String token,
+  );
+@PUT(ApiConstants.updateUserProfile)
+@MultiPart()
+Future<UserResponseModel> updateUserProfile(
+  @Header("x-auth-token") String token,
+  @Part(name: "username") String username,
+  @Part(name: "avatar") File? avatar, 
+);
+
+
+
+@POST(ApiConstants.hadithAnalysis)
+Future<HadithAnalysisResponse> hadithAnalysis(
+  @Body() HadithAnalysisRequest hadithAnalysisRequest,
+  @Header("x-auth-token") String token,
+
+
+);
+
+@POST(ApiConstants.serag)
+Future<SeragResponseModel> serag(
+  @Body() SeragRequestModel seragRequistModel,
+  @Header("x-auth-token") String token,
+
+
+);
+@GET(ApiConstants.remainingQuestions)
+Future<RmainingQuestionsResponse> getReaminingQuestions(
+  @Header("x-auth-token") String token,
+);
+
+
+
+
+
 }

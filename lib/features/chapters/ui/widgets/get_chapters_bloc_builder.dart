@@ -1,12 +1,12 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/build_statistics_container.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/chapters_grid_view.dart';
-import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
-
 import '../../../../core/theming/colors.dart';
 import '../../../home/ui/widgets/build_header_app_bar.dart';
 import '../../logic/cubit/chapters_cubit.dart';

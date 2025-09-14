@@ -13,6 +13,6 @@ final class BookDataSuccess extends BookDataState {
 }
 
 final class BookDataFailure extends BookDataState {
-  String errorMessage;
+final  String errorMessage;
   BookDataFailure(this.errorMessage);
 }

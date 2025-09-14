@@ -5,6 +5,11 @@ class ApiConstants {
 
   static const String login = "auth/login";
   static const String signup = "auth/register";
+  static const String getUserProfile = "auth/profile";
+  static const String updateUserProfile = "auth/update-profile";
+
+
+
   static const String getAllBooksWithCategories = "islamic-library/books";
 
   static const String getLibraryStatistics = "islamic-library/statistics";
@@ -30,11 +35,19 @@ class ApiConstants {
   static const String navigationHadith =
       "/islamic-library/books/{bookSlug}/chapter/{chapterNumber}/hadith/{hadithNumber}/navigation";
 
-
-        static const String localNavigationHadith =
+  static const String localNavigationHadith =
       "/islamic-library/local-books/{bookSlug}/hadiths/{hadithNumber}/navigation";
-}
 
+  static const String searchWithFilters =
+      "/islamic-library/search?q={searchQuery}&book={bookSlug}&narrator={narrator}&status={grade}&category={category}&chapter={chapter}&includeLocal=true&includeAPI=true";
+
+      static const String enhancedSearch = "/search";
+      static const String hadithAnalysis = "/ai/analyze-hadith";
+            static const String serag = "/ai/chat";
+            static const String remainingQuestions = "/ai/remaining-questions";
+
+
+}
 
 class ApiErrors {
   static const String badRequestError = "badRequestError";

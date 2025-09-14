@@ -22,7 +22,7 @@ class HadithData {
   final List<String>? hints;
 
 
-  @JsonKey(name: 'words_meanings') // مهم جدًا
+  @JsonKey(name: 'words_meanings')
   final List<WordMeaning>? wordsMeanings;
 
   const HadithData({

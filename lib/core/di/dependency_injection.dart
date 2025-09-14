@@ -13,6 +13,8 @@ import 'package:mishkat_almasabih/features/chapters/data/repos/chapters_repo.dar
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/data/repos/hadith_analysis_repo.dart';
+import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_all_books_with_categories_repo.dart';
@@ -21,8 +23,21 @@ import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_c
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/navigation/data/repos/navigation_repo.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
+import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
+import 'package:mishkat_almasabih/features/profile/data/repos/user_response_repo.dart';
+import 'package:mishkat_almasabih/features/profile/edit_profile/data/repos/edit_profile_repo.dart';
+import 'package:mishkat_almasabih/features/profile/edit_profile/logic/cubit/edit_profile_cubit.dart';
+import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
+import 'package:mishkat_almasabih/features/remaining_questions/data/repos/remaining_questions_repo.dart';
+import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/repos/public_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/data/repos/search_with_filters_repo.dart';
+import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
+import 'package:mishkat_almasabih/features/serag/data/repos/serag_repo.dart';
+import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
 import '../../features/authentication/login/logic/cubit/login_cubit.dart';
 import '../networking/api_service.dart';
 import '../networking/dio_factory.dart';
@@ -83,7 +98,52 @@ Future<void> setUpGetIt() async {
   getIt.registerLazySingleton<HadithDailyRepo>(() => HadithDailyRepo(getIt()));
   getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit(getIt()));
 
-  
   getIt.registerLazySingleton<NavigationRepo>(() => NavigationRepo(getIt()));
   getIt.registerFactory<NavigationCubit>(() => NavigationCubit(getIt()));
+
+  getIt.registerFactory<LocalHadithNavigationCubit>(
+    () => LocalHadithNavigationCubit(getIt()),
+  );
+
+  getIt.registerLazySingleton<SearchWithFiltersRepo>(
+    () => SearchWithFiltersRepo(getIt()),
+  );
+  getIt.registerFactory<SearchWithFiltersCubit>(
+    () => SearchWithFiltersCubit(getIt()),
+  );
+
+  getIt.registerLazySingleton<EnhancedSearchRepo>(
+    () => EnhancedSearchRepo(getIt()),
+  );
+  getIt.registerFactory<EnhancedSearchCubit>(
+    () => EnhancedSearchCubit(getIt()),
+  );
+
+  getIt.registerLazySingleton<UserResponseRepo>(
+    () => UserResponseRepo(getIt()),
+  );
+  getIt.registerFactory<ProfileCubit>(() => ProfileCubit(getIt()));
+
+  getIt.registerLazySingleton<EditProfileRepo>(() => EditProfileRepo(getIt()));
+  getIt.registerFactory<EditProfileCubit>(() => EditProfileCubit(getIt()));
+
+  getIt.registerLazySingleton<HadithAnalysisRepo>(
+    () => HadithAnalysisRepo(getIt()),
+  );
+  getIt.registerFactory<HadithAnalysisCubit>(
+    () => HadithAnalysisCubit(getIt()),
+  );
+
+  getIt.registerLazySingleton<RemainingQuestionsRepo>(
+    () => RemainingQuestionsRepo(getIt()),
+  );
+  getIt.registerFactory<RemainingQuestionsCubit>(
+    () => RemainingQuestionsCubit(getIt()),
+  );
+
+  getIt.registerLazySingleton<SeragRepo>(() => SeragRepo(getIt()));
+  getIt.registerFactory<SeragCubit>(() => SeragCubit(getIt()));
+
+
+  
 }

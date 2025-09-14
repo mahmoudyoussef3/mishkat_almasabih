@@ -10,7 +10,6 @@ class BuildSignupHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // App Logo
         Container(
           width: 80.w,
           height: 80.w,

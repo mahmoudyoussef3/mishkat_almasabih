@@ -85,12 +85,10 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         emit(currentState.copyWith(filteredAhadith: filtered));
       }
     } else if (currentState is LocalAhadithsSuccess) {
-      // Handle search for local hadiths
       final normalizedQuery = normalizeArabic(query);
       final hadithsList = currentState.localHadithResponse.hadiths?.data ?? [];
 
       if (normalizedQuery.isEmpty) {
-        // Return all hadiths (you might need to store original list in state)
         emit(currentState);
       } else {
         final filtered =
@@ -102,15 +100,13 @@ class AhadithsCubit extends Cubit<AhadithsState> {
                 )
                 .toList();
 
-        // You might need to create a new state with filtered results
-        // This depends on your LocalAhadithsSuccess state structure
+
         emit(currentState);
       }
     }
   }
 
   String normalizeArabic(String text) {
-    // 1. شيل التشكيل (كل الحركات + التنوين + السكون + الشدة)
     final diacritics = RegExp(r'[\u0617-\u061A\u064B-\u0652]');
     String result = text.replaceAll(diacritics, '');
 

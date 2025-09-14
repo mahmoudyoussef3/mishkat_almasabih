@@ -1,5 +1,10 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
@@ -9,6 +14,7 @@ import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_attrib
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tab_content.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
 class HadithDailyScreen extends StatefulWidget {
   const HadithDailyScreen({super.key, required this.dailyHadithModel});
@@ -28,14 +34,37 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
+           floatingActionButton: FloatingActionButton(
+            onPressed:
+                () => context.pushNamed(
+                  Routes.serag,
+                  arguments: SeragRequestModel(
+                    hadith: Hadith(
+                      hadeeth: widget.dailyHadithModel.data?.hadith ?? '',
+                      grade_ar: widget.dailyHadithModel.data?.grade ?? '',
+                      source:   '',
+                      takhrij_ar: widget.dailyHadithModel.data?.attribution ?? '',
+                    ),
+                    messages: [Message(role: 'user', content: '')],
+                  ),
+                ),
+            backgroundColor: ColorsManager.primaryPurple,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+            elevation: 10,
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/images/serag_logo.jpg'),
+            )
+          ),
         backgroundColor: ColorsManager.primaryBackground,
         body: CustomScrollView(
           slivers: [
-            const BuildHeaderAppBar(
+             BuildHeaderAppBar(
               title: 'حديث اليوم',
               description: 'نص حديث نبوي شريف مع شرحه',
             ),
-    
+
             SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
             SliverToBoxAdapter(
@@ -66,9 +95,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                         SizedBox(height: 5.h),
                       ],
                     ),
-                   HadithAttributionAndGrade(
-                        data: widget.dailyHadithModel,
-                      ),
+                    HadithAttributionAndGrade(data: widget.dailyHadithModel),
                     Column(
                       children: [
                         SizedBox(height: 5.h),
@@ -224,8 +251,17 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           width: 1,
         ),
       ),
-      child:           HadithActionsRow(hadith: widget.dailyHadithModel.data?.hadith ?? ""),
-
+      child: HadithActionsRow(
+        author: widget.dailyHadithModel.data?.attribution ?? "",
+        authorDeath: '',
+        grade: widget.dailyHadithModel.data?.grade ?? '',
+        chapter: "",
+        bookSlug: "",
+        hadithNumber: "",
+        id: (Random().nextInt(10000000) + 1).toString(),
+        bookName:'',
+        hadith: widget.dailyHadithModel.data?.hadith ?? "",
+      ),
     );
   }
 }

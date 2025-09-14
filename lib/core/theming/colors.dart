@@ -12,18 +12,13 @@ import 'package:flutter/material.dart';
 /// All colors are designed to work together harmoniously and provide
 /// excellent contrast for accessibility.
 class ColorsManager {
-  // ==================== PRIMARY ISLAMIC COLORS ====================
 
-  /// Main brand color - Islamic purple
-  /// Used for primary actions, headers, and main UI elements
   static const Color primaryPurple = Color(0xFF7440E9);
 
-  /// Light purple variation for gradients and secondary elements
-  /// Used in combination with primaryPurple for depth
+
   static const Color secondaryPurple = Color(0xFF9D7BF0);
 
-  /// Islamic gold for decorative elements and highlights
-  /// Used for accents, icons, and special UI elements
+
   static const Color primaryGold = Color(0xFFFFB300);
 
   // ==================== SECONDARY COLOR VARIATIONS ====================

@@ -9,11 +9,13 @@ class SearchBarWidget extends StatelessWidget {
   final TextEditingController controller;
   final Function(String) onSearch;
   final String? hintText;
+  final VoidCallback? onTap;
 
   const SearchBarWidget({
     super.key,
     required this.controller,
     required this.onSearch,
+    this.onTap,
     this.hintText,
   });
 
@@ -32,6 +34,7 @@ class SearchBarWidget extends StatelessWidget {
         ],
       ),
       child: TextField(
+        onTap:onTap,
         controller: controller,
         onSubmitted: onSearch,
         decoration: InputDecoration(

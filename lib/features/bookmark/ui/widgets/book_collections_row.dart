@@ -17,35 +17,10 @@ class BookmarkCollectionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<
-      GetCollectionsBookmarkCubit,
-      GetCollectionsBookmarkState
-    >(
+    return BlocBuilder<GetCollectionsBookmarkCubit, GetCollectionsBookmarkState>(
       builder: (context, state) {
         if (state is GetCollectionsBookmarkLoading) {
-          /// 🔹 Shimmer effect while loading
-          return SizedBox(
-            height: 50.h,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              itemCount: 5,
-              separatorBuilder: (_, __) => SizedBox(width: 10.w),
-              itemBuilder:
-                  (_, __) => Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: Container(
-                      width: 80.w,
-                      height: 36.h,
-                      decoration: BoxDecoration(
-                        color: ColorsManager.lightGray,
-                        borderRadius: BorderRadius.circular(22.r),
-                      ),
-                    ),
-                  ),
-            ),
-          );
+          return _buildLoadingShimmer();
         } else if (state is GetCollectionsBookmarkSuccess) {
           final collections = state.collectionsResponse.collections;
           final allCollections = [
@@ -54,65 +29,97 @@ class BookmarkCollectionsRow extends StatelessWidget {
           ];
 
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w),
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 6.h),
               decoration: BoxDecoration(
                 color: ColorsManager.secondaryBackground,
-                borderRadius: BorderRadius.circular(14.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 6,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-                border: Border.all(color: ColorsManager.primaryGreen, width: 1),
+                borderRadius: BorderRadius.circular(16.r),
               ),
-              height: 56.h,
-              child: ListView.separated(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 12.w),
-                itemCount: allCollections.length,
-                separatorBuilder: (_, __) => SizedBox(width: 12.w),
-                itemBuilder: (context, index) {
-                  final c = allCollections[index];
-                  final isSelected = selectedCollection == c;
+              child: SizedBox(
+                height: 50.h,
+                child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  itemCount: allCollections.length,
+                  separatorBuilder: (_, __) => SizedBox(width: 8.w),
+                  itemBuilder: (context, index) {
+                    final c = allCollections[index];
+                    final isSelected = selectedCollection == c;
 
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                    child: ChoiceChip(
-                      showCheckmark: false,
-                      label: Text(
-                        c ?? "",
-                        style: TextStyle(
-                          color:
-                              isSelected
+                    return InkWell(
+                      borderRadius: BorderRadius.circular(16.r),
+                      onTap: () => onCollectionSelected(c),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 20.w,
+                          vertical: 10.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? ColorsManager.primaryPurple
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(16.r),
+                          border: Border.all(
+                            color: isSelected
+                                ? ColorsManager.primaryPurple
+                                : ColorsManager.mediumGray.withOpacity(0.35),
+                            width: 1,
+                          ),
+                        
+                        ),
+                        child: Center(
+                          child: Text(
+                            c,
+                            style: TextStyle(
+                              color: isSelected
                                   ? Colors.white
                                   : ColorsManager.primaryText,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 14.sp,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                              fontSize: 14.sp,
+                            ),
+                          ),
                         ),
                       ),
-                      selected: isSelected,
-                      selectedColor: ColorsManager.primaryPurple,
-                      backgroundColor: ColorsManager.lightGray.withOpacity(0.6),
-                      pressElevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(22.r),
-                      ),
-                      onSelected: (_) => onCollectionSelected(c),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
           );
         }
         return const SizedBox.shrink();
       },
+    );
+  }
+
+  /// shimmer أثناء التحميل
+  Widget _buildLoadingShimmer() {
+    return SizedBox(
+      height: 50.h,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        itemCount: 5,
+        separatorBuilder: (_, __) => SizedBox(width: 10.w),
+        itemBuilder: (_, __) => Shimmer.fromColors(
+          baseColor: Colors.grey.shade300,
+          highlightColor: Colors.grey.shade100,
+          child: Container(
+            width: 90.w,
+            height: 34.h,
+            decoration: BoxDecoration(
+              color: ColorsManager.lightGray,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

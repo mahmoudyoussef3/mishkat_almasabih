@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theming/colors.dart';
 import '../../../../../core/widgets/app_text_form_field.dart';
-import '../../../login/ui/widgets/password_validations.dart';
 import '../../logic/signup_cubit.dart';
 
 class SignupForm extends StatefulWidget {
@@ -33,7 +32,6 @@ class _SignupFormState extends State<SignupForm> {
       key: context.read<SignupCubit>().formKey,
       child: Column(
         children: [
-          // Full Name Field
           AppTextFormField(
                 controller: signupCubit.userNameController,
 
@@ -60,7 +58,6 @@ class _SignupFormState extends State<SignupForm> {
 
           SizedBox(height: 16.h),
 
-          // Email Field
           AppTextFormField(
                 hintStyle: TextStyle(color: Colors.black),
 
@@ -89,7 +86,6 @@ class _SignupFormState extends State<SignupForm> {
 
           SizedBox(height: 16.h),
 
-          // Password Field
           AppTextFormField(
                 hintStyle: TextStyle(color: Colors.black),
 
@@ -126,7 +122,6 @@ class _SignupFormState extends State<SignupForm> {
 
           SizedBox(height: 16.h),
 
-          // Confirm Password Field
           AppTextFormField(
                 hintStyle: TextStyle(color: Colors.black),
 

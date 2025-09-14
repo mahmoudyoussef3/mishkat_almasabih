@@ -3,9 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class SectionCard extends StatelessWidget {
-  final String title;
   final Widget child;
-  const SectionCard({super.key, required this.title, required this.child});
+  const SectionCard({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -25,21 +24,7 @@ class SectionCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: ColorsManager.primaryPurple,
-              ),
-            ),
-            SizedBox(height: 12.h),
-            child,
-          ],
-        ),
+        child: child,
       ),
     );
   }
