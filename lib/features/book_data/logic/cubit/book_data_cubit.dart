@@ -16,7 +16,7 @@ class BookDataCubit extends Cubit<BookDataState> {
     result.fold((l) {
 
 
-      emit(BookDataFailure(l.apiErrorModel.msg!));
+      emit(BookDataFailure(l.apiErrorModel.msg??'حدث خطأ '));
     }, (r) => emit(BookDataSuccess(r)));
   }
 }

@@ -60,6 +60,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   bool prev = false;
   bool isNavigated = false;
   String newTextOfHadith = '';
+
   String newHadithId = '';
   late String _currentHadithId;
   bool _hasPrev = true;
@@ -84,9 +85,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         BlocProvider(
           create: (context) => getIt<HadithAnalysisCubit>()
             ..analyzeHadith(
-              hadith: widget.hadithText ?? '',
+              hadith:newTextOfHadith.isEmpty ? widget.hadithText??'':newTextOfHadith,
               attribution: widget.author ?? '',
-              grade: widget.grade ?? '',
+                            grade: widget.grade??'',
+
               reference: widget.bookName ?? '',
             ),
         ),
@@ -159,8 +161,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               SliverToBoxAdapter(child: SizedBox(height: 20.h)),
               HadithAnalysis(
                 attribution: widget.narrator ?? '',
-                hadith: widget.hadithText ?? '',
-                grade: widget.grade ?? '',
+                hadith: newTextOfHadith ,
+                grade: widget.grade??'',
                 reference: widget.bookName ?? '',
               ),
 
@@ -171,7 +173,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: HadithGradeTile(
-                      grade: widget.grade!,
+                      grade:widget.grade??'',
                       onTap: () {
                         Clipboard.setData(
                           ClipboardData(text: widget.hadithText ?? ''),
