@@ -163,7 +163,9 @@ class AppRouter {
                   ),
 
                   BlocProvider(create: (context) => getIt<SeragCubit>()),
-                  BlocProvider(create: (context) => ChatHistoryCubit()),
+                  BlocProvider(
+                    create: (context) => ChatHistoryCubit()..clearMessages(),
+                  ),
                 ],
                 child: SeragChatScreen(model: query),
               ),

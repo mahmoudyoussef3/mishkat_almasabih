@@ -3,13 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_state.dart';
 import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
-import 'package:mishkat_almasabih/features/serag/ui/widgets/remaining_questions_card.dart';
 
 class ChatInputSection extends StatelessWidget {
   final TextEditingController controller;
