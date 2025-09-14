@@ -50,6 +50,7 @@ class BottomNavigationWidget extends StatelessWidget {
         ],
       ),
       child: SafeArea(
+top: false,
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: Spacing.md,

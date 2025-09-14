@@ -100,22 +100,34 @@ class BookmarkCollectionsRow extends StatelessWidget {
 
   /// shimmer أثناء التحميل
   Widget _buildLoadingShimmer() {
-    return SizedBox(
-      height: 50.h,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        itemCount: 5,
-        separatorBuilder: (_, __) => SizedBox(width: 10.w),
-        itemBuilder: (_, __) => Shimmer.fromColors(
-          baseColor: Colors.grey.shade300,
-          highlightColor: Colors.grey.shade100,
-          child: Container(
-            width: 90.w,
-            height: 34.h,
-            decoration: BoxDecoration(
-              color: ColorsManager.lightGray,
-              borderRadius: BorderRadius.circular(16.r),
+    return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 6.h),
+
+               decoration: BoxDecoration(
+                color: ColorsManager.secondaryBackground,
+                borderRadius: BorderRadius.circular(16.r),
+              ),
+        child: SizedBox(
+
+          height: 50.h,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+            itemCount: 5,
+                  separatorBuilder: (_, __) => SizedBox(width: 8.w),
+            itemBuilder: (_, __) => Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                width: 90.w,
+                height: 34.h,
+                decoration: BoxDecoration(
+                  color: ColorsManager.lightGray,
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
+              ),
             ),
           ),
         ),

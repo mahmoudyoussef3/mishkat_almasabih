@@ -150,6 +150,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
           ),
         ),
         child: SafeArea(
+          top: false,
+
           child: Column(
             children: [
               _buildHeader(),

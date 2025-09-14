@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.2.5
   image_picker: ^1.0.7
   fluttertoast: ^8.2.12
+  solid_lints: ^0.3.1
 
 dev_dependencies:
   flutter_test:

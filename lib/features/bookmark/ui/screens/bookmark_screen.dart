@@ -19,6 +19,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
+      top: false,
+
       child: DoubleTapToExitApp(
         myScaffoldScreen: Directionality(
           textDirection: TextDirection.rtl,

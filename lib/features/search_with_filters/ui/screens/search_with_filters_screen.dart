@@ -79,19 +79,25 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
     } else {
       _items.add(historyItem);
     }
-    await HistoryPrefs.saveHistory(_items,HistoryPrefs.filteredSearch);
-    context.read<SearchHistoryCubit>().emitHistorySearch( searchCategory: HistoryPrefs.filteredSearch);
+    await HistoryPrefs.saveHistory(_items, HistoryPrefs.filteredSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch(
+      searchCategory: HistoryPrefs.filteredSearch,
+    );
   }
 
   Future<void> removeItem(int index) async {
     _items.removeAt(index);
-    await HistoryPrefs.saveHistory(_items,HistoryPrefs.filteredSearch);
-    context.read<SearchHistoryCubit>().emitHistorySearch( searchCategory: HistoryPrefs.filteredSearch);
+    await HistoryPrefs.saveHistory(_items, HistoryPrefs.filteredSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch(
+      searchCategory: HistoryPrefs.filteredSearch,
+    );
   }
 
   Future<void> clearAll() async {
     await HistoryPrefs.clearHistory(HistoryPrefs.filteredSearch);
-    context.read<SearchHistoryCubit>().emitHistorySearch( searchCategory: HistoryPrefs.filteredSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch(
+      searchCategory: HistoryPrefs.filteredSearch,
+    );
   }
 
   String formatDateTime(DateTime dateTime) {
@@ -106,9 +112,13 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<SearchHistoryCubit>().emitHistorySearch(searchCategory: HistoryPrefs.filteredSearch);
+    context.read<SearchHistoryCubit>().emitHistorySearch(
+      searchCategory: HistoryPrefs.filteredSearch,
+    );
 
     return SafeArea(
+      top: false,
+
       child: DoubleTapToExitApp(
         myScaffoldScreen: Directionality(
           textDirection: TextDirection.rtl,
@@ -121,7 +131,9 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                   Container(
                     height: 100.h,
                     width: double.infinity,
-                    decoration: BoxDecoration(color: ColorsManager.primaryPurple),
+                    decoration: BoxDecoration(
+                      color: ColorsManager.primaryPurple,
+                    ),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -137,7 +149,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                             ),
                           ),
                         ),
-          
+
                         Center(
                           child: Text(
                             "البحث",
@@ -152,9 +164,9 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                       ],
                     ),
                   ),
-          
+
                   SizedBox(height: 20.h),
-          
+
                   /// Search Bar
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
@@ -172,12 +184,13 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                 time: formatDateTime(now).split(' - ')[0],
                               ),
                             );
-          
+
                             context.pushNamed(
                               Routes.filterResultSearch,
                               arguments: {
                                 'book': booksMap[_selectedBook] ?? '',
-                                'category': categoriesMap[_selectedCategory] ?? '',
+                                'category':
+                                    categoriesMap[_selectedCategory] ?? '',
                                 'chapter': chapterController.text.trim(),
                                 'grade': gradesMap[_selectedAuthenticity] ?? '',
                                 'narrator': narratorController.text.trim(),
@@ -186,9 +199,9 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                             );
                           },
                         ),
-          
+
                         SizedBox(height: 20.h),
-          
+
                         /// Filters Card
                         Container(
                           width: double.infinity,
@@ -208,7 +221,8 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'خيارات البحث',
@@ -244,7 +258,10 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                         Expanded(
                                           child: _buildDropdown(
                                             value: _selectedBook,
-                                            items: ['جميع الكتب', ...booksMap.keys],
+                                            items: [
+                                              'جميع الكتب',
+                                              ...booksMap.keys,
+                                            ],
                                             label: 'اختر الكتاب',
                                             onChanged:
                                                 (val) => setState(
@@ -263,7 +280,9 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                             label: 'درجة الصحة',
                                             onChanged:
                                                 (val) => setState(
-                                                  () => _selectedAuthenticity = val,
+                                                  () =>
+                                                      _selectedAuthenticity =
+                                                          val,
                                                 ),
                                           ),
                                         ),
@@ -287,6 +306,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                       children: [
                                         Expanded(
                                           child: _buildTextField(
+                                            keyboardType: TextInputType.phone,
                                             controller: chapterController,
                                             label: 'رقم الباب',
                                             hint: 'أدخل رقم الباب',
@@ -308,16 +328,16 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                             ],
                           ),
                         ),
-          
+
                         SizedBox(height: 20.h),
-          
+
                         /// Divider
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 12.w),
                           child: buildIslamicSeparator(),
                         ),
                         SizedBox(height: 12.h),
-          
+
                         /// Recent Searches Header
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -346,14 +366,16 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                       ],
                     ),
                   ),
-          
+
                   /// Recent Searches List
                   BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
                     builder: (context, state) {
                       if (state is SearchHistoryLoading) {
                         return const HistoryShimmer();
                       } else if (state is SearchHistoryError) {
-                        return const Center(child: Text("خطأ أثناء تحميل السجل"));
+                        return const Center(
+                          child: Text("خطأ أثناء تحميل السجل"),
+                        );
                       } else if (state is SearchHistorySuccess) {
                         _items = List.from(state.hisoryItems);
                         return _items.isNotEmpty
@@ -437,6 +459,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
     required TextEditingController controller,
     required String label,
     required String hint,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -450,6 +473,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
         ),
         SizedBox(height: 6.h),
         TextField(
+          keyboardType: keyboardType,
           controller: controller,
           decoration: InputDecoration(
             hintText: hint,

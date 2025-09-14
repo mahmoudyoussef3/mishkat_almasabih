@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
@@ -14,7 +15,7 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(
       foregroundColor: ColorsManager.secondaryBackground,
-      expandedHeight: 180,
+      expandedHeight: 200.h,
       pinned: true,
       backgroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
@@ -33,21 +34,15 @@ class ProfileHeader extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
+                
                 CircleAvatar(
-                  radius: 32,
+                  radius: 46,
                   backgroundColor: Colors.transparent,
                   backgroundImage:
-                      (user.avatarUrl?.isNotEmpty ?? false)
-                          ? NetworkImage(user.avatarUrl!)
-                          : null,
-                  child:
-                      (user.avatarUrl?.isEmpty ?? true)
-                          ? const Icon(
-                            Icons.person,
-                            size: 60,
-                            color: ColorsManager.secondaryBackground,
-                          )
-                          : null,
+                       NetworkImage(getAvatarUrl(user))
+                      
+             
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -90,4 +85,23 @@ class ProfileHeader extends StatelessWidget {
       ],
     );
   }
+  String getAvatarUrl(UserResponseModel? user) {
+  const String defaultAvatar = "https://api.hadith-shareef.com/api/uploads/avatars/default-avatar.jpg"; 
+  if (user == null) {
+    return defaultAvatar;
+  }
+
+  final String? url = user.avatarUrl; 
+
+  if (url != null && url.isNotEmpty) {
+    if (url.startsWith("http")) {
+      return url; 
+    } else if (url.startsWith("/uploads/avatars")) {
+      final String baseUrl = "https://api.hadith-shareef.com/";
+      return '$baseUrl/api$url';
+    }
+  }
+
+  return defaultAvatar;
+}
 }

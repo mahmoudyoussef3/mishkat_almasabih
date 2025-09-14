@@ -91,12 +91,13 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    /*
                     if (data?.title != null)
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
                         child: HadithTitle(title: data!.title!),
                       ),
-
+*/
                     if (data?.hadith != null)
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),

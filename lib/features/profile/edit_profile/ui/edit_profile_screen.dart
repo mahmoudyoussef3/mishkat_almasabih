@@ -77,6 +77,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
           child: SafeArea(
+            top: false,
+
             child: BlocConsumer<EditProfileCubit, EditProfileState>(
               listener: (context, state) {
                 if (state is EditProfileSuccess) {
@@ -132,7 +134,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       // ===== Avatar Section =====
                       AvatarSection(
                         selectedImageFile: _selectedImageFile,
-                        avatarUrl: widget.userData.avatarUrl,
+                        avatarUrl:getAvatarUrl(widget.userData),
                         onPickImage: _pickImage,
                       ),
                       SizedBox(height: 32.h),
@@ -201,6 +203,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
   }
+      String getAvatarUrl(UserResponseModel? user) {
+  const String defaultAvatar = "https://api.hadith-shareef.com/api/uploads/avatars/default-avatar.jpg"; 
+  if (user == null) {
+    return defaultAvatar;
+  }
+
+  final String? url = user.avatarUrl; 
+
+  if (url != null && url.isNotEmpty) {
+    if (url.startsWith("http")) {
+      return url; 
+    } else if (url.startsWith("/uploads/avatars")) {
+      final String baseUrl = "https://api.hadith-shareef.com/";
+      return '$baseUrl/api$url';
+    }
+  }
+
+  return defaultAvatar;
+}
 }
 
 class AvatarSection extends StatelessWidget {
@@ -396,4 +417,5 @@ class InfoCard extends StatelessWidget {
       ],
     );
   }
+
 }

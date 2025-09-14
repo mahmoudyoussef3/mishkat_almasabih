@@ -21,6 +21,8 @@ class SignupScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: ColorsManager.white,
         body: SafeArea(
+          top: false,
+
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
             child: Column(

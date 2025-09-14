@@ -82,6 +82,9 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
         child: SafeArea(
+
+          top: false,
+
           child: Column(
             children: [
               Expanded(

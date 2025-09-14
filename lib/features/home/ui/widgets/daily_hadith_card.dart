@@ -91,7 +91,7 @@ class HadithOfTheDayCard extends StatelessWidget {
 
                         Flexible(
                           child: Text(
-                            state.dailyHadithModel.data?.title ?? "حديث اليوم",
+                            state.dailyHadithModel.data?.hadith ?? "حديث اليوم",
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.start,
