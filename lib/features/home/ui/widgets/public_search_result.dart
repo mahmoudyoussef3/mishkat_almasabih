@@ -51,8 +51,7 @@ class PublicSearchResult extends StatelessWidget {
 
                   return SliverList.separated(
                     itemCount: hadiths.length,
-                    separatorBuilder:
-                        (_, __) => IslamicSeparator(),
+                    separatorBuilder: (_, __) => IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = hadiths[index];
                       return InkWell(
@@ -62,18 +61,14 @@ class PublicSearchResult extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithResultDetails(
-                                    
                                       enhancedHadithModel: hadith,
                                     ),
                               ),
                             ),
 
-                            
                         child: ChapterAhadithCard(
                           number: hadith.id ?? '',
                           bookName: hadith.reference ?? '',
-                          
-                        
 
                           text: hadith.hadeeth ?? '',
                           narrator: hadith.attribution ?? '',

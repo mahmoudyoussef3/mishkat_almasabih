@@ -16,7 +16,6 @@ import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dar
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/empty_history.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
@@ -95,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-top: false,
+      top: false,
       child: DoubleTapToExitApp(
         myScaffoldScreen: Directionality(
           textDirection: TextDirection.rtl,
@@ -262,7 +261,7 @@ top: false,
   }
 
   Widget _buildHeaderSection() {
-    return  BuildHeaderAppBar(
+    return BuildHeaderAppBar(
       home: true,
       title: 'مشكاة المصابيح',
       description: 'مكتبة مشكاة الإسلامية',
@@ -315,8 +314,6 @@ top: false,
       ),
     );
   }
-
- 
 
   // ==================== COMPONENT BUILDERS ====================
 
@@ -393,9 +390,7 @@ top: false,
         _buildStatisticsCard(
           icon: Icons.book,
           title: 'إجمالي الكتب',
-          value:
-          
-           state.statisticsResponse.statistics.totalBooks.toString(),
+          value: state.statisticsResponse.statistics.totalBooks.toString(),
           color: const Color.fromARGB(255, 51, 13, 128),
         ),
         SizedBox(width: Spacing.md),

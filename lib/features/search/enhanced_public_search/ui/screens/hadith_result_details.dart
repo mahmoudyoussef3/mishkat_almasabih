@@ -37,53 +37,51 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-              floatingActionButton: Builder(
-          builder: (context) {
-            return FloatingActionButton.extended(
-              onPressed: () {
-                context.pushNamed(
-                  Routes.serag,
-                  arguments: SeragRequestModel(
-                    hadith: Hadith(
-                      hadeeth: widget.enhancedHadithModel.hadeeth ?? '',
-                      grade_ar: widget.enhancedHadithModel.grade ?? '',
-                      source:widget.enhancedHadithModel.reference??"",
-                      takhrij_ar:
-                          widget.enhancedHadithModel.attribution ?? '',
+          floatingActionButton: Builder(
+            builder: (context) {
+              return FloatingActionButton.extended(
+                onPressed: () {
+                  context.pushNamed(
+                    Routes.serag,
+                    arguments: SeragRequestModel(
+                      hadith: Hadith(
+                        hadeeth: widget.enhancedHadithModel.hadeeth ?? '',
+                        grade_ar: widget.enhancedHadithModel.grade ?? '',
+                        source: widget.enhancedHadithModel.reference ?? "",
+                        takhrij_ar:
+                            widget.enhancedHadithModel.attribution ?? '',
+                      ),
+                      messages: [Message(role: 'user', content: '')],
                     ),
-                    messages: [Message(role: 'user', content: '')],
+                  );
+                },
+                backgroundColor: ColorsManager.primaryPurple,
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                icon: CircleAvatar(
+                  radius: 20.r,
+                  backgroundImage: const AssetImage(
+                    'assets/images/serag_logo.jpg',
                   ),
-                );
-              },
-              backgroundColor: ColorsManager.primaryPurple,
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              icon: CircleAvatar(
-                radius: 20.r,
-                backgroundImage: const AssetImage(
-                  'assets/images/serag_logo.jpg',
+                  backgroundColor: Colors.transparent,
                 ),
-                backgroundColor: Colors.transparent,
-              ),
-              label: Text(
-                "اسأل سراج",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorsManager.secondaryBackground,
+                label: Text(
+                  "اسأل سراج",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorsManager.secondaryBackground,
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          ),
           backgroundColor: ColorsManager.primaryBackground,
           body: CustomScrollView(
             slivers: [
-               BuildHeaderAppBar(
-                title: 'معلومات عن الحديث',
-              ),
+              BuildHeaderAppBar(title: 'معلومات عن الحديث'),
 
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
@@ -93,12 +91,13 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      /*
                       if (data.title != null)
                         Container(
                           margin: EdgeInsets.only(bottom: 10.h),
                           child: HadithTitle(title: data.title!),
                         ),
-
+                        */
                       if (data.hadeeth != null)
                         Container(
                           margin: EdgeInsets.only(bottom: 10.h),
@@ -176,8 +175,6 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
     );
   }
 
-
-
   Widget _buildEnhancedTabsSection() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
@@ -224,7 +221,7 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
         author: widget.enhancedHadithModel.attribution ?? "",
         authorDeath: 'غير معروف',
         grade: widget.enhancedHadithModel.grade ?? '',
-isBookmarked: false,
+        isBookmarked: false,
         chapter: "",
         bookSlug: "",
         hadithNumber: widget.enhancedHadithModel.id ?? "",
