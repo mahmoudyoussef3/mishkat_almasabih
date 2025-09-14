@@ -51,7 +51,7 @@ class MishkatAlmasabih extends StatelessWidget {
             useMaterial3: true, // إضافة Material 3
           ),
           debugShowCheckedModeBanner: false,
-          initialRoute: startScreen,
+          initialRoute: Routes.onBoardingScreen,
           onGenerateRoute: appRouter.generateRoute,
           
           // إضافة error handling

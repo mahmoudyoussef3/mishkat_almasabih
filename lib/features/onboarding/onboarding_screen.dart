@@ -26,50 +26,48 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   static const Color deepPurple = Color(0xFF5A2FC2);
   static const Color accentPurple = Color(0xFFB794FF);
 
-  final List<OnboardingPage> _onboardingPages = [
-    OnboardingPage(
-      title: 'مرحباً بك في مشكاة المصابيح',
-      subtitle: 'كنوز السنة النبوية في يديك',
-      description:
-          'استكشف أعظم كتب الحديث الشريف مع واجهة عربية جميلة وتصميم عصري يجمع بين الأصالة والحداثة',
-      imageUrl:
-          'assets/images/first_onboardin.jpeg',
-      icon: Icons.auto_stories_outlined,
-      gradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        colors: [primaryPurple, lightPurple],
-      ),
+final List<OnboardingPage> _onboardingPages = [
+  OnboardingPage(
+    title: 'مشكاة المصابيح',
+    subtitle: 'مكتبة حديثية بين يديك',
+    description:
+        'استكشف 17 كتاباً من أمهات كتب الحديث مثل صحيح البخاري، مسلم، أبي داود، الترمذي، النسائي، وابن ماجه، والمزيد.',
+    imageUrl: 'assets/images/first_onboardin.jpeg',
+    icon: Icons.auto_stories_outlined,
+    gradient: LinearGradient(
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      colors: [primaryPurple, lightPurple],
     ),
-    OnboardingPage(
-      title: 'مكتبة شاملة من كتب الحديث',
-      subtitle: '17 كتاباً من أمهات المصادر',
-      description:
-          'صحيح البخاري، صحيح مسلم، سنن أبي داود، الترمذي، النسائي، ابن ماجه، والمزيد من كتب الحديث المعتمدة',
-      imageUrl:
-          'assets/images/first_onboardin.jpeg',
-      icon: Icons.library_books_outlined,
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [lightPurple, accentPurple],
-      ),
+  ),
+  OnboardingPage(
+    title: 'سراج - مساعدك الذكي',
+    subtitle: 'شرح فوري مدعوم بالذكاء الاصطناعي',
+    description:
+        'اقرأ الحديث واحصل على شرح سريع ومبسط، واسأل "سراج" عن أي تفاصيل إضافية لفهم النصوص بعمق.',
+    imageUrl: 'assets/images/serag_logo.jpg',
+    icon: Icons.smart_toy_outlined,
+   gradient: LinearGradient(
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      colors: [primaryPurple, lightPurple],
     ),
-    OnboardingPage(
-      title: 'بحث متقدم وتصفح ذكي',
-      subtitle: 'العثور على أي حديث في ثوانٍ',
-      description:
-          'ابحث في نصوص الأحاديث، أسماء الرواة، الأبواب، والكتب مع خيارات فلترة متقدمة ونتائج دقيقة',
-      imageUrl:
-          'assets/images/first_onboardin.jpeg',
-      icon: Icons.search_outlined,
-      gradient: LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [deepPurple, primaryPurple],
-      ),
+  ),
+  OnboardingPage(
+    title: 'بحث متقدم',
+    subtitle: 'العثور على أي حديث بسهولة',
+    description:
+        'ابحث في نصوص الأحاديث، أسماء الرواة، الأبواب والكتب مع نتائج دقيقة وخيارات فلترة ذكية.',
+    imageUrl:
+        'assets/images/search_logo.jpg',
+    icon: Icons.search_outlined,
+   gradient: LinearGradient(
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      colors: [primaryPurple, lightPurple],
     ),
-  ];
+  ),
+];
 
   @override
   void initState() {
@@ -114,8 +112,8 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     }
   }
 
-  void _getStarted()async {
-      await SaveDataForFirstTime.setNotFirstTime();
+  void _getStarted() async {
+    await SaveDataForFirstTime.setNotFirstTime();
 
     context.pushNamed(Routes.loginScreen);
   }
@@ -132,43 +130,44 @@ class _OnboardingScreenState extends State<OnboardingScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              _onboardingPages[_currentPage].gradient.colors.first.withOpacity(
-                0.08,
-              ),
-              Colors.white,
-              _onboardingPages[_currentPage].gradient.colors.last.withOpacity(
-                0.03,
-              ),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          top: false,
-
-          child: Column(
-            children: [
-              _buildHeader(),
-
-              Expanded(
-                child: PageView.builder(
-                  controller: _pageController,
-                  onPageChanged: _onPageChanged,
-                  itemCount: _onboardingPages.length,
-                  itemBuilder: (context, index) {
-                    return _buildOnboardingPage(_onboardingPages[index]);
-                  },
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                _onboardingPages[_currentPage].gradient.colors.first
+                    .withOpacity(0.08),
+                Colors.white,
+                _onboardingPages[_currentPage].gradient.colors.last.withOpacity(
+                  0.03,
                 ),
-              ),
+              ],
+            ),
+          ),
+          child: SafeArea(
+            top: false,
 
-              _buildBottomNavigation(),
-            ],
+            child: Column(
+              children: [
+                _buildHeader(),
+
+                Expanded(
+                  child: PageView.builder(
+                    controller: _pageController,
+                    onPageChanged: _onPageChanged,
+                    itemCount: _onboardingPages.length,
+                    itemBuilder: (context, index) {
+                      return _buildOnboardingPage(_onboardingPages[index]);
+                    },
+                  ),
+                ),
+
+                _buildBottomNavigation(),
+              ],
+            ),
           ),
         ),
       ),
@@ -242,39 +241,29 @@ class _OnboardingScreenState extends State<OnboardingScreen>
     );
   }
 
-  Widget _buildOnboardingPage(OnboardingPage page) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return FadeTransition(
-          opacity: _fadeAnimation,
-          child: SlideTransition(
-            position: _slideAnimation,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                return SingleChildScrollView(
-                  physics: const ClampingScrollPhysics(),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(height: 20.h),
-                        _buildImageSection(page),
-                        SizedBox(height: 24.h),
-                        _buildTextContent(page),
-                        SizedBox(height: 20.h),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+Widget _buildOnboardingPage(OnboardingPage page) {
+  return LayoutBuilder(
+    builder: (context, constraints) {
+      return SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 20.h),
+              _buildImageSection(page),
+              SizedBox(height: 24.h),
+              _buildTextContent(page),
+              SizedBox(height: 20.h),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
+
 
   Widget _buildImageSection(OnboardingPage page) {
     return Stack(
@@ -303,7 +292,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               gradient: page.gradient,
-              //     opacity: 0.15,
+//opacity: 0.15,
             ),
           ),
         ),
@@ -328,16 +317,13 @@ class _OnboardingScreenState extends State<OnboardingScreen>
               children: [
                 // Pattern overlay
                 Positioned.fill(
-                  child: Opacity(
-                    opacity: 0.03,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDQwQzMxLjA0NTcgNDAgNDAgMzEuMDQ1NyA0MCAyMEM0MCA4Ljk1NDMgMzEuMDQ1NyAwIDIwIDBDOC45NTQzIDAgMCA4Ljk1NDMgMCAyMEMwIDMxLjA0NTcgOC45NTQzIDQwIDIwIDQwWiIgZmlsbD0iIzc0NDAlOSIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+Cjwvc3ZnPgo=',
-                          ),
-                          repeat: ImageRepeat.repeat,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDQwQzMxLjA0NTcgNDAgNDAgMzEuMDQ1NyA0MCAyMEM0MCA4Ljk1NDMgMzEuMDQ1NyAwIDIwIDBDOC45NTQzIDAgMCA4Ljk1NDMgMCAyMEMwIDMxLjA0NTcgOC45NTQzIDQwIDIwIDQwWiIgZmlsbD0iIzc0NDAlOSIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+Cjwvc3ZnPgo=',
                         ),
+                        repeat: ImageRepeat.repeat,
                       ),
                     ),
                   ),
@@ -376,7 +362,10 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                 //    height: double.infinity,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage(page.imageUrl),
+                                    image:
+                                        page.imageUrl.contains('https')
+                                            ? NetworkImage(page.imageUrl)
+                                            : AssetImage(page.imageUrl),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
