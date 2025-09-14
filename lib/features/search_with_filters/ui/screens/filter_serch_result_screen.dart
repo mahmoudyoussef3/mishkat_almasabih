@@ -62,8 +62,9 @@ class FilterSerchResultScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
+                                    
                                       isBookMark: false,
-                                      showNavigation: true,
+                                      showNavigation: false,
 
                                       isLocal: false,
                                       chapterNumber:

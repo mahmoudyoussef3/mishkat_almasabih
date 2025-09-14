@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/utils/constants.dart';
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
@@ -97,7 +96,7 @@ class ChapterAhadithScreen extends StatelessWidget {
                                           chapter:
                                               hadith.chapter?.chapterArabic ??
                                               '',
-                                          hadithNumber: hadith.id.toString(),
+                                          hadithNumber: hadith.hadithNumber.toString(),
                                         ),
                                   ),
                                 ),

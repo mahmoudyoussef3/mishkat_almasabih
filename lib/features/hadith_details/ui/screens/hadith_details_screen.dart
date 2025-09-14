@@ -19,6 +19,7 @@ import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cub
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
+// ignore: must_be_immutable
 class HadithDetailScreen extends StatefulWidget {
   final String? hadithText;
   final String? narrator;
@@ -60,8 +61,18 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   bool isNavigated = false;
   String newTextOfHadith = '';
   String newHadithId = '';
+  late String _currentHadithId;
+  bool _hasPrev = true;
+  bool _hasNext = true;
+  bool _isNavLoading = false;
 
   bool _isValid(String? text) => text != null && text.trim().isNotEmpty;
+
+  @override
+  void initState() {
+    _currentHadithId = widget.hadithNumber ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,58 +82,57 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         BlocProvider(create: (context) => getIt<NavigationCubit>()),
         BlocProvider(create: (context) => getIt<LocalHadithNavigationCubit>()),
         BlocProvider(
-          create:
-              (context) =>
-                  getIt<HadithAnalysisCubit>()..analyzeHadith(
-                    hadith: widget.hadithText ?? '',
-                    attribution: widget.author ?? '',
-                    grade: widget.grade ?? '',
-                    reference: widget.bookName ?? '',
-                  ),
+          create: (context) => getIt<HadithAnalysisCubit>()
+            ..analyzeHadith(
+              hadith: widget.hadithText ?? '',
+              attribution: widget.author ?? '',
+              grade: widget.grade ?? '',
+              reference: widget.bookName ?? '',
+            ),
         ),
       ],
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: Scaffold(
-   floatingActionButton: Builder(
-  builder: (context) {
-    return FloatingActionButton.extended(
-      onPressed: () {
-        context.pushNamed(
-          Routes.serag,
-          arguments: SeragRequestModel(
-            hadith: Hadith(
-              hadeeth: widget.hadithText ?? '',
-              grade_ar: widget.grade ?? '',
-              source: widget.bookName ?? '',
-              takhrij_ar: widget.narrator ?? '',
-            ),
-            messages: [Message(role: 'user', content: '')],
+          floatingActionButton: Builder(
+            builder: (context) {
+              return FloatingActionButton.extended(
+                onPressed: () {
+                  context.pushNamed(
+                    Routes.serag,
+                    arguments: SeragRequestModel(
+                      hadith: Hadith(
+                        hadeeth: widget.hadithText ?? '',
+                        grade_ar: widget.grade ?? '',
+                        source: widget.bookName ?? '',
+                        takhrij_ar: widget.narrator ?? '',
+                      ),
+                      messages: [Message(role: 'user', content: '')],
+                    ),
+                  );
+                },
+                backgroundColor: ColorsManager.primaryPurple,
+                elevation: 10,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                icon: CircleAvatar(
+                  radius: 20.r,
+                  backgroundImage:
+                      const AssetImage('assets/images/serag_logo.jpg'),
+                  backgroundColor: Colors.transparent,
+                ),
+                label: Text(
+                  "اسأل سراج",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorsManager.secondaryBackground,
+                  ),
+                ),
+              );
+            },
           ),
-        );
-      },
-      backgroundColor: ColorsManager.primaryPurple,
-      elevation: 10,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      icon: CircleAvatar(
-        radius: 20.r, 
-        backgroundImage: const AssetImage('assets/images/serag_logo.jpg'),
-        backgroundColor: Colors.transparent,
-      ),
-      label: Text(
-        "اسأل سراج",
-        style: TextStyle(
-          fontSize: 18.sp,
-          fontWeight: FontWeight.bold,
-          color: ColorsManager.secondaryBackground,
-        ),
-      ),
-    );
-  },
-),
-
           backgroundColor: ColorsManager.secondaryBackground,
           body: CustomScrollView(
             slivers: [
@@ -131,10 +141,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 22.w,
-                      vertical: 16.h,
-                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 22.w, vertical: 16.h),
                     child: _buildHadithHeader(),
                   ),
                 ),
@@ -142,10 +150,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               if (_isValid(widget.hadithText))
                 SliverToBoxAdapter(
                   child: HadithTextCard(
-                    hadithText:
-                        isNavigated
-                            ? newTextOfHadith
-                            : widget.hadithText ?? "الحديث غير متوفر",
+                    hadithText: isNavigated
+                        ? newTextOfHadith
+                        : widget.hadithText ?? "الحديث غير متوفر",
                   ),
                 ),
 
@@ -157,8 +164,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                 reference: widget.bookName ?? '',
               ),
 
-              if (_isValid(widget.grade))
-               _buildDividerSection(),
+              if (_isValid(widget.grade)) _buildDividerSection(),
 
               if (_isValid(widget.grade))
                 SliverToBoxAdapter(
@@ -176,18 +182,14 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                             backgroundColor: ColorsManager.success,
                             content: Row(
                               children: [
-                                Icon(
-                                  Icons.check_circle,
-                                  color: Colors.white,
-                                  size: 20.sp,
-                                ),
+                                Icon(Icons.check_circle,
+                                    color: Colors.white, size: 20.sp),
                                 SizedBox(width: 12.w),
                                 Text(
                                   "تم نسخ الحديث بنجاح",
                                   style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -226,10 +228,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               /// Actions Section
               SliverToBoxAdapter(
                 child: Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                    vertical: 20.h,
-                  ),
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   child: _buildEnhancedActionsSection(),
                 ),
               ),
@@ -238,14 +238,11 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               if (widget.showNavigation && !widget.isBookMark)
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
-                    ),
-                    child:
-                        widget.isLocal
-                            ? _buildLocalNavigation()
-                            : _buildRemoteNavigation(),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                    child: widget.isLocal
+                        ? _buildLocalNavigation()
+                        : _buildRemoteNavigation(),
                   ),
                 ),
 
@@ -276,7 +273,6 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         ),
       ),
       child: HadithActionsRow(
-      
         author: widget.author ?? "",
         authorDeath: widget.authorDeath ?? "",
         grade: widget.grade ?? "",
@@ -284,8 +280,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         bookName: widget.bookName ?? "",
         bookSlug: widget.bookSlug ?? "",
         chapter: widget.chapterNumber,
-        hadithNumber: widget.hadithNumber ?? "",
-        id: widget.hadithNumber ?? "",
+        hadithNumber: _currentHadithId,
+        id: _currentHadithId,
         hadith: widget.hadithText ?? "",
       ),
     );
@@ -301,11 +297,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       ),
       child: Row(
         children: [
-          Icon(
-            Icons.format_quote,
-            color: ColorsManager.primaryGreen,
-            size: 28.sp,
-          ),
+          Icon(Icons.format_quote,
+              color: ColorsManager.primaryGreen, size: 28.sp),
           SizedBox(width: 12.w),
           Expanded(
             child: Column(
@@ -313,9 +306,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               children: [
                 if (_isValid(widget.hadithNumber) || isNavigated)
                   Text(
-                    isNavigated
-                        ? 'حديث رقم $newHadithId'
-                        : 'حديث رقم ${widget.hadithNumber}',
+                    "حديث رقم ${newHadithId.isNotEmpty ? newHadithId : _currentHadithId}",
                     style: TextStyle(
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w600,
@@ -326,8 +317,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                                        Divider(endIndent: 60.w),
-
+                      Divider(endIndent: 60.w),
                       Text(
                         'من ${widget.bookName}',
                         style: TextStyle(
@@ -389,34 +379,42 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         if (state is LocalHadithNavigationSuccess) {
           setState(() {
             isNavigated = true;
-            final hadith =
-                prev
-                    ? state.navigationHadithResponse.prevHadith
-                    : state.navigationHadithResponse.nextHadith;
+            final hadith = prev
+                ? state.navigationHadithResponse.prevHadith
+                : state.navigationHadithResponse.nextHadith;
 
-            newTextOfHadith = hadith?.title ?? "الحديث غير متوفر";
-            newHadithId = hadith?.id.toString() ?? "الحديث غير متوفر";
+            if (hadith != null) {
+              newTextOfHadith = hadith.title ?? "الحديث غير متوفر";
+              newHadithId = hadith.id.toString();
+              _currentHadithId = newHadithId;
+              _hasPrev = state.navigationHadithResponse.prevHadith != null;
+              _hasNext = state.navigationHadithResponse.nextHadith != null;
+            }
           });
         }
       },
       builder: (context, state) {
         return _buildNavigationContainer(
           isLoading: state is NavigationLoading,
-          hadithId: newHadithId,
-          onPrev: () {
-            prev = true;
-            context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
-              widget.hadithNumber ?? "",
-              widget.bookSlug ?? "",
-            );
-          },
-          onNext: () {
-            prev = false;
-            context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
-              widget.hadithNumber ?? "",
-              widget.bookSlug ?? "",
-            );
-          },
+          hadithId: newHadithId.isNotEmpty ? newHadithId : _currentHadithId,
+          onPrev: _hasPrev
+              ? () {
+                  prev = true;
+                  context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
+                        _currentHadithId,
+                        widget.bookSlug ?? "",
+                      );
+                }
+              : null,
+          onNext: _hasNext
+              ? () {
+                  prev = false;
+                  context.read<LocalHadithNavigationCubit>().emitLocalNavigation(
+                        _currentHadithId,
+                        widget.bookSlug ?? "",
+                      );
+                }
+              : null,
         );
       },
     );
@@ -441,36 +439,44 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         if (state is NavigationSuccess) {
           setState(() {
             isNavigated = true;
-            final hadith =
-                prev
-                    ? state.navigationHadithResponse.prevHadith
-                    : state.navigationHadithResponse.nextHadith;
+            final hadith = prev
+                ? state.navigationHadithResponse.prevHadith
+                : state.navigationHadithResponse.nextHadith;
 
-            newTextOfHadith = hadith?.title ?? "الحديث غير متوفر";
-            newHadithId = hadith?.id ?? "الحديث غير متوفر";
+            if (hadith != null) {
+              newTextOfHadith = hadith.title ?? "الحديث غير متوفر";
+              newHadithId = hadith.id!;
+              _currentHadithId = newHadithId;
+              _hasPrev = state.navigationHadithResponse.prevHadith != null;
+              _hasNext = state.navigationHadithResponse.nextHadith != null;
+            }
           });
         }
       },
       builder: (context, state) {
         return _buildNavigationContainer(
           isLoading: state is NavigationLoading,
-          hadithId: newHadithId,
-          onPrev: () {
-            prev = true;
-            context.read<NavigationCubit>().emitNavigationStates(
-              widget.hadithNumber ?? "",
-              widget.bookSlug ?? "",
-              widget.chapterNumber,
-            );
-          },
-          onNext: () {
-            prev = false;
-            context.read<NavigationCubit>().emitNavigationStates(
-              widget.hadithNumber ?? "",
-              widget.bookSlug ?? "",
-              widget.chapterNumber,
-            );
-          },
+          hadithId: newHadithId.isNotEmpty ? newHadithId : _currentHadithId,
+          onPrev: _hasPrev
+              ? () {
+                  prev = true;
+                  context.read<NavigationCubit>().emitNavigationStates(
+                        _currentHadithId,
+                        widget.bookSlug ?? "",
+                        widget.chapterNumber,
+                      );
+                }
+              : null,
+          onNext: _hasNext
+              ? () {
+                  prev = false;
+                  context.read<NavigationCubit>().emitNavigationStates(
+                        _currentHadithId,
+                        widget.bookSlug ?? "",
+                        widget.chapterNumber,
+                      );
+                }
+              : null,
         );
       },
     );
@@ -479,8 +485,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   Widget _buildNavigationContainer({
     required bool isLoading,
     required String hadithId,
-    required VoidCallback onPrev,
-    required VoidCallback onNext,
+    required VoidCallback? onPrev,
+    required VoidCallback? onNext,
   }) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -491,33 +497,38 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(icon: const Icon(Icons.arrow_back_ios), onPressed: onPrev),
+          IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: onPrev,
+            color: onPrev == null ? Colors.grey : ColorsManager.primaryPurple,
+          ),
           isLoading
               ? Row(
-                children: [
-                  loadingProgressIndicator(size: 16),
-                  SizedBox(width: 8.w),
-                  Text(
-                    "جاري التحميل...",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
-                      color: ColorsManager.primaryPurple,
+                  children: [
+                    loadingProgressIndicator(size: 16),
+                    SizedBox(width: 8.w),
+                    Text(
+                      "جاري التحميل...",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: ColorsManager.primaryPurple,
+                      ),
                     ),
-                  ),
-                ],
-              )
+                  ],
+                )
               : Text(
-                "الحديث رقم $hadithId",
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: ColorsManager.primaryPurple,
+                  "الحديث رقم $hadithId",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: ColorsManager.primaryPurple,
+                  ),
                 ),
-              ),
           IconButton(
             icon: const Icon(Icons.arrow_forward_ios),
             onPressed: onNext,
+            color: onNext == null ? Colors.grey : ColorsManager.primaryPurple,
           ),
         ],
       ),
