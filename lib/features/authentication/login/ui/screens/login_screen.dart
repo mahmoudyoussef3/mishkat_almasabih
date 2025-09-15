@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:mishkat_almasabih/features/debug_service/debug_screen.dart';
 import '../../../../../core/theming/colors.dart';
-
 import '../widgets/don`t_have_account_text.dart';
 import '../widgets/email_and_password.dart';
 import '../widgets/login_bloc_listener.dart';
@@ -18,14 +16,7 @@ class LoginScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(onPressed: () {
-         
-   Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const DebugScreen()),
-    );
-
-        },),
+     
         backgroundColor: ColorsManager.white,
         body: SafeArea(
 top: false,
