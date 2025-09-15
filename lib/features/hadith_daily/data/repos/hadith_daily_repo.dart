@@ -10,13 +10,7 @@ class HadithDailyRepo {
   Future<Either<ErrorHandler, DailyHadithModel>> getDailyHadith() async {
     try {
       final response = await _apiService.getDailyHadith();
-      /*
-    EasyNotify.showBasicNotification(
-            body: response.data?.hadith??'...',
-            id: 0,
-            title: 'حديث اليوم',
-          );
-          */
+
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e));

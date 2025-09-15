@@ -96,7 +96,7 @@ Future<void> setUpGetIt() async {
   getIt.registerFactory<PublicSearchCubit>(() => PublicSearchCubit(getIt()));
 
   getIt.registerLazySingleton<HadithDailyRepo>(() => HadithDailyRepo(getIt()));
-  getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit(getIt()));
+  getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit());
 
   getIt.registerLazySingleton<NavigationRepo>(() => NavigationRepo(getIt()));
   getIt.registerFactory<NavigationCubit>(() => NavigationCubit(getIt()));
