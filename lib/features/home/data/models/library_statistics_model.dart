@@ -8,6 +8,10 @@ class StatisticsResponse {
   StatisticsResponse({required this.status, required this.statistics});
   factory StatisticsResponse.fromJson(Map<String, dynamic> json) =>
       _$StatisticsResponseFromJson(json);
+
+        Map<String,dynamic> toJson()=>_$StatisticsResponseToJson(this);
+
+
 }
 
 @JsonSerializable()
@@ -29,6 +33,8 @@ class Statistics {
   });
   factory Statistics.fromJson(Map<String, dynamic> json) =>
       _$StatisticsFromJson(json);
+              Map<String,dynamic> toJson()=>_$StatisticsToJson(this);
+
 }
 
 @JsonSerializable()
@@ -48,6 +54,8 @@ class BooksByCategory {
   });
   factory BooksByCategory.fromJson(Map<String, dynamic> json) =>
       _$BooksByCategoryFromJson(json);
+                    Map<String,dynamic> toJson()=>_$BooksByCategoryToJson(this);
+
 }
 
 @JsonSerializable()
@@ -58,4 +66,6 @@ class TopBook {
 
   TopBook({required this.name, required this.hadiths, required this.chapters});
   factory TopBook.fromJson(Map<String, dynamic> json) => _$TopBookFromJson(json);
+                Map<String,dynamic> toJson()=>_$TopBookToJson(this);
+
 }

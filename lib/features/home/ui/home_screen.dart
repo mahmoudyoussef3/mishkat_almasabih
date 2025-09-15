@@ -31,7 +31,41 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
+// في الـ _HomeScreenState class، حدث الـ methods دي:
 
+/// Initialize all required data on screen load
+Future<void> _initializeScreen() async {
+  await Future.wait([
+    _loadLibraryStatistics(),
+    _loadBooksWithCategories(),
+  ]);
+}
+
+/// Load library statistics and daily hadith
+Future<void> _loadLibraryStatistics() async {
+  await Future.wait([
+    context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit(), // بدون force refresh
+    context.read<DailyHadithCubit>().loadOrFetchHadith(),
+  ]);
+}
+
+/// Load books with categories data
+Future<void> _loadBooksWithCategories() async {
+  await context.read<GetAllBooksWithCategoriesCubit>().emitGetAllBooksWithCategories(); // بدون force refresh
+}
+
+/// Handle refresh functionality (with force refresh)
+Future<void> _onRefresh() async {
+  debugPrint('🔄 Manual refresh triggered');
+  
+  await Future.wait([
+    context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
+    context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit(forceRefresh: true), // مع force refresh
+    context.read<GetAllBooksWithCategoriesCubit>().emitGetAllBooksWithCategories(forceRefresh: true), // مع force refresh
+  ]);
+  
+  debugPrint('✅ Manual refresh completed');
+}
   @override
   void initState() {
     super.initState();
@@ -45,25 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   /// Initialize all required data on screen load
-  Future<void> _initializeScreen() async {
-    await Future.wait([
-      _loadLibraryStatistics(),
-      _loadBooksWithCategories(),
-    ]);
-  }
 
-  /// Load library statistics and daily hadith
-  Future<void> _loadLibraryStatistics() async {
-    await Future.wait([
-      context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit(),
-      context.read<DailyHadithCubit>().loadOrFetchHadith(),
-    ]);
-  }
-
-  /// Load books with categories data
-  Future<void> _loadBooksWithCategories() async {
-    await context.read<GetAllBooksWithCategoriesCubit>().emitGetAllBooksWithCategories();
-  }
 
   /// Handle search functionality
   void _onSearch(String query) {
@@ -95,14 +111,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// Handle refresh functionality
-  Future<void> _onRefresh() async {
-    await Future.wait([
-      context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
-      context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit(),
-      context.read<GetAllBooksWithCategoriesCubit>().emitGetAllBooksWithCategories(),
-    ]);
-  }
 
   @override
   Widget build(BuildContext context) {
