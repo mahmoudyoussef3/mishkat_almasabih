@@ -22,7 +22,7 @@ Future<void> main() async {
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
   await EasyNotify.init();
-  await initializeService();
+ // await initializeService();
 
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');

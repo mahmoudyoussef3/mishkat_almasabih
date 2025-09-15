@@ -31,16 +31,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    _initializeScreen();
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   Future<void> _initializeScreen() async {
     await _loadLibraryStatistics();
@@ -90,6 +81,27 @@ class _HomeScreenState extends State<HomeScreen> {
         "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
     return "$time - $date";
   }
+
+  @override
+  void dispose() {
+    _controller.dispose(); // ✅ release memory
+    super.dispose(); // ✅ always call super.dispose()
+  }
+
+  bool showSearch = true;
+  @override
+void initState() {
+  super.initState();
+      _initializeScreen();
+
+  _controller.addListener(() {
+    if (_controller.text.isEmpty && !showSearch) {
+      setState(() {
+        showSearch = true;
+      });
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -151,28 +163,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                     controller: _controller,
-                    onSearch: (query) {
-                      final trimmedQuery = query.trim();
-                      if (trimmedQuery.isNotEmpty) {
-                        final now = DateTime.now();
-                        final historyItem = HistoryItem(
-                          title: trimmedQuery,
-                          date: "${now.year}-${now.month}-${now.day}",
-                          time:
-                              "${now.hour}:${now.minute.toString().padLeft(2, '0')}",
-                        );
+                  onSearch: (query) {
+  setState(() {
+    showSearch = false; // rebuild UI
+  });
 
-                        context.read<SearchHistoryCubit>().addItem(
-                          historyItem,
-                          searchCategory: HistoryPrefs.enhancedPublicSearch,
-                        );
+  final trimmedQuery = query.trim();
+  if (trimmedQuery.isNotEmpty) {
+    final now = DateTime.now();
+    final historyItem = HistoryItem(
+      title: trimmedQuery,
+      date: "${now.year}-${now.month}-${now.day}",
+      time: "${now.hour}:${now.minute.toString().padLeft(2, '0')}",
+    );
 
-                        context.pushNamed(
-                          Routes.publicSearchSCreen,
-                          arguments: trimmedQuery,
-                        );
-                      }
-                    },
+    context.read<SearchHistoryCubit>().addItem(
+      historyItem,
+      searchCategory: HistoryPrefs.enhancedPublicSearch,
+    );
+
+    context.pushNamed(
+      Routes.publicSearchSCreen,
+      arguments: trimmedQuery,
+    );
+  }
+},
+
                   ),
 
                   BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
@@ -187,57 +203,64 @@ class _HomeScreenState extends State<HomeScreen> {
                         if (state.hisoryItems.isEmpty) {
                           return const SizedBox.shrink();
                         }
-                        return ListView.separated(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: state.hisoryItems.length,
-                          separatorBuilder:
-                              (context, index) => Divider(
-                                endIndent: 30.w,
-                                indent: 30.w,
-                                height: 1.h,
-                                color: Colors.grey[300],
-                              ),
-                          itemBuilder: (context, index) {
-                            final item = state.hisoryItems[index];
-                            return ListTile(
-                              tileColor: Colors.white,
-                              title: Text(
-                                item.title,
-                                style: TextStyles.bodyMedium.copyWith(
-                                  color: ColorsManager.primaryText,
-                                ),
-                              ),
-                              subtitle: Text(
-                                item.date,
-                                style: TextStyles.bodySmall.copyWith(
-                                  color: ColorsManager.secondaryText,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.delete,
-                                  size: 22.r,
-                                  color: ColorsManager.primaryGreen,
-                                ),
-                                onPressed:
-                                    () => context
-                                        .read<SearchHistoryCubit>()
-                                        .removeItem(
-                                          index,
-                                          searchCategory:
-                                              HistoryPrefs.enhancedPublicSearch,
+                        return showSearch
+                            ? SizedBox(
+                              height: 150.h,
+
+                              child: ListView.separated(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                itemCount: state.hisoryItems.length,
+                                separatorBuilder:
+                                    (context, index) => Divider(
+                                      endIndent: 30.w,
+                                      indent: 30.w,
+                                      height: 1.h,
+                                      color: Colors.grey[300],
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final item = state.hisoryItems[index];
+                                  return ListTile(
+                                    tileColor: Colors.white,
+                                    title: Text(
+                                      item.title,
+                                      style: TextStyles.bodyMedium.copyWith(
+                                        color: ColorsManager.primaryText,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      item.date,
+                                      style: TextStyles.bodySmall.copyWith(
+                                        color: ColorsManager.secondaryText,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.delete,
+                                        size: 22.r,
+                                        color: ColorsManager.primaryGreen,
+                                      ),
+                                      onPressed:
+                                          () => context
+                                              .read<SearchHistoryCubit>()
+                                              .removeItem(
+                                                index,
+                                                searchCategory:
+                                                    HistoryPrefs
+                                                        .enhancedPublicSearch,
+                                              ),
+                                    ),
+                                    onTap:
+                                        () => context.pushNamed(
+                                          Routes.publicSearchSCreen,
+                                          arguments: item.title,
                                         ),
+                                  );
+                                },
                               ),
-                              onTap:
-                                  () => context.pushNamed(
-                                    Routes.publicSearchSCreen,
-                                    arguments: item.title,
-                                  ),
-                            );
-                          },
-                        );
+                            )
+                            : SizedBox.shrink();
                       }
                       return const SizedBox.shrink();
                     },
