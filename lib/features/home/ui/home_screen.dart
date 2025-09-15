@@ -11,6 +11,7 @@ import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_main_category_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/daily_hadith_card.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/home_screen_shimmer.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
@@ -39,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadLibraryStatistics() async {
     await context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit();
-    await context.read<DailyHadithCubit>().loadOrFetchHadith();
   }
 
   final List<HistoryItem> _items = [];
@@ -110,16 +110,13 @@ void initState() {
       child: DoubleTapToExitApp(
         myScaffoldScreen: Directionality(
           textDirection: TextDirection.rtl,
-          child: RefreshIndicator(
-            onRefresh:
-                () => context.read<DailyHadithCubit>().fetchAndRefreshHadith(),
-            child: Scaffold(
+          child: Scaffold(
               backgroundColor: ColorsManager.secondaryBackground,
               body: _buildBody(),
             ),
           ),
         ),
-      ),
+      
     );
   }
 
@@ -135,10 +132,13 @@ void initState() {
       },
     );
   }
-
   Widget _buildLoadingState() {
-    return loadingProgressIndicator();
-  }
+  return const Directionality(
+    textDirection: TextDirection.rtl,
+    child: HomeScreenShimmer(),
+  );
+}
+
 
   /// Builds the success state with all content
   Widget _buildSuccessState(GetLivraryStatisticsSuccess state) {
