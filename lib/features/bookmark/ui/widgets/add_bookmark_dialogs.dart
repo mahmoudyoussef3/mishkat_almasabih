@@ -32,11 +32,16 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
   String selectedCollection = "الإفتراضي";
   final TextEditingController notesController = TextEditingController();
 
- @override
-void didChangeDependencies() {
-  super.didChangeDependencies();
-  context.read<GetCollectionsBookmarkCubit>().getBookMarkCollections();
+@override
+void initState() {
+  super.initState();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (mounted) {
+      context.read<GetCollectionsBookmarkCubit>().getBookMarkCollections();
+    }
+  });
 }
+
 
   @override
   Widget build(BuildContext context) {

@@ -30,109 +30,117 @@ class HadithActionsRow extends StatelessWidget {
     required this.hadithNumber,
     required this.id,
     this.isBookmarked = false,
-   required this.author,
-   required this.authorDeath,
-   required this.grade,
+    required this.author,
+    required this.authorDeath,
+    required this.grade,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsetsDirectional.symmetric(
-        horizontal: 16.w,
-        vertical: 16.h,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: ColorsManager.primaryPurple.withOpacity(0.1),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _buildActionButton(
-            icon: Icons.copy,
-            label: "نسخ",
-            onTap: () {
-              Clipboard.setData(ClipboardData(text: hadith));
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  behavior: SnackBarBehavior.floating,
-                  content: Text("تم نسخ الحديث"),
-                ),
-              );
-            },
-          ),
-          _buildActionButton(
-            icon: Icons.share,
-            label: "مشاركة",
-            onTap: () async {
-              await Share.share(hadith, subject: "شارك الحديث");
-            },
-          ),
-          if (!isBookmarked)
-            BlocConsumer<AddCubitCubit, AddCubitState>(
-            listener: (context, state) {
-  if (!context.mounted) return;
-
-  ScaffoldMessenger.of(context).clearSnackBars();
-  if (state is AddLoading) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: ColorsManager.primaryGreen,
-        content: loadingProgressIndicator(size: 30, color: Colors.white),
-      ),
-    );
-  } else if (state is AddSuccess) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.green,
-        content: Text("تم حفظ الحديث"),
-      ),
-    );
-  } else if (state is AddFailure) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.red,
-        content: Text("حدث خطأ. حاول مرة أخرى"),
-      ),
-    );
-  }
-}
-,
-              builder: (context, state) {
-                return _buildActionButton(
-                  icon: Icons.bookmark,
-                  label: "حفظ",
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder:
-                          (_) => MultiBlocProvider(
-                            providers: [
-                              BlocProvider(
-                                create:
-                                    (_) => getIt<GetCollectionsBookmarkCubit>(),
-                              ),
-                              BlocProvider(
-                                create: (_) => getIt<AddCubitCubit>(),
-                              ),
-                            ],
-                            child: AddToFavoritesDialog(
-                              bookName: bookName,
-                              bookSlug: bookSlug,
-                              
-                              chapter: chapter,
-                              hadithNumber: hadithNumber,
-                              hadithText: hadith,
-                              id: id,
-                            ),
-                          ),
-                    );
-                  },
+    return MultiBlocProvider(
+  providers: [
+    BlocProvider(
+      create: (_) => getIt<GetCollectionsBookmarkCubit>()..getBookMarkCollections(),
+    ),
+    BlocProvider(
+      create: (_) => getIt<AddCubitCubit>(),
+    ),
+  ],
+      child: Container(
+        padding: EdgeInsetsDirectional.symmetric(
+          horizontal: 16.w,
+          vertical: 16.h,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: ColorsManager.primaryPurple.withOpacity(0.1),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildActionButton(
+              icon: Icons.copy,
+              label: "نسخ",
+              onTap: () {
+                Clipboard.setData(ClipboardData(text: hadith));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text("تم نسخ الحديث"),
+                  ),
                 );
               },
             ),
-        ],
+            _buildActionButton(
+              icon: Icons.share,
+              label: "مشاركة",
+              onTap: () async {
+                await Share.share(hadith, subject: "شارك الحديث");
+              },
+            ),
+            if (!isBookmarked)
+              BlocConsumer<AddCubitCubit, AddCubitState>(
+                listener: (context, state) {
+                  if (!context.mounted) return;
+
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  if (state is AddLoading) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: ColorsManager.primaryGreen,
+                        content: loadingProgressIndicator(
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  } else if (state is AddSuccess) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.green,
+                        content: Text("تم حفظ الحديث"),
+                      ),
+                    );
+                  } else if (state is AddFailure) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        backgroundColor: Colors.red,
+                        content: Text("حدث خطأ. حاول مرة أخرى"),
+                      ),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  return _buildActionButton(
+                    icon: Icons.bookmark,
+                    label: "حفظ",
+                    onTap: () {
+showDialog(
+  context: context,
+  builder: (dialogContext) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: context.read<GetCollectionsBookmarkCubit>()),
+        BlocProvider.value(value: context.read<AddCubitCubit>()),
+      ],
+      child: AddToFavoritesDialog(
+        bookName: bookName,
+        bookSlug: bookSlug,
+        chapter: chapter,
+        hadithNumber: hadithNumber,
+        hadithText: hadith,
+        id: id,
+      ),
+    );
+  },
+);
+
+                    },
+                  );
+                },
+              ),
+          ],
+        ),
       ),
     );
   }

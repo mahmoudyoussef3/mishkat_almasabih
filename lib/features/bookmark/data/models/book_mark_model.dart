@@ -6,14 +6,12 @@ class BookmarksResponse {
 
   factory BookmarksResponse.fromJson(Map<String, dynamic> json) {
     return BookmarksResponse(
-      bookmarks:
-          (json['bookmarks'] as List<dynamic>?)
-              ?.map((e) => Bookmark.fromJson(e as Map<String, dynamic>))
-              .toList(),
-      pagination:
-          json['pagination'] != null
-              ? Pagination.fromJson(json['pagination'])
-              : null,
+      bookmarks: (json['bookmarks'] as List<dynamic>?)
+          ?.map((e) => Bookmark.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      pagination: json['pagination'] != null
+          ? Pagination.fromJson(json['pagination'])
+          : null,
     );
   }
 
@@ -78,7 +76,7 @@ class Bookmark {
       id: json['id'] as int?,
       userId: json['user_id'] as int?,
       type: json['type'] as String?,
-      bookSlug: json['bookSlug'] as String?,
+      bookSlug: json['book_slug'] as String?,
       bookName: json['book_name'] as String?,
       bookNameEn: json['book_name_en'] as String?,
       bookNameUr: json['book_name_ur'] as String?,
@@ -100,29 +98,28 @@ class Bookmark {
   }
 
   /// toJson => بيبعت camelCase (زي الريكويست اللي محتاجه الـ API)
-  // داخل Bookmark class
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user_id': userId,
+      'userId': userId,
       'type': type,
       'bookSlug': bookSlug,
-      'book_name': bookName,
-      'book_name_en': bookNameEn,
-      'book_name_ur': bookNameUr,
-      'chapter_number': chapterNumber,
-      'chapter_name': chapterName,
-      'chapter_name_en': chapterNameEn,
-      'chapter_name_ur': chapterNameUr,
-      'hadith_id': hadithId,
-      'hadith_number': hadithNumber,
-      'hadith_text': hadithText,
-      'hadith_text_en': hadithTextEn,
-      'hadith_text_ur': hadithTextUr,
+      'bookName': bookName,
+      'bookNameEn': bookNameEn,
+      'bookNameUr': bookNameUr,
+      'chapterNumber': chapterNumber,
+      'chapterName': chapterName,
+      'chapterNameEn': chapterNameEn,
+      'chapterNameUr': chapterNameUr,
+      'hadithId': hadithId,
+      'hadithNumber': hadithNumber,
+      'hadithText': hadithText,
+      'hadithTextEn': hadithTextEn,
+      'hadithTextUr': hadithTextUr,
       'collection': collection,
       'notes': notes,
-      'is_local': isLocal,
-      'created_at': createdAt,
+      'isLocal': isLocal,
+      'created_at': createdAt, // ممكن تخليها camel برضو لو السيرفر ما يعتمدهاش
       'updated_at': updatedAt,
     };
   }
@@ -152,10 +149,10 @@ class Pagination {
 
   Map<String, dynamic> toJson() {
     return {
-      'current_page': currentPage,
-      'total_pages': totalPages,
-      'total_items': totalItems,
-      'items_per_page': itemsPerPage,
+      'currentPage': currentPage,
+      'totalPages': totalPages,
+      'totalItems': totalItems,
+      'itemsPerPage': itemsPerPage,
     };
   }
 }

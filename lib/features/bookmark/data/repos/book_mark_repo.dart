@@ -19,31 +19,8 @@ class BookMarkRepo {
     try {
       final token = await _getUserToken();
 
-      final cacheKey = CacheKeys.bookmarks;
-
-      final cachedData = await GenericCacheService.instance
-          .getData<BookmarksResponse>(
-            key: cacheKey,
-            fromJson: (json) => BookmarksResponse.fromJson(json),
-          );
-
-      if (cachedData != null) {
-              cachedData!.bookmarks![0].toJson();
-
-        log('cached for bookmarks is $cachedData');
-
-        log('📂 Loaded Ahadith from cache for $id ');
-        return Right(cachedData);
-      }
-
       final response = await _apiService.getUserBookmarks(token);
 
-      await GenericCacheService.instance.saveData<BookmarksResponse>(
-        key: cacheKey,
-        data: response,
-        toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
-      );
 
       return Right(response);
     } catch (e) {
