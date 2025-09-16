@@ -100,28 +100,29 @@ class Bookmark {
   }
 
   /// toJson => بيبعت camelCase (زي الريكويست اللي محتاجه الـ API)
+  // داخل Bookmark class
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'userId': userId,
+      'user_id': userId,
       'type': type,
-      'bookSlug': bookSlug,
-      'bookName': bookName,
-      'bookNameEn': bookNameEn,
-      'bookNameUr': bookNameUr,
-      'chapterNumber': chapterNumber,
-      'chapterName': chapterName,
-      'chapterNameEn': chapterNameEn,
-      'chapterNameUr': chapterNameUr,
-      'hadithId': hadithId,
-      'hadithNumber': hadithNumber,
-      'hadithText': hadithText,
-      'hadithTextEn': hadithTextEn,
-      'hadithTextUr': hadithTextUr,
+      'book_slug': bookSlug,
+      'book_name': bookName,
+      'book_name_en': bookNameEn,
+      'book_name_ur': bookNameUr,
+      'chapter_number': chapterNumber,
+      'chapter_name': chapterName,
+      'chapter_name_en': chapterNameEn,
+      'chapter_name_ur': chapterNameUr,
+      'hadith_id': hadithId,
+      'hadith_number': hadithNumber,
+      'hadith_text': hadithText,
+      'hadith_text_en': hadithTextEn,
+      'hadith_text_ur': hadithTextUr,
       'collection': collection,
       'notes': notes,
-      'isLocal': isLocal,
-      'created_at': createdAt, // ممكن تخليها camel برضو لو السيرفر ما يعتمدهاش
+      'is_local': isLocal,
+      'created_at': createdAt,
       'updated_at': updatedAt,
     };
   }
@@ -151,10 +152,10 @@ class Pagination {
 
   Map<String, dynamic> toJson() {
     return {
-      'currentPage': currentPage,
-      'totalPages': totalPages,
-      'totalItems': totalItems,
-      'itemsPerPage': itemsPerPage,
+      'current_page': currentPage,
+      'total_pages': totalPages,
+      'total_items': totalItems,
+      'items_per_page': itemsPerPage,
     };
   }
 }

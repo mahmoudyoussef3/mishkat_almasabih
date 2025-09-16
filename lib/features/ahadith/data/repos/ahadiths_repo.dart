@@ -10,44 +10,40 @@ class AhadithsRepo {
   AhadithsRepo(this._apiService);
   final ApiService _apiService;
 
-  // 🔹 كاش لكل نوع موديل
-  final _hadithCache = GenericCache<HadithResponse>(
-    cacheKey: "hadith_response",
-    fromJson: (json) => HadithResponse.fromJson(json),
-  );
-
-  final _localHadithCache = GenericCache<LocalHadithResponse>(
-    cacheKey: "local_hadith_response",
-    fromJson: (json) => LocalHadithResponse.fromJson(json),
-  );
-
-  final _threeBooksCache = GenericCache<LocalHadithResponse>(
-    cacheKey: "three_books_hadith_response",
-    fromJson: (json) => LocalHadithResponse.fromJson(json),
-  );
-
-  /// 📦 Get Ahadith (with caching)
   Future<Either<ErrorHandler, HadithResponse>> getAhadith({
-    required  bookSlug,
-    required  chapterId,
+    required String bookSlug,
+    required int chapterId,
   }) async {
     try {
-      // 1) حاول تجيب من الكاش
-      final cached = await _hadithCache.getData();
-      if (cached != null) {
-        log("📦 رجعنا الكاش - getAhadith");
-        return Right(cached);
+      final cacheKey =
+          '${CacheKeys.remoteHadithResponse}_${bookSlug}_$chapterId';
+
+      final cachedData = await GenericCacheService.instance
+          .getData<HadithResponse>(
+            key: cacheKey,
+            fromJson: (json) => HadithResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        log('📂 Loaded Ahadith from cache for $bookSlug / $chapterId');
+        return Right(cachedData);
       }
 
-      // 2) لو الكاش فاضي → نجيب من API
       final response = await _apiService.getChapterAhadiths(
         bookSlug,
         chapterId,
       );
 
-      // 3) خزنه في الكاش
-      await _hadithCache.saveData(response);
+      await GenericCacheService.instance.saveData<HadithResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        cacheExpirationHours: 100, 
+      );
 
+      log(
+        '🌍 Loaded Ahadith from API and cached it for $bookSlug / $chapterId',
+      );
       return Right(response);
     } catch (e) {
       log(e.toString());
@@ -55,16 +51,23 @@ class AhadithsRepo {
     }
   }
 
-  /// 📦 Get Local Ahadith (with caching)
   Future<Either<ErrorHandler, LocalHadithResponse>> getLocalAhadith({
-    required  bookSlug,
-    required  chapterId,
+    required String bookSlug,
+    required int chapterId,
   }) async {
     try {
-      final cached = await _localHadithCache.getData();
-      if (cached != null) {
-        log("📦 رجعنا الكاش - getLocalAhadith");
-        return Right(cached);
+      final cacheKey =
+          '${CacheKeys.localHadithResponse}_${bookSlug}_$chapterId';
+
+      final cachedData = await GenericCacheService.instance
+          .getData<LocalHadithResponse>(
+            key: cacheKey,
+            fromJson: (json) => LocalHadithResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        log('📂 Loaded Local Ahadith from cache');
+        return Right(cachedData);
       }
 
       final response = await _apiService.getLocalChapterAhadiths(
@@ -72,8 +75,14 @@ class AhadithsRepo {
         chapterId,
       );
 
-      await _localHadithCache.saveData(response);
+      await GenericCacheService.instance.saveData<LocalHadithResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        
+      );
 
+      log('🌍 Loaded Local Ahadith from API and cached it');
       return Right(response);
     } catch (e) {
       log(e.toString());
@@ -82,15 +91,23 @@ class AhadithsRepo {
   }
 
   /// 📦 Get Three Books Local Ahadith (with caching)
-  Future<Either<ErrorHandler, LocalHadithResponse>> getThreeBooksLocalAhadith({
-    required  bookSlug,
-    required  chapterId,
+  Future<Either<ErrorHandler, LocalHadithResponse>> getThreeAhadith({
+    required String bookSlug,
+    required int chapterId,
   }) async {
     try {
-      final cached = await _threeBooksCache.getData();
-      if (cached != null) {
-        log("📦 رجعنا الكاش - getThreeBooksLocalAhadith");
-        return Right(cached);
+      final cacheKey =
+          '${CacheKeys.localHadithResponse}_${bookSlug}_$chapterId';
+
+      final cachedData = await GenericCacheService.instance
+          .getData<LocalHadithResponse>(
+            key: cacheKey,
+            fromJson: (json) => LocalHadithResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        log('📂 Loaded Local Ahadith from cache');
+        return Right(cachedData);
       }
 
       final response = await _apiService.getThreeBooksLocalChapterAhadiths(
@@ -98,8 +115,13 @@ class AhadithsRepo {
         chapterId,
       );
 
-      await _threeBooksCache.saveData(response);
+      await GenericCacheService.instance.saveData<LocalHadithResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+      );
 
+      log('🌍 Loaded Local Ahadith from API and cached it');
       return Right(response);
     } catch (e) {
       log(e.toString());

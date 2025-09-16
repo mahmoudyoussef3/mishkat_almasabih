@@ -19,7 +19,7 @@ class AhadithsCubit extends Cubit<AhadithsState> {
     emit(AhadithsLoading());
 
     if (isArbainBooks) {
-      final result = await _chapterAhadithsRepo.getThreeBooksLocalAhadith(
+      final result = await _chapterAhadithsRepo.getThreeAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
       );

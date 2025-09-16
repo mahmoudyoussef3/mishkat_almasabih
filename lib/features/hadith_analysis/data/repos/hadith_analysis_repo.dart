@@ -12,22 +12,14 @@ class HadithAnalysisRepo {
   final ApiService apiService;
   HadithAnalysisRepo(this.apiService);
 
-  final _hadithAnalysisCache = GenericCache<HadithAnalysisResponse>(
-    cacheKey: "hadith_analysis",
-    fromJson: (json) => HadithAnalysisResponse.fromJson(json),
-  );
 
   Future<Either<ErrorHandler, HadithAnalysisResponse>> analyzeHadith(
     HadithAnalysisRequest request,
   ) async {
     try {
-      final cache = await _hadithAnalysisCache.getData();
-      if (cache != null) {
-        return Right(cache);
-      }
+
       final String token = await _getUserToken();
       final response = await apiService.hadithAnalysis(request, token);
-      await _hadithAnalysisCache.saveData(response);
       return Right(response);
     } catch (e) {
       log(e.toString());

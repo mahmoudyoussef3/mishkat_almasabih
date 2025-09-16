@@ -10,22 +10,31 @@ class GetLibraryStatisticsRepo {
   final ApiService _apiService;
 
   GetLibraryStatisticsRepo(this._apiService);
-  final _statisticsResponseCache = GenericCache<StatisticsResponse>(
-    cacheKey: "statistics_response",
-    fromJson: (json) => StatisticsResponse.fromJson(json),
-  );
+
   Future<Either<ErrorHandler, StatisticsResponse>>
   getLibraryStatistics() async {
     try {
-      final cache = await _statisticsResponseCache.getData();
-      if (cache != null) {
-                log("cache library statistics is $cache");
+        final cacheKey = CacheKeys.libraryStatistics;
 
-        return Right(cache);
+      final cachedData = await GenericCacheService.instance
+          .getData<StatisticsResponse>(
+            key: cacheKey,
+            fromJson: (json) => StatisticsResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        return Right(cachedData);
       }
       final response = await _apiService.getLibraryStatisctics();
-      await _statisticsResponseCache.saveData(response);
+
+       await GenericCacheService.instance.saveData<StatisticsResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        cacheExpirationHours: 100,
+      );
       return Right(response);
+
     } catch (error) {
       return Left(ErrorHandler.handle(error));
     }

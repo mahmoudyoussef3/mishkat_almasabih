@@ -11,20 +11,36 @@ class GetBookDataRepo {
 
   GetBookDataRepo(this._apiService);
 
-  final _bookDataCache = GenericCache<CategoryResponse>(
-    cacheKey: "categoryResponse",
-    fromJson: (json) => CategoryResponse.fromJson(json),
-  );
-
+ 
   Future<Either<ErrorHandler, CategoryResponse>> getBookData(String id) async {
     try {
-      final cache = await _bookDataCache.getData();
-      if (cache != null) {
-        return Right(cache);
-      }
-      final response = await _apiService.getBookData(id);
 
-    await  _bookDataCache.saveData(response);
+      final cacheKey =
+          '${CacheKeys.bookCategoryResponse}_$id';
+
+      final cachedData = await GenericCacheService.instance
+          .getData<CategoryResponse>(
+            key: cacheKey,
+            fromJson: (json) => CategoryResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        log('📂 Loaded Ahadith from cache for $id ');
+        return Right(cachedData);
+      }
+
+
+      final response = await _apiService.getBookData(id);
+     await GenericCacheService.instance.saveData<CategoryResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        cacheExpirationHours: 100, 
+      );
+
+      log(
+        '🌍 Loaded Ahadith from API and cached it for $id ',
+      );
       return Right(response);
     } catch (error) {
       log(error.toString());

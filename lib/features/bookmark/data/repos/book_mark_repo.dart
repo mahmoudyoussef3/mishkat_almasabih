@@ -14,31 +14,37 @@ class BookMarkRepo {
 
   BookMarkRepo(this._apiService);
 
-  // 🔹 كاش لكل نوع ريسبونس
-  final _userBookmarksCache = GenericCache<BookmarksResponse>(
-    cacheKey: "user_bookmarks",
-    fromJson: (json) => BookmarksResponse.fromJson(json),
-  );
-
-  final _collectionsCache = GenericCache<CollectionsResponse>(
-    cacheKey: "bookmark_collections",
-    fromJson: (json) => CollectionsResponse.fromJson(json),
-  );
-
   /// Get all user bookmarks (with caching)
   Future<Either<ErrorHandler, BookmarksResponse>> getUserBookMarks() async {
     try {
-      final cached = await _userBookmarksCache.getData();
-      if (cached != null) {
-                        log("cache library statistics is $cached");
+      final token = await _getUserToken();
 
-        return Right(cached);
+      final cacheKey = CacheKeys.bookmarks;
+
+      final cachedData = await GenericCacheService.instance
+          .getData<BookmarksResponse>(
+            key: cacheKey,
+            fromJson: (json) => BookmarksResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+              cachedData!.bookmarks![0].toJson();
+
+        log('cached for bookmarks is $cachedData');
+
+        log('📂 Loaded Ahadith from cache for $id ');
+        return Right(cachedData);
       }
 
-      final token = await _getUserToken();
       final response = await _apiService.getUserBookmarks(token);
 
-      await _userBookmarksCache.saveData(response);
+      await GenericCacheService.instance.saveData<BookmarksResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        cacheExpirationHours: 100,
+      );
+
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e));
@@ -46,19 +52,30 @@ class BookMarkRepo {
   }
 
   /// Get bookmark collections (with caching)
-  Future<Either<ErrorHandler, CollectionsResponse>> getBookmarkCollectionsRepo() async {
+  Future<Either<ErrorHandler, CollectionsResponse>>
+  getBookmarkCollectionsRepo() async {
     try {
-      final cached = await _collectionsCache.getData();
-      if (cached != null) {
-                                log("cache library statistics is $cached");
-
-        return Right(cached);
-      }
-
       final token = await _getUserToken();
-      final response = await _apiService.getBookmarkCollection(token);
 
-      await _collectionsCache.saveData(response);
+      final cacheKey = CacheKeys.collectionBookmarksResponse;
+
+      final cachedData = await GenericCacheService.instance
+          .getData<CollectionsResponse>(
+            key: cacheKey,
+            fromJson: (json) => CollectionsResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        log('📂 Loaded Ahadith from cache for $id ');
+        return Right(cachedData);
+      }
+      final response = await _apiService.getBookmarkCollection(token);
+      await GenericCacheService.instance.saveData<CollectionsResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        cacheExpirationHours: 100,
+      );
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e));
@@ -66,13 +83,14 @@ class BookMarkRepo {
   }
 
   /// Delete a bookmark by ID
-  Future<Either<ErrorHandler, AddBookmarkResponse>> deleteBookMark(int bookmarkId) async {
+  Future<Either<ErrorHandler, AddBookmarkResponse>> deleteBookMark(
+    int bookmarkId,
+  ) async {
     try {
       final token = await _getUserToken();
       final response = await _apiService.deleteUserBookmsrk(bookmarkId, token);
 
       // مسح الكاش بعد الحذف عشان يجيب بيانات جديدة المرة الجاية
-      await _userBookmarksCache.clear();
 
       return Right(response);
     } catch (e) {
@@ -81,14 +99,13 @@ class BookMarkRepo {
   }
 
   /// Add a new bookmark
-  Future<Either<ErrorHandler, AddBookmarkResponse>> addBookmark(Bookmark body) async {
+  Future<Either<ErrorHandler, AddBookmarkResponse>> addBookmark(
+    Bookmark body,
+  ) async {
     try {
       final token = await _getUserToken();
-      
-      final response = await _apiService.addBookmark(token, body);
 
-      // مسح الكاش بعد الإضافة عشان يجيب بيانات جديدة المرة الجاية
-      await _userBookmarksCache.clear();
+      final response = await _apiService.addBookmark(token, body);
 
       return Right(response);
     } catch (e) {

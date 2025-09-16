@@ -10,21 +10,33 @@ class GetAllBooksWithCategoriesRepo {
   final ApiService _apiService;
 
   GetAllBooksWithCategoriesRepo(this._apiService);
-  final _bookResponseCache = GenericCache<BooksResponse>(
-    cacheKey: "book_response",
-    fromJson: (json) => BooksResponse.fromJson(json),
-  );
+
 
   Future<Either<ErrorHandler, BooksResponse>>
   getAllBooksWithCategoriesRepo() async {
     try {
-      final cache = await _bookResponseCache.getData();
-      if (cache != null) {
-        log("cache bookd with categories is $cache");
-        return Right(cache);
+
+
+      
+         final cacheKey = CacheKeys.booksWithCategories;
+
+      final cachedData = await GenericCacheService.instance
+          .getData<BooksResponse>(
+            key: cacheKey,
+            fromJson: (json) => BooksResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        return Right(cachedData);
       }
-      final response = await _apiService.getAllBooksWithCategories();
-      await _bookResponseCache.saveData(response);
+            final response = await _apiService.getAllBooksWithCategories();
+      
+      await GenericCacheService.instance.saveData<BooksResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        cacheExpirationHours: 100,
+      );
       return Right(response);
     } catch (error) {
       return Left(ErrorHandler.handle(error));

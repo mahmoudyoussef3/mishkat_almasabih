@@ -11,27 +11,19 @@ class NavigationRepo {
   final ApiService _apiService;
 
   NavigationRepo(this._apiService);
-  final _navigationHadithCache = GenericCache<NavigationHadithResponse>(
-    cacheKey: "NavigationResponse",
-    fromJson: (json) => NavigationHadithResponse.fromJson(json),
-  );
+
   Future<Either<ErrorHandler, NavigationHadithResponse>> navigationHadith(
     String hadithNumber,
     String bookSlug,
     String chapterNumber,
   ) async {
     try {
-      final cache = await _navigationHadithCache.getData();
 
-      if (cache != null) {
-        return Right(cache);
-      }
       final response = await _apiService.navigationHadith(
         hadithNumber,
         bookSlug,
         chapterNumber,
       );
-      await _navigationHadithCache.saveData(response);
       return Right(response);
     } catch (err) {
       log(err.toString());

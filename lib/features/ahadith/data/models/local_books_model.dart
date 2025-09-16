@@ -11,6 +11,8 @@ class LocalHadithResponse {
 
   factory LocalHadithResponse.fromJson(Map<String, dynamic> json) =>
       _$LocalHadithResponseFromJson(json);
+                      Map<String,dynamic> toJson()=>_$LocalHadithResponseToJson(this);
+
 }
 
 @JsonSerializable()
@@ -21,6 +23,8 @@ class LocalHadithsWrapper {
 
   factory LocalHadithsWrapper.fromJson(Map<String, dynamic> json) =>
       _$LocalHadithsWrapperFromJson(json);
+                            Map<String,dynamic> toJson()=>_$LocalHadithsWrapperToJson(this);
+
 }
 
 @JsonSerializable()
@@ -43,6 +47,9 @@ class LocalHadith {
 
   factory LocalHadith.fromJson(Map<String, dynamic> json) =>
       _$LocalHadithFromJson(json);
+
+                                  Map<String,dynamic> toJson()=>_$LocalHadithToJson(this);
+
 }
 
 @JsonSerializable()
@@ -54,4 +61,6 @@ class EnglishHadith {
 
   factory EnglishHadith.fromJson(Map<String, dynamic> json) =>
       _$EnglishHadithFromJson(json);
+                                        Map<String,dynamic> toJson()=>_$EnglishHadithToJson(this);
+
 }
