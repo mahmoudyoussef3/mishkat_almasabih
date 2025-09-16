@@ -14,6 +14,8 @@ class BooksResponse {
     required this.allBooks,
   });
       factory BooksResponse.fromJson(Map<String,dynamic> json)=>_$BooksResponseFromJson(json);
+                          Map<String,dynamic> toJson()=>_$BooksResponseToJson(this);
+
 
 }
 @JsonSerializable()

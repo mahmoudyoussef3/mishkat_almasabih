@@ -7,14 +7,12 @@ class CategoryResponse {
   final Category? category;
   final List<Book>? books;
 
-  const CategoryResponse({
-    this.status,
-    this.category,
-    this.books,
-  });
+  const CategoryResponse({this.status, this.category, this.books});
 
   factory CategoryResponse.fromJson(Map<String, dynamic> json) =>
       _$CategoryResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CategoryResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -41,6 +39,8 @@ class Category {
 
   factory Category.fromJson(Map<String, dynamic> json) =>
       _$CategoryFromJson(json);
+        Map<String, dynamic> toJson() => _$CategoryToJson(this);
+
 }
 
 @JsonSerializable()
@@ -53,10 +53,10 @@ class Book {
   final String? writerNameEn;
   final String? writerNameUr;
   final String? bookSlug;
-    @JsonKey(fromJson: _toInt)
+  @JsonKey(fromJson: _toInt)
   final int? hadiths_count;
-    @JsonKey(fromJson: _toInt)
-final int? chapters_count;
+  @JsonKey(fromJson: _toInt)
+  final int? chapters_count;
   final String? status;
   final bool? isLocal;
   final String? category;
@@ -86,4 +86,6 @@ final int? chapters_count;
     if (value is String) return int.tryParse(value);
     return null;
   }
-  }
+          Map<String, dynamic> toJson() => _$BookToJson(this);
+
+}

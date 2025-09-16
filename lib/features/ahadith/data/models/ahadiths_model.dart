@@ -12,6 +12,8 @@ class HadithResponse {
   HadithResponse({this.status, this.message, this.hadiths});
   factory HadithResponse.fromJson(Map<String, dynamic> json) =>
       _$HadithResponseFromJson(json);
+
+  Map<String,dynamic> toJson()=>_$HadithResponseToJson(this);
 }
 
 @JsonSerializable()
@@ -47,6 +49,8 @@ class Hadiths {
   });
   factory Hadiths.fromJson(Map<String, dynamic> json) =>
       _$HadithsFromJson(json);
+        Map<String,dynamic> toJson()=>_$HadithsToJson(this);
+
 }
 
 @JsonSerializable()
@@ -87,6 +91,9 @@ class Hadith {
     this.chapter,
   });
   factory Hadith.fromJson(Map<String, dynamic> json) => _$HadithFromJson(json);
+
+          Map<String,dynamic> toJson()=>_$HadithToJson(this);
+
 }
 
 @JsonSerializable()
@@ -108,6 +115,10 @@ class HadithBook {
   });
   factory HadithBook.fromJson(Map<String, dynamic> json) =>
       _$HadithBookFromJson(json);
+
+                Map<String,dynamic> toJson()=>_$HadithBookToJson(this);
+
+      
 }
 
 @JsonSerializable()
@@ -129,6 +140,8 @@ class HadithChapter {
   });
   factory HadithChapter.fromJson(Map<String, dynamic> json) =>
       _$HadithChapterFromJson(json);
+                Map<String,dynamic> toJson()=>_$HadithChapterToJson(this);
+
 }
 
 @JsonSerializable()
@@ -140,4 +153,6 @@ class HadithLink {
   HadithLink({this.url, this.label, this.active});
   factory HadithLink.fromJson(Map<String, dynamic> json) =>
       _$HadithLinkFromJson(json);
+                Map<String,dynamic> toJson()=>_$HadithLinkToJson(this);
+
 }

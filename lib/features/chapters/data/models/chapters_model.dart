@@ -10,6 +10,8 @@ class ChaptersModel {
 
   factory ChaptersModel.fromJson(Map<String, dynamic> json) =>
       _$ChaptersModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChaptersModelToJson(this);
 }
 
 @JsonSerializable()
@@ -41,4 +43,6 @@ class Chapter {
     if (value is String) return int.tryParse(value);
     return null;
   }
+    Map<String, dynamic> toJson() => _$ChapterToJson(this);
+
 }

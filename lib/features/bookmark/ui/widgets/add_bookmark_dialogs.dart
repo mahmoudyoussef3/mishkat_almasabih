@@ -32,11 +32,11 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
   String selectedCollection = "الإفتراضي";
   final TextEditingController notesController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<GetCollectionsBookmarkCubit>().getBookMarkCollections();
-  }
+ @override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+  context.read<GetCollectionsBookmarkCubit>().getBookMarkCollections();
+}
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +72,7 @@ class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
                     key: const ValueKey('create'),
                     bookName: widget.bookName,
                     bookSlug: widget.bookSlug,
+
                     chapter: widget.chapter,
                     hadithNumber: widget.hadithNumber,
                     hadithText: widget.hadithText,

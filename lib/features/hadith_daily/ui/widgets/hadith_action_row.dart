@@ -71,34 +71,34 @@ class HadithActionsRow extends StatelessWidget {
           ),
           if (!isBookmarked)
             BlocConsumer<AddCubitCubit, AddCubitState>(
-              listener: (context, state) {
-                ScaffoldMessenger.of(context).clearSnackBars();
-                if (state is AddLoading) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      backgroundColor: ColorsManager.primaryGreen,
-                      content: loadingProgressIndicator(
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                  );
-                } else if (state is AddSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      backgroundColor: Colors.green,
-                      content: Text("تم حفظ الحديث"),
-                    ),
-                  );
-                } else if (state is AddFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      backgroundColor: Colors.red,
-                      content: Text("حدث خطأ. حاول مرة أخرى"),
-                    ),
-                  );
-                }
-              },
+            listener: (context, state) {
+  if (!context.mounted) return;
+
+  ScaffoldMessenger.of(context).clearSnackBars();
+  if (state is AddLoading) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: ColorsManager.primaryGreen,
+        content: loadingProgressIndicator(size: 30, color: Colors.white),
+      ),
+    );
+  } else if (state is AddSuccess) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.green,
+        content: Text("تم حفظ الحديث"),
+      ),
+    );
+  } else if (state is AddFailure) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text("حدث خطأ. حاول مرة أخرى"),
+      ),
+    );
+  }
+}
+,
               builder: (context, state) {
                 return _buildActionButton(
                   icon: Icons.bookmark,
