@@ -24,13 +24,22 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
       context.read<DailyHadithCubit>().startListeningForUpdates();
     });
   }
-/*
-  @override
-  void dispose() {
-    context.read<DailyHadithCubit>().stopListening();
-    super.dispose();
+@override
+void dispose() {
+  // إيقاف مؤقت عند الخروج من الشاشة
+  context.read<DailyHadithCubit>().pauseListening();
+  super.dispose();
+}
+
+// عند العودة للشاشة
+@override
+void didChangeAppLifecycleState(AppLifecycleState state) {
+  if (state == AppLifecycleState.resumed) {
+    context.read<DailyHadithCubit>().resumeListening();
+  } else if (state == AppLifecycleState.paused) {
+    context.read<DailyHadithCubit>().pauseListening();
   }
-*/
+}
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DailyHadithCubit, DailyHadithState>(

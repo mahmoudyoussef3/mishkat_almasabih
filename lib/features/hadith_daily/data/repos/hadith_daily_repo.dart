@@ -14,33 +14,11 @@ class HadithDailyRepo {
 
   Future<Either<ErrorHandler, DailyHadithModel>> getDailyHadith() async {
     try {
-         final cacheKey = CacheKeys.hadithDaily;
-
-      final cachedData = await GenericCacheService.instance
-          .getData<DailyHadithModel>(
-            key: cacheKey,
-            fromJson: (json) => DailyHadithModel.fromJson(json),
-          );
-
-      if (cachedData != null) {
-        log('📂 Loaded Ahadith from cache for $id ');
-        return Right(cachedData);
-      }
 
       final response = await _apiService.getDailyHadith();
 
-      EasyNotify.showBasicNotification(
-        body: response.data?.hadith ?? '...',
-        id: 0,
-        title: 'حديث اليوم',
-      );
+
       
-      await GenericCacheService.instance.saveData<DailyHadithModel>(
-        key: cacheKey,
-        data: response,
-        toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
-      );
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e));

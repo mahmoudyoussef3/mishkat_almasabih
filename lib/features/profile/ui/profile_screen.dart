@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
+import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 import 'package:mishkat_almasabih/features/profile/ui/widgets/dark_mode_toggle.dart';
+import 'package:mishkat_almasabih/features/profile/ui/widgets/profile_screen_shimmer.dart';
 import 'package:mishkat_almasabih/features/profile/ui/widgets/section_title.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -24,7 +26,6 @@ class ProfileScreen extends StatelessWidget {
       },
       child: SafeArea(
         top: false,
-
         child: DoubleTapToExitApp(
           myScaffoldScreen: Directionality(
             textDirection: TextDirection.rtl,
@@ -33,20 +34,10 @@ class ProfileScreen extends StatelessWidget {
               body: BlocBuilder<ProfileCubit, ProfileState>(
                 builder: (context, state) {
                   if (state is ProfileLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: ColorsManager.primaryPurple,
-                      ),
-                    );
+                    return ProfileShimmerScreen();
                   } else if (state is ProfileError) {
                     return Center(
-                      child: Text(
-                        "حدث خطأ أثناء تحميل البيانات",
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          color: ColorsManager.error,
-                        ),
-                      ),
+                      child: ErrorState(error: state.message)
                     );
                   } else if (state is ProfileLoaded) {
                     final user = state.user;
@@ -61,10 +52,10 @@ class ProfileScreen extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const SectionTitle(title: "الإعدادات"),
-                                SizedBox(height: 16.h),
-                                const DarkModeToggle(),
-                                SizedBox(height: 16.h),
+                           //     const SectionTitle(title: "الإعدادات"),
+                             //   SizedBox(height: 16.h),
+                             //   const DarkModeToggle(),
+                               // SizedBox(height: 16.h),
                                 const SectionTitle(title: "من نحن"),
                                 SizedBox(height: 16.h),
                                 _buildSection(

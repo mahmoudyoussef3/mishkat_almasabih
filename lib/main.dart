@@ -22,7 +22,7 @@ Future<void> main() async {
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
   await EasyNotify.init();
- // await initializeService();
+  await initializeService();
 
   final prefs = await SharedPreferences.getInstance();
   final token = prefs.getString('token');
@@ -37,7 +37,7 @@ Future<void> main() async {
 
   runApp(app);
 
- // await openBatterySettings();
+  await openBatterySettings();
 }
 
 Future<void> openBatterySettings() async {
@@ -94,10 +94,10 @@ void onStart(ServiceInstance service) async {
         debugPrint("❌ حصل خطأ: ${failure.apiErrorModel.msg}");
       },
       (hadith) async {
-                SaveHadithDailyRepo().deleteHadith();
+                await SaveHadithDailyRepo().deleteHadith();
 
         debugPrint("✅ Got hadith: ${hadith.data?.hadith}");
-                SaveHadithDailyRepo().saveHadith(hadith);
+            await    SaveHadithDailyRepo().saveHadith(hadith);
 
         await EasyNotify.showBasicNotification(
           id: DateTime.now().millisecondsSinceEpoch.remainder(0x7FFFFFFF),

@@ -289,7 +289,7 @@ void initState() {
   Widget _buildHeaderSection() {
     return BuildHeaderAppBar(
       home: true,
-      title: 'مشكاة المصابيح',
+     title: 'مشكاة المصابيح',
       description: 'مكتبة مشكاة الإسلامية',
     );
   }

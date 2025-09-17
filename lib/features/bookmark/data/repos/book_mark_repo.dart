@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:dartz/dartz.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
 import 'package:mishkat_almasabih/core/networking/api_service.dart';
@@ -27,7 +26,9 @@ class BookMarkRepo {
           );
 
       if (cachedData != null) {
-        log('📂 Loaded bookmarks from cache for ${cachedData.bookmarks![0].hadithText} ');
+        log(
+          '📂 Loaded bookmarks from cache for ${cachedData.bookmarks![0].hadithText} ',
+        );
         return Right(cachedData);
       }
       final response = await _apiService.getUserBookmarks(token);
@@ -82,8 +83,11 @@ class BookMarkRepo {
     try {
       final token = await _getUserToken();
       final response = await _apiService.deleteUserBookmsrk(bookmarkId, token);
+            await GenericCacheService.instance.clearCache(
+        CacheKeys.collectionBookmarksResponse,
+      );
+      await GenericCacheService.instance.clearCache(CacheKeys.bookmarks);
 
-      // مسح الكاش بعد الحذف عشان يجيب بيانات جديدة المرة الجاية
 
       return Right(response);
     } catch (e) {
@@ -102,6 +106,7 @@ class BookMarkRepo {
       );
       await GenericCacheService.instance.clearCache(CacheKeys.bookmarks);
       final response = await _apiService.addBookmark(token, body);
+
 
       return Right(response);
     } catch (e) {

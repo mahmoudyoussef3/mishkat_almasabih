@@ -12,7 +12,6 @@ import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/searc
 import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/search_with_filters_screen.dart';
 
 import '../home/ui/home_screen.dart';
-import '../search/search_screen/ui/search_screen.dart';
 import 'widgets/build_bottom_nva_container.dart';
 
 class MainNavigationScreen extends StatefulWidget {
