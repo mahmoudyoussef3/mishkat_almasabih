@@ -23,8 +23,13 @@
     <application
         android:label="مكتبة مشكاة الإسلامية"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
-
+        android:icon="@mipmap/launcher_icon"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:hardwareAccelerated="true"
+        android:largeHeap="true"
+        android:usesCleartextTraffic="true"
+    >
         <!-- Foreground Service -->
         <service
             android:name="id.flutter.flutter_background_service.BackgroundService"

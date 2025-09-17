@@ -88,30 +88,7 @@ void didChangeAppLifecycleState(AppLifecycleState state) {
                   ),
 
                   // Refresh button for manual refresh
-                  Positioned(
-                    top: 12.h,
-                    right: 12.w,
-                    child: GestureDetector(
-                      onTap: () {
-                        debugPrint('🔄 Manual refresh requested');
-                        context.read<DailyHadithCubit>().refreshNow();
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(8.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: Colors.white70),
-                        ),
-                        child: Icon(
-                          Icons.refresh,
-                          color: ColorsManager.secondaryBackground,
-                          size: 18.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-
+           
                   // Main content
                   Padding(
                     padding: EdgeInsets.symmetric(
