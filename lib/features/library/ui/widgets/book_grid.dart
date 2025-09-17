@@ -11,10 +11,7 @@ class BookGrid extends StatelessWidget {
   final bool isShimmer;
 
   const BookGrid._({
-    super.key,
-    this.books,
-    required this.aspectRatio,
-    required this.isShimmer,
+    required this.aspectRatio, required this.isShimmer, this.books,
   });
 
   factory BookGrid.shimmer({required double aspectRatio}) {

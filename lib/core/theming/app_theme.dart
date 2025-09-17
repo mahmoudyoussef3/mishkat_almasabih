@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/helpers/spacing.dart';
-import 'colors.dart';
-import 'styles.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 /// AppTheme provides comprehensive theming for the Mishkat Al-Masabih app.
 ///
@@ -80,17 +80,12 @@ class AppTheme {
   static ColorScheme _buildLightColorScheme() {
     return const ColorScheme.light(
       primary: ColorsManager.primaryPurple,
-      onPrimary: ColorsManager.white,
       secondary: ColorsManager.primaryGold,
       onSecondary: ColorsManager.primaryText,
       tertiary: ColorsManager.hadithAuthentic,
       onTertiary: ColorsManager.white,
-      surface: ColorsManager.cardBackground,
       onSurface: ColorsManager.primaryText,
-      background: ColorsManager.primaryBackground,
-      onBackground: ColorsManager.primaryText,
       error: ColorsManager.error,
-      onError: ColorsManager.white,
     );
   }
 
@@ -104,9 +99,6 @@ class AppTheme {
       tertiary: ColorsManager.hadithAuthentic,
       onTertiary: ColorsManager.white,
       surface: Color(0xFF1E1E1E),
-      onSurface: ColorsManager.white,
-      background: Color(0xFF121212),
-      onBackground: ColorsManager.white,
       error: ColorsManager.error,
       onError: ColorsManager.white,
     );
@@ -127,7 +119,7 @@ class AppTheme {
         color: ColorsManager.primaryPurple,
         size: 24,
       ),
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),
@@ -151,7 +143,7 @@ class AppTheme {
         color: ColorsManager.primaryPurple,
         size: 24,
       ),
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),
@@ -246,11 +238,11 @@ class AppTheme {
       fillColor: ColorsManager.white,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Spacing.inputRadius),
-        borderSide: BorderSide(color: ColorsManager.mediumGray),
+        borderSide: const BorderSide(color: ColorsManager.mediumGray),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Spacing.inputRadius),
-        borderSide: BorderSide(color: ColorsManager.mediumGray),
+        borderSide: const BorderSide(color: ColorsManager.mediumGray),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Spacing.inputRadius),
@@ -360,14 +352,14 @@ class AppTheme {
   /// Builds the switch theme
   static SwitchThemeData _buildSwitchTheme() {
     return SwitchThemeData(
-      thumbColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      thumbColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return ColorsManager.white;
         }
         return ColorsManager.gray;
       }),
-      trackColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      trackColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return ColorsManager.primaryPurple;
         }
         return ColorsManager.mediumGray;
@@ -378,13 +370,13 @@ class AppTheme {
   /// Builds the checkbox theme
   static CheckboxThemeData _buildCheckboxTheme() {
     return CheckboxThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return ColorsManager.primaryPurple;
         }
         return Colors.transparent;
       }),
-      checkColor: WidgetStatePropertyAll(ColorsManager.cardBackground),
+      checkColor: const WidgetStatePropertyAll(ColorsManager.cardBackground),
       side: const BorderSide(color: ColorsManager.mediumGray, width: 2),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     );
@@ -393,8 +385,8 @@ class AppTheme {
   /// Builds the radio theme
   static RadioThemeData _buildRadioTheme() {
     return RadioThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return ColorsManager.primaryPurple;
         }
         return ColorsManager.mediumGray;

@@ -5,10 +5,7 @@ import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model
 
 class LocalHadithCard extends StatelessWidget {
   const LocalHadithCard({
-    super.key,
-    required this.hadith,
-    required this.bookName,
-    required this.chapterName,
+    required this.hadith, required this.bookName, required this.chapterName, super.key,
   });
 
   final LocalHadith hadith;
@@ -122,7 +119,6 @@ class LocalHadithCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.r),
                     border: Border.all(
                       color: Colors.green.withOpacity(0.1),
-                      width: 1,
                     ),
                   ),
                   child: Text(

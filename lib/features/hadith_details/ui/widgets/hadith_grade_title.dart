@@ -5,7 +5,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 class HadithGradeTile extends StatelessWidget {
   final String grade;
   final VoidCallback onTap;
-  const HadithGradeTile({super.key, required this.grade, required this.onTap});
+  const HadithGradeTile({required this.grade, required this.onTap, super.key});
 
   String gradeArabic(String g) {
     switch (g.toLowerCase()) {
@@ -61,8 +61,8 @@ class HadithGradeTile extends StatelessWidget {
             child: TextButton.icon(
               onPressed: onTap,
 
-              icon: Icon(Icons.copy),
-              label: Text('نسخ الحديث'),
+              icon: const Icon(Icons.copy),
+              label: const Text('نسخ الحديث'),
             ),
           ),
         ],

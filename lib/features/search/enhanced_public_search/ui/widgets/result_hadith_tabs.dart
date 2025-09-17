@@ -7,9 +7,7 @@ class ResultHadithTabs extends StatelessWidget {
   final Function(String) onTabSelected;
 
   const ResultHadithTabs({
-    super.key,
-    required this.selectedTab,
-    required this.onTabSelected,
+    required this.selectedTab, required this.onTabSelected, super.key,
   });
 
   @override

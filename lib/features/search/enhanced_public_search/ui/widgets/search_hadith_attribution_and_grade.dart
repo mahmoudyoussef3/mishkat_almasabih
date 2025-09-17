@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/helpers/functions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 
 class searchHadithAttributionAndGrade extends StatelessWidget {
   final EnhancedHadithModel enhancedHadithModel;
-  const searchHadithAttributionAndGrade({super.key, required this.enhancedHadithModel});
+  const searchHadithAttributionAndGrade({required this.enhancedHadithModel, super.key});
 
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (enhancedHadithModel.attribution != null)

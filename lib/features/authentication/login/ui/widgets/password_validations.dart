@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/helpers/spacing.dart';
-import '../../../../../core/theming/colors.dart';
-import '../../../../../core/theming/styles.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class PasswordValidations extends StatelessWidget {
   final bool hasLowerCase;
@@ -10,12 +9,7 @@ class PasswordValidations extends StatelessWidget {
   final bool hasNumber;
   final bool hasMinLength;
   const PasswordValidations({
-    super.key,
-    required this.hasLowerCase,
-    required this.hasUpperCase,
-    required this.hasSpecialCharacters,
-    required this.hasNumber,
-    required this.hasMinLength,
+    required this.hasLowerCase, required this.hasUpperCase, required this.hasSpecialCharacters, required this.hasNumber, required this.hasMinLength, super.key,
   });
 
   @override
@@ -23,16 +17,16 @@ class PasswordValidations extends StatelessWidget {
     return Column(
       children: [
         buildValidationRow('At least 1 lowercase letter', hasLowerCase),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         buildValidationRow('At least 1 uppercase letter', hasUpperCase),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         buildValidationRow(
           'At least 1 special character',
           hasSpecialCharacters,
         ),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         buildValidationRow('At least 1 number', hasNumber),
-        SizedBox(height: 2),
+        const SizedBox(height: 2),
         buildValidationRow('At least 8 characters long', hasMinLength),
       ],
     );
@@ -42,7 +36,7 @@ class PasswordValidations extends StatelessWidget {
     return Row(
       children: [
         const CircleAvatar(radius: 2.5, backgroundColor: ColorsManager.gray),
-        SizedBox(width: 6),
+        const SizedBox(width: 6),
         Text(
           text,
           style: TextStyles.font13DarkBlueRegular.copyWith(

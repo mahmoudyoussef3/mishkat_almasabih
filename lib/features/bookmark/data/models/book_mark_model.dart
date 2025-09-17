@@ -79,7 +79,7 @@ class Bookmark {
       userId: json['user_id'] as int?,
       type: json['type'] as String?,
    //   bookSlug: json['book_slug'] as String?,
-      bookName: json['book_name'] ?? json['bookName'],
+      bookName: json['book_name'] ?? json['bookName'] as String?,
       bookNameEn: json['book_name_en'] as String?,
       bookNameUr: json['book_name_ur'] as String?,
       chapterNumber: json['chapter_number'] as int?,

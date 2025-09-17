@@ -13,14 +13,10 @@ class HadithNavigation extends StatefulWidget {
   final bool isLocal;
 
   const HadithNavigation({
-    super.key,
-    required this.hadithNumber,
+    required this.hadithNumber, required this.bookSlug, required this.isLocal, required this.chapterNumber, super.key,
 
     this.onNext,
     this.onPrev,
-    required this.bookSlug,
-    required this.isLocal,
-    required this.chapterNumber,
   });
 
   @override
@@ -117,6 +113,6 @@ class _HadithNavigationState extends State<HadithNavigation> {
             return const SizedBox.shrink();
           },
         )
-        : SizedBox();
+        : const SizedBox();
   }
 }

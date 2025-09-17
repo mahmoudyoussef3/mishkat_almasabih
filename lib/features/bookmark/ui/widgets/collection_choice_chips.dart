@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 
-import '../../../../core/theming/colors.dart';
 
 class CollectionsChoiceChips extends StatelessWidget {
   final List<dynamic> collections;
   final String selectedCollection;
   final void Function(String) onSelected;
   const CollectionsChoiceChips({
-    super.key,
-    required this.collections,
-    required this.selectedCollection,
-    required this.onSelected,
+    required this.collections, required this.selectedCollection, required this.onSelected, super.key,
   });
 
   @override

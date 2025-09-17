@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/ui/widgets/hadith_analysis.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_books_section.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_grade_title.dart';
-import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
-import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/hadith_text_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
@@ -36,19 +36,8 @@ class HadithDetailScreen extends StatefulWidget {
   bool showNavigation;
 
   HadithDetailScreen({
-    super.key,
-    required this.hadithText,
-    required this.chapterNumber,
-    required this.narrator,
-    required this.grade,
-    required this.bookName,
-    required this.author,
-    required this.chapter,
-    required this.authorDeath,
-    required this.hadithNumber,
-    required this.bookSlug,
+    required this.hadithText, required this.chapterNumber, required this.narrator, required this.grade, required this.bookName, required this.author, required this.chapter, required this.authorDeath, required this.hadithNumber, required this.bookSlug, required this.isLocal, super.key,
     this.isBookMark = false,
-    required this.isLocal,
     this.showNavigation = true,
   });
 
@@ -200,7 +189,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                                   size: 20.sp,
                                 ),
                                 SizedBox(width: 12.w),
-                                Text(
+                                const Text(
                                   "تم نسخ الحديث بنجاح",
                                   style: TextStyle(
                                     color: Colors.white,
@@ -290,7 +279,6 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: ColorsManager.primaryGold.withOpacity(0.2),
-          width: 1,
         ),
       ),
       child: HadithActionsRow(
@@ -395,7 +383,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               behavior: SnackBarBehavior.floating,
               content: Text(
                 state.errMessage,
-                style: TextStyle(color: ColorsManager.secondaryBackground),
+                style: const TextStyle(color: ColorsManager.secondaryBackground),
               ),
             ),
           );
@@ -462,7 +450,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               behavior: SnackBarBehavior.floating,
               content: Text(
                 state.errMessage,
-                style: TextStyle(color: ColorsManager.secondaryBackground),
+                style: const TextStyle(color: ColorsManager.secondaryBackground),
               ),
             ),
           );
@@ -536,8 +524,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
             onPressed: onPrev,
             color: onPrev == null ? Colors.grey : ColorsManager.primaryPurple,
           ),
-          isLoading
-              ? Row(
+          if (isLoading) Row(
                 children: [
                   loadingProgressIndicator(size: 16),
                   SizedBox(width: 8.w),
@@ -550,8 +537,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     ),
                   ),
                 ],
-              )
-              : Text(
+              ) else Text(
                 "الحديث رقم $hadithId",
                 style: TextStyle(
                   fontSize: 16.sp,

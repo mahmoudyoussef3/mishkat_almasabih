@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'category_model.dart';
+import 'package:mishkat_almasabih/features/home/data/models/category_model.dart';
 part 'book_model.g.dart';
 @JsonSerializable()
 class BooksResponse {
@@ -40,16 +40,12 @@ class Book {
   Book({
     required this.id,
     required this.bookName,
-    this.bookNameEn,
+    required this.writerName, required this.bookSlug, required this.hadithsCount, required this.chaptersCount, this.bookNameEn,
     this.bookNameUr,
-    required this.writerName,
     this.writerNameEn,
     this.writerNameUr,
     this.aboutWriter,
     this.writerDeath,
-    required this.bookSlug,
-    required this.hadithsCount,
-    required this.chaptersCount,
     this.status,
     this.isLocal,
     this.category,

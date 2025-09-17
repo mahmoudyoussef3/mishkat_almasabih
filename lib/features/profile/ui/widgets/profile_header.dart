@@ -9,7 +9,7 @@ import 'package:mishkat_almasabih/features/profile/edit_profile/ui/edit_profile_
 
 class ProfileHeader extends StatelessWidget {
   final UserResponseModel user;
-  const ProfileHeader({super.key, required this.user});
+  const ProfileHeader({required this.user, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class ProfileHeader extends StatelessWidget {
       pinned: true,
       backgroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(
+        background: DecoratedBox(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -94,7 +94,7 @@ class ProfileHeader extends StatelessWidget {
       if (url.startsWith("http")) {
         return url;
       } else if (url.startsWith("/uploads/avatars")) {
-        final String baseUrl = "https://api.hadith-shareef.com/";
+        const String baseUrl = "https://api.hadith-shareef.com/";
         return '$baseUrl/api$url';
       }
     }

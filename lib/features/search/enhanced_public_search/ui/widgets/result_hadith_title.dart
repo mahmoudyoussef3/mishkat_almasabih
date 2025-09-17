@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class ResultHadithTitle extends StatelessWidget {
   final String title;
-  const ResultHadithTitle({super.key, required this.title});
+  const ResultHadithTitle({required this.title, super.key});
 
   @override
   Widget build(BuildContext context) {

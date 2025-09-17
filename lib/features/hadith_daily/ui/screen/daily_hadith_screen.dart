@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
@@ -8,16 +7,15 @@ import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_title.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_content_card.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_attribution_and_grade.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_content_card.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tab_content.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
 class HadithDailyScreen extends StatefulWidget {
-  const HadithDailyScreen({super.key, required this.dailyHadithModel});
+  const HadithDailyScreen({required this.dailyHadithModel, super.key});
   final DailyHadithModel dailyHadithModel;
 
   @override
@@ -182,7 +180,6 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: ColorsManager.primaryPurple.withOpacity(0.2),
-          width: 1,
         ),
       ),
       child: Row(
@@ -230,7 +227,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
 
   Widget _buildEnhancedTabsSection() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: ColorsManager.white,
 
@@ -267,7 +264,6 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: ColorsManager.primaryGold.withOpacity(0.2),
-          width: 1,
         ),
       ),
       child: HadithActionsRow(

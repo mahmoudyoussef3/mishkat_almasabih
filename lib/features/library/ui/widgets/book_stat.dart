@@ -6,7 +6,7 @@ class BookStat extends StatelessWidget {
   final String value;
   final Color color;
 
-  const BookStat({super.key, required this.value, required this.color});
+  const BookStat({required this.value, required this.color, super.key});
 
   @override
   Widget build(BuildContext context) {

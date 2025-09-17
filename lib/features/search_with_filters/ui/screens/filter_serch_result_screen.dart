@@ -6,14 +6,13 @@ import 'package:mishkat_almasabih/core/widgets/empty_search_state.dart';
 import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
-import 'package:mishkat_almasabih/features/ahadith/ui/widgets/emoty_chapter_ahadith.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 
 class FilterSerchResultScreen extends StatelessWidget {
-  const FilterSerchResultScreen({super.key, required this.searchQuery});
+  const FilterSerchResultScreen({required this.searchQuery, super.key});
   final String? searchQuery;
 
   @override
@@ -42,12 +41,12 @@ class FilterSerchResultScreen extends StatelessWidget {
                   final hadiths =
                       state.searchWithFiltersModel.search?.results?.data ?? [];
                   if (hadiths.isEmpty) {
-                    return EmptySliverState();
+                    return const EmptySliverState();
                   }
 
                   return SliverList.separated(
                     itemCount: hadiths.length,
-                    separatorBuilder: (_, __) => IslamicSeparator(),
+                    separatorBuilder: (_, __) => const IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = hadiths[index];
                       return GestureDetector(
@@ -57,7 +56,6 @@ class FilterSerchResultScreen extends StatelessWidget {
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
-                                      isBookMark: false,
                                       showNavigation: false,
 
                                       isLocal: false,
@@ -97,7 +95,7 @@ class FilterSerchResultScreen extends StatelessWidget {
                   );
                 }
 
-                return SliverToBoxAdapter(child: SizedBox.shrink());
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),
           ],

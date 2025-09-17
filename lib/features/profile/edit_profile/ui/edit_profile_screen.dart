@@ -11,7 +11,7 @@ import 'package:mishkat_almasabih/features/profile/edit_profile/logic/cubit/edit
 class EditProfileScreen extends StatefulWidget {
   final UserResponseModel userData;
 
-  const EditProfileScreen({super.key, required this.userData});
+  const EditProfileScreen({required this.userData, super.key});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -84,7 +84,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 if (state is EditProfileSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(
 
-                    SnackBar(
+                    const SnackBar(
                       
                       behavior: SnackBarBehavior.floating,
                       backgroundColor: ColorsManager.hadithAuthentic,
@@ -215,7 +215,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     if (url.startsWith("http")) {
       return url; 
     } else if (url.startsWith("/uploads/avatars")) {
-      final String baseUrl = "https://api.hadith-shareef.com/";
+      const String baseUrl = "https://api.hadith-shareef.com/";
       return '$baseUrl/api$url';
     }
   }
@@ -230,10 +230,7 @@ class AvatarSection extends StatelessWidget {
   final Future<void> Function(ImageSource source) onPickImage;
 
   const AvatarSection({
-    super.key,
-    required this.selectedImageFile,
-    required this.avatarUrl,
-    required this.onPickImage,
+    required this.selectedImageFile, required this.avatarUrl, required this.onPickImage, super.key,
   });
 
   void _openPicker(BuildContext context) {
@@ -255,7 +252,7 @@ class AvatarSection extends StatelessWidget {
 
     return Column(
       children: [
-        Container(
+        DecoratedBox(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             boxShadow: [
@@ -290,7 +287,7 @@ class AvatarSection extends StatelessWidget {
 class AvatarPickerSheet extends StatelessWidget {
   final Future<void> Function(ImageSource source) onPickImage;
 
-  const AvatarPickerSheet({super.key, required this.onPickImage});
+  const AvatarPickerSheet({required this.onPickImage, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -348,7 +345,7 @@ class AvatarPickerSheet extends StatelessWidget {
 class UsernameSection extends StatelessWidget {
   final TextEditingController controller;
 
-  const UsernameSection({super.key, required this.controller});
+  const UsernameSection({required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -356,7 +353,7 @@ class UsernameSection extends StatelessWidget {
       controller: controller,
       style: TextStyle(fontSize: 15.sp),
       decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person, color: ColorsManager.primaryPurple),
+        prefixIcon: const Icon(Icons.person, color: ColorsManager.primaryPurple),
         hintText: "أدخل اسم المستخدم",
         filled: true,
         fillColor: Colors.white,
@@ -376,10 +373,8 @@ class InfoCard extends StatelessWidget {
   final int achievements;
 
   const InfoCard({
-    super.key,
+    required this.createdAt, required this.achievements, super.key,
     this.email,
-    required this.createdAt,
-    required this.achievements,
   });
 
   @override

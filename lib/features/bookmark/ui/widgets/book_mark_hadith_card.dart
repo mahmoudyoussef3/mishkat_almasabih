@@ -9,11 +9,7 @@ import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmar
 
 class BookmarkHadithCard extends StatelessWidget {
   const BookmarkHadithCard({
-    super.key,
-    required this.hadithNumber,
-    required this.hadithText,
-    required this.bookName,
-    required this.chapterName,
+    required this.hadithNumber, required this.hadithText, required this.bookName, required this.chapterName, super.key,
     this.collection,
     this.notes,
   });
@@ -34,7 +30,7 @@ class BookmarkHadithCard extends StatelessWidget {
         curve: Curves.easeInOut,
         margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
+          gradient: const LinearGradient(
             colors: [ColorsManager.secondaryBackground, ColorsManager.offWhite],
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
@@ -92,10 +88,10 @@ class BookmarkHadithCard extends StatelessWidget {
                       } else if (state is DeleteSuccess) {
                         ScaffoldMessenger.of(context).clearSnackBars();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
 
                             backgroundColor: ColorsManager.primaryGreen,
-                            content: const Text(
+                            content: Text(
                               'تم حذف الحديث من المحفوظات',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -106,10 +102,10 @@ class BookmarkHadithCard extends StatelessWidget {
                                                 ScaffoldMessenger.of(context).clearSnackBars();
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
 
                             backgroundColor: ColorsManager.primaryGreen,
-                            content: const Text(
+                            content: Text(
                               'حدث خطأ. حاول مرة اخري',
                               style: TextStyle(color: Colors.white),
                             ),

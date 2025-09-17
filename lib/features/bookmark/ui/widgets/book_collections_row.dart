@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookmarkCollectionsRow extends StatelessWidget {
   final String selectedCollection;
   final ValueChanged<String> onCollectionSelected;
 
   const BookmarkCollectionsRow({
-    super.key,
-    required this.selectedCollection,
-    required this.onCollectionSelected,
+    required this.selectedCollection, required this.onCollectionSelected, super.key,
   });
 
   @override
@@ -74,7 +72,6 @@ class BookmarkCollectionsRow extends StatelessWidget {
                                     : ColorsManager.mediumGray.withOpacity(
                                       0.35,
                                     ),
-                            width: 1,
                           ),
                         ),
                         child: Center(

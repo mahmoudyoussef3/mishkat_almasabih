@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../../core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class FeaturedHadithCard extends StatelessWidget {
   final String hadithNumber;
@@ -12,11 +11,7 @@ class FeaturedHadithCard extends StatelessWidget {
   final String book;
 
   const FeaturedHadithCard({
-    super.key,
-    required this.hadithNumber,
-    required this.hadithText,
-    required this.narrator,
-    required this.book,
+    required this.hadithNumber, required this.hadithText, required this.narrator, required this.book, super.key,
   });
 
   @override
@@ -63,7 +58,7 @@ class FeaturedHadithCard extends StatelessWidget {
                     color: ColorsManager.white.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(Spacing.sm),
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.format_quote,
                     color: ColorsManager.white,
                     size: 20,
@@ -91,7 +86,7 @@ class FeaturedHadithCard extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.bookmark_border,
                     color: ColorsManager.white,
                     size: 20,
@@ -131,7 +126,7 @@ class FeaturedHadithCard extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.person_outline,
                           size: 16,
                           color: ColorsManager.primaryPurple,
@@ -147,7 +142,7 @@ class FeaturedHadithCard extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.share_outlined,
                             size: 16,
                             color: ColorsManager.primaryPurple,

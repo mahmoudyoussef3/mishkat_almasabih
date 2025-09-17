@@ -3,7 +3,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class DialogHeader extends StatelessWidget {
   final String title;
-  const DialogHeader({super.key, required this.title});
+  const DialogHeader({required this.title, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class DialogHeader extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             shape: BoxShape.circle,
             gradient: LinearGradient(
               colors: [

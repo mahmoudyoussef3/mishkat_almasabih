@@ -64,7 +64,7 @@ class SearchHistoryCubit extends Cubit<SearchHistoryState> {
   /// مسح الكل
   Future<void> clearAll({required String searchCategory}) async {
     await HistoryPrefs.clearHistory(searchCategory);
-    emit(SearchHistorySuccess([]));
+    emit(SearchHistorySuccess(const []));
   }
 }
 

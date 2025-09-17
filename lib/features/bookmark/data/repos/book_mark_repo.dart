@@ -18,12 +18,12 @@ class BookMarkRepo {
   Future<Either<ErrorHandler, BookmarksResponse>> getUserBookMarks() async {
     try {
       final token = await _getUserToken();
-      final cacheKey = CacheKeys.bookmarks;
+      const cacheKey = CacheKeys.bookmarks;
 
       final cachedData = await GenericCacheService.instance
           .getData<BookmarksResponse>(
             key: cacheKey,
-            fromJson: (json) => BookmarksResponse.fromJson(json),
+            fromJson: BookmarksResponse.fromJson,
           );
 
       if (cachedData != null) {
@@ -35,7 +35,6 @@ class BookMarkRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
       );
 
       return Right(response);
@@ -50,12 +49,12 @@ class BookMarkRepo {
     try {
       final token = await _getUserToken();
 
-      final cacheKey = CacheKeys.collectionBookmarksResponse;
+      const cacheKey = CacheKeys.collectionBookmarksResponse;
 
       final cachedData = await GenericCacheService.instance
           .getData<CollectionsResponse>(
             key: cacheKey,
-            fromJson: (json) => CollectionsResponse.fromJson(json),
+            fromJson: CollectionsResponse.fromJson,
           );
 
       if (cachedData != null) {
@@ -67,7 +66,6 @@ class BookMarkRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
       );
       return Right(response);
     } catch (e) {

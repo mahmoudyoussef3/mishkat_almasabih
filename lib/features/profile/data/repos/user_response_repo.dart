@@ -14,12 +14,12 @@ class UserResponseRepo {
     try {
       final String token = await _getUserToken();
 
-      final cacheKey = CacheKeys.userProfile;
+      const cacheKey = CacheKeys.userProfile;
 
       final cachedData = await GenericCacheService.instance
           .getData<UserResponseModel>(
             key: cacheKey,
-            fromJson: (json) => UserResponseModel.fromJson(json),
+            fromJson: UserResponseModel.fromJson,
           );
 
       if (cachedData != null) {
@@ -31,7 +31,6 @@ class UserResponseRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
       );
       return Right(response);
     } catch (e) {

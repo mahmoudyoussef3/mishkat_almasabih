@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
-import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_button.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_button_old.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/collection_choice_chips.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/dialog_header.dart';
@@ -22,16 +21,7 @@ class CollectionsView extends StatelessWidget {
   final VoidCallback onCreateNewPressed;
 
   const CollectionsView({
-    super.key,
-    required this.bookName,
-    required this.bookSlug,
-    required this.chapter,
-    required this.hadithNumber,
-    required this.hadithText,
-    required this.notesController,
-    required this.onCollectionSelected,
-    required this.selectedCollection,
-    required this.onCreateNewPressed,
+    required this.bookName, required this.bookSlug, required this.chapter, required this.hadithNumber, required this.hadithText, required this.notesController, required this.onCollectionSelected, required this.selectedCollection, required this.onCreateNewPressed, super.key,
   });
 
   @override
@@ -49,12 +39,12 @@ class CollectionsView extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                DialogHeader(title: "إضافة للمفضلة"),
+                const DialogHeader(title: "إضافة للمفضلة"),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   "اختر مجموعة من الإشارات المرجعية",
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: ColorsManager.secondaryText,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -84,7 +74,7 @@ class CollectionsView extends StatelessWidget {
                     child: GestureDetector(
                   //    borderRadius: BorderRadius.circular(12),
                       onTap: onCreateNewPressed,
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
@@ -92,7 +82,7 @@ class CollectionsView extends StatelessWidget {
                             color: ColorsManager.primaryPurple,
                             size: 20,
                           ),
-                          const SizedBox(width: 8),
+                          SizedBox(width: 8),
                           Text(
                             "إنشاء مجموعة جديدة",
                             style: TextStyle(
@@ -108,7 +98,7 @@ class CollectionsView extends StatelessWidget {
                 ),
                 
                 const SizedBox(height: 20),
-                InputLabel("ملاحظات (اختياري)"),
+                const InputLabel("ملاحظات (اختياري)"),
                 const SizedBox(height: 6),
                 StyledTextField(controller: notesController, hint: "أدخل ملاحظاتك هنا", maxLines: 3),
                 const SizedBox(height: 28),

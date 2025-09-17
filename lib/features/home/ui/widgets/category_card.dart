@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../../core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class CategoryCard extends StatelessWidget {
   final String name;
@@ -12,18 +10,14 @@ class CategoryCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const CategoryCard({
-    super.key,
-    required this.name,
-    required this.icon,
-    required this.color,
-    required this.onTap,
+    required this.name, required this.icon, required this.color, required this.onTap, super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: ColorsManager.white,
           borderRadius: BorderRadius.circular(Spacing.cardRadius),
@@ -49,7 +43,7 @@ class CategoryCard extends StatelessWidget {
                   colors: [color.withOpacity(0.2), color.withOpacity(0.1)],
                 ),
                 borderRadius: BorderRadius.circular(Spacing.md),
-                border: Border.all(color: color.withOpacity(0.3), width: 1),
+                border: Border.all(color: color.withOpacity(0.3)),
               ),
               child: Icon(icon, color: color, size: 28),
             ),

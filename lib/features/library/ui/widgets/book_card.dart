@@ -9,7 +9,7 @@ import 'package:mishkat_almasabih/features/library/ui/widgets/book_stat.dart';
 class BookCard extends StatelessWidget {
   final Book book;
 
-  const BookCard({super.key, required this.book});
+  const BookCard({required this.book, super.key});
   static const Map<String, String> bookWriters = {
     "Sahih Bukhari": "الإمام البخاري",
     "Sahih Muslim": "الإمام مسلم",
@@ -85,7 +85,7 @@ class BookCard extends StatelessWidget {
               },
             ],
           ),
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           color: ColorsManager.white,
           borderRadius: BorderRadius.circular(20.r),

@@ -1,26 +1,25 @@
 import 'dart:async';
 import 'dart:ui';
+
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_notify/easy_notify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
-import 'package:flutter_background_service_android/flutter_background_service_android.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/networking/api_service.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/save_hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
+import 'package:mishkat_almasabih/mishkat_almasabih.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:easy_notify/easy_notify.dart';
-import 'package:android_intent_plus/android_intent.dart';
-
-import 'mishkat_almasabih.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setUpGetIt();
-  await initializeDateFormatting('ar', null);
+  await initializeDateFormatting('ar');
   await EasyNotify.init();
  // await initializeService();
 
@@ -53,8 +52,6 @@ Future<void> initializeService() async {
 
   await service.configure(
     androidConfiguration: AndroidConfiguration(
-      autoStart: true,
-      autoStartOnBoot: true,
       isForegroundMode: true,
       onStart: onStart,
       notificationChannelId: 'my_foreground',
@@ -62,7 +59,6 @@ Future<void> initializeService() async {
       initialNotificationContent: 'التطبيق بيعمل في الخلفية',
     ),
     iosConfiguration: IosConfiguration(
-      autoStart: true,
       onForeground: onStart,
       onBackground: onIosBackground,
     ),
@@ -72,7 +68,7 @@ Future<void> initializeService() async {
 }
 
 @pragma('vm:entry-point')
-void onStart(ServiceInstance service) async {
+Future<void> onStart(ServiceInstance service) async {
   WidgetsFlutterBinding.ensureInitialized();
   DartPluginRegistrant.ensureInitialized();
 

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import 'api_error_handler.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
 
 /// A helper class to wrap API results using Either.
 /// - Left = Failure (ErrorHandler)

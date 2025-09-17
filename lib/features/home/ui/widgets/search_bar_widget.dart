@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../../core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class SearchBarWidget extends StatelessWidget {
   final TextEditingController controller;
@@ -12,16 +10,14 @@ class SearchBarWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
   const SearchBarWidget({
-    super.key,
-    required this.controller,
-    required this.onSearch,
+    required this.controller, required this.onSearch, super.key,
     this.onTap,
     this.hintText,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: ColorsManager.white,
         borderRadius: BorderRadius.circular(Spacing.cardRadius),
@@ -40,7 +36,7 @@ class SearchBarWidget extends StatelessWidget {
             hintStyle: TextStyles.bodyMedium.copyWith(
               color: ColorsManager.secondaryText,
             ),
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.search,
               color: ColorsManager.primaryPurple,
               size: 24,
@@ -48,14 +44,12 @@ class SearchBarWidget extends StatelessWidget {
             suffixIcon:
                 controller.text.isNotEmpty
                     ? IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.clear,
                         color: ColorsManager.gray,
                         size: 20,
                       ),
-                      onPressed: () {
-                        controller.clear();
-                      },
+                      onPressed: controller.clear,
                     )
                     : null,
             border: InputBorder.none,

@@ -1,6 +1,11 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
+import 'package:mishkat_almasabih/features/authentication/login/logic/cubit/login_cubit.dart';
+import 'package:mishkat_almasabih/features/authentication/login/ui/screens/login_screen.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/signup_screen.dart';
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
@@ -13,6 +18,9 @@ import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/public_search_result.dart';
+import 'package:mishkat_almasabih/features/main_navigation/main_navigation_screen.dart';
+import 'package:mishkat_almasabih/features/onboarding/onboarding_screen.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
@@ -22,14 +30,7 @@ import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model
 import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/ui/serag_chat_screen.dart';
-import '../../features/home/ui/widgets/public_search_result.dart';
-import '../../features/main_navigation/main_navigation_screen.dart';
-import '../di/dependency_injection.dart';
-import 'routes.dart';
-import '../../features/authentication/login/logic/cubit/login_cubit.dart';
-import '../../features/authentication/login/ui/screens/login_screen.dart';
-import '../../features/onboarding/onboarding_screen.dart';
-import '../../features/splash/splash_screen.dart';
+import 'package:mishkat_almasabih/features/splash/splash_screen.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
@@ -43,7 +44,7 @@ class AppRouter {
           builder:
               (_) => BlocProvider(
                 create: (context) => getIt<SignupCubit>(),
-                child: SignupScreen(),
+                child: const SignupScreen(),
               ),
         );
       case Routes.loginScreen:
@@ -51,7 +52,7 @@ class AppRouter {
           builder:
               (_) => BlocProvider(
                 create: (context) => getIt<LoginCubit>(),
-                child: LoginScreen(),
+                child: const LoginScreen(),
               ),
         );
       case Routes.mainNavigationScreen:
@@ -78,8 +79,8 @@ class AppRouter {
         );
 
       case Routes.bookChaptersScreen:
-        final args = settings.arguments as List<dynamic>;
-        final bookSlug = args[0];
+        final args = settings.arguments! as List<String>;
+        final String bookSlug = args[0];
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
@@ -90,7 +91,7 @@ class AppRouter {
               ),
         );
       case Routes.publicSearchSCreen:
-        final query = settings.arguments as String;
+        final query = settings.arguments! as String;
         log(query);
 
         return MaterialPageRoute(
@@ -106,7 +107,7 @@ class AppRouter {
         );
 
       case Routes.filterResultSearch:
-        final query = settings.arguments as Map<String, dynamic>;
+        final Map<String,String> query = settings.arguments! as Map<String, String>;
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
@@ -136,7 +137,7 @@ class AppRouter {
         );
         */
       case Routes.hadithOfTheDay:
-        final query = settings.arguments as DailyHadithModel;
+        final query = settings.arguments! as DailyHadithModel;
 
         return MaterialPageRoute(
           builder:
@@ -149,7 +150,7 @@ class AppRouter {
               ),
         );
       case Routes.serag:
-        final query = settings.arguments as SeragRequestModel;
+        final query = settings.arguments! as SeragRequestModel;
 
         return MaterialPageRoute(
           builder:

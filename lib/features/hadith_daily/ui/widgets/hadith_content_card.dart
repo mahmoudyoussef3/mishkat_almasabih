@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_rich_text.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_rich_text.dart';
 
 class HadithContentCard extends StatelessWidget {
   final DailyHadithModel data;
-  const HadithContentCard({super.key, required this.data});
+  const HadithContentCard({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topRight,
@@ -89,7 +89,6 @@ class HadithContentCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.r),
                     border: Border.all(
                       color: ColorsManager.primaryPurple.withOpacity(0.2),
-                      width: 1,
                     ),
                   ),
                   child: Row(

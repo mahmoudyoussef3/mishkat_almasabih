@@ -1,15 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
-import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
-import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
-import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
-import 'package:mishkat_almasabih/features/bookmark/data/models/collection_model.dart';
-import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
-import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
-import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
-import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Generic Cache Service that can handle any type of data
@@ -160,7 +150,7 @@ class GenericCacheService {
 
   /// Check if cache is valid for a specific key
   Future<bool> isCacheValid(String key) async {
-    return await _isCacheValid(key);
+    return _isCacheValid(key);
   }
 
   /// Get cache info for debugging
@@ -278,206 +268,9 @@ class CacheKeys {
 /// Extension methods for commonly used data types
 extension CacheExtensions on GenericCacheService {
   /// Save statistics with predefined settings
-  Future<bool> saveStatistics(StatisticsResponse statistics) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.libraryStatistics,
-      data: statistics,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
 
-  /// Get statistics from cache
-  Future<T?> getStatistics<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.libraryStatistics,
-      fromJson: fromJson,
-    );
-  }
 
-  /// Save books with predefined settings
-  Future<bool> saveBooks(BooksResponse books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.booksWithCategories,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
 
-  /// Get books from cache
-  Future<T?> getBooks<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.booksWithCategories,
-      fromJson: fromJson,
-    );
-  }
 
-  //get Three types of hadith
 
-  Future<bool> saveLocalHadith(LocalHadithResponse books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.localHadithResponse,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getLocalHadith<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.localHadithResponse,
-      fromJson: fromJson,
-    );
-  }
-
-  Future<bool> saveAdabHadith(LocalHadithResponse books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.adabHadithResponse,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getAdabHadith<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.adabHadithResponse,
-      fromJson: fromJson,
-    );
-  }
-
-  Future<bool> saveRemoteHadith(HadithResponse books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.remoteHadithResponse,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getRemoteHadith<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.remoteHadithResponse,
-      fromJson: fromJson,
-    );
-  }
-
-  Future<bool> saveBookCategory(CategoryResponse books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.bookCategoryResponse,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getBookCategory<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.bookCategoryResponse,
-      fromJson: fromJson,
-    );
-  }
-
-  Future<bool> saveBookmarks(BookmarksResponse books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.bookmarks,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getBookmarks<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(key: CacheKeys.bookmarks, fromJson: fromJson);
-  }
-
-  Future<bool> saveCollectionBookmarks(CollectionsResponse books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.collectionBookmarksResponse,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getCollectinsBookmarks<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.collectionBookmarksResponse,
-      fromJson: fromJson,
-    );
-  }
-
-  Future<bool> saveChapters(ChaptersModel books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.chaptersResponse,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getChapters<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(
-      key: CacheKeys.chaptersResponse,
-      fromJson: fromJson,
-    );
-  }
-
-  Future<bool> saveHadithDaily(DailyHadithModel books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.hadithDaily,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getHadithDaily<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(key: CacheKeys.hadithDaily, fromJson: fromJson);
-  }
-
-  Future<bool> saveUser(UserResponseModel books) async {
-    return await saveData<dynamic>(
-      key: CacheKeys.userProfile,
-      data: books,
-      toJson: (data) => data.toJson(),
-      cacheExpirationHours: 24,
-    );
-  }
-
-  /// Get books from cache
-  Future<T?> getUser<T>({
-    required T Function(Map<String, dynamic>) fromJson,
-  }) async {
-    return await getData<T>(key: CacheKeys.userProfile, fromJson: fromJson);
-  }
 }

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/theming/colors.dart';
-import '../../../../../core/widgets/app_text_form_field.dart';
-import '../../logic/cubit/login_cubit.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/app_text_form_field.dart';
+import 'package:mishkat_almasabih/features/authentication/login/logic/cubit/login_cubit.dart';
 
 class EmailAndPassword extends StatefulWidget {
   const EmailAndPassword({super.key});
@@ -33,13 +33,13 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           // Email Field
           AppTextFormField(
                 backgroundColor: ColorsManager.lightGray,
-                suffixIcon: Icon(
+                suffixIcon: const Icon(
                   Icons.email,
                   color: ColorsManager.primaryGreen,
                 ),
                 controller: context.read<LoginCubit>().emailController,
                 hintText: 'البريد الإلكتروني',
-                hintStyle: TextStyle(color: Colors.black),
+                hintStyle: const TextStyle(color: Colors.black),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'يرجى إدخال البريد الإلكتروني';
@@ -61,7 +61,7 @@ class _EmailAndPasswordState extends State<EmailAndPassword> {
           // Password Field
           AppTextFormField(
                 backgroundColor: ColorsManager.lightGray,
-                hintStyle: TextStyle(color: Colors.black),
+                hintStyle: const TextStyle(color: Colors.black),
 
                 controller: context.read<LoginCubit>().passwordController,
                 hintText: 'كلمة المرور',

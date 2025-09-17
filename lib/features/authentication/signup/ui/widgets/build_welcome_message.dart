@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
 class BuildWelcomeMessage extends StatelessWidget {
   const BuildWelcomeMessage({super.key});
 

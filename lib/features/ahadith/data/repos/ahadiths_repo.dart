@@ -21,7 +21,7 @@ class AhadithsRepo {
       final cachedData = await GenericCacheService.instance
           .getData<HadithResponse>(
             key: cacheKey,
-            fromJson: (json) => HadithResponse.fromJson(json),
+            fromJson: HadithResponse.fromJson,
           );
 
       if (cachedData != null) {
@@ -37,8 +37,7 @@ class AhadithsRepo {
       await GenericCacheService.instance.saveData<HadithResponse>(
         key: cacheKey,
         data: response,
-        toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100, 
+        toJson: (data) => data.toJson(), 
       );
 
       log(
@@ -62,7 +61,7 @@ class AhadithsRepo {
       final cachedData = await GenericCacheService.instance
           .getData<LocalHadithResponse>(
             key: cacheKey,
-            fromJson: (json) => LocalHadithResponse.fromJson(json),
+            fromJson: LocalHadithResponse.fromJson,
           );
 
       if (cachedData != null) {
@@ -102,7 +101,7 @@ class AhadithsRepo {
       final cachedData = await GenericCacheService.instance
           .getData<LocalHadithResponse>(
             key: cacheKey,
-            fromJson: (json) => LocalHadithResponse.fromJson(json),
+            fromJson: LocalHadithResponse.fromJson,
           );
 
       if (cachedData != null) {

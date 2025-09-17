@@ -5,11 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:mishkat_almasabih/core/helpers/functions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
+import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
-import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/bookmark_empty_state.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 
@@ -17,9 +17,7 @@ class BookmarkList extends StatefulWidget {
   final String selectedCollection;
   final String query;
   const BookmarkList({
-    super.key,
-    required this.selectedCollection,
-    required this.query,
+    required this.selectedCollection, required this.query, super.key,
   });
 
   @override
@@ -28,8 +26,8 @@ class BookmarkList extends StatefulWidget {
 
 class _BookmarkListState extends State<BookmarkList> {
   String formatDateArabic(String utcString) {
-    DateTime utcTime = DateTime.parse(utcString);
-    DateTime localTime = utcTime.toLocal();
+    final DateTime utcTime = DateTime.parse(utcString);
+    final DateTime localTime = utcTime.toLocal();
     return DateFormat('d MMMM yyyy - h:mm a', 'ar').format(localTime);
   }
 
@@ -83,10 +81,10 @@ final List<Bookmark> filteredSearch =
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: filteredSearch.length,
-                    separatorBuilder: (_, __) => IslamicSeparator(),
+                    separatorBuilder: (_, __) => const IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = filteredSearch[index];
-                      String createdAT = hadith.createdAt ?? '';
+                      final String createdAT = hadith.createdAt ?? '';
 
                       return GestureDetector(
                    //     borderRadius: BorderRadius.circular(16.r),

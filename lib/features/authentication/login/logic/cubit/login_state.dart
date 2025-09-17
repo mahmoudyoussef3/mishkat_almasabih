@@ -1,4 +1,3 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_response_body.dart';
 
 abstract class LoginState {}

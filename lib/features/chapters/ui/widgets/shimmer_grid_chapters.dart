@@ -8,14 +8,14 @@ class ChapterGridShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     const crossAxisCount = 2;
-    final spacing = 12 * (crossAxisCount - 1);
+    const spacing = 12 * (crossAxisCount - 1);
     final itemWidth = (screenWidth - spacing) / crossAxisCount;
     final itemHeight = itemWidth * 0.4;
     final aspectRatio = itemWidth / itemHeight;
 
     return SliverGrid(
       delegate: SliverChildBuilderDelegate((context, index) {
-        return Padding(
+        return const Padding(
           padding: EdgeInsets.symmetric(horizontal: 8),
           child: ChapterCardShimmer(),
         );

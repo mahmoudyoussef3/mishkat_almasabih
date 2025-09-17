@@ -15,13 +15,7 @@ class CreateCollectionView extends StatefulWidget {
   final VoidCallback onBack;
 
   const CreateCollectionView({
-    super.key,
-    required this.bookName,
-    required this.bookSlug,
-    required this.chapter,
-    required this.hadithNumber,
-    required this.hadithText,
-    required this.onBack,
+    required this.bookName, required this.bookSlug, required this.chapter, required this.hadithNumber, required this.hadithText, required this.onBack, super.key,
   });
 
   @override
@@ -72,16 +66,15 @@ class _CreateCollectionViewState extends State<CreateCollectionView> {
           ),
           const SizedBox(height: 24),
 
-          InputLabel("اسم المجموعة *"),
+          const InputLabel("اسم المجموعة *"),
           const SizedBox(height: 8),
           StyledTextField(
             controller: collectionNameController,
             hint: "مثال: أحاديث الصلاة",
-            maxLines: 1,
           ),
           const SizedBox(height: 16),
 
-          InputLabel("ملاحظات (اختياري)"),
+          const InputLabel("ملاحظات (اختياري)"),
           const SizedBox(height: 8),
           StyledTextField(
             controller: notesController,

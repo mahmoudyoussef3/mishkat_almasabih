@@ -3,10 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class ChapterCard extends StatelessWidget {
-  const ChapterCard({super.key, 
-    required this.chapterNumber,
-    required this.ar,
-    required this.primaryPurple,
+  const ChapterCard({required this.chapterNumber, required this.ar, required this.primaryPurple, super.key,
   });
   final int? chapterNumber;
   final String? ar;
@@ -58,7 +55,7 @@ class ChapterCard extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  ("الباب $chapterNumber").toString(),
+                  "الباب $chapterNumber",
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
@@ -77,7 +74,7 @@ class ChapterCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     textDirection: TextDirection.rtl,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: ColorsManager.black,
                       fontSize: 18,
                       fontWeight: FontWeight.w800,

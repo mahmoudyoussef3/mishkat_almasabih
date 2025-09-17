@@ -9,7 +9,7 @@ class DioFactory {
   static Dio? dio;
 
   static Dio getDio() {
-    Duration timeOut = const Duration(seconds: 30);
+    const Duration timeOut = Duration(seconds: 30);
 
     if (dio == null) {
       dio = Dio();
@@ -24,7 +24,7 @@ class DioFactory {
     }
   }
 
-  static void addDioHeaders() async {
+  static Future<void> addDioHeaders() async {
     dio?.options.headers = {
       'Accept': 'application/json',
       //'Authorization':

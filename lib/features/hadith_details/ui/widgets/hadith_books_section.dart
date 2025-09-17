@@ -10,11 +10,9 @@ class HadithBookSection extends StatelessWidget {
   final String chapter;
 
   const HadithBookSection({
-    super.key,
-    required this.bookName,
+    required this.bookName, required this.chapter, super.key,
     this.author,
     this.authorDeath,
-    required this.chapter,
   });
 
   @override

@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'core/routing/app_router.dart';
-import 'core/routing/routes.dart';
+import 'package:mishkat_almasabih/core/routing/app_router.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 
 class MishkatAlmasabih extends StatelessWidget {
   final AppRouter appRouter;
@@ -10,10 +10,7 @@ class MishkatAlmasabih extends StatelessWidget {
   final bool isLoggedIn;
   
   const MishkatAlmasabih({
-    super.key,
-    required this.appRouter,
-    required this.isFirstTime,
-    required this.isLoggedIn,
+    required this.appRouter, required this.isFirstTime, required this.isLoggedIn, super.key,
   });
 
   String _getStartScreen() {
@@ -66,9 +63,6 @@ class MishkatAlmasabih extends StatelessWidget {
               ),
             );
           },
-          
-          // إضافة home fallback
-          home: null, // تأكد إن home = null عشان يستخدم initialRoute
         );
       },
     );

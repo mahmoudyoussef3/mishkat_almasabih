@@ -4,12 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
+import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:mishkat_almasabih/features/profile/ui/widgets/dark_mode_toggle.dart';
+import 'package:mishkat_almasabih/features/profile/ui/widgets/profile_header.dart';
 import 'package:mishkat_almasabih/features/profile/ui/widgets/section_title.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../logic/cubit/profile_cubit.dart';
-import 'widgets/profile_header.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -129,7 +128,6 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                               Container(
           width: 120.w,
@@ -156,7 +154,7 @@ class ProfileScreen extends StatelessWidget {
         ),
                                 SizedBox(height: 5.h),
 
-                                Text(
+                                const Text(
                                   style: TextStyle(
                                     color: ColorsManager.secondaryBackground,
                                   ),
@@ -264,7 +262,7 @@ class ProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorsManager.cardBackground,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: ColorsManager.mediumGray, width: 1),
+        border: Border.all(color: ColorsManager.mediumGray),
         boxShadow: [
           BoxShadow(
             color: ColorsManager.black.withOpacity(0.05),

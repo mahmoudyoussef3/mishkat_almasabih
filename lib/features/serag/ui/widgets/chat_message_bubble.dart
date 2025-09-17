@@ -7,7 +7,7 @@ import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model
 class ChatMessageBubble extends StatelessWidget {
   final Message message;
 
-  const ChatMessageBubble({super.key, required this.message});
+  const ChatMessageBubble({required this.message, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class ChatMessageBubble extends StatelessWidget {
           if (!isUser) ...[
             CircleAvatar(
               radius: 16.r,
-              backgroundImage: AssetImage('assets/images/serag_logo.jpg'),
+              backgroundImage: const AssetImage('assets/images/serag_logo.jpg'),
             ),
           ],
         ],

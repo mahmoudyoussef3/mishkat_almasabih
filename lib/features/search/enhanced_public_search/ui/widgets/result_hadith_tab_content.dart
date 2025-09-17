@@ -7,9 +7,7 @@ class ResultHadithTabContent extends StatelessWidget {
   final EnhancedHadithModel? data;
 
   const ResultHadithTabContent({
-    super.key,
-    required this.selectedTab,
-    required this.data,
+    required this.selectedTab, required this.data, super.key,
   });
 
   @override
@@ -46,7 +44,7 @@ class ResultHadithTabContent extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "${count++}- ".toString(),
+                                text: "${count++}- ",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: ColorsManager.black,
@@ -55,7 +53,7 @@ class ResultHadithTabContent extends StatelessWidget {
                               TextSpan(
                                 text: hint,
                                 
-                                style: TextStyle(
+                                style: const TextStyle(
                                   
                                                     fontWeight: FontWeight.w800,
 

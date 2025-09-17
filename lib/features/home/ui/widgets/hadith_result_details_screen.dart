@@ -1,15 +1,4 @@
-import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_title.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_content_card.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_attribution_and_grade.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tab_content.dart';
-import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
-import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
+
 /*
 class HadithResultDetailsScreen extends StatefulWidget {
   const HadithResultDetailsScreen({

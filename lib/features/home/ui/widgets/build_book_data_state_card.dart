@@ -5,11 +5,7 @@ import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class BuildBookDataStateCard extends StatelessWidget {
   const BuildBookDataStateCard({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.value,
-    required this.color,
+    required this.icon, required this.title, required this.value, required this.color, super.key,
   });
 
   final IconData icon;

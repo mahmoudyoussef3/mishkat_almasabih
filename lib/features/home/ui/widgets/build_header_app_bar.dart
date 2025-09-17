@@ -8,9 +8,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class BuildHeaderAppBar extends StatelessWidget {
    BuildHeaderAppBar({
-    super.key,
+    required this.title, super.key,
     this.description,
-    required this.title,
     this.home = false,
     this.pinned = false,
     this.actions,
@@ -74,7 +73,7 @@ class BuildHeaderAppBar extends StatelessWidget {
                             SizedBox(width: 12.w),
                             OutlinedButton(
                               style: OutlinedButton.styleFrom(
-                                side: BorderSide(
+                                side: const BorderSide(
                                   color: ColorsManager.lightBlue,
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -130,15 +129,15 @@ class BuildHeaderAppBar extends StatelessWidget {
           ],
         ),
         centerTitle: true,
-        background: Container(
-          decoration: BoxDecoration(),
+        background: DecoratedBox(
+          decoration: const BoxDecoration(),
           child: Stack(
             children: [
               Positioned.fill(
                 child: Opacity(
                   opacity: 0.05,
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage('assets/images/islamic_pattern.jpg'),
                         repeat: ImageRepeat.repeat,

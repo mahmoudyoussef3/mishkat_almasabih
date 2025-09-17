@@ -28,7 +28,6 @@ class RemainingQuestionsCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: ColorsManager.primaryPurple.withOpacity(0.3),
-                width: 1,
               ),
             ),
             child: Row(
@@ -69,7 +68,6 @@ class RemainingQuestionsCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: ColorsManager.primaryPurple.withOpacity(0.2),
-                width: 1,
               ),
             ),
             child: Row(
@@ -150,8 +148,6 @@ class _ShimmerBoxState extends State<_ShimmerBox>
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.borderRadius),
             gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
               stops: [
                 (_animation.value - 0.3).clamp(0.0, 1.0),
                 _animation.value.clamp(0.0, 1.0),

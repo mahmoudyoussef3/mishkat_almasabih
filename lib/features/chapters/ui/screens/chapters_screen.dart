@@ -3,7 +3,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/get_chapters_bloc_builder.dart';
 
 class BookChaptersScreen extends StatelessWidget {
-  const BookChaptersScreen({super.key, required this.args});
+  const BookChaptersScreen({required this.args, super.key});
   final List<dynamic>? args;
 
   @override

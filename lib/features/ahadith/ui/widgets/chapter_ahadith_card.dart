@@ -7,13 +7,10 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class ChapterAhadithCard extends StatelessWidget {
   const ChapterAhadithCard({
-    super.key,
-    required this.number,
-    required this.text,
+    required this.number, required this.text, required this.bookName, super.key,
     this.narrator,
     this.grade,
     this.reference,
-    required this.bookName,
   });
 
   final String number;
@@ -134,7 +131,6 @@ class ChapterAhadithCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
                             color: gradeColor.withOpacity(0.2),
-                            width: 1,
                           ),
                         ),
                         child: Text(
@@ -166,7 +162,6 @@ class ChapterAhadithCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.r),
                       border: Border.all(
                         color: gradeColor.withOpacity(0.1),
-                        width: 1,
                       ),
                     ),
                     child: Text(

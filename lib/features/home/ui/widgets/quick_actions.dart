@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../core/theming/colors.dart';
-import '../../../../core/theming/styles.dart';
-import '../../../../core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class QuickActions extends StatelessWidget {
   const QuickActions({super.key});
@@ -54,7 +52,7 @@ class QuickActions extends StatelessWidget {
       children: [
         Row(
           children: [
-            Icon(Icons.flash_on, color: ColorsManager.primaryPurple, size: 24),
+            const Icon(Icons.flash_on, color: ColorsManager.primaryPurple, size: 24),
             SizedBox(width: Spacing.sm),
             Text(
               'إجراءات سريعة',
@@ -71,7 +69,7 @@ class QuickActions extends StatelessWidget {
               actions.map((action) {
                 return Expanded(
                   child: GestureDetector(
-                    onTap: action['onTap'] as VoidCallback,
+                    onTap: action['onTap']! as VoidCallback,
                     child: Container(
                       margin: EdgeInsets.only(
                         right:
@@ -96,20 +94,20 @@ class QuickActions extends StatelessWidget {
                           Container(
                             padding: EdgeInsets.all(Spacing.sm),
                             decoration: BoxDecoration(
-                              color: (action['color'] as Color).withOpacity(
+                              color: (action['color']! as Color).withOpacity(
                                 0.1,
                               ),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Icon(
-                              action['icon'] as IconData,
-                              color: action['color'] as Color,
+                              action['icon']! as IconData,
+                              color: action['color']! as Color,
                               size: 24,
                             ),
                           ),
                           SizedBox(height: Spacing.sm),
                           Text(
-                            action['title'] as String,
+                            action['title']! as String,
                             style: TextStyles.labelMedium.copyWith(
                               color: ColorsManager.primaryText,
                               fontWeight: FontWeight.bold,
@@ -120,7 +118,7 @@ class QuickActions extends StatelessWidget {
                           ),
                           SizedBox(height: Spacing.xs),
                           Text(
-                            action['subtitle'] as String,
+                            action['subtitle']! as String,
                             style: TextStyles.bodySmall.copyWith(
                               color: ColorsManager.secondaryText,
                               fontSize: 10,

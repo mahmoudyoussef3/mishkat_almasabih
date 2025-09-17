@@ -1,17 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mishkat_almasabih/core/helpers/extensions.dart';
-import 'package:mishkat_almasabih/core/routing/routes.dart';
-import 'package:mishkat_almasabih/core/theming/colors.dart';
-import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
-import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_list.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/empty_history.dart';
+
 /*class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 

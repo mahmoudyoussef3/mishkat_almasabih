@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import 'api_constants.dart';
-import 'api_error_model.dart';
+import 'package:mishkat_almasabih/core/networking/api_constants.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_model.dart';
 
 
 

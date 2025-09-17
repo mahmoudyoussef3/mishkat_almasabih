@@ -1,9 +1,9 @@
 import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChatHistoryCubit extends Cubit<ChatHistoryState> {
   final List<Message> _messages = [];
@@ -24,7 +24,7 @@ class ChatHistoryCubit extends Cubit<ChatHistoryState> {
     _messages.clear();
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove("serag_messages");
-    emit(ChatHistorySuccess([]));
+    emit(ChatHistorySuccess(const []));
   }
 
   Future<void> loadMessages() async {

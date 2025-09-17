@@ -6,15 +6,13 @@ class HadithRichText extends StatelessWidget {
   final List wordsMeanings;
 
   const HadithRichText({
-    super.key,
-    required this.hadith,
-    required this.wordsMeanings,
+    required this.hadith, required this.wordsMeanings, super.key,
   });
 
   @override
   Widget build(BuildContext context) {
     final Map<String, String> wordMap = {
-      for (var wm in wordsMeanings) normalizeArabic(wm.word!): wm.meaning ?? "",
+      for (final wm in wordsMeanings) normalizeArabic(wm.word!): wm.meaning ?? "",
     };
 
     final words = hadith.split(" ");

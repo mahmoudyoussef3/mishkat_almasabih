@@ -4,11 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class BuildNavItem extends StatelessWidget {
   const BuildNavItem({
-    super.key,
-    required this.icon,
-    required this.index,
-    required this.currentIndex,
-    required this.onTap,
+    required this.icon, required this.index, required this.currentIndex, required this.onTap, super.key,
   });
   final IconData icon;
   final int index;

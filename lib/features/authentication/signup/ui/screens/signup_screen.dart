@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/login_with_google.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/already_have_account.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/build_signup_header.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/build_welcome_message.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/sign_up_form.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/signup_bloc_listener.dart';
-import '../../../../../core/theming/colors.dart';
 
 
 class SignupScreen extends StatelessWidget {
@@ -29,19 +29,19 @@ class SignupScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                    
-                BuildSignupHeader(),
+                const BuildSignupHeader(),
             
                 SizedBox(height: 24.h),
             
-                BuildWelcomeMessage(),
+                const BuildWelcomeMessage(),
             
                 SizedBox(height: 32.h),
             
-                SignupForm(),
+                const SignupForm(),
             
                 SizedBox(height: 32.h),
             
-                SignupBlocListener(),
+                const SignupBlocListener(),
             
                 SizedBox(height: 24.h),
             
@@ -49,10 +49,10 @@ class SignupScreen extends StatelessWidget {
             
                 SizedBox(height: 24.h),
             
-                AlreadyHaveAccount(),
+                const AlreadyHaveAccount(),
                 SizedBox(height: 8.h),
             
-                LoginWithGoogle(),
+                const LoginWithGoogle(),
             
                 SizedBox(height: 40.h),
               ],

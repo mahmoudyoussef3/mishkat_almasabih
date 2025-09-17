@@ -6,14 +6,7 @@ import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class BuildMainCategoryCard extends StatelessWidget {
   const BuildMainCategoryCard({
-    super.key,
-    required this.title,
-    required this.subtitle,
-    required this.description,
-    required this.icon,
-    required this.bookCount,
-    required this.gradient,
-    required this.onTap,
+    required this.title, required this.subtitle, required this.description, required this.icon, required this.bookCount, required this.gradient, required this.onTap, super.key,
   });
   final String title;
   final String subtitle;
@@ -200,7 +193,6 @@ class BuildMainCategoryCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: ColorsManager.white.withOpacity(0.3),
-                    width: 1,
                   ),
                 ),
                 child: Icon(icon, color: ColorsManager.white, size: 24.sp),

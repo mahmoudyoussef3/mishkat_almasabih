@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class ErrorState extends StatelessWidget {
   final String error;
-  const ErrorState({super.key, required this.error});
+  const ErrorState({required this.error, super.key});
 
   @override
   Widget build(BuildContext context) {

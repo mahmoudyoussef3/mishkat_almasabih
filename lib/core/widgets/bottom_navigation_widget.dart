@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../theming/colors.dart';
-import '../theming/styles.dart';
-import '../helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class BottomNavigationWidget extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
 
   const BottomNavigationWidget({
-    super.key,
-    required this.currentIndex,
-    required this.onTap,
+    required this.currentIndex, required this.onTap, super.key,
   });
 
   @override
@@ -38,7 +36,7 @@ class BottomNavigationWidget extends StatelessWidget {
       },
     ];
 
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: ColorsManager.white,
         boxShadow: [
@@ -74,7 +72,7 @@ top: false,
                       decoration: BoxDecoration(
                         color:
                             isActive
-                                ? (item['color'] as Color).withOpacity(0.1)
+                                ? (item['color']! as Color).withOpacity(0.1)
                                 : Colors.transparent,
                         borderRadius: BorderRadius.circular(Spacing.md),
                       ),
@@ -83,21 +81,21 @@ top: false,
                         children: [
                           Icon(
                             isActive
-                                ? item['activeIcon'] as IconData
-                                : item['icon'] as IconData,
+                                ? item['activeIcon']! as IconData
+                                : item['icon']! as IconData,
                             color:
                                 isActive
-                                    ? item['color'] as Color
+                                    ? item['color']! as Color
                                     : ColorsManager.gray,
                             size: 24.sp,
                           ),
                           SizedBox(height: Spacing.xs),
                           Text(
-                            item['label'] as String,
+                            item['label']! as String,
                             style: TextStyles.labelSmall.copyWith(
                               color:
                                   isActive
-                                      ? item['color'] as Color
+                                      ? item['color']! as Color
                                       : ColorsManager.gray,
                               fontWeight:
                                   isActive ? FontWeight.w600 : FontWeight.w400,

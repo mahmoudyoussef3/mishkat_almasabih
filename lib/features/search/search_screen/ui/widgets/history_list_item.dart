@@ -9,10 +9,7 @@ class HistoryListItem extends StatelessWidget {
   final VoidCallback onTap;
 
   const HistoryListItem({
-    super.key,
-    required this.item,
-    required this.onRemove,
-    required this.onTap,
+    required this.item, required this.onRemove, required this.onTap, super.key,
   });
 
   @override

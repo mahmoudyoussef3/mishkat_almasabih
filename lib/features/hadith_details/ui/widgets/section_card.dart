@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class SectionCard extends StatelessWidget {
   final Widget child;
-  const SectionCard({super.key, required this.child});
+  const SectionCard({required this.child, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,23 +1,19 @@
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
-import 'package:mishkat_almasabih/features/chapters/ui/widgets/build_chapter_card.dart';
-import 'package:mishkat_almasabih/features/chapters/ui/widgets/chapter_card_shimmer.dart';
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/screens/ahadith_screen.dart';
+import 'package:mishkat_almasabih/features/chapters/ui/widgets/build_chapter_card.dart';
+import 'package:mishkat_almasabih/features/chapters/ui/widgets/chapter_card_shimmer.dart';
 
 class ResponsiveChapterList extends StatelessWidget {
   const ResponsiveChapterList({
-    super.key,
-    required this.items,
-    required this.primaryPurple,
+    required this.items, required this.primaryPurple, required this.bookName, required this.writerName, required this.bookSlug, super.key,
     this.isLoading = false,
-    required this.bookName,
-    required this.writerName,
-    required this.bookSlug,
   });
 
   final List<dynamic> items;
@@ -54,7 +50,7 @@ class ResponsiveChapterList extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     const crossAxisCount = 2;
-    final spacing = 12 * (crossAxisCount - 1);
+    const spacing = 12 * (crossAxisCount - 1);
     final itemWidth = (screenWidth - spacing) / crossAxisCount;
     final itemHeight = itemWidth * 0.4;
     final aspectRatio = itemWidth / itemHeight;

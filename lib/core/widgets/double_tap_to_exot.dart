@@ -3,7 +3,7 @@ import 'package:mishkat_almasabih/core/helpers/functions.dart';
 
 // ignore: must_be_immutable
 class DoubleTapToExitApp extends StatelessWidget {
-  DoubleTapToExitApp({super.key, required this.myScaffoldScreen});
+  DoubleTapToExitApp({required this.myScaffoldScreen, super.key});
 
   DateTime? lastBackPressed;
   Widget myScaffoldScreen;
@@ -14,7 +14,7 @@ class DoubleTapToExitApp extends StatelessWidget {
         onWillPop: () async {
           final now = DateTime.now();
           if (lastBackPressed == null ||
-              now.difference(lastBackPressed!) > Duration(seconds: 2)) {
+              now.difference(lastBackPressed!) > const Duration(seconds: 2)) {
             lastBackPressed = now;
             showToast('اضغط مرة اخري للخروج من التطبيق', Colors.grey);
 

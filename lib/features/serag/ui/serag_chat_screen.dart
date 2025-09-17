@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
-import 'package:mishkat_almasabih/features/serag/ui/widgets/remaining_questions_card.dart';
-import 'package:mishkat_almasabih/features/serag/ui/widgets/chat_messages_list.dart';
 import 'package:mishkat_almasabih/features/serag/ui/widgets/chat_input_section.dart';
+import 'package:mishkat_almasabih/features/serag/ui/widgets/chat_messages_list.dart';
+import 'package:mishkat_almasabih/features/serag/ui/widgets/remaining_questions_card.dart';
 
 class SeragChatScreen extends StatefulWidget {
-  const SeragChatScreen({super.key, required this.model});
+  const SeragChatScreen({required this.model, super.key});
   final SeragRequestModel model;
 
   @override
@@ -44,7 +44,7 @@ class _SeragChatScreenState extends State<SeragChatScreen> {
                 controller: _scrollController,
                 slivers: [
                   BuildHeaderAppBar(title: "سراج", description: "مساعد الحديث"),
-                  SliverToBoxAdapter(child: RemainingQuestionsCard()),
+                  const SliverToBoxAdapter(child: RemainingQuestionsCard()),
                   const ChatMessagesList(),
                   SliverToBoxAdapter(child: SizedBox(height: 20.h)),
                 ],

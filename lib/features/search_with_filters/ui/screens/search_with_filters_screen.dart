@@ -140,7 +140,7 @@ void initState() {
                   Container(
                     height: 100.h,
                     width: double.infinity,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: ColorsManager.primaryPurple,
                     ),
                     child: Stack(
@@ -452,7 +452,7 @@ void initState() {
                       )
                       .toList(),
               onChanged: onChanged,
-              icon: Icon(
+              icon: const Icon(
                 Icons.keyboard_arrow_down,
                 color: ColorsManager.primaryPurple,
               ),

@@ -2,16 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 class BuildStatisticsContainer extends StatelessWidget {
   const BuildStatisticsContainer({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.value,
-    required this.color,
+    required this.icon, required this.title, required this.value, required this.color, super.key,
   });
 
   final IconData icon;
@@ -42,7 +38,6 @@ class BuildStatisticsContainer extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
             radius: 22,

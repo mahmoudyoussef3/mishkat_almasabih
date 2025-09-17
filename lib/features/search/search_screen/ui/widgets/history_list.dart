@@ -5,7 +5,7 @@ import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
-import 'history_list_item.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_list_item.dart';
 
 class HistoryList extends StatelessWidget {
   final List<HistoryItem> items;
@@ -13,10 +13,7 @@ class HistoryList extends StatelessWidget {
   final VoidCallback onClearAll;
 
   const HistoryList({
-    super.key,
-    required this.items,
-    required this.onRemove,
-    required this.onClearAll,
+    required this.items, required this.onRemove, required this.onClearAll, super.key,
   });
 
   @override

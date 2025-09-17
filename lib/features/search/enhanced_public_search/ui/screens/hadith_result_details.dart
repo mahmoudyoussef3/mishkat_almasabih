@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +8,6 @@ import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_title.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
@@ -18,7 +18,7 @@ import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widg
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
 class HadithResultDetails extends StatefulWidget {
-  const HadithResultDetails({super.key, required this.enhancedHadithModel});
+  const HadithResultDetails({required this.enhancedHadithModel, super.key});
   final EnhancedHadithModel enhancedHadithModel;
 
   @override
@@ -177,7 +177,7 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
 
   Widget _buildEnhancedTabsSection() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       decoration: BoxDecoration(
         color: ColorsManager.white,
 
@@ -214,14 +214,12 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
         borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: ColorsManager.primaryGold.withOpacity(0.2),
-          width: 1,
         ),
       ),
       child: ResultHadithActionRow(
         author: widget.enhancedHadithModel.attribution ?? "",
         authorDeath: 'غير معروف',
         grade: widget.enhancedHadithModel.grade ?? '',
-        isBookmarked: false,
         chapter: "",
         bookSlug: "",
         hadithNumber: widget.enhancedHadithModel.id ?? "",

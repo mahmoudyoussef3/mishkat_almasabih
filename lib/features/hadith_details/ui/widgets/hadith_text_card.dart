@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class HadithTextCard extends StatelessWidget {
   final String hadithText;
-  const HadithTextCard({super.key, required this.hadithText});
+  const HadithTextCard({required this.hadithText, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +82,6 @@ class HadithTextCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: ColorsManager.primaryPurple.withOpacity(0.2),
-                    width: 1,
                   ),
                 ),
                 child: Row(

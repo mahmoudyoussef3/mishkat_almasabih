@@ -10,11 +10,7 @@ class ProfileOptionTile extends StatelessWidget {
   final String url;
 
   const ProfileOptionTile({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.url,
+    required this.icon, required this.title, required this.subtitle, required this.url, super.key,
   });
 
   Future<void> _launchUrl(String url) async {
@@ -29,7 +25,7 @@ class ProfileOptionTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorsManager.cardBackground,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: ColorsManager.mediumGray, width: 1),
+        border: Border.all(color: ColorsManager.mediumGray),
       ),
       child: ListTile(
         leading: Icon(icon, color: ColorsManager.primaryGreen),

@@ -6,11 +6,11 @@ import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/mo
 
 class ResultHadithContentCard extends StatelessWidget {
   final EnhancedHadithModel data;
-  const ResultHadithContentCard({super.key, required this.data});
+  const ResultHadithContentCard({required this.data, super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
        gradient: LinearGradient(
           begin: Alignment.topRight,
@@ -89,7 +89,6 @@ class ResultHadithContentCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16.r),
                     border: Border.all(
                       color: ColorsManager.primaryPurple.withOpacity(0.2),
-                      width: 1,
                     ),
                   ),
                   child: Row(

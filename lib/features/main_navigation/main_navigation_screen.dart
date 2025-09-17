@@ -4,16 +4,13 @@ import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
+import 'package:mishkat_almasabih/features/home/ui/home_screen.dart';
+import 'package:mishkat_almasabih/features/main_navigation/widgets/build_bottom_nva_container.dart';
 import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
-
 import 'package:mishkat_almasabih/features/profile/ui/profile_screen.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/search_with_filters_screen.dart';
-
-import '../home/ui/home_screen.dart';
-import '../search/search_screen/ui/search_screen.dart';
-import 'widgets/build_bottom_nva_container.dart';
 
 class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
@@ -28,7 +25,7 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     BlocProvider(
       create: (context) => SearchHistoryCubit(),
-      child: HomeScreen(),
+      child: const HomeScreen(),
     ),
 
     MultiBlocProvider(
@@ -36,7 +33,7 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
         BlocProvider(create: (context) => getIt<SearchWithFiltersCubit>()),
         BlocProvider(create: (context) => SearchHistoryCubit()),
       ],
-      child: SearchWithFiltersScreen(),
+      child: const SearchWithFiltersScreen(),
     ),
     MultiBlocProvider(
       providers: [
@@ -50,11 +47,11 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
                     ..getBookMarkCollections(),
         ),
       ],
-      child: BookmarkScreen(),
+      child: const BookmarkScreen(),
     ),
     BlocProvider(
       create: (context) => getIt<ProfileCubit>(),
-      child: ProfileScreen(),
+      child: const ProfileScreen(),
     ),
   ];
 

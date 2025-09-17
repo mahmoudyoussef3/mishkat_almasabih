@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 
-import 'sava_date_for_first_time.dart';
+import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -34,7 +34,7 @@ final List<OnboardingPage> _onboardingPages = [
         'استكشف 17 كتاباً من أمهات كتب الحديث مثل صحيح البخاري، مسلم، أبي داود، الترمذي، النسائي، وابن ماجه، والمزيد.',
     imageUrl: 'assets/images/first_onboardin.jpeg',
     icon: Icons.auto_stories_outlined,
-    gradient: LinearGradient(
+    gradient: const LinearGradient(
       begin: Alignment.topRight,
       end: Alignment.bottomLeft,
       colors: [primaryPurple, lightPurple],
@@ -47,7 +47,7 @@ final List<OnboardingPage> _onboardingPages = [
         'اقرأ الحديث واحصل على شرح سريع ومبسط، واسأل "سراج" عن أي تفاصيل إضافية لفهم النصوص بعمق.',
     imageUrl: 'assets/images/serag_logo.jpg',
     icon: Icons.smart_toy_outlined,
-   gradient: LinearGradient(
+   gradient: const LinearGradient(
       begin: Alignment.topRight,
       end: Alignment.bottomLeft,
       colors: [primaryPurple, lightPurple],
@@ -61,7 +61,7 @@ final List<OnboardingPage> _onboardingPages = [
     imageUrl:
         'assets/images/search_logo.jpg',
     icon: Icons.search_outlined,
-   gradient: LinearGradient(
+   gradient: const LinearGradient(
       begin: Alignment.topRight,
       end: Alignment.bottomLeft,
       colors: [primaryPurple, lightPurple],
@@ -112,7 +112,7 @@ final List<OnboardingPage> _onboardingPages = [
     }
   }
 
-  void _getStarted() async {
+  Future<void> _getStarted() async {
     await SaveDataForFirstTime.setNotFirstTime();
 
     context.pushNamed(Routes.loginScreen);
@@ -132,7 +132,7 @@ final List<OnboardingPage> _onboardingPages = [
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: Container(
+        body: DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topRight,
@@ -195,7 +195,7 @@ final List<OnboardingPage> _onboardingPages = [
                     BoxShadow(
                       color: primaryPurple.withOpacity(0.3),
                       blurRadius: 8,
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -249,7 +249,6 @@ Widget _buildOnboardingPage(OnboardingPage page) {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: 20.h),
               _buildImageSection(page),
@@ -318,7 +317,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
                 // Pattern overlay
                 Positioned.fill(
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: NetworkImage(
                           'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDQwQzMxLjA0NTcgNDAgNDAgMzEuMDQ1NyA0MCAyMEM0MCA4Ljk1NDMgMzEuMDQ1NyAwIDIwIDBDOC45NTQzIDAgMCA4Ljk1NDMgMCAyMEMwIDMxLjA0NTcgOC45NTQzIDQwIDIwIDQwWiIgZmlsbD0iIzc0NDAlOSIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+Cjwvc3ZnPgo=',
@@ -347,8 +346,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
                                 0.3,
                               ),
                               blurRadius: 20,
-                              offset: Offset(0, 10),
-                              spreadRadius: 0,
+                              offset: const Offset(0, 10),
                             ),
                           ],
                         ),
@@ -403,7 +401,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.1),
                                         blurRadius: 8,
-                                        offset: Offset(0, 4),
+                                        offset: const Offset(0, 4),
                                       ),
                                     ],
                                   ),
@@ -503,7 +501,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(
               _onboardingPages.length,
-              (index) => _buildPageIndicator(index),
+              _buildPageIndicator,
             ),
           ),
 
@@ -539,7 +537,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
               else
                 SizedBox(width: 80.w),
 
-              Container(
+              DecoratedBox(
                 decoration: BoxDecoration(
                   gradient: _onboardingPages[_currentPage].gradient,
                   borderRadius: BorderRadius.circular(24.r),
@@ -551,7 +549,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
                           .first
                           .withOpacity(0.4),
                       blurRadius: 12,
-                      offset: Offset(0, 6),
+                      offset: const Offset(0, 6),
                     ),
                   ],
                 ),
@@ -600,7 +598,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
   }
 
   Widget _buildPageIndicator(int index) {
-    bool isActive = index == _currentPage;
+    final bool isActive = index == _currentPage;
     return AnimatedContainer(
       duration: const Duration(milliseconds: 600),
       curve: Curves.easeInOutCubic,
@@ -618,7 +616,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
                     color: _onboardingPages[_currentPage].gradient.colors.first
                         .withOpacity(0.3),
                     blurRadius: 8,
-                    offset: Offset(0, 2),
+                    offset: const Offset(0, 2),
                   ),
                 ]
                 : null,

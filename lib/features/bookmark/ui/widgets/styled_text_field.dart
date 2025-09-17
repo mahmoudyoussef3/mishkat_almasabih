@@ -6,9 +6,7 @@ class StyledTextField extends StatelessWidget {
   final String hint;
   final int maxLines;
   const StyledTextField({
-    super.key,
-    required this.controller,
-    required this.hint,
+    required this.controller, required this.hint, super.key,
     this.maxLines = 1,
   });
 

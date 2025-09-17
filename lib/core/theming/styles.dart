@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'colors.dart';
-import 'font_weight_helper.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/font_weight_helper.dart';
 
 /// TextStyles provides a comprehensive typography system for the Mishkat Al-Masabih app.
 ///

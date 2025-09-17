@@ -13,7 +13,7 @@ class DarkModeToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorsManager.cardBackground,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: ColorsManager.mediumGray, width: 1),
+        border: Border.all(color: ColorsManager.mediumGray),
         boxShadow: [
           BoxShadow(
             color: ColorsManager.black.withOpacity(0.05),
@@ -24,7 +24,7 @@ class DarkModeToggle extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(FontAwesomeIcons.sun, color: ColorsManager.primaryGreen),
+          const Icon(FontAwesomeIcons.sun, color: ColorsManager.primaryGreen),
           SizedBox(width: 16.w),
           Expanded(
             child: Column(
@@ -43,7 +43,7 @@ class DarkModeToggle extends StatelessWidget {
           Switch(
             value: true,
             onChanged: (value) {},
-            activeColor: ColorsManager.primaryPurple,
+            activeThumbColor: ColorsManager.primaryPurple,
           ),
         ],
       ),

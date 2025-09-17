@@ -3,13 +3,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/helpers/functions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/app_text_button.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
-
-import '../../../../../core/helpers/functions.dart';
-import '../../../../../core/routing/routes.dart';
-import '../../../../../core/theming/colors.dart';
-import '../../../../../core/widgets/app_text_button.dart';
-import '../../logic/signup_cubit.dart';
+import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 
 class SignupBlocListener extends StatelessWidget {
   const SignupBlocListener({super.key});

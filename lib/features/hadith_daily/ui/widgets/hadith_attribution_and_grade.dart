@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily
 
 class HadithAttributionAndGrade extends StatelessWidget {
   final DailyHadithModel data;
-  const HadithAttributionAndGrade({super.key, required this.data});
+  const HadithAttributionAndGrade({required this.data, super.key});
 
   Color gradeColor(String? g) {
     switch (g?.toLowerCase()) {
@@ -25,7 +25,6 @@ class HadithAttributionAndGrade extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         if (data.data?.attribution != null)

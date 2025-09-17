@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class HadithTitle extends StatelessWidget {
   final String title;
-  const HadithTitle({super.key, required this.title});
+  const HadithTitle({required this.title, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistic
 part 'get_library_statistics_state.dart';
 
 class GetLibraryStatisticsCubit extends Cubit<GetLibraryStatisticsState> {
-  GetLibraryStatisticsRepo _getLibraryStatisticsRepo;
+  final GetLibraryStatisticsRepo _getLibraryStatisticsRepo;
   GetLibraryStatisticsCubit(this._getLibraryStatisticsRepo)
     : super(GetLibraryStatisticsInitial());
 

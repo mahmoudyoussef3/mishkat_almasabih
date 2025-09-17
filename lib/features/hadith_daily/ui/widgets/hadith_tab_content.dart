@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 
 class HadithTabContent extends StatelessWidget {
   final String selectedTab;
   final DailyHadithModel? data;
 
   const HadithTabContent({
-    super.key,
-    required this.selectedTab,
-    required this.data,
+    required this.selectedTab, required this.data, super.key,
   });
 
   @override
@@ -46,7 +44,7 @@ class HadithTabContent extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: "${count++}- ".toString(),
+                                text: "${count++}- ",
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: ColorsManager.black,
@@ -55,7 +53,7 @@ class HadithTabContent extends StatelessWidget {
                               TextSpan(
                                 text: hint,
                                 
-                                style: TextStyle(
+                                style: const TextStyle(
                                   
                                                     fontWeight: FontWeight.w800,
 

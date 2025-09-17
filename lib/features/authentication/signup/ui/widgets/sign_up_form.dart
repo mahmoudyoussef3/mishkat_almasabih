@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../core/theming/colors.dart';
-import '../../../../../core/widgets/app_text_form_field.dart';
-import '../../logic/signup_cubit.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/app_text_form_field.dart';
+import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 
 class SignupForm extends StatefulWidget {
   const SignupForm({super.key});
@@ -26,7 +26,7 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
-    var signupCubit = context.read<SignupCubit>();
+    final signupCubit = context.read<SignupCubit>();
 
     return Form(
       key: context.read<SignupCubit>().formKey,
@@ -36,12 +36,12 @@ class _SignupFormState extends State<SignupForm> {
                 controller: signupCubit.userNameController,
 
                 backgroundColor: ColorsManager.lightGray,
-                suffixIcon: Icon(
+                suffixIcon: const Icon(
                   Icons.person,
                   color: ColorsManager.primaryGreen,
                 ),
                 hintText: 'الاسم الكامل',
-                hintStyle: TextStyle(color: Colors.black),
+                hintStyle: const TextStyle(color: Colors.black),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'يرجى إدخال الاسم الكامل';
@@ -59,10 +59,10 @@ class _SignupFormState extends State<SignupForm> {
           SizedBox(height: 16.h),
 
           AppTextFormField(
-                hintStyle: TextStyle(color: Colors.black),
+                hintStyle: const TextStyle(color: Colors.black),
 
                 backgroundColor: ColorsManager.lightGray,
-                suffixIcon: Icon(
+                suffixIcon: const Icon(
                   Icons.email,
                   color: ColorsManager.primaryGreen,
                 ),
@@ -87,7 +87,7 @@ class _SignupFormState extends State<SignupForm> {
           SizedBox(height: 16.h),
 
           AppTextFormField(
-                hintStyle: TextStyle(color: Colors.black),
+                hintStyle: const TextStyle(color: Colors.black),
 
                 backgroundColor: ColorsManager.lightGray,
                 controller: signupCubit.passwordController,
@@ -123,7 +123,7 @@ class _SignupFormState extends State<SignupForm> {
           SizedBox(height: 16.h),
 
           AppTextFormField(
-                hintStyle: TextStyle(color: Colors.black),
+                hintStyle: const TextStyle(color: Colors.black),
 
                 backgroundColor: ColorsManager.lightGray,
                 controller: signupCubit.confirmPasswordController,

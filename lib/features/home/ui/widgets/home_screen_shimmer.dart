@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreenShimmer extends StatelessWidget {
   const HomeScreenShimmer({super.key});

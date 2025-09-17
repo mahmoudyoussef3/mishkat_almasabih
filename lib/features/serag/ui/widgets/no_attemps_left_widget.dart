@@ -13,15 +13,15 @@ class NoAttemptsLeftWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: Colors.red.shade200),
       ),
-      child: Row(
+      child: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(Icons.warning_amber_rounded, color: Colors.red),
-          const SizedBox(width: 8),
+          Icon(Icons.warning_amber_rounded, color: Colors.red),
+          SizedBox(width: 8),
           Expanded(
             child: Text(
               "عذراً، لقد استنفذت الحد اليومي.\nيرجى المحاولة مرة أخرى غداً.",
-              style: const TextStyle(
+              style: TextStyle(
                 color: Colors.red,
                 fontSize: 14,
                 height: 1.4,

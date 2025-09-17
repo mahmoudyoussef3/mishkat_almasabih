@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
-import 'package:mishkat_almasabih/features/serag/data/models/serag_response_model.dart';
 
 @immutable
 sealed class ChatHistoryState {}

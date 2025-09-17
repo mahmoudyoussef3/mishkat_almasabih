@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_request_body.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/repo/login_repo.dart';
+import 'package:mishkat_almasabih/features/authentication/login/logic/cubit/login_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final LoginRepo _loginRepo;
@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._loginRepo) : super(LoginInitial());
 
   Future<void> emitLoginStates() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     emit(LoginLoading());
     final response = await _loginRepo.login(
@@ -39,7 +39,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   /// Google login
   Future<void> emitGoogleLoginStates() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     emit(LoginLoading());
     final response = await _loginRepo.googleLogin();

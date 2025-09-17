@@ -1,5 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:mishkat_almasabih/core/networking/api_service.dart';
+import 'package:mishkat_almasabih/core/networking/dio_factory.dart';
+import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
+import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
+import 'package:mishkat_almasabih/features/authentication/login/data/repo/login_repo.dart';
+import 'package:mishkat_almasabih/features/authentication/login/logic/cubit/login_cubit.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/repo/signup_repo.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/book_data/data/repos/book_data_repo.dart';
@@ -11,8 +17,6 @@ import 'package:mishkat_almasabih/features/bookmark/logic/delete_cubit/cubit/del
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/data/repos/chapters_repo.dart';
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
-import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
-import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/data/repos/hadith_analysis_repo.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/hadith_daily_repo.dart';
@@ -31,22 +35,18 @@ import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dar
 import 'package:mishkat_almasabih/features/remaining_questions/data/repos/remaining_questions_repo.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
+import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/data/repos/public_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
-import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/repos/search_with_filters_repo.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/data/repos/serag_repo.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
-import '../../features/authentication/login/logic/cubit/login_cubit.dart';
-import '../networking/api_service.dart';
-import '../networking/dio_factory.dart';
-import '../../features/authentication/login/data/repo/login_repo.dart';
 
 final getIt = GetIt.instance;
 
 Future<void> setUpGetIt() async {
-  Dio dio = await DioFactory.getDio();
+  final Dio dio = DioFactory.getDio();
 
   getIt.registerLazySingleton<ApiService>(() => ApiService(dio));
 
@@ -96,7 +96,7 @@ Future<void> setUpGetIt() async {
   getIt.registerFactory<PublicSearchCubit>(() => PublicSearchCubit(getIt()));
 
   getIt.registerLazySingleton<HadithDailyRepo>(() => HadithDailyRepo(getIt()));
-  getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit());
+  getIt.registerFactory<DailyHadithCubit>(DailyHadithCubit.new);
 
   getIt.registerLazySingleton<NavigationRepo>(() => NavigationRepo(getIt()));
   getIt.registerFactory<NavigationCubit>(() => NavigationCubit(getIt()));

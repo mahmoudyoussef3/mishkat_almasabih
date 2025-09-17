@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import '../../../../../core/theming/colors.dart';
-import '../widgets/don`t_have_account_text.dart';
-import '../widgets/email_and_password.dart';
-import '../widgets/login_bloc_listener.dart';
-import '../widgets/login_screen_header.dart';
-import '../widgets/login_with_google.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/don%60t_have_account_text.dart';
+import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/email_and_password.dart';
+import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/login_bloc_listener.dart';
+import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/login_screen_header.dart';
+import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/login_with_google.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -30,19 +30,19 @@ top: false,
                 SizedBox(height: 60.h),
 
                 // App Logo and Title
-                LoginScreenHeader(),
+                const LoginScreenHeader(),
 
                 SizedBox(height: 60.h),
 
                 // Login Form
-                EmailAndPassword(),
+                const EmailAndPassword(),
 
                 SizedBox(height: 24.h),
 
        
 
                 // Login Button
-                LoginBlocListener(),
+                const LoginBlocListener(),
                 SizedBox(height: 18.h),
 
                 // Divider
@@ -55,7 +55,7 @@ top: false,
 
                 SizedBox(height: 32.h),
 
-                LoginWithGoogle(),
+                const LoginWithGoogle(),
 
                 SizedBox(height: 40.h),
               ],

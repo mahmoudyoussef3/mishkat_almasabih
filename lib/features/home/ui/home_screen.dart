@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
+import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
-import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -18,9 +19,6 @@ import 'package:mishkat_almasabih/features/search/search_screen/data/models/hist
 import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
-import '../../../core/theming/colors.dart';
-import '../../../core/theming/styles.dart';
-import '../../../core/helpers/spacing.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -154,7 +152,6 @@ void initState() {
               elevation: 0,
               margin: EdgeInsets.zero,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SearchBarWidget(
@@ -263,7 +260,7 @@ void initState() {
                                 },
                               ),
                             )
-                            : SizedBox.shrink();
+                            : const SizedBox.shrink();
                       }
                       return const SizedBox.shrink();
                     },
@@ -589,7 +586,7 @@ void initState() {
 
   /// Builds gradient for Kutub Tisaa category
   LinearGradient _buildKutubTisaaGradient() {
-    return LinearGradient(
+    return const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [ColorsManager.primaryGreen, ColorsManager.darkPurple],
@@ -598,7 +595,7 @@ void initState() {
 
   /// Builds gradient for Arbaain category
   LinearGradient _buildArbaainGradient() {
-    return LinearGradient(
+    return const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [ColorsManager.primaryGreen, ColorsManager.darkPurple],
@@ -607,7 +604,7 @@ void initState() {
 
   /// Builds gradient for Adab category
   LinearGradient _buildAdabGradient() {
-    return LinearGradient(
+    return const LinearGradient(
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [ColorsManager.primaryGreen, ColorsManager.darkPurple],

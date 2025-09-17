@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/spacing.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
-import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/book_collections_row.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/bookmark_list.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -52,7 +50,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                       color: ColorsManager.secondaryBackground,
                       margin: EdgeInsets.zero,
                       elevation: 0,
-                      child: Container(
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: ColorsManager.white,
                           borderRadius: BorderRadius.circular(
@@ -78,7 +76,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                             hintStyle: TextStyles.bodyMedium.copyWith(
                               color: ColorsManager.secondaryText,
                             ),
-                            prefixIcon: Icon(
+                            prefixIcon: const Icon(
                               Icons.search,
                               color: ColorsManager.primaryPurple,
                               size: 24,

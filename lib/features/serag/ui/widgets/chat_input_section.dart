@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
+import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
+import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_state.dart';
-import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history_cubit.dart';
-import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 
 class ChatInputSection extends StatelessWidget {
   final TextEditingController controller;
@@ -15,15 +15,12 @@ class ChatInputSection extends StatelessWidget {
   final SeragRequestModel model;
 
   const ChatInputSection({
-    super.key,
-    required this.controller,
-    required this.scrollToBottom,
-    required this.model,
+    required this.controller, required this.scrollToBottom, required this.model, super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: ColorsManager.primaryBackground,
         boxShadow: [
@@ -71,7 +68,7 @@ class ChatInputSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Container(
+                      child: DecoratedBox(
                         decoration: BoxDecoration(
                           color: ColorsManager.secondaryBackground,
                           borderRadius: BorderRadius.circular(25.r),
@@ -107,7 +104,7 @@ class ChatInputSection extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 12.w),
-                    Container(
+                    DecoratedBox(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [

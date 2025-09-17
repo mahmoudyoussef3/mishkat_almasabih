@@ -1,11 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
+import 'package:mishkat_almasabih/core/networking/api_service.dart';
+import 'package:mishkat_almasabih/features/authentication/login/data/models/login_request_body.dart';
+import 'package:mishkat_almasabih/features/authentication/login/data/models/login_response_body.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../../core/networking/api_error_handler.dart';
-import '../../../../../core/networking/api_service.dart';
-import '../models/login_request_body.dart';
-import '../models/login_response_body.dart';
 
 class LoginRepo {
   final ApiService _apiService;

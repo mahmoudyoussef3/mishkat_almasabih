@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
@@ -14,12 +13,12 @@ class GetLibraryStatisticsRepo {
   Future<Either<ErrorHandler, StatisticsResponse>>
   getLibraryStatistics() async {
     try {
-        final cacheKey = CacheKeys.libraryStatistics;
+        const cacheKey = CacheKeys.libraryStatistics;
 
       final cachedData = await GenericCacheService.instance
           .getData<StatisticsResponse>(
             key: cacheKey,
-            fromJson: (json) => StatisticsResponse.fromJson(json),
+            fromJson: StatisticsResponse.fromJson,
           );
 
       if (cachedData != null) {
@@ -31,7 +30,6 @@ class GetLibraryStatisticsRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
       );
       return Right(response);
 

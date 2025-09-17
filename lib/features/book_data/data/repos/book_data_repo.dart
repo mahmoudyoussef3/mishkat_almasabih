@@ -21,7 +21,7 @@ class GetBookDataRepo {
       final cachedData = await GenericCacheService.instance
           .getData<CategoryResponse>(
             key: cacheKey,
-            fromJson: (json) => CategoryResponse.fromJson(json),
+            fromJson: CategoryResponse.fromJson,
           );
 
       if (cachedData != null) {
@@ -34,8 +34,7 @@ class GetBookDataRepo {
      await GenericCacheService.instance.saveData<CategoryResponse>(
         key: cacheKey,
         data: response,
-        toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100, 
+        toJson: (data) => data.toJson(), 
       );
 
       log(

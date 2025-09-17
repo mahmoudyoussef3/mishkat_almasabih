@@ -14,12 +14,12 @@ class HadithDailyRepo {
 
   Future<Either<ErrorHandler, DailyHadithModel>> getDailyHadith() async {
     try {
-         final cacheKey = CacheKeys.hadithDaily;
+         const cacheKey = CacheKeys.hadithDaily;
 
       final cachedData = await GenericCacheService.instance
           .getData<DailyHadithModel>(
             key: cacheKey,
-            fromJson: (json) => DailyHadithModel.fromJson(json),
+            fromJson: DailyHadithModel.fromJson,
           );
 
       if (cachedData != null) {
@@ -39,7 +39,6 @@ class HadithDailyRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
       );
       return Right(response);
     } catch (e) {

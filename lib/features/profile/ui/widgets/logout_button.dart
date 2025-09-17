@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:mishkat_almasabih/core/routing/routes.dart';
-import 'package:mishkat_almasabih/core/widgets/app_text_button.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/app_text_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({super.key});

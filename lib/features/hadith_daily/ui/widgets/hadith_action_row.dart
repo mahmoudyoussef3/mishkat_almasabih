@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
-import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
-import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HadithActionsRow extends StatelessWidget {
   final String hadith;
@@ -22,17 +22,8 @@ class HadithActionsRow extends StatelessWidget {
   final String? grade;
   bool isBookmarked;
   HadithActionsRow({
-    super.key,
-    required this.hadith,
-    required this.bookName,
-    required this.bookSlug,
-    required this.chapter,
-    required this.hadithNumber,
-    required this.id,
+    required this.hadith, required this.bookName, required this.bookSlug, required this.chapter, required this.hadithNumber, required this.id, required this.author, required this.authorDeath, required this.grade, super.key,
     this.isBookmarked = false,
-    required this.author,
-    required this.authorDeath,
-    required this.grade,
   });
 
   @override

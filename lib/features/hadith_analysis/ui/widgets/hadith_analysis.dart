@@ -8,11 +8,7 @@ import 'package:shimmer/shimmer.dart';
 
 class HadithAnalysis extends StatelessWidget {
   HadithAnalysis({
-    super.key,
-    required this.attribution,
-    required this.hadith,
-    required this.grade,
-    required this.reference,
+    required this.attribution, required this.hadith, required this.grade, required this.reference, super.key,
   });
 
   final String attribution;
@@ -50,7 +46,7 @@ class HadithAnalysis extends StatelessWidget {
                       curr is HadithAnalysisError,
               builder: (context, state) {
                 if (state is HadithAnalysisLoading) {
-                  return _ShimmerResultCard();
+                  return const _ShimmerResultCard();
                 } else if (state is HadithAnalysisLoaded) {
                   return tapped
                       ? _ResultCard(
@@ -60,7 +56,7 @@ class HadithAnalysis extends StatelessWidget {
                             state.response.analysis ??
                             "لا يوجد تحليل متاح في الوقت الحالي.",
                       )
-                      : _ResultCard(
+                      : const _ResultCard(
                         icon: FontAwesomeIcons.lightbulb,
                         title: "معلومة",
                         text:
@@ -77,7 +73,7 @@ class HadithAnalysis extends StatelessWidget {
                         color: Colors.red.withOpacity(0.08),
                         textColor: Colors.red.shade700,
                       )
-                      : _ResultCard(
+                      : const _ResultCard(
                         icon: FontAwesomeIcons.lightbulb,
                         title: "معلومة",
                         text:
@@ -86,7 +82,7 @@ class HadithAnalysis extends StatelessWidget {
                         textColor: Colors.black87,
                       );
                 } else {
-                  return _ResultCard(
+                  return const _ResultCard(
                     icon: FontAwesomeIcons.lightbulb,
                     title: "معلومة",
                     text:
@@ -181,7 +177,7 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.r),
         color: ColorsManager.primaryGreen.withOpacity(0.05),
@@ -231,7 +227,7 @@ class _ResultCard extends StatelessWidget {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.grey.shade100,
-      child: Container(
+      child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12.r),
           color: Colors.white,

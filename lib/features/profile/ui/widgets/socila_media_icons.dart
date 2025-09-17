@@ -82,13 +82,13 @@ class SocilaMediaIcons extends StatelessWidget {
                     spacing: 16.w,
                     children: socialLinks.map((link) {
                       return GestureDetector(
-                        onTap: () => _launchUrl(link['url'] as String),
+                        onTap: () => _launchUrl(link['url']! as String),
                         child: CircleAvatar(
                           radius: 24.r,
-                          backgroundColor: (link['color'] as Color).withOpacity(0.15),
+                          backgroundColor: (link['color']! as Color).withOpacity(0.15),
                           child: Icon(
-                            link['icon'] as IconData,
-                            color: link['color'] as Color,
+                            link['icon']! as IconData,
+                            color: link['color']! as Color,
                             size: 22.sp,
                           ),
                         ),

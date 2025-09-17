@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 import 'package:mishkat_almasabih/features/serag/data/repos/serag_repo.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_state.dart';

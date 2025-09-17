@@ -1,6 +1,10 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:mishkat_almasabih/core/networking/api_constants.dart';
+import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
+import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
+import 'package:mishkat_almasabih/features/authentication/login/data/models/login_request_body.dart';
 import 'package:mishkat_almasabih/features/authentication/login/data/models/login_response_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_request_body.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/data/models/sign_up_response_body.dart';
@@ -9,8 +13,6 @@ import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_response.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/collection_model.dart';
 import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
-import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
-import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_request.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/data/models/hadith_analysis_response.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
@@ -27,8 +29,6 @@ import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model
 import 'package:mishkat_almasabih/features/serag/data/models/serag_response_model.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../../features/authentication/login/data/models/login_request_body.dart';
-import 'api_constants.dart';
 part 'api_service.g.dart';
 
 @RestApi(baseUrl: ApiConstants.apiBaseUrl)

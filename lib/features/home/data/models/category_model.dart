@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'book_model.dart';
+import 'package:mishkat_almasabih/features/home/data/models/book_model.dart';
 
 part 'category_model.g.dart';
 @JsonSerializable()

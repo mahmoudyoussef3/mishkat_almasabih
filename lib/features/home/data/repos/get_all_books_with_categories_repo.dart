@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
@@ -18,12 +17,12 @@ class GetAllBooksWithCategoriesRepo {
 
 
       
-         final cacheKey = CacheKeys.booksWithCategories;
+         const cacheKey = CacheKeys.booksWithCategories;
 
       final cachedData = await GenericCacheService.instance
           .getData<BooksResponse>(
             key: cacheKey,
-            fromJson: (json) => BooksResponse.fromJson(json),
+            fromJson: BooksResponse.fromJson,
           );
 
       if (cachedData != null) {
@@ -35,7 +34,6 @@ class GetAllBooksWithCategoriesRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
       );
       return Right(response);
     } catch (error) {

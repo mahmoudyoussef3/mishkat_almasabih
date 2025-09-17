@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
-import '../theming/styles.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 
 void setupErrorState(BuildContext context, String error) {
   context.pop();
@@ -65,8 +65,8 @@ String convertToArabicNumber(int number) {
     '9': '٩',
   };
 
-  String english = number.toString();
-  String arabic = english.split('').map((digit) => englishToArabic[digit] ?? digit).join();
+  final String english = number.toString();
+  final String arabic = english.split('').map((digit) => englishToArabic[digit] ?? digit).join();
   return arabic;
 }
 

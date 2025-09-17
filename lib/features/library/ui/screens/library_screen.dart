@@ -11,7 +11,7 @@ class LibraryScreen extends StatefulWidget {
   final String id;
   final String name;
 
-  const LibraryScreen({super.key, required this.id, required this.name});
+  const LibraryScreen({required this.id, required this.name, super.key});
 
   @override
   State<LibraryScreen> createState() => _LibraryScreenState();
@@ -22,7 +22,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     const crossAxisCount = 2;
-    final spacing = 12 * (crossAxisCount - 1);
+    const spacing = 12 * (crossAxisCount - 1);
     final itemWidth = (screenWidth - spacing) / crossAxisCount;
     final itemHeight = itemWidth * 1.5;
     final aspectRatio = itemWidth / itemHeight;
