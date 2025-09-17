@@ -128,8 +128,8 @@ class ChatInputSection extends StatelessWidget {
                       ),
                       child: Material(
                         color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(25.r),
+                        child: GestureDetector(
+                       //   borderRadius: BorderRadius.circular(25.r),
                           onTap:
                               seragState is SeragLoading
                                   ? null

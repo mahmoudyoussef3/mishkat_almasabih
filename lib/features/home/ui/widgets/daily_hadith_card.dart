@@ -24,14 +24,13 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
       context.read<DailyHadithCubit>().startListeningForUpdates();
     });
   }
-
+/*
   @override
   void dispose() {
-    // إيقاف التايمر عند التخلص من الويدجيت
     context.read<DailyHadithCubit>().stopListening();
     super.dispose();
   }
-
+*/
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DailyHadithCubit, DailyHadithState>(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/empty_search_state.dart';
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
@@ -41,10 +42,9 @@ class PublicSearchResult extends StatelessWidget {
                   if (hadiths.isEmpty) {
                     return SliverToBoxAdapter(
                       child: Center(
-                        child: Text(
-                          "لا توجد نتائج",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
+                        child: EmptyState(
+                          subtitle: 'حاول تغيير كلمات البحث',
+                        )
                       ),
                     );
                   }
@@ -54,7 +54,7 @@ class PublicSearchResult extends StatelessWidget {
                     separatorBuilder: (_, __) => IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = hadiths[index];
-                      return InkWell(
+                      return GestureDetector(
                         onTap:
                             () => Navigator.push(
                               context,

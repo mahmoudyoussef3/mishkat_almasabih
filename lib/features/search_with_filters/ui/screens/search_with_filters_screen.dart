@@ -109,12 +109,21 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
   }
 
   bool showFilters = false;
+@override
+void initState() {
+  super.initState();
+  Future.microtask(() {
+    if (mounted) {
+      context.read<SearchHistoryCubit>().emitHistorySearch(
+        searchCategory: HistoryPrefs.filteredSearch,
+      );
+    }
+  });
+}
 
   @override
   Widget build(BuildContext context) {
-    context.read<SearchHistoryCubit>().emitHistorySearch(
-      searchCategory: HistoryPrefs.filteredSearch,
-    );
+
 
     return SafeArea(
       top: false,
@@ -355,8 +364,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                                 'مسح الكل',
                                 style: TextStyles.bodyMedium.copyWith(
                                   color: ColorsManager.primaryPurple,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: ColorsManager.primaryPurple,
+
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),

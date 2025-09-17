@@ -17,7 +17,10 @@ class BookmarkCollectionsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GetCollectionsBookmarkCubit, GetCollectionsBookmarkState>(
+    return BlocBuilder<
+      GetCollectionsBookmarkCubit,
+      GetCollectionsBookmarkState
+    >(
       builder: (context, state) {
         if (state is GetCollectionsBookmarkLoading) {
           return _buildLoadingShimmer();
@@ -37,7 +40,7 @@ class BookmarkCollectionsRow extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: SizedBox(
-                height: 50.h,
+                height: 40.h,
                 child: ListView.separated(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
@@ -48,8 +51,8 @@ class BookmarkCollectionsRow extends StatelessWidget {
                     final c = allCollections[index];
                     final isSelected = selectedCollection == c;
 
-                    return InkWell(
-                      borderRadius: BorderRadius.circular(16.r),
+                    return GestureDetector(
+                   //   borderRadius: BorderRadius.circular(16.r),
                       onTap: () => onCollectionSelected(c),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
@@ -59,29 +62,34 @@ class BookmarkCollectionsRow extends StatelessWidget {
                           vertical: 10.h,
                         ),
                         decoration: BoxDecoration(
-                          color: isSelected
-                              ? ColorsManager.primaryPurple
-                              : Colors.transparent,
+                          color:
+                              isSelected
+                                  ? ColorsManager.primaryPurple
+                                  : Colors.transparent,
                           borderRadius: BorderRadius.circular(16.r),
                           border: Border.all(
-                            color: isSelected
-                                ? ColorsManager.primaryPurple
-                                : ColorsManager.mediumGray.withOpacity(0.35),
+                            color:
+                                isSelected
+                                    ? ColorsManager.primaryPurple
+                                    : ColorsManager.mediumGray.withOpacity(
+                                      0.35,
+                                    ),
                             width: 1,
                           ),
-                        
                         ),
                         child: Center(
                           child: Text(
                             c,
                             style: TextStyle(
-                              color: isSelected
-                                  ? Colors.white
-                                  : ColorsManager.primaryText,
-                              fontWeight: isSelected
-                                  ? FontWeight.bold
-                                  : FontWeight.w500,
-                              fontSize: 14.sp,
+                              color:
+                                  isSelected
+                                      ? Colors.white
+                                      : ColorsManager.primaryText,
+                              fontWeight:
+                                  isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ),
@@ -101,34 +109,34 @@ class BookmarkCollectionsRow extends StatelessWidget {
   /// shimmer أثناء التحميل
   Widget _buildLoadingShimmer() {
     return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
       child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 6.h),
+        padding: EdgeInsets.symmetric(vertical: 6.h),
 
-               decoration: BoxDecoration(
-                color: ColorsManager.secondaryBackground,
-                borderRadius: BorderRadius.circular(16.r),
-              ),
+        decoration: BoxDecoration(
+          color: ColorsManager.secondaryBackground,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
         child: SizedBox(
-
           height: 50.h,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
             itemCount: 5,
-                  separatorBuilder: (_, __) => SizedBox(width: 8.w),
-            itemBuilder: (_, __) => Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-              child: Container(
-                width: 90.w,
-                height: 34.h,
-                decoration: BoxDecoration(
-                  color: ColorsManager.lightGray,
-                  borderRadius: BorderRadius.circular(16.r),
+            separatorBuilder: (_, __) => SizedBox(width: 8.w),
+            itemBuilder:
+                (_, __) => Shimmer.fromColors(
+                  baseColor: Colors.grey.shade300,
+                  highlightColor: Colors.grey.shade100,
+                  child: Container(
+                    width: 90.w,
+                    height: 34.h,
+                    decoration: BoxDecoration(
+                      color: ColorsManager.lightGray,
+                      borderRadius: BorderRadius.circular(16.r),
+                    ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ),
       ),

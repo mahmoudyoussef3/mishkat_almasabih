@@ -17,21 +17,22 @@ class HistoryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Container(
-        padding: EdgeInsets.all(12.w),
-        decoration: BoxDecoration(
-          color: ColorsManager.cardBackground,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: ColorsManager.mediumGray),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: onTap,
+    return GestureDetector(
+      onTap: onTap,
+
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.h),
+        child: Container(
+          padding: EdgeInsets.all(12.w),
+          decoration: BoxDecoration(
+            color: ColorsManager.cardBackground,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: ColorsManager.mediumGray),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -46,12 +47,15 @@ class HistoryListItem extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.close, color: ColorsManager.primaryGreen),
-              onPressed: onRemove,
-            ),
-          ],
+              IconButton(
+                icon: const Icon(
+                  Icons.close,
+                  color: ColorsManager.primaryGreen,
+                ),
+                onPressed: onRemove,
+              ),
+            ],
+          ),
         ),
       ),
     );

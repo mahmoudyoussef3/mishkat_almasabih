@@ -18,9 +18,25 @@ class BookMarkRepo {
   Future<Either<ErrorHandler, BookmarksResponse>> getUserBookMarks() async {
     try {
       final token = await _getUserToken();
+      final cacheKey = CacheKeys.bookmarks;
 
+      final cachedData = await GenericCacheService.instance
+          .getData<BookmarksResponse>(
+            key: cacheKey,
+            fromJson: (json) => BookmarksResponse.fromJson(json),
+          );
+
+      if (cachedData != null) {
+        log('📂 Loaded bookmarks from cache for ${cachedData.bookmarks![0].hadithText} ');
+        return Right(cachedData);
+      }
       final response = await _apiService.getUserBookmarks(token);
-
+      await GenericCacheService.instance.saveData<BookmarksResponse>(
+        key: cacheKey,
+        data: response,
+        toJson: (data) => data.toJson(),
+        cacheExpirationHours: 100,
+      );
 
       return Right(response);
     } catch (e) {
@@ -81,15 +97,14 @@ class BookMarkRepo {
   ) async {
     try {
       final token = await _getUserToken();
-await GenericCacheService.instance.clearCache(   CacheKeys.collectionBookmarksResponse
-);
-await GenericCacheService.instance.clearCache(   CacheKeys.bookmarks
-);
+      await GenericCacheService.instance.clearCache(
+        CacheKeys.collectionBookmarksResponse,
+      );
+      await GenericCacheService.instance.clearCache(CacheKeys.bookmarks);
       final response = await _apiService.addBookmark(token, body);
 
       return Right(response);
     } catch (e) {
-
       log(e.toString());
       return Left(ErrorHandler.handle(e));
     }

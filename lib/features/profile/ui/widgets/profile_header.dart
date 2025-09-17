@@ -34,15 +34,10 @@ class ProfileHeader extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
-                
                 CircleAvatar(
                   radius: 46,
                   backgroundColor: Colors.transparent,
-                  backgroundImage:
-                       NetworkImage(getAvatarUrl(user))
-                      
-             
+                  backgroundImage: NetworkImage(getAvatarUrl(user)),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -85,23 +80,25 @@ class ProfileHeader extends StatelessWidget {
       ],
     );
   }
+
   String getAvatarUrl(UserResponseModel? user) {
-  const String defaultAvatar = "https://api.hadith-shareef.com/api/uploads/avatars/default-avatar.jpg"; 
-  if (user == null) {
+    const String defaultAvatar =
+        "https://api.hadith-shareef.com/api/uploads/avatars/default-avatar.jpg";
+    if (user == null) {
+      return defaultAvatar;
+    }
+
+    final String? url = user.avatarUrl;
+
+    if (url != null && url.isNotEmpty) {
+      if (url.startsWith("http")) {
+        return url;
+      } else if (url.startsWith("/uploads/avatars")) {
+        final String baseUrl = "https://api.hadith-shareef.com/";
+        return '$baseUrl/api$url';
+      }
+    }
+
     return defaultAvatar;
   }
-
-  final String? url = user.avatarUrl; 
-
-  if (url != null && url.isNotEmpty) {
-    if (url.startsWith("http")) {
-      return url; 
-    } else if (url.startsWith("/uploads/avatars")) {
-      final String baseUrl = "https://api.hadith-shareef.com/";
-      return '$baseUrl/api$url';
-    }
-  }
-
-  return defaultAvatar;
-}
 }

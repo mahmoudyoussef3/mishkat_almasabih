@@ -25,49 +25,48 @@ class SearchBarWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: ColorsManager.white,
         borderRadius: BorderRadius.circular(Spacing.cardRadius),
-        boxShadow: [
-          BoxShadow(
-            color: ColorsManager.black.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    
       ),
-      child: TextField(
-        onTap:onTap,
-        controller: controller,
-        onSubmitted: onSearch,
-        decoration: InputDecoration(
-          hintText: hintText ?? 'ابحث في الأحاديث...',
-          hintStyle: TextStyles.bodyMedium.copyWith(
-            color: ColorsManager.secondaryText,
+      child: Card(
+        margin: EdgeInsets.zero,
+        color: ColorsManager.secondaryBackground,
+        elevation: 2,
+        child: TextField(
+          onTap:onTap,
+          controller: controller,
+          onSubmitted: onSearch,
+          decoration: InputDecoration(
+            hintText: hintText ?? 'ابحث في الأحاديث...',
+            hintStyle: TextStyles.bodyMedium.copyWith(
+              color: ColorsManager.secondaryText,
+            ),
+            prefixIcon: Icon(
+              Icons.search,
+              color: ColorsManager.primaryPurple,
+              size: 24,
+            ),
+            suffixIcon:
+                controller.text.isNotEmpty
+                    ? IconButton(
+                      icon: Icon(
+                        Icons.clear,
+                        color: ColorsManager.gray,
+                        size: 20,
+                      ),
+                      onPressed: () {
+                        controller.clear();
+                      },
+                    )
+                    : null,
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: Spacing.md,
+              vertical: Spacing.md,
+            ),
           ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: ColorsManager.primaryPurple,
-            size: 24,
-          ),
-          suffixIcon:
-              controller.text.isNotEmpty
-                  ? IconButton(
-                    icon: Icon(
-                      Icons.clear,
-                      color: ColorsManager.gray,
-                      size: 20,
-                    ),
-                    onPressed: () {
-                      controller.clear();
-                    },
-                  )
-                  : null,
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: Spacing.md,
-            vertical: Spacing.md,
-          ),
+          style: TextStyles.bodyMedium,
+          textInputAction: TextInputAction.search,
         ),
-        style: TextStyles.bodyMedium,
-        textInputAction: TextInputAction.search,
       ),
     );
   }

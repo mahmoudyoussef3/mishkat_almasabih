@@ -118,7 +118,7 @@ class BookmarkHadithCard extends StatelessWidget {
                       }
                     },
                     builder: (context, state) {
-                      return InkWell(
+                      return GestureDetector(
                         onTap:
                             () => context.read<DeleteCubitCubit>().delete(
                               hadithNumber,

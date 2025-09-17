@@ -69,3 +69,20 @@ String convertToArabicNumber(int number) {
   String arabic = english.split('').map((digit) => englishToArabic[digit] ?? digit).join();
   return arabic;
 }
+
+
+  String normalizeArabic(String text) {
+    final diacritics = RegExp(r'[\u0617-\u061A\u064B-\u0652]');
+    String result = text.replaceAll(diacritics, '');
+
+    // 2. توحيد الهمزات: أ إ آ -> ا
+    result = result.replaceAll(RegExp('[إأآ]'), 'ا');
+
+    // 3. شيل المدّة "ـ"
+    result = result.replaceAll('ـ', '');
+
+    // 4. Optional: lowercase (عشان لو فيه انجليزي)
+    result = result.toLowerCase();
+
+    return result.trim();
+  }

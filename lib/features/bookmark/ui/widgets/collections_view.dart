@@ -81,8 +81,8 @@ class CollectionsView extends StatelessWidget {
                   ),
                   child: Material(
                     color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(12),
+                    child: GestureDetector(
+                  //    borderRadius: BorderRadius.circular(12),
                       onTap: onCreateNewPressed,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,

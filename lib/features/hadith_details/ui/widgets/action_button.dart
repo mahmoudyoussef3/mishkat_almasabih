@@ -14,9 +14,9 @@ class ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12.r),
+   //   borderRadius: BorderRadius.circular(12.r),
       child: Column(
         children: [
           CircleAvatar(

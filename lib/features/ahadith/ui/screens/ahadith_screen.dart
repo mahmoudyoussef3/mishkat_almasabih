@@ -3,11 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/utils/constants.dart';
+import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_search_bar.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/emoty_chapter_ahadith.dart';
-import 'package:mishkat_almasabih/features/ahadith/ui/widgets/error_state_for_chapter_ahadith.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -47,7 +47,6 @@ class ChapterAhadithScreen extends StatelessWidget {
         body: CustomScrollView(
           slivers: [
             BuildHeaderAppBar(
-            
               title: arabicBookName,
               description: arabicChapterName,
             ),
@@ -67,7 +66,7 @@ class ChapterAhadithScreen extends StatelessWidget {
                         separatorBuilder: (_, __) => const IslamicSeparator(),
                         itemBuilder: (context, index) {
                           final hadith = state.filteredAhadith[index];
-                          return InkWell(
+                          return GestureDetector(
                             onTap:
                                 () => Navigator.push(
                                   context,
@@ -96,7 +95,8 @@ class ChapterAhadithScreen extends StatelessWidget {
                                           chapter:
                                               hadith.chapter?.chapterArabic ??
                                               '',
-                                          hadithNumber: hadith.hadithNumber.toString(),
+                                          hadithNumber:
+                                              hadith.hadithNumber.toString(),
                                         ),
                                   ),
                                 ),
@@ -130,7 +130,7 @@ class ChapterAhadithScreen extends StatelessWidget {
                     separatorBuilder: (_, __) => const IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = list[index];
-                      return InkWell(
+                      return GestureDetector(
                         onTap:
                             () => Navigator.push(
                               context,

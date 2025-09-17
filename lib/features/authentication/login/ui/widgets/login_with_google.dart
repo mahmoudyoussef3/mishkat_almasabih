@@ -10,7 +10,7 @@ class LoginWithGoogle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: () async {
         context.read<LoginCubit>().emitGoogleLoginStates();
       },

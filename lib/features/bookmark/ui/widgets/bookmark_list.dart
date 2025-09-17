@@ -4,7 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:mishkat_almasabih/core/helpers/functions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
+import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
 import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
@@ -13,23 +15,18 @@ import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_deta
 
 class BookmarkList extends StatefulWidget {
   final String selectedCollection;
-
-  const BookmarkList({super.key, required this.selectedCollection});
+  final String query;
+  const BookmarkList({
+    super.key,
+    required this.selectedCollection,
+    required this.query,
+  });
 
   @override
   State<BookmarkList> createState() => _BookmarkListState();
 }
 
 class _BookmarkListState extends State<BookmarkList> {
-  final TextEditingController _searchController = TextEditingController();
-  String _query = "";
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   String formatDateArabic(String utcString) {
     DateTime utcTime = DateTime.parse(utcString);
     DateTime localTime = utcTime.toLocal();
@@ -62,85 +59,22 @@ class _BookmarkListState extends State<BookmarkList> {
                       .where((b) => b.collection == widget.selectedCollection)
                       .toList();
 
-          final List<Bookmark> filteredSearch =
-              filteredCollection.where((b) {
-                final text = (b.hadithText ?? "").toLowerCase();
-                final notes = (b.notes ?? "").toLowerCase();
-                return text.contains(_query.toLowerCase()) ||
-                    notes.contains(_query.toLowerCase());
-              }).toList();
+final List<Bookmark> filteredSearch =
+    widget.query.isEmpty
+        ? filteredCollection
+        : filteredCollection.where((b) {
+            final normalizedText =
+                normalizeArabic(b.hadithText ?? '').toLowerCase();
+            final normalizedNotes =
+                normalizeArabic(b.notes ?? "").toLowerCase();
+            return normalizedText.contains(widget.query.toLowerCase()) ||
+                normalizedNotes.contains(widget.query.toLowerCase());
+          }).toList();
+
 
           return SliverToBoxAdapter(
             child: Column(
               children: [
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 8.h,
-                  ),
-                  child: TextField(
-                    controller: _searchController,
-                    onChanged: (value) {
-                      setState(() {
-                        _query = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: "ابحث بنص الحديث أو الملاحظات...",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontSize: 14.sp,
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: ColorsManager.primaryPurple,
-                      ),
-                      suffixIcon:
-                          _query.isNotEmpty
-                              ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  setState(() => _query = "");
-                                },
-                              )
-                              : null,
-                      filled: true,
-                      fillColor: ColorsManager.secondaryBackground,
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 12.h,
-                        horizontal: 16.w,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                        borderSide: BorderSide(
-                          color: ColorsManager.primaryPurple.withOpacity(0.3),
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                        borderSide: BorderSide(
-                          color: ColorsManager.primaryPurple.withOpacity(0.2),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16.r),
-                        borderSide: BorderSide(
-                          color: ColorsManager.primaryPurple,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
-                                Container(
-                                  
-                                          margin: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
-
-                                  child: _buildIslamicSeparator()),
-
-
                 if (filteredSearch.isEmpty)
                   const BookmarkEmptyState()
                 else
@@ -149,24 +83,19 @@ class _BookmarkListState extends State<BookmarkList> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: filteredSearch.length,
-                    separatorBuilder:
-                        (_, __) => Divider(
-                          color: ColorsManager.primaryPurple.withOpacity(0.3),
-                          indent: 20.w,
-                          endIndent: 20.w,
-                        ),
+                    separatorBuilder: (_, __) => IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = filteredSearch[index];
                       String createdAT = hadith.createdAt ?? '';
 
-                      return InkWell(
-                        borderRadius: BorderRadius.circular(16.r),
-                        splashColor: ColorsManager.primaryPurple.withOpacity(
-                          0.1,
-                        ),
-                        highlightColor: ColorsManager.primaryPurple.withOpacity(
-                          0.05,
-                        ),
+                      return GestureDetector(
+                   //     borderRadius: BorderRadius.circular(16.r),
+                     //   splashColor: ColorsManager.primaryPurple.withOpacity(
+                       //   0.1,
+                        //),
+                        //highlightColor: ColorsManager.primaryPurple.withOpacity(
+                          //0.05,
+                        //),
                         onTap:
                             () => Navigator.push(
                               context,
@@ -232,50 +161,11 @@ class _BookmarkListState extends State<BookmarkList> {
             ),
           );
         } else if (state is GetBookmarksFailure) {
-          return SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.only(top: 40.h),
-              child: Center(
-                child: Text(
-                  state.message,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    color: ColorsManager.error,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-          );
+          return SliverToBoxAdapter(child: ErrorState(error: state.message));
         }
 
         return const SliverToBoxAdapter(child: SizedBox.shrink());
       },
-    );
-  }
-
-  Widget _buildIslamicSeparator() {
-    return Container(
-      height: 1.h,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            ColorsManager.primaryPurple.withOpacity(0.3),
-            ColorsManager.primaryGold.withOpacity(0.6),
-            ColorsManager.primaryPurple.withOpacity(0.3),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(1.r),
-      ),
-    );
-  }
-
-  Widget _buildDividerSection() {
-    return SliverToBoxAdapter(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30.w, vertical: 12.h),
-        child: _buildIslamicSeparator(),
-      ),
     );
   }
 }

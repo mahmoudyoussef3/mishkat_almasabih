@@ -151,7 +151,8 @@ void initState() {
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Card(
               color: ColorsManager.secondaryBackground,
-              elevation: 5,
+              elevation: 0,
+              margin: EdgeInsets.zero,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -190,6 +191,8 @@ void initState() {
 },
 
                   ),
+                  
+                 SizedBox(height: 8.h),
 
                   BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
                     builder: (context, state) {

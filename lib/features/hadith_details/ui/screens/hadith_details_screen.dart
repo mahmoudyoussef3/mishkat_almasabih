@@ -65,7 +65,6 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   late String _currentHadithId;
   bool _hasPrev = true;
   bool _hasNext = true;
-  bool _isNavLoading = false;
 
   bool _isValid(String? text) => text != null && text.trim().isNotEmpty;
 
@@ -169,7 +168,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               SliverToBoxAdapter(child: SizedBox(height: 20.h)),
               HadithAnalysis(
                 attribution: widget.narrator ?? '',
-                hadith: newTextOfHadith,
+                hadith:
+                    newTextOfHadith.isEmpty
+                        ? widget.hadithText ?? ''
+                        : newTextOfHadith,
                 grade: widget.grade ?? '',
                 reference: widget.bookName ?? '',
               ),

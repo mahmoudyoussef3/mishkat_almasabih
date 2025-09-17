@@ -53,10 +53,8 @@ class ProfileScreen extends StatelessWidget {
 
                     return CustomScrollView(
                       slivers: [
-                        /// User Info Header
                         ProfileHeader(user: user),
 
-                        /// Content Sections
                         SliverToBoxAdapter(
                           child: Padding(
                             padding: EdgeInsets.all(20.w),
@@ -299,7 +297,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Widget _socialIcon(IconData icon, VoidCallback onTap) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: CircleAvatar(
         backgroundColor: Colors.transparent,

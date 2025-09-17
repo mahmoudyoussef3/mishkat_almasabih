@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/empty_search_state.dart';
+import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/chapter_ahadith_card.dart';
+import 'package:mishkat_almasabih/features/ahadith/ui/widgets/emoty_chapter_ahadith.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/separator.dart';
 import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_details_screen.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -39,30 +42,21 @@ class FilterSerchResultScreen extends StatelessWidget {
                   final hadiths =
                       state.searchWithFiltersModel.search?.results?.data ?? [];
                   if (hadiths.isEmpty) {
-                    return SliverToBoxAdapter(
-                      child: Center(
-                        child: Text(
-                          "لا توجد نتائج",
-                          style: TextStyle(color: Colors.grey, fontSize: 16),
-                        ),
-                      ),
-                    );
+                    return EmptySliverState();
                   }
 
                   return SliverList.separated(
                     itemCount: hadiths.length,
-                    separatorBuilder:
-                        (_, __) => IslamicSeparator(),
+                    separatorBuilder: (_, __) => IslamicSeparator(),
                     itemBuilder: (context, index) {
                       final hadith = hadiths[index];
-                      return InkWell(
+                      return GestureDetector(
                         onTap:
                             () => Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder:
                                     (context) => HadithDetailScreen(
-                                    
                                       isBookMark: false,
                                       showNavigation: false,
 
@@ -99,7 +93,7 @@ class FilterSerchResultScreen extends StatelessWidget {
                   );
                 } else if (state is SearchWithFiltersFailure) {
                   return SliverToBoxAdapter(
-                    child: Center(child: Text("خطأ: ${state.errMessage}")),
+                    child: ErrorState(error: state.errMessage),
                   );
                 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:mishkat_almasabih/core/helpers/functions.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
@@ -106,19 +107,4 @@ class AhadithsCubit extends Cubit<AhadithsState> {
     }
   }
 
-  String normalizeArabic(String text) {
-    final diacritics = RegExp(r'[\u0617-\u061A\u064B-\u0652]');
-    String result = text.replaceAll(diacritics, '');
-
-    // 2. توحيد الهمزات: أ إ آ -> ا
-    result = result.replaceAll(RegExp('[إأآ]'), 'ا');
-
-    // 3. شيل المدّة "ـ"
-    result = result.replaceAll('ـ', '');
-
-    // 4. Optional: lowercase (عشان لو فيه انجليزي)
-    result = result.toLowerCase();
-
-    return result.trim();
-  }
 }

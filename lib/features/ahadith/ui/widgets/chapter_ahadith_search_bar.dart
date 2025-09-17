@@ -14,23 +14,24 @@ class AhadithSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        margin: EdgeInsets.symmetric(horizontal: Spacing.screenHorizontal),
+        margin: EdgeInsets.symmetric(horizontal:12.w),
         padding: EdgeInsets.all(4.w),
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              ColorsManager.primaryPurple.withOpacity(0.05),
-              ColorsManager.primaryPurple.withOpacity(0.02),
-            ],
-          ),
+        
           borderRadius: BorderRadius.circular(20.r),
         ),
-        child: SearchBarWidget(
-          hintText: 'ابحث في الأحاديث...',
-          controller: controller,
-          onSearch: (query) {
-            context.read<AhadithsCubit>().filterAhadith(query);
-          },
+        child: Card(
+          elevation: 0,
+                  margin: EdgeInsets.zero,
+
+          color: ColorsManager.secondaryBackground,
+          child: SearchBarWidget(
+            hintText: 'ابحث في الأحاديث...',
+            controller: controller,
+            onSearch: (query) {
+              context.read<AhadithsCubit>().filterAhadith(query);
+            },
+          ),
         ),
       ),
     );

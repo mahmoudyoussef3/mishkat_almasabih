@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/library/ui/widgets/book_grid.dart';
@@ -47,8 +48,8 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       aspectRatio: aspectRatio,
                     );
                   } else if (state is BookDataFailure) {
-                    return const SliverToBoxAdapter(
-                      child: Center(child: Text("Something went wrong")),
+                    return  SliverToBoxAdapter(
+                      child: Center(child:ErrorState(error: state.errorMessage)),
                     );
                   }
                   return const SliverToBoxAdapter(child: SizedBox.shrink());

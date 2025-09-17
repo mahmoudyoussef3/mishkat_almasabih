@@ -67,7 +67,7 @@ class ResponsiveChapterList extends StatelessWidget {
             child: ChapterCardShimmer(),
           );
         }
-        return InkWell(
+        return GestureDetector(
           onTap: () {
             log(bookSlug);
             log(bookName);

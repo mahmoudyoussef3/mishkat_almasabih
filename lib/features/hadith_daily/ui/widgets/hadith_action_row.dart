@@ -40,7 +40,7 @@ class HadithActionsRow extends StatelessWidget {
     return MultiBlocProvider(
   providers: [
     BlocProvider(
-      create: (_) => getIt<GetCollectionsBookmarkCubit>()..getBookMarkCollections(),
+      create: (_) => getIt<GetCollectionsBookmarkCubit>(),
     ),
     BlocProvider(
       create: (_) => getIt<AddCubitCubit>(),
@@ -150,9 +150,9 @@ showDialog(
     required String label,
     required VoidCallback onTap,
   }) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12.r),
+      //borderRadius: BorderRadius.circular(12.r),
       child: Column(
         children: [
           CircleAvatar(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/spacing.dart';
+import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/build_statistics_container.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/chapters_grid_view.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
@@ -38,6 +39,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
               _buildStatsCards(),
               _buildSearchBar(context, controller),
+
               SliverToBoxAdapter(
                 child: Divider(
                   color: ColorsManager.primaryNavy,
@@ -58,12 +60,13 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
         }
 
         if (state is ChaptersFailure) {
-          return ErrorView(
-            message: state.errorMessage ?? 'حدث خطأ',
-            onRetry:
-                () =>
-                    context.read<ChaptersCubit>().emitGetBookChapters(bookSlug),
+          return Center(
+            child: ErrorState(
+            
+              error: state.errorMessage??'حدث خطأ. حاول مرة أخري'),
           );
+
+        
         }
 
         if (state is ChaptersSuccess) {
@@ -89,7 +92,8 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 ),
                 SliverToBoxAdapter(child: SizedBox(height: 12.h)),
                 _buildSearchBar(context, controller),
-                SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+
+                SliverToBoxAdapter(child: SizedBox(height: 22.h)),
                 state.filteredChapters.isEmpty
                     ? SliverFillRemaining(
                       hasScrollBody: false,
@@ -157,26 +161,24 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
         padding: EdgeInsets.all(Spacing.screenHorizontal),
         child: Row(
           children: [
-          
-              Expanded(
-                child: BuildStatisticsContainer(
-                  icon: Icons.folder,
-                  title: 'الأبواب',
-                  value: '${bookData['noOfChapters']}',
-                  color: ColorsManager.hadithAuthentic.withOpacity(0.7),
-                ),
+            Expanded(
+              child: BuildStatisticsContainer(
+                icon: Icons.folder,
+                title: 'الأبواب',
+                value: '${bookData['noOfChapters']}',
+                color: ColorsManager.hadithAuthentic.withOpacity(0.7),
               ),
-            
+            ),
+
             SizedBox(width: Spacing.md),
-           Expanded(
-             child: BuildStatisticsContainer(
-                  icon: Icons.auto_stories,
-                  title: 'الأحاديث',
-                  value: '${bookData['noOfHadith']}',
-                  color: ColorsManager.hadithAuthentic.withOpacity(0.7),
-                ),
-           ),
-            
+            Expanded(
+              child: BuildStatisticsContainer(
+                icon: Icons.auto_stories,
+                title: 'الأحاديث',
+                value: '${bookData['noOfHadith']}',
+                color: ColorsManager.hadithAuthentic.withOpacity(0.7),
+              ),
+            ),
           ],
         ),
       ),
@@ -189,24 +191,26 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
   ) {
     return SliverToBoxAdapter(
       child: Container(
-           margin: EdgeInsets.symmetric(horizontal: Spacing.screenHorizontal),
-      padding: EdgeInsets.all(4.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            ColorsManager.primaryPurple.withOpacity(0.05),
-            ColorsManager.primaryPurple.withOpacity(0.02),
-          ],
+        margin: EdgeInsets.symmetric(horizontal: 12.w),
+        padding: EdgeInsets.all(0.w),
+        decoration: BoxDecoration(
+       
+          borderRadius: BorderRadius.circular(20.r),
         ),
-        borderRadius: BorderRadius.circular(20.r),
+        child: Card(
+          elevation: 0,
+                  margin: EdgeInsets.zero,
+
+          color: ColorsManager.secondaryBackground,
+          child: SearchBarWidget(
+            hintText: 'ابحث في الكتب...',
+            controller: controller,
+            onSearch: (query) {
+              context.read<ChaptersCubit>().filterChapters(query);
+            },
+          ),
+        ),
       ),
-        child:  SearchBarWidget(
-        hintText: 'ابحث في الكتب...',
-        controller: controller,
-        onSearch: (query) {
-          context.read<ChaptersCubit>().filterChapters(query);
-        },
-      )),
     );
   }
 }

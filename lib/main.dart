@@ -37,7 +37,7 @@ Future<void> main() async {
 
   runApp(app);
 
-  await openBatterySettings();
+ // await openBatterySettings();
 }
 
 Future<void> openBatterySettings() async {
