@@ -6,6 +6,7 @@ import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HadithOfTheDayCard extends StatefulWidget {
   const HadithOfTheDayCard({super.key});
@@ -77,19 +78,23 @@ void didChangeAppLifecycleState(AppLifecycleState state) {
                   Positioned.fill(
                     child: Opacity(
                       opacity: 0.9,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(24.r),
-                        child: Image.asset(
-                          "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                      child:ClipRRect(
+  borderRadius: BorderRadius.circular(24.r),
+  child: FadeInImage(
+
+
+    
+    placeholder: MemoryImage(kTransparentImage),
+    image: AssetImage(
+
+      "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
+    ),
+    fit: BoxFit.cover,
+    fadeInDuration: Duration(milliseconds: 700),
+  ),
+),
                     ),
                   ),
-
-                  // Refresh button for manual refresh
-           
-                  // Main content
                   Padding(
                     padding: EdgeInsets.symmetric(
                       vertical: 12.h,
