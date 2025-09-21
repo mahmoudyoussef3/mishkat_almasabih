@@ -20,7 +20,7 @@ android {
     }
 
     defaultConfig {
-        applicationId 'com.example.mishkat_almasabih'
+        applicationId 'com.mishkat_almasabih.app'
         minSdk flutter.minSdkVersion
         targetSdk flutter.targetSdkVersion
         versionCode flutter.versionCode
