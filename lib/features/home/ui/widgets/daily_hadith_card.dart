@@ -18,29 +18,10 @@ class HadithOfTheDayCard extends StatefulWidget {
 class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
   @override
   void initState() {
+          context.read<DailyHadithCubit>().fetchHadith();
     super.initState();
-    debugPrint('🏠 HadithCard: Starting listener...');
-    // بدء الاستماع للتحديثات
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<DailyHadithCubit>().startListeningForUpdates();
-    });
   }
-@override
-void dispose() {
-  // إيقاف مؤقت عند الخروج من الشاشة
-  context.read<DailyHadithCubit>().pauseListening();
-  super.dispose();
-}
 
-// عند العودة للشاشة
-@override
-void didChangeAppLifecycleState(AppLifecycleState state) {
-  if (state == AppLifecycleState.resumed) {
-    context.read<DailyHadithCubit>().resumeListening();
-  } else if (state == AppLifecycleState.paused) {
-    context.read<DailyHadithCubit>().pauseListening();
-  }
-}
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<DailyHadithCubit, DailyHadithState>(
@@ -78,21 +59,17 @@ void didChangeAppLifecycleState(AppLifecycleState state) {
                   Positioned.fill(
                     child: Opacity(
                       opacity: 0.9,
-                      child:ClipRRect(
-  borderRadius: BorderRadius.circular(24.r),
-  child: FadeInImage(
-
-
-    
-    placeholder: MemoryImage(kTransparentImage),
-    image: AssetImage(
-
-      "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
-    ),
-    fit: BoxFit.cover,
-    fadeInDuration: Duration(milliseconds: 700),
-  ),
-),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24.r),
+                        child: FadeInImage(
+                          placeholder: MemoryImage(kTransparentImage),
+                          image: AssetImage(
+                            "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
+                          ),
+                          fit: BoxFit.cover,
+                          fadeInDuration: Duration(milliseconds: 700),
+                        ),
+                      ),
                     ),
                   ),
                   Padding(

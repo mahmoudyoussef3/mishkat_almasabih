@@ -157,7 +157,7 @@ class _SplashScreenState extends State<SplashScreen>
         Text(
               'مكتبة مشكاة الإسلامية ',
               style: TextStyle(
-                fontFamily: 'YaModernPro',
+                fontFamily: 'Cairo',
                 fontSize: 32.sp,
                 fontWeight: FontWeight.bold,
                 color: ColorsManager.white,
@@ -186,7 +186,7 @@ class _SplashScreenState extends State<SplashScreen>
                   fontWeight: FontWeight.w500,
                   color: ColorsManager.white.withOpacity(0.9),
                   height: 1.6,
-                  fontFamily: 'YaModernPro',
+                  fontFamily: 'Amiri',
                 ),
                 textAlign: TextAlign.center,
               ),

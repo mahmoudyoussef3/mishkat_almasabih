@@ -5,7 +5,8 @@ plugins {
 }
 
 android {
-    namespace 'com.example.mishkat_almasabih'
+    namespace 'com.mishkat_almasabih.app'
+
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

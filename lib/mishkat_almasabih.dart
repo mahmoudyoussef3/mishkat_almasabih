@@ -54,7 +54,6 @@ class MishkatAlmasabih extends StatelessWidget {
           initialRoute: _getStartScreen(),
           onGenerateRoute: appRouter.generateRoute,
           
-          // إضافة error handling
           onUnknownRoute: (settings) {
             log("Unknown route: ${settings.name}");
             return MaterialPageRoute(

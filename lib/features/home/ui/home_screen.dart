@@ -4,8 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
-import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -17,7 +15,6 @@ import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dar
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
-import 'package:mishkat_almasabih/features/search/search_screen/ui/widgets/history_shimmer.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
 import '../../../core/helpers/spacing.dart';
@@ -30,9 +27,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
+  bool showSearch = false;
+  OverlayEntry? _overlayEntry;
+  final GlobalKey _searchKey = GlobalKey();
 
+  @override
+  void initState() {
+    super.initState();
+    _initializeScreen();
+  }
 
+  @override
+  void dispose() {
+    _removeOverlay();
+    _controller.dispose();
+    super.dispose();
+  }
 
   Future<void> _initializeScreen() async {
     await _loadLibraryStatistics();
@@ -42,66 +53,259 @@ class _HomeScreenState extends State<HomeScreen> {
     await context.read<GetLibraryStatisticsCubit>().emitGetStatisticsCubit();
   }
 
-  final List<HistoryItem> _items = [];
-
-  Future<void> addItemToHistory(HistoryItem historyItem) async {
-    final existingIndex = _items.indexWhere(
-      (item) => item.title == historyItem.title,
-    );
-    if (existingIndex != -1) {
-      _items[existingIndex] = historyItem;
-    } else {
-      _items.add(historyItem);
-    }
-    await HistoryPrefs.saveHistory(_items, HistoryPrefs.enhancedPublicSearch);
-    context.read<SearchHistoryCubit>().emitHistorySearch(
-      searchCategory: HistoryPrefs.enhancedPublicSearch,
-    );
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
   }
 
-  Future<void> removeItem(int index) async {
-    _items.removeAt(index);
-    await HistoryPrefs.saveHistory(_items, HistoryPrefs.enhancedPublicSearch);
-    context.read<SearchHistoryCubit>().emitHistorySearch(
-      searchCategory: HistoryPrefs.enhancedPublicSearch,
-    );
+  void _showSearchHistory() {
+    if (_overlayEntry != null) return;
+
+    // تحقق من وجود context
+    final renderBox = _searchKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final position = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+
+    // احصل على الـ cubit من الـ context الحالي
+    final searchHistoryCubit = context.read<SearchHistoryCubit>();
+
+    _overlayEntry = OverlayEntry(
+      builder: (overlayContext) => BlocProvider.value(
+        value: searchHistoryCubit,
+        child: Positioned(
+          left: position.dx,
+          top: position.dy + size.height + 8,
+          width: size.width,
+          child: Material(
+            elevation: 8,
+            borderRadius: BorderRadius.circular(12.r),
+            color: Colors.white,
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: 300.h,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(
+                  color: Colors.grey.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12.r),
+                child: BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
+                builder: (context, state) {
+                  if (state is SearchHistoryLoading) {
+                    return Container(
+                      height: 100.h,
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    );
+                  } else if (state is SearchHistoryError) {
+                    return Container(
+                      height: 60.h,
+                      child: Center(
+                        child: Text(
+                          "خطأ أثناء تحميل السجل",
+                          style: TextStyles.bodySmall.copyWith(color: Colors.red),
+                        ),
+                      ),
+                    );
+                  } else if (state is SearchHistorySuccess) {
+                    if (state.hisoryItems.isEmpty) {
+                      return Container(
+                        height: 80.h,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.history, size: 24.r, color: Colors.grey[400]),
+                              SizedBox(height: 8.h),
+                              Text(
+                                "لا يوجد عمليات بحث سابقة",
+                                style: TextStyles.bodySmall.copyWith(color: Colors.grey[600]),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Header
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                          decoration: BoxDecoration(
+                            color: ColorsManager.primaryGreen.withOpacity(0.05),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(12.r),
+                              topRight: Radius.circular(12.r),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.history, size: 18.r, color: ColorsManager.primaryGreen),
+                              SizedBox(width: 8.w),
+                              Text(
+                                "عمليات البحث السابقة",
+                                style: TextStyles.bodySmall.copyWith(
+                                  color: ColorsManager.primaryGreen,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: _hideSearchHistory,
+                                child: Icon(Icons.close, size: 18.r, color: Colors.grey[600]),
+                              ),
+                            ],
+                          ),
+                        ),
+                        
+                        // History List
+                        Flexible(
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: state.hisoryItems.length > 6 ? 6 : state.hisoryItems.length,
+                            separatorBuilder: (context, index) => Divider(
+                              height: 1.h,
+                              color: Colors.grey[200],
+                              indent: 16.w,
+                              endIndent: 16.w,
+                            ),
+                            itemBuilder: (context, index) {
+                              final item = state.hisoryItems[index];
+                              return InkWell(
+                                onTap: () {
+                                  _hideSearchHistory();
+                                  context.pushNamed(
+                                    Routes.publicSearchSCreen,
+                                    arguments: item.title,
+                                  );
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        width: 32.w,
+                                        height: 32.w,
+                                        decoration: BoxDecoration(
+                                          color: ColorsManager.primaryGreen.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(8.r),
+                                        ),
+                                        child: Icon(
+                                          Icons.search,
+                                          size: 16.r,
+                                          color: ColorsManager.primaryGreen,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item.title,
+                                              style: TextStyles.bodyMedium.copyWith(
+                                                color: ColorsManager.primaryText,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(height: 2.h),
+                                            Text(
+                                              "${item.date} - ${item.time}",
+                                              style: TextStyles.bodySmall.copyWith(
+                                                color: ColorsManager.secondaryText,
+                                                fontSize: 11.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      GestureDetector(
+                                        onTap: () {
+                                          searchHistoryCubit.removeItem(
+                                            index,
+                                            searchCategory: HistoryPrefs.enhancedPublicSearch,
+                                          );
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(4.r),
+                                          child: Icon(
+                                            Icons.close,
+                                            size: 16.r,
+                                            color: Colors.grey[400],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Show more button if there are more than 6 items
+                        if (state.hisoryItems.length > 6)
+                          Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.symmetric(vertical: 8.h),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                top: BorderSide(
+                                  color: Colors.grey[200]!,
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                _hideSearchHistory();
+                                // Navigate to full search history page if needed
+                              },
+                              child: Text(
+                                "عرض المزيد",
+                                style: TextStyles.bodySmall.copyWith(
+                                  color: ColorsManager.primaryGreen,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    ));
+
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
-  Future<void> clearAll() async {
-    await HistoryPrefs.clearHistory(HistoryPrefs.enhancedPublicSearch);
-    context.read<SearchHistoryCubit>().emitHistorySearch(
-      searchCategory: HistoryPrefs.enhancedPublicSearch,
-    );
+  void _hideSearchHistory() {
+    setState(() {
+      showSearch = false;
+    });
+    _removeOverlay();
   }
-
-  String formatDateTime(DateTime dateTime) {
-    final date =
-        "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
-    final time =
-        "${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}";
-    return "$time - $date";
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose(); // ✅ release memory
-    super.dispose(); // ✅ always call super.dispose()
-  }
-
-  bool showSearch = true;
-  @override
-void initState() {
-  super.initState();
-      _initializeScreen();
-
-  _controller.addListener(() {
-    if (_controller.text.isEmpty && !showSearch) {
-      setState(() {
-        showSearch = true;
-      });
-    }
-  });
-}
 
   @override
   Widget build(BuildContext context) {
@@ -111,12 +315,11 @@ void initState() {
         myScaffoldScreen: Directionality(
           textDirection: TextDirection.rtl,
           child: Scaffold(
-              backgroundColor: ColorsManager.secondaryBackground,
-              body: _buildBody(),
-            ),
+            backgroundColor: ColorsManager.secondaryBackground,
+            body: _buildBody(),
           ),
         ),
-      
+      ),
     );
   }
 
@@ -132,153 +335,40 @@ void initState() {
       },
     );
   }
+
   Widget _buildLoadingState() {
-  return const Directionality(
-    textDirection: TextDirection.rtl,
-    child: HomeScreenShimmer(),
-  );
-}
-
-
-  /// Builds the success state with all content
-  Widget _buildSuccessState(GetLivraryStatisticsSuccess state) {
-    return CustomScrollView(
-      slivers: [
-        _buildHeaderSection(),
-        SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Card(
-              color: ColorsManager.secondaryBackground,
-              elevation: 0,
-              margin: EdgeInsets.zero,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SearchBarWidget(
-                    onTap: () {
-                      context.read<SearchHistoryCubit>().emitHistorySearch(
-                        searchCategory: HistoryPrefs.enhancedPublicSearch,
-                      );
-                    },
-                    controller: _controller,
-                  onSearch: (query) {
-  setState(() {
-    showSearch = false; // rebuild UI
-  });
-
-  final trimmedQuery = query.trim();
-  if (trimmedQuery.isNotEmpty) {
-    final now = DateTime.now();
-    final historyItem = HistoryItem(
-      title: trimmedQuery,
-      date: "${now.year}-${now.month}-${now.day}",
-      time: "${now.hour}:${now.minute.toString().padLeft(2, '0')}",
-    );
-
-    context.read<SearchHistoryCubit>().addItem(
-      historyItem,
-      searchCategory: HistoryPrefs.enhancedPublicSearch,
-    );
-
-    context.pushNamed(
-      Routes.publicSearchSCreen,
-      arguments: trimmedQuery,
+    return const Directionality(
+      textDirection: TextDirection.rtl,
+      child: HomeScreenShimmer(),
     );
   }
-},
 
-                  ),
-                  
-                 SizedBox(height: 8.h),
-
-                  BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
-                    builder: (context, state) {
-                      if (state is SearchHistoryLoading) {
-                        return const HistoryShimmer();
-                      } else if (state is SearchHistoryError) {
-                        return const Center(
-                          child: Text("خطأ أثناء تحميل السجل"),
-                        );
-                      } else if (state is SearchHistorySuccess) {
-                        if (state.hisoryItems.isEmpty) {
-                          return const SizedBox.shrink();
-                        }
-                        return showSearch
-                            ? SizedBox(
-                              height: 150.h,
-
-                              child: ListView.separated(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                physics: const AlwaysScrollableScrollPhysics(),
-                                itemCount: state.hisoryItems.length,
-                                separatorBuilder:
-                                    (context, index) => Divider(
-                                      endIndent: 30.w,
-                                      indent: 30.w,
-                                      height: 1.h,
-                                      color: Colors.grey[300],
-                                    ),
-                                itemBuilder: (context, index) {
-                                  final item = state.hisoryItems[index];
-                                  return ListTile(
-                                    tileColor: Colors.white,
-                                    title: Text(
-                                      item.title,
-                                      style: TextStyles.bodyMedium.copyWith(
-                                        color: ColorsManager.primaryText,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      item.date,
-                                      style: TextStyles.bodySmall.copyWith(
-                                        color: ColorsManager.secondaryText,
-                                      ),
-                                    ),
-                                    trailing: IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        size: 22.r,
-                                        color: ColorsManager.primaryGreen,
-                                      ),
-                                      onPressed:
-                                          () => context
-                                              .read<SearchHistoryCubit>()
-                                              .removeItem(
-                                                index,
-                                                searchCategory:
-                                                    HistoryPrefs
-                                                        .enhancedPublicSearch,
-                                              ),
-                                    ),
-                                    onTap:
-                                        () => context.pushNamed(
-                                          Routes.publicSearchSCreen,
-                                          arguments: item.title,
-                                        ),
-                                  );
-                                },
-                              ),
-                            )
-                            : SizedBox.shrink();
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+  Widget _buildSuccessState(GetLivraryStatisticsSuccess state) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (showSearch) {
+          _hideSearchHistory();
+        }
+        return false;
+      },
+      child: GestureDetector(
+        onTap: () {
+          if (showSearch) _hideSearchHistory();
+        },
+        child: CustomScrollView(
+          slivers: [
+            _buildHeaderSection(),
+            SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+            _buildSearchBarSection(),
+            _buildDailyHadithSection(),
+            _buildDividerSection(),
+            _buildStatisticsSection(state),
+            _buildDividerSection(),
+            _buildCategoriesSection(state),
+            SliverToBoxAdapter(child: SizedBox(height: 32.h)),
+          ],
         ),
-        _buildDailyHadithSection(),
-        _buildDividerSection(),
-        _buildStatisticsSection(state),
-        _buildDividerSection(),
-        _buildCategoriesSection(state),
-      ],
+      ),
     );
   }
 
@@ -289,8 +379,70 @@ void initState() {
   Widget _buildHeaderSection() {
     return BuildHeaderAppBar(
       home: true,
-     title: 'مشكاة المصابيح',
+      title: 'مشكاة المصابيح',
       description: 'مكتبة مشكاة الإسلامية',
+    );
+  }
+
+  Widget _buildSearchBarSection() {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Container(
+          key: _searchKey,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+          child: SearchBarWidget(
+            onTap: () {
+              if (!showSearch) {
+                setState(() {
+                  showSearch = true;
+                });
+                context.read<SearchHistoryCubit>().emitHistorySearch(
+                  searchCategory: HistoryPrefs.enhancedPublicSearch,
+                );
+                _showSearchHistory();
+              } else {
+                _hideSearchHistory();
+              }
+            },
+            controller: _controller,
+            onSearch: (query) {
+              _hideSearchHistory();
+
+              final trimmedQuery = query.trim();
+              if (trimmedQuery.isNotEmpty) {
+                final now = DateTime.now();
+                final historyItem = HistoryItem(
+                  title: trimmedQuery,
+                  date: "${now.year}-${now.month}-${now.day}",
+                  time: "${now.hour}:${now.minute.toString().padLeft(2, '0')}",
+                );
+
+                context.read<SearchHistoryCubit>().addItem(
+                  historyItem,
+                  searchCategory: HistoryPrefs.enhancedPublicSearch,
+                );
+
+                context.pushNamed(
+                  Routes.publicSearchSCreen,
+                  arguments: trimmedQuery,
+                );
+              }
+            },
+          ),
+        ),
+      ),
     );
   }
 
@@ -298,7 +450,6 @@ void initState() {
     return const SliverToBoxAdapter(child: HadithOfTheDayCard());
   }
 
-  /// Builds the statistics section with enhanced header
   Widget _buildStatisticsSection(GetLivraryStatisticsSuccess state) {
     return SliverToBoxAdapter(
       child: Container(
@@ -314,7 +465,6 @@ void initState() {
     );
   }
 
-  /// Builds the divider section with Islamic design
   Widget _buildDividerSection() {
     return SliverToBoxAdapter(
       child: Container(
@@ -324,7 +474,6 @@ void initState() {
     );
   }
 
-  /// Builds the categories section with enhanced headers
   Widget _buildCategoriesSection(GetLivraryStatisticsSuccess state) {
     return SliverToBoxAdapter(
       child: Container(
@@ -341,9 +490,6 @@ void initState() {
     );
   }
 
-  // ==================== COMPONENT BUILDERS ====================
-
-  /// Builds the statistics header with icon and description
   Widget _buildStatisticsHeader() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -368,7 +514,6 @@ void initState() {
     );
   }
 
-  /// Builds the statistics header icon
   Widget _buildStatisticsHeaderIcon() {
     return Container(
       padding: EdgeInsets.all(12.w),
@@ -384,7 +529,6 @@ void initState() {
     );
   }
 
-  /// Builds the statistics header text
   Widget _buildStatisticsHeaderText() {
     return Expanded(
       child: Column(
@@ -409,7 +553,6 @@ void initState() {
     );
   }
 
-  /// Builds the statistics cards row
   Widget _buildStatisticsCards(GetLivraryStatisticsSuccess state) {
     return Row(
       children: [
@@ -437,7 +580,6 @@ void initState() {
     );
   }
 
-  /// Builds an individual statistics card
   Widget _buildStatisticsCard({
     required IconData icon,
     required String title,
@@ -454,7 +596,6 @@ void initState() {
     );
   }
 
-  /// Builds the categories header with icon and description
   Widget _buildCategoriesHeader() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
@@ -479,7 +620,6 @@ void initState() {
     );
   }
 
-  /// Builds the categories header icon
   Widget _buildCategoriesHeaderIcon() {
     return Container(
       padding: EdgeInsets.all(8.w),
@@ -495,7 +635,6 @@ void initState() {
     );
   }
 
-  /// Builds the categories header text
   Widget _buildCategoriesHeaderText() {
     return Expanded(
       child: Column(
@@ -520,7 +659,6 @@ void initState() {
     );
   }
 
-  /// Builds the category cards
   Widget _buildCategoryCards(GetLivraryStatisticsSuccess state) {
     return Column(
       children: [
@@ -560,7 +698,6 @@ void initState() {
     );
   }
 
-  /// Builds an individual category card
   Widget _buildCategoryCard({
     required GetLivraryStatisticsSuccess state,
     required String categoryKey,
@@ -571,8 +708,7 @@ void initState() {
     required String screenName,
     required String screenId,
   }) {
-    final category =
-        state.statisticsResponse.statistics.booksByCategory[categoryKey]!;
+    final category = state.statisticsResponse.statistics.booksByCategory[categoryKey]!;
 
     return BuildMainCategoryCard(
       title: category.name,
@@ -585,9 +721,6 @@ void initState() {
     );
   }
 
-  // ==================== GRADIENT BUILDERS ====================
-
-  /// Builds gradient for Kutub Tisaa category
   LinearGradient _buildKutubTisaaGradient() {
     return LinearGradient(
       begin: Alignment.topLeft,
@@ -596,7 +729,6 @@ void initState() {
     );
   }
 
-  /// Builds gradient for Arbaain category
   LinearGradient _buildArbaainGradient() {
     return LinearGradient(
       begin: Alignment.topLeft,
@@ -605,7 +737,6 @@ void initState() {
     );
   }
 
-  /// Builds gradient for Adab category
   LinearGradient _buildAdabGradient() {
     return LinearGradient(
       begin: Alignment.topLeft,
@@ -614,9 +745,6 @@ void initState() {
     );
   }
 
-  // ==================== UTILITY BUILDERS ====================
-
-  /// Builds Islamic-themed separator with gradient and star decoration
   Widget _buildIslamicSeparator() {
     return Container(
       height: 2.h,
@@ -633,9 +761,6 @@ void initState() {
     );
   }
 
-  // ==================== NAVIGATION METHODS ====================
-
-  /// Navigates to the library screen with specified parameters
   void _navigateToLibrary(String screenName, String screenId) {
     Navigator.push(
       context,
