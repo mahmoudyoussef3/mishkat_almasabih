@@ -44,6 +44,8 @@ dependencies:
   flutter_background_service: ^5.1.0
   android_intent_plus: ^6.0.0
   transparent_image: ^2.0.1
+  firebase_core: ^4.1.1
+  firebase_auth: ^6.1.0
 
 dev_dependencies:
   flutter_test:
