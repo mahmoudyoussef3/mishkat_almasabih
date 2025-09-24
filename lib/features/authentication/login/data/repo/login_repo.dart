@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,15 +47,14 @@ class LoginRepo {
 
       final idToken = googleAuth.idToken ?? "";
 
-      // استدعاء API backend بالـ idToken
       final response = await _apiService.googleLogin({"token": idToken});
 
-      // خزن التوكين اللي السيرفر رجعه مش بس idToken
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString("token", response.token ?? "");
 
       return Right(response);
     } catch (error) {
+    log(error.toString());
       return Left(ErrorHandler.handle(error));
     }
   }

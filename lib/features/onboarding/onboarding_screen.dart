@@ -17,15 +17,12 @@ class _OnboardingScreenState extends State<OnboardingScreen>
   final PageController _pageController = PageController();
   int _currentPage = 0;
   late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<Offset> _slideAnimation;
+
 
   // Your custom primary color with related palette
   static const Color primaryPurple = Color(0xFF7440E9);
   static const Color lightPurple = Color(0xFF9B6FFF);
-  static const Color deepPurple = Color(0xFF5A2FC2);
-  static const Color accentPurple = Color(0xFFB794FF);
-
+ 
 final List<OnboardingPage> _onboardingPages = [
   OnboardingPage(
     title: 'مشكاة المصابيح',
@@ -76,21 +73,8 @@ final List<OnboardingPage> _onboardingPages = [
       duration: const Duration(milliseconds: 400),
       vsync: this,
     );
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.8, curve: Curves.easeOutQuart),
-      ),
-    );
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.1),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.2, 1.0, curve: Curves.easeOutCubic),
-      ),
-    );
+ 
+    
     _animationController.forward();
   }
 
@@ -316,18 +300,7 @@ Widget _buildOnboardingPage(OnboardingPage page) {
             child: Stack(
               children: [
                 // Pattern overlay
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTIwIDQwQzMxLjA0NTcgNDAgNDAgMzEuMDQ1NyA0MCAyMEM0MCA4Ljk1NDMgMzEuMDQ1NyAwIDIwIDBDOC45NTQzIDAgMCA4Ljk1NDMgMCAyMEMwIDMxLjA0NTcgOC45NTQzIDQwIDIwIDQwWiIgZmlsbD0iIzc0NDAlOSIgZmlsbC1vcGFjaXR5PSIwLjA1Ii8+Cjwvc3ZnPgo=',
-                        ),
-                        repeat: ImageRepeat.repeat,
-                      ),
-                    ),
-                  ),
-                ),
+          
 
                 // Main content
                 Center(

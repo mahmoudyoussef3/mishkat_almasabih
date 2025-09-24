@@ -47,7 +47,6 @@ class LoginCubit extends Cubit<LoginState> {
     response.fold(
       (error) => emit(LoginError(error.apiErrorModel.msg.toString())),
       (data) async {
-        await sharedPreferences.setString("token", data.token!);
         log("📌 Google login token: ${data.token}");
         emit(LoginSuccess(data));
       },

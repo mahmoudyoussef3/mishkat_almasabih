@@ -2,7 +2,7 @@ name: mishkat_almasabih
 description: "A new Flutter project."
 publish_to: 'none' 
 
-version: 1.0.0+3
+version: 1.0.0+5
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
@@ -76,16 +76,40 @@ flutter:
     - assets/images/islamic_pattern.jpg
     - assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg
 
-
   fonts:
+    - family: Amiri
+      fonts:
+        - asset: assets/fonts/Amiri-Regular.ttf
+        - asset: assets/fonts/Amiri-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Amiri-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Amiri-Italic.ttf
+          style: italic
 
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Cairo-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Cairo-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Cairo-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Cairo-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Cairo-Black.ttf
+          weight: 900
 
-      - family: Amiri
-        fonts:
-            - asset: assets/fonts/Amiri-Regular.ttf     
-      - family: Cairo
-        fonts:
-            - asset: assets/fonts/Cairo-Regular.ttf   
-            
+    - family: YaModernPro
+      fonts:
+        - asset: assets/fonts/Ya-ModernPro-Bold.otf
+          weight: 700          
 
 
