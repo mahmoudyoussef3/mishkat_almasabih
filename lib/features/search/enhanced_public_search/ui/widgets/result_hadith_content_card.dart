@@ -117,9 +117,7 @@ class ResultHadithContentCard extends StatelessWidget {
 
                 // Hadith content
                 HadithRichText(
-                  hadith: data.hadeeth ?? "",
-                  wordsMeanings: data.words_meanings ?? [],
-                ),
+                  hadith: data.hadeeth ?? "",                ),
               ],
             ),
           ),

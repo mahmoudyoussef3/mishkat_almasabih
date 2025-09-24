@@ -1,15 +1,11 @@
 import 'dart:math';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_title.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_content_card.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_content_card.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_attribution_and_grade.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tab_content.dart';
@@ -91,13 +87,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    /*
-                    if (data?.title != null)
-                      Container(
-                        margin: EdgeInsets.only(bottom: 10.h),
-                        child: HadithTitle(title: data!.title!),
-                      ),
-*/
+            
+
                     if (data?.hadith != null)
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
