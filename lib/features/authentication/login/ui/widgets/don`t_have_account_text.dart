@@ -31,7 +31,7 @@ class DontHaveAccountText extends StatelessWidget {
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
               color: ColorsManager.primaryGreen,
-              decoration: TextDecoration.underline,
+          
             ),
           ),
         ),

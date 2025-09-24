@@ -2,7 +2,7 @@ name: mishkat_almasabih
 description: "A new Flutter project."
 publish_to: 'none' 
 
-version: 1.0.0+3
+version: 1.0.0+4
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
@@ -83,9 +83,10 @@ flutter:
       - family: Amiri
         fonts:
             - asset: assets/fonts/Amiri-Regular.ttf     
-      - family: Cairo
-        fonts:
-            - asset: assets/fonts/Cairo-Regular.ttf   
+            ##
+       ##  - family: Cairo
+       ##    fonts:
+        ##       - asset: assets/fonts/Cairo-Regular.ttf   
             
 
 

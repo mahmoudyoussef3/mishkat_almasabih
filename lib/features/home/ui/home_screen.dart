@@ -61,14 +61,12 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showSearchHistory() {
     if (_overlayEntry != null) return;
 
-    // تحقق من وجود context
     final renderBox = _searchKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
     final position = renderBox.localToGlobal(Offset.zero);
     final size = renderBox.size;
 
-    // احصل على الـ cubit من الـ context الحالي
     final searchHistoryCubit = context.read<SearchHistoryCubit>();
 
     _overlayEntry = OverlayEntry(
@@ -386,12 +384,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSearchBarSection() {
     return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Container(
+      child:  Container(
           key: _searchKey,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.transparent,
             borderRadius: BorderRadius.circular(16.r),
             boxShadow: [
               BoxShadow(
@@ -442,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-      ),
+     
     );
   }
 
