@@ -112,9 +112,9 @@ class ResponsiveChapterList extends StatelessWidget {
                   ar: items[index].chapterArabic,
                   primaryPurple: primaryPurple,
                 )
-                .animate()
-                .fadeIn(duration: 1.seconds)
-                .scale(duration: 1.seconds, curve: Curves.easeOutBack),
+           //     .animate()
+            //    .fadeIn(duration: 1.seconds)
+             //   .scale(duration: 1.seconds, curve: Curves.easeOutBack),
           ),
         );
       }, childCount: isLoading ? 12 : items.length),

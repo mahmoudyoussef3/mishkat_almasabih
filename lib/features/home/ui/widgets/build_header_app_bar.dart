@@ -116,7 +116,7 @@ class BuildHeaderAppBar extends StatelessWidget {
               title,
               style: TextStyles.displaySmall.copyWith(
                 color: ColorsManager.white,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
                 fontSize: 24.sp,
               ),
             ),

@@ -49,7 +49,7 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                 ),
             child: Container(
               margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
-              height: 180.h,
+              height: 220.h,
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24.r),
@@ -101,6 +101,7 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                             ),
                           ],
                         ),
+//                        SizedBox(height: 8.h),
 
                         Flexible(
                           child: Text(
@@ -110,7 +111,7 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontSize: 20.sp,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               color: ColorsManager.secondaryBackground,
                             ),
                           ),

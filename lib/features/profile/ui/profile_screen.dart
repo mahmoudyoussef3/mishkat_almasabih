@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
 import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
-import 'package:mishkat_almasabih/features/profile/ui/widgets/dark_mode_toggle.dart';
 import 'package:mishkat_almasabih/features/profile/ui/widgets/profile_screen_shimmer.dart';
 import 'package:mishkat_almasabih/features/profile/ui/widgets/section_title.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -57,37 +56,37 @@ class ProfileScreen extends StatelessWidget {
                              //   const DarkModeToggle(),
                                // SizedBox(height: 16.h),
                                 const SectionTitle(title: "من نحن"),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 12.h),
                                 _buildSection(
                                   title: "",
                                   icon: Icons.info_outline,
                                   text:
                                       "مشروع متخصص في نشر العلوم الإسلامية والحديثية بأسلوب معاصر وسلس. نهدف إلى تقريب تراث الإسلام وعلومه للمسلمين والمهتمين بطريقة سهلة وموثوقة",
                                 ),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 12.h),
 
                                 const SectionTitle(title: "رؤيتنا"),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 12.h),
                                 _buildSection(
                                   title: "",
                                   icon: Icons.visibility_outlined,
                                   text:
                                       "أن نكون المرجع الأول والأكثر موثوقية في تقديم العلوم الحديثية بشكل سهل ومفهوم للجميع.",
                                 ),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 12.h),
 
                                 const SectionTitle(title: "رسالتنا"),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 12.h),
                                 _buildSection(
                                   title: "",
                                   icon: Icons.lightbulb_outline,
                                   text:
                                       "توفير مصادر علمية دقيقة للأحاديث النبوية وشروحها، مع الحرص على الوضوح والدقة العلمية.",
                                 ),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 12.h),
 
                                 const SectionTitle(title: "قيمنا"),
-                                SizedBox(height: 16.h),
+                                SizedBox(height: 12.h),
                                 _buildSection(
                                   title: "",
                                   icon: Icons.favorite_outline,

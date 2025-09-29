@@ -47,7 +47,7 @@ class MishkatAlmasabih extends StatelessWidget {
         return MaterialApp(
           title: 'Mishkat Almasabih',
           theme: ThemeData(
-            fontFamily: 'Amiri',
+            fontFamily: 'Cairo',
             useMaterial3: true, // إضافة Material 3
           ),
           debugShowCheckedModeBanner: false,

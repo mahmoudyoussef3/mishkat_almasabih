@@ -1,5 +1,4 @@
 // ignore_for_file: deprecated_member_use
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +10,6 @@ import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dar
 import '../../../../core/theming/colors.dart';
 import '../../../home/ui/widgets/build_header_app_bar.dart';
 import '../../logic/cubit/chapters_cubit.dart';
-import 'build_error_view_book_chapters.dart';
 
 class GetBookChaptersBlocBuilder extends StatelessWidget {
   const GetBookChaptersBlocBuilder({
@@ -166,7 +164,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 icon: Icons.folder,
                 title: 'الأبواب',
                 value: '${bookData['noOfChapters']}',
-                color: ColorsManager.hadithAuthentic.withOpacity(0.7),
+                color: ColorsManager.primaryGreen.withOpacity(0.7),
               ),
             ),
 
@@ -176,7 +174,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
                 icon: Icons.auto_stories,
                 title: 'الأحاديث',
                 value: '${bookData['noOfHadith']}',
-                color: ColorsManager.hadithAuthentic.withOpacity(0.7),
+                color: ColorsManager.primaryGreen.withOpacity(0.7),
               ),
             ),
           ],

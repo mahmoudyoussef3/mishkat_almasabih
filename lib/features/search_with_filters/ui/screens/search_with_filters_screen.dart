@@ -193,8 +193,11 @@ void initState() {
                                 time: formatDateTime(now).split(' - ')[0],
                               ),
                             );
-
-                            context.pushNamed(
+      context.pushNamed(
+                  Routes.publicSearchSCreen,
+                  arguments: query.trim(),
+                );
+                           /* context.pushNamed(
                               Routes.filterResultSearch,
                               arguments: {
                                 'book': booksMap[_selectedBook] ?? '',
@@ -206,13 +209,14 @@ void initState() {
                                 'search': query.trim(),
                               },
                             );
+                            */
                           },
                         ),
 
                         SizedBox(height: 20.h),
 
                         /// Filters Card
-                        Container(
+                 /*       Container(
                           width: double.infinity,
                           padding: EdgeInsets.all(Spacing.md),
                           decoration: BoxDecoration(
@@ -339,6 +343,7 @@ void initState() {
                         ),
 
                         SizedBox(height: 20.h),
+                        */
 
                         /// Divider
                         Padding(
