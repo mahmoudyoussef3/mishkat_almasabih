@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/login_with_google.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/already_have_account.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/build_signup_header.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/widgets/build_welcome_message.dart';
@@ -22,7 +21,6 @@ class SignupScreen extends StatelessWidget {
         backgroundColor: ColorsManager.white,
         body: SafeArea(
           top: false,
-
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
             child: Column(
@@ -50,9 +48,8 @@ class SignupScreen extends StatelessWidget {
                 SizedBox(height: 24.h),
             
                 AlreadyHaveAccount(),
-                SizedBox(height: 8.h),
-            
-                LoginWithGoogle(),
+         //       SizedBox(height: 8.h),
+           //     LoginWithGoogle(),
             
                 SizedBox(height: 40.h),
               ],
@@ -69,7 +66,7 @@ class SignupScreen extends StatelessWidget {
         Expanded(child: Container(height: 1, color: ColorsManager.mediumGray)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Text(
+          child: Text(      
             'أو',
             style: TextStyle(
               fontSize: 14.sp,
