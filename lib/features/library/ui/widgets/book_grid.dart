@@ -44,10 +44,10 @@ class BookGrid extends StatelessWidget {
             return const BookCardShimmer();
           } else {
             final book = books![index];
-            return BookCard(book: book)
-                .animate()
-                .fadeIn(duration: 1.2.seconds)
-                .scale(duration: 1.2.seconds, curve: Curves.easeOutBack);
+            return BookCard(book: book);
+            //   .animate()
+            //  .fadeIn(duration: 1.2.seconds)
+            //   .scale(duration: 1.2.seconds, curve: Curves.easeOutBack);
           }
         }, childCount: isShimmer ? 6 : books!.length),
       ),

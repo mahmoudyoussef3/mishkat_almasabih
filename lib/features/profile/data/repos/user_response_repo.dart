@@ -13,26 +13,7 @@ class UserResponseRepo {
   Future<Either<ErrorHandler, UserResponseModel>> getUserProfile() async {
     try {
       final String token = await _getUserToken();
-
-      final cacheKey = CacheKeys.userProfile;
-
-      final cachedData = await GenericCacheService.instance
-          .getData<UserResponseModel>(
-            key: cacheKey,
-            fromJson: (json) => UserResponseModel.fromJson(json),
-          );
-
-      if (cachedData != null) {
-        return Right(cachedData);
-      }
       final response = await apiService.getUserProfile(token);
-
-      await GenericCacheService.instance.saveData<UserResponseModel>(
-        key: cacheKey,
-        data: response,
-        toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100,
-      );
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e));

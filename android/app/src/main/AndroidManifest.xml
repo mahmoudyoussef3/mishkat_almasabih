@@ -3,14 +3,17 @@
 
     <!-- Basic Internet Permission -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <application
         android:label="مكتبة مشكاة الإسلامية"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:allowBackup="false"
-        android:fullBackupContent="false"
-        >
+        android:fullBackupContent="false">
 
         <!-- Main Activity -->
         <activity
@@ -25,6 +28,10 @@
             <meta-data
                 android:name="io.flutter.embedding.android.NormalTheme"
                 android:resource="@style/NormalTheme" />
+
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_channel_id"
+                android:value="high_importance_channel" />
 
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.MAIN" />

@@ -37,6 +37,8 @@ class ChapterCard extends StatelessWidget {
         ),
         padding: const EdgeInsets.all(8),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 48.w,
@@ -58,10 +60,10 @@ class ChapterCard extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  ("الباب $chapterNumber").toString(),
+                  ("$chapterNumber").toString(),
                   style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
+                    color: ColorsManager.secondaryBackground,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
               ),
@@ -72,16 +74,18 @@ class ChapterCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    ar!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textDirection: TextDirection.rtl,
-                    style: TextStyle(
-                      color: ColorsManager.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      height: 1.1,
+                  Flexible(
+                    child: Text(
+                      ar!,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(
+                        color: ColorsManager.black,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                        height: 1.1,
+                      ),
                     ),
                   ),
                 ],

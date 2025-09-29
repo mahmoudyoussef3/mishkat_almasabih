@@ -65,7 +65,7 @@ class BuildStatisticsContainer extends StatelessWidget {
                 value,
                 style: TextStyles.headlineLarge.copyWith(
                   color: ColorsManager.white,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
             ],

@@ -34,18 +34,23 @@ class ProfileHeader extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(height: 16.h),
+
                 CircleAvatar(
                   radius: 46,
                   backgroundColor: Colors.transparent,
                   backgroundImage: NetworkImage(getAvatarUrl(user)),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  user.username ?? "المستخدم",
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: ColorsManager.white,
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    user.username ?? "المستخدم",
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: ColorsManager.white,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),

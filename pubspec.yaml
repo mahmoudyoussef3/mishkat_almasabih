@@ -46,6 +46,8 @@ dependencies:
   transparent_image: ^2.0.1
   firebase_core: ^4.1.1
   firebase_auth: ^6.1.0
+  firebase_messaging: ^16.0.2
+  flutter_local_notifications: ^17.2.4
 
 dev_dependencies:
   flutter_test:
@@ -77,39 +79,39 @@ flutter:
     - assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg
 
   fonts:
-    - family: Amiri
-      fonts:
-        - asset: assets/fonts/Amiri-Regular.ttf
-        - asset: assets/fonts/Amiri-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Amiri-BoldItalic.ttf
-          weight: 700
-          style: italic
-        - asset: assets/fonts/Amiri-Italic.ttf
-          style: italic
+  - family: Amiri
+    fonts:
+      - asset: assets/fonts/Amiri-Regular.ttf
+      - asset: assets/fonts/Amiri-Bold.ttf
+        weight: 700
+      - asset: assets/fonts/Amiri-Italic.ttf
+        style: italic
+      - asset: assets/fonts/Amiri-BoldItalic.ttf
+        weight: 700
+        style: italic
 
-    - family: Cairo
-      fonts:
-        - asset: assets/fonts/Cairo-ExtraLight.ttf
-          weight: 200
-        - asset: assets/fonts/Cairo-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Cairo-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Cairo-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Cairo-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/Cairo-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Cairo-ExtraBold.ttf
-          weight: 800
-        - asset: assets/fonts/Cairo-Black.ttf
-          weight: 900
+  - family: Cairo
+    fonts:
+      - asset: assets/fonts/Cairo-Regular.ttf
+      - asset: assets/fonts/Cairo-Light.ttf
+        weight: 300
+      - asset: assets/fonts/Cairo-ExtraLight.ttf
+        weight: 200
+      - asset: assets/fonts/Cairo-Medium.ttf
+        weight: 500
+      - asset: assets/fonts/Cairo-SemiBold.ttf
+        weight: 600
+      - asset: assets/fonts/Cairo-Bold.ttf
+        weight: 700
+      - asset: assets/fonts/Cairo-ExtraBold.ttf
+        weight: 800
+      - asset: assets/fonts/Cairo-Black.ttf
+        weight: 900
 
-    - family: YaModernPro
-      fonts:
-        - asset: assets/fonts/Ya-ModernPro-Bold.otf
-          weight: 700          
+  - family: YaModernPro
+    fonts:
+      - asset: assets/fonts/Ya-ModernPro-Bold.otf
+        weight: 700
+            
 
 
