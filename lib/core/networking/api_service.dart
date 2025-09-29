@@ -104,8 +104,10 @@ abstract class ApiService {
     @Path("chapter") String chapterName,
   );
 
+/*
   @GET(ApiConstants.dailyHadith)
-  Future<DailyHadithModel> getDailyHadith();
+  Future<HadithData> getDailyHadith();
+  */
   @GET(ApiConstants.bookmarkCollection)
   Future<CollectionsResponse> getBookmarkCollection(
     @Header("x-auth-token") String token,
@@ -167,4 +169,11 @@ abstract class ApiService {
   Future<RmainingQuestionsResponse> getReaminingQuestions(
     @Header("x-auth-token") String token,
   );
+
+
+
+  
+
+
+
 }

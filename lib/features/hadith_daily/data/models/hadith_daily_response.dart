@@ -1,17 +1,8 @@
-
 import 'package:json_annotation/json_annotation.dart';
 part 'hadith_daily_response.g.dart';
-@JsonSerializable()
-class DailyHadithModel {
-  final bool? status;
-  final HadithData? data;
 
-  const DailyHadithModel({this.status, this.data});
-  factory DailyHadithModel.fromJson(Map<String, dynamic> json) =>
-      _$DailyHadithModelFromJson(json);
-        Map<String,dynamic> toJson()=>_$DailyHadithModelToJson(this);
 
-}
+
 @JsonSerializable()
 class HadithData {
   final String? title;
@@ -20,7 +11,7 @@ class HadithData {
   final String? grade;
   final String? explanation;
   final List<String>? hints;
-
+  final int? id;
 
   @JsonKey(name: 'words_meanings')
   final List<WordMeaning>? wordsMeanings;
@@ -29,6 +20,7 @@ class HadithData {
     this.title,
     this.hadith,
     this.attribution,
+    this.id,
     this.grade,
     this.explanation,
     this.hints,
@@ -37,7 +29,7 @@ class HadithData {
   factory HadithData.fromJson(Map<String, dynamic> json) =>
       _$HadithDataFromJson(json);
 
-             Map<String,dynamic> toJson()=>_$HadithDataToJson(this);
+  Map<String, dynamic> toJson() => _$HadithDataToJson(this);
 }
 
 @JsonSerializable()
@@ -49,6 +41,5 @@ class WordMeaning {
   factory WordMeaning.fromJson(Map<String, dynamic> json) =>
       _$WordMeaningFromJson(json);
 
-                   Map<String,dynamic> toJson()=>_$WordMeaningToJson(this);
-
+  Map<String, dynamic> toJson() => _$WordMeaningToJson(this);
 }

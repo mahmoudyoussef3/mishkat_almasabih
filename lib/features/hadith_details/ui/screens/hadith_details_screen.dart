@@ -165,7 +165,25 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   ),
                 ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+       
+                            SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+      if (widget.showNavigation && !widget.isBookMark)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 16.h,
+                    ),
+                    child:
+                        widget.isLocal
+                            ? _buildLocalNavigation()
+                            : _buildRemoteNavigation(),
+                  ),
+                ),
+                
+                            
+
+
               HadithAnalysis(
                 attribution: widget.narrator ?? '',
                 hadith:
@@ -253,19 +271,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               ),
 
               /// Navigation Section
-              if (widget.showNavigation && !widget.isBookMark)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
-                    ),
-                    child:
-                        widget.isLocal
-                            ? _buildLocalNavigation()
-                            : _buildRemoteNavigation(),
-                  ),
-                ),
+        
 
               SliverToBoxAdapter(child: SizedBox(height: 40.h)),
             ],

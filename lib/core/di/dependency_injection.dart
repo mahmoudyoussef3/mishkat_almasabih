@@ -15,9 +15,7 @@ import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/data/repos/hadith_analysis_repo.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/data/repos/hadith_daily_repo.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/data/repos/save_hadith_daily_repo.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
+
 import 'package:mishkat_almasabih/features/home/data/repos/get_all_books_with_categories_repo.dart';
 import 'package:mishkat_almasabih/features/home/data/repos/get_library_statistics_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
@@ -96,8 +94,8 @@ Future<void> setUpGetIt() async {
   );
   getIt.registerFactory<PublicSearchCubit>(() => PublicSearchCubit(getIt()));
 
-  getIt.registerLazySingleton<SaveHadithDailyRepo>(() => SaveHadithDailyRepo(getIt()));
-  getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit(getIt()));
+  //getIt.registerLazySingleton<SaveHadithDailyRepo>(() => SaveHadithDailyRepo(getIt()));
+  //getIt.registerFactory<DailyHadithCubit>(() => DailyHadithCubit(getIt()));
 
   getIt.registerLazySingleton<NavigationRepo>(() => NavigationRepo(getIt()));
   getIt.registerFactory<NavigationCubit>(() => NavigationCubit(getIt()));

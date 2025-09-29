@@ -5,7 +5,7 @@ import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_rich_t
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 
 class HadithContentCard extends StatelessWidget {
-  final DailyHadithModel data;
+  final HadithData data;
   const HadithContentCard({super.key, required this.data});
 
   @override
@@ -117,7 +117,7 @@ class HadithContentCard extends StatelessWidget {
 
                 // Hadith content
                 HadithRichText(
-                  hadith: data.data?.hadith ?? "",
+                  hadith: data?.hadith ?? "",
                 ),
               ],
             ),

@@ -449,7 +449,7 @@ extension CacheExtensions on GenericCacheService {
     );
   }
 
-  Future<bool> saveHadithDaily(DailyHadithModel books) async {
+  Future<bool> saveHadithDaily(HadithData books) async {
     return await saveData<dynamic>(
       key: CacheKeys.hadithDaily,
       data: books,

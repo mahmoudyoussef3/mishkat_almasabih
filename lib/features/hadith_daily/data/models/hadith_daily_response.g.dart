@@ -6,22 +6,11 @@ part of 'hadith_daily_response.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DailyHadithModel _$DailyHadithModelFromJson(Map<String, dynamic> json) =>
-    DailyHadithModel(
-      status: json['status'] as bool?,
-      data:
-          json['data'] == null
-              ? null
-              : HadithData.fromJson(json['data'] as Map<String, dynamic>),
-    );
-
-Map<String, dynamic> _$DailyHadithModelToJson(DailyHadithModel instance) =>
-    <String, dynamic>{'status': instance.status, 'data': instance.data};
-
 HadithData _$HadithDataFromJson(Map<String, dynamic> json) => HadithData(
   title: json['title'] as String?,
   hadith: json['hadith'] as String?,
   attribution: json['attribution'] as String?,
+  id: (json['id'] as num?)?.toInt(),
   grade: json['grade'] as String?,
   explanation: json['explanation'] as String?,
   hints: (json['hints'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -39,6 +28,7 @@ Map<String, dynamic> _$HadithDataToJson(HadithData instance) =>
       'grade': instance.grade,
       'explanation': instance.explanation,
       'hints': instance.hints,
+      'id': instance.id,
       'words_meanings': instance.wordsMeanings,
     };
 

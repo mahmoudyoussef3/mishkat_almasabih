@@ -8,7 +8,7 @@ final class DailyHadithInitial extends DailyHadithState {}
 final class DailyHaditLoading extends DailyHadithState {}
 
 final class DailyHadithSuccess extends DailyHadithState {
-  final DailyHadithModel dailyHadithModel;
+  final HadithData? dailyHadithModel;
   DailyHadithSuccess(this.dailyHadithModel);
 }
 

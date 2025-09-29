@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/repos/save_hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
@@ -443,7 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildDailyHadithSection() {
-    return const SliverToBoxAdapter(child: HadithOfTheDayCard());
+    return  SliverToBoxAdapter(child: HadithOfTheDayCard(repo: SaveHadithDailyRepo(),));
   }
 
   Widget _buildStatisticsSection(GetLivraryStatisticsSuccess state) {

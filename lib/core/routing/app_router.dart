@@ -136,7 +136,7 @@ class AppRouter {
         );
         */
       case Routes.hadithOfTheDay:
-        final query = settings.arguments as DailyHadithModel;
+        final query = settings.arguments as HadithData;
 
         return MaterialPageRoute(
           builder:

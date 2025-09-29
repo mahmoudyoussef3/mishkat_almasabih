@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
+
 /// API Constants for Mishkat Al-Masabih Islamic Library App
 /// Contains all the endpoint URLs and configuration constants
 class ApiConstants {
   static const String apiBaseUrl = "https://api.hadith-shareef.com/api/";
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   static const String login = "auth/login";
   static const String signup = "auth/register";

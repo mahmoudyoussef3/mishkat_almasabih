@@ -14,8 +14,8 @@ class DailyHadithCubit extends Cubit<DailyHadithState> {
    Future<void> fetchHadith() async {
     emit(DailyHaditLoading());
     try {
-      final hadith = await _repo.fetchHadith();
-      emit(DailyHadithSuccess(hadith));
+     // final hadith = await _repo.fetchHadith();
+    // */  emit(DailyHadithSuccess(hadith));
     } catch (e) {
       emit(DailyHadithFailure(e.toString()));
     }

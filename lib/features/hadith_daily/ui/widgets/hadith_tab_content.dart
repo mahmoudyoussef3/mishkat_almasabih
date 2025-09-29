@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class HadithTabContent extends StatelessWidget {
   final String selectedTab;
-  final DailyHadithModel? data;
+  final HadithData? data;
 
   const HadithTabContent({
     super.key,
@@ -22,7 +22,7 @@ class HadithTabContent extends StatelessWidget {
           text: TextSpan(
             children: [
               TextSpan(
-                text: data?.data?.explanation ?? "لا يوجد شرح",
+                text: data?.explanation ?? "لا يوجد شرح",
                 style: const TextStyle(
                   fontWeight: FontWeight.w800,
                   color: ColorsManager.black,
@@ -34,11 +34,11 @@ class HadithTabContent extends StatelessWidget {
         );
 
       case "الدروس المستفادة":
-        if (data?.data?.hints != null && data!.data!.hints!.isNotEmpty) {
+        if (data?.hints != null && data!.hints!.isNotEmpty) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:
-                data!.data!.hints!
+                data!.hints!
                     .map<Widget>(
                       (hint) => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -72,12 +72,12 @@ class HadithTabContent extends StatelessWidget {
         return const Text("لا توجد فوائد");
 
       case "معاني الكلمات":
-        if (data?.data?.wordsMeanings != null &&
-            data!.data!.wordsMeanings!.isNotEmpty) {
+        if (data?.wordsMeanings != null &&
+            data!.wordsMeanings!.isNotEmpty) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:
-                data!.data!.wordsMeanings!
+                data!.wordsMeanings!
                     .map<Widget>(
                       (wm) => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),

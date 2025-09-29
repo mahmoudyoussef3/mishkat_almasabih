@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/notification/firebase_service/notification_handler.dart';
 import 'core/routing/app_router.dart';
 import 'core/routing/routes.dart';
 
@@ -45,6 +46,7 @@ class MishkatAlmasabih extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
+          navigatorKey: navigatorKey,
           title: 'Mishkat Almasabih',
           theme: ThemeData(
             fontFamily: 'Cairo',

@@ -1,11 +1,14 @@
+import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/core/notification/local_notification.dart';
+import 'package:mishkat_almasabih/core/notification/push_notification.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
 import 'package:mishkat_almasabih/firebase_options.dart';
-import 'package:mishkat_almasabih/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'mishkat_almasabih.dart';
@@ -13,19 +16,15 @@ import 'mishkat_almasabih.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-    await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  
-  // تهيئة خدمة الإشعارات
-  await NotificationService().initialize();
-await Firebase.initializeApp();
-  await NotificationService().initialize();
+  await Firebase.initializeApp();
 
-     await NotificationService().getToken();
-  
-
+  // تهيئة الـ FCM (مرة واحدة بس)
+  await PushNotification.init();
+  // Setup notification tap handlers
+  await LocalNotification.init();
+  //await PushNotification.getApnsToken();
 
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
@@ -35,12 +34,11 @@ await Firebase.initializeApp();
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
   final app = MishkatAlmasabih(
+    
     appRouter: AppRouter(),
     isFirstTime: isFirstTime,
     isLoggedIn: isLoggedIn,
   );
 
   runApp(app);
-
 }
-
