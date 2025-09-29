@@ -4,13 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
+import 'package:mishkat_almasabih/firebase_options.dart';
+import 'package:mishkat_almasabih/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'mishkat_almasabih.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+
+    await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
+  // تهيئة خدمة الإشعارات
+  await NotificationService().initialize();
 await Firebase.initializeApp();
+  await NotificationService().initialize();
+
+     await NotificationService().getToken();
+  
+
+
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
   final prefs = await SharedPreferences.getInstance();
