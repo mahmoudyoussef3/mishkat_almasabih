@@ -16,7 +16,7 @@ class HadithOfTheDayCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<HadithData?>(
-      future: repo.getHadith(), // بيجيب الحديث من الداتا بيز
+      future: repo.getHadith(), 
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Shimmer.fromColors(
@@ -74,7 +74,6 @@ class HadithOfTheDayCard extends StatelessWidget {
           );
         }
 
-        // ✅ لو فيه حديث متخزن
         return GestureDetector(
           onTap: () => context.pushNamed(
             Routes.hadithOfTheDay,

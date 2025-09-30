@@ -62,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showSearchHistory() {
     if (_overlayEntry != null) return;
 
-    final renderBox = _searchKey.currentContext?.findRenderObject() as RenderBox?;
+    final renderBox =
+        _searchKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
     final position = renderBox.localToGlobal(Offset.zero);
@@ -71,230 +72,273 @@ class _HomeScreenState extends State<HomeScreen> {
     final searchHistoryCubit = context.read<SearchHistoryCubit>();
 
     _overlayEntry = OverlayEntry(
-      builder: (overlayContext) => BlocProvider.value(
-        value: searchHistoryCubit,
-        child: Positioned(
-          left: position.dx,
-          top: position.dy + size.height + 8,
-          width: size.width,
-          child: Material(
-            elevation: 8,
-            borderRadius: BorderRadius.circular(12.r),
-            color: Colors.white,
-            child: Container(
-              constraints: BoxConstraints(
-                maxHeight: 300.h,
-              ),
-              decoration: BoxDecoration(
+      builder:
+          (overlayContext) => BlocProvider.value(
+            value: searchHistoryCubit,
+            child: Positioned(
+              left: position.dx,
+              top: position.dy + size.height + 8,
+              width: size.width,
+              child: Material(
+                elevation: 8,
+                borderRadius: BorderRadius.circular(12.r),
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(
-                  color: Colors.grey.withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12.r),
-                child: BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
-                builder: (context, state) {
-                  if (state is SearchHistoryLoading) {
-                    return Container(
-                      height: 100.h,
-                      child: const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    );
-                  } else if (state is SearchHistoryError) {
-                    return Container(
-                      height: 60.h,
-                      child: Center(
-                        child: Text(
-                          "خطأ أثناء تحميل السجل",
-                          style: TextStyles.bodySmall.copyWith(color: Colors.red),
-                        ),
-                      ),
-                    );
-                  } else if (state is SearchHistorySuccess) {
-                    if (state.hisoryItems.isEmpty) {
-                      return Container(
-                        height: 80.h,
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.history, size: 24.r, color: Colors.grey[400]),
-                              SizedBox(height: 8.h),
-                              Text(
-                                "لا يوجد عمليات بحث سابقة",
-                                style: TextStyles.bodySmall.copyWith(color: Colors.grey[600]),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Header
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                          decoration: BoxDecoration(
-                            color: ColorsManager.primaryGreen.withOpacity(0.05),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(12.r),
-                              topRight: Radius.circular(12.r),
+                child: Container(
+                  constraints: BoxConstraints(maxHeight: 300.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
+                      builder: (context, state) {
+                        if (state is SearchHistoryLoading) {
+                          return Container(
+                            height: 100.h,
+                            child: const Center(
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.history, size: 18.r, color: ColorsManager.primaryGreen),
-                              SizedBox(width: 8.w),
-                              Text(
-                                "عمليات البحث السابقة",
+                          );
+                        } else if (state is SearchHistoryError) {
+                          return Container(
+                            height: 60.h,
+                            child: Center(
+                              child: Text(
+                                "خطأ أثناء تحميل السجل",
                                 style: TextStyles.bodySmall.copyWith(
-                                  color: ColorsManager.primaryGreen,
-                                  fontWeight: FontWeight.w600,
+                                  color: Colors.red,
                                 ),
                               ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: _hideSearchHistory,
-                                child: Icon(Icons.close, size: 18.r, color: Colors.grey[600]),
-                              ),
-                            ],
-                          ),
-                        ),
-                        
-                        // History List
-                        Flexible(
-                          child: ListView.separated(
-                            padding: EdgeInsets.zero,
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: state.hisoryItems.length > 6 ? 6 : state.hisoryItems.length,
-                            separatorBuilder: (context, index) => Divider(
-                              height: 1.h,
-                              color: Colors.grey[200],
-                              indent: 16.w,
-                              endIndent: 16.w,
                             ),
-                            itemBuilder: (context, index) {
-                              final item = state.hisoryItems[index];
-                              return InkWell(
-                                onTap: () {
-                                  _hideSearchHistory();
-                                  context.pushNamed(
-                                    Routes.publicSearchSCreen,
-                                    arguments: item.title,
-                                  );
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: 32.w,
-                                        height: 32.w,
-                                        decoration: BoxDecoration(
-                                          color: ColorsManager.primaryGreen.withOpacity(0.1),
-                                          borderRadius: BorderRadius.circular(8.r),
-                                        ),
-                                        child: Icon(
-                                          Icons.search,
-                                          size: 16.r,
-                                          color: ColorsManager.primaryGreen,
-                                        ),
+                          );
+                        } else if (state is SearchHistorySuccess) {
+                          if (state.hisoryItems.isEmpty) {
+                            return Container(
+                              height: 80.h,
+                              child: Center(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.history,
+                                      size: 24.r,
+                                      color: Colors.grey[400],
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      "لا يوجد عمليات بحث سابقة",
+                                      style: TextStyles.bodySmall.copyWith(
+                                        color: Colors.grey[600],
                                       ),
-                                      SizedBox(width: 12.w),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              // Header
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 12.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: ColorsManager.primaryGreen.withOpacity(
+                                    0.05,
+                                  ),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(12.r),
+                                    topRight: Radius.circular(12.r),
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.history,
+                                      size: 18.r,
+                                      color: ColorsManager.primaryGreen,
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Text(
+                                      "عمليات البحث السابقة",
+                                      style: TextStyles.bodySmall.copyWith(
+                                        color: ColorsManager.primaryGreen,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    GestureDetector(
+                                      onTap: _hideSearchHistory,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 18.r,
+                                        color: Colors.grey[600],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // History List
+                              Flexible(
+                                child: ListView.separated(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount:
+                                      state.hisoryItems.length > 6
+                                          ? 6
+                                          : state.hisoryItems.length,
+                                  separatorBuilder:
+                                      (context, index) => Divider(
+                                        height: 1.h,
+                                        color: Colors.grey[200],
+                                        indent: 16.w,
+                                        endIndent: 16.w,
+                                      ),
+                                  itemBuilder: (context, index) {
+                                    final item = state.hisoryItems[index];
+                                    return InkWell(
+                                      onTap: () {
+                                        _hideSearchHistory();
+                                        context.pushNamed(
+                                          Routes.publicSearchSCreen,
+                                          arguments: item.title,
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 16.w,
+                                          vertical: 12.h,
+                                        ),
+                                        child: Row(
                                           children: [
-                                            Text(
-                                              item.title,
-                                              style: TextStyles.bodyMedium.copyWith(
-                                                color: ColorsManager.primaryText,
-                                                fontWeight: FontWeight.w500,
+                                            Container(
+                                              width: 32.w,
+                                              height: 32.w,
+                                              decoration: BoxDecoration(
+                                                color: ColorsManager
+                                                    .primaryGreen
+                                                    .withOpacity(0.1),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.r),
                                               ),
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
+                                              child: Icon(
+                                                Icons.search,
+                                                size: 16.r,
+                                                color:
+                                                    ColorsManager.primaryGreen,
+                                              ),
                                             ),
-                                            SizedBox(height: 2.h),
-                                            Text(
-                                              "${item.date} - ${item.time}",
-                                              style: TextStyles.bodySmall.copyWith(
-                                                color: ColorsManager.secondaryText,
-                                                fontSize: 11.sp,
+                                            SizedBox(width: 12.w),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    item.title,
+                                                    style: TextStyles.bodyMedium
+                                                        .copyWith(
+                                                          color:
+                                                              ColorsManager
+                                                                  .primaryText,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  SizedBox(height: 2.h),
+                                                  Text(
+                                                    "${item.date} - ${item.time}",
+                                                    style: TextStyles.bodySmall
+                                                        .copyWith(
+                                                          color:
+                                                              ColorsManager
+                                                                  .secondaryText,
+                                                          fontSize: 11.sp,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            GestureDetector(
+                                              onTap: () {
+                                                searchHistoryCubit.removeItem(
+                                                  index,
+                                                  searchCategory:
+                                                      HistoryPrefs
+                                                          .enhancedPublicSearch,
+                                                );
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.all(4.r),
+                                                child: Icon(
+                                                  Icons.close,
+                                                  size: 16.r,
+                                                  color: Colors.grey[400],
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      SizedBox(width: 8.w),
-                                      GestureDetector(
-                                        onTap: () {
-                                          searchHistoryCubit.removeItem(
-                                            index,
-                                            searchCategory: HistoryPrefs.enhancedPublicSearch,
-                                          );
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.all(4.r),
-                                          child: Icon(
-                                            Icons.close,
-                                            size: 16.r,
-                                            color: Colors.grey[400],
-                                          ),
-                                        ),
+                                    );
+                                  },
+                                ),
+                              ),
+
+                              // Show more button if there are more than 6 items
+                              if (state.hisoryItems.length > 6)
+                                Container(
+                                  width: double.infinity,
+                                  padding: EdgeInsets.symmetric(vertical: 8.h),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: Colors.grey[200]!,
+                                        width: 1,
                                       ),
-                                    ],
+                                    ),
+                                  ),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      _hideSearchHistory();
+                                      // Navigate to full search history page if needed
+                                    },
+                                    child: Text(
+                                      "عرض المزيد",
+                                      style: TextStyles.bodySmall.copyWith(
+                                        color: ColorsManager.primaryGreen,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-
-                        // Show more button if there are more than 6 items
-                        if (state.hisoryItems.length > 6)
-                          Container(
-                            width: double.infinity,
-                            padding: EdgeInsets.symmetric(vertical: 8.h),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                top: BorderSide(
-                                  color: Colors.grey[200]!,
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                _hideSearchHistory();
-                                // Navigate to full search history page if needed
-                              },
-                              child: Text(
-                                "عرض المزيد",
-                                style: TextStyles.bodySmall.copyWith(
-                                  color: ColorsManager.primaryGreen,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
+                            ],
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    ));
+    );
 
     Overlay.of(context).insert(_overlayEntry!);
   }
@@ -308,6 +352,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SaveHadithDailyRepo().getHadith();
     return SafeArea(
       top: false,
       child: DoubleTapToExitApp(
@@ -385,66 +430,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSearchBarSection() {
     return SliverToBoxAdapter(
-      child:  Container(
-          key: _searchKey,
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-            borderRadius: BorderRadius.circular(16.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-          child: SearchBarWidget(
-            onTap: () {
-              if (!showSearch) {
-                setState(() {
-                  showSearch = true;
-                });
-                context.read<SearchHistoryCubit>().emitHistorySearch(
-                  searchCategory: HistoryPrefs.enhancedPublicSearch,
-                );
-                _showSearchHistory();
-              } else {
-                _hideSearchHistory();
-              }
-            },
-            controller: _controller,
-            onSearch: (query) {
-              _hideSearchHistory();
-
-              final trimmedQuery = query.trim();
-              if (trimmedQuery.isNotEmpty) {
-                final now = DateTime.now();
-                final historyItem = HistoryItem(
-                  title: trimmedQuery,
-                  date: "${now.year}-${now.month}-${now.day}",
-                  time: "${now.hour}:${now.minute.toString().padLeft(2, '0')}",
-                );
-
-                context.read<SearchHistoryCubit>().addItem(
-                  historyItem,
-                  searchCategory: HistoryPrefs.enhancedPublicSearch,
-                );
-
-                context.pushNamed(
-                  Routes.publicSearchSCreen,
-                  arguments: trimmedQuery,
-                );
-              }
-            },
-          ),
+      child: Container(
+        key: _searchKey,
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-     
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        child: SearchBarWidget(
+          onTap: () {
+            if (!showSearch) {
+              setState(() {
+                showSearch = true;
+              });
+              context.read<SearchHistoryCubit>().emitHistorySearch(
+                searchCategory: HistoryPrefs.enhancedPublicSearch,
+              );
+              _showSearchHistory();
+            } else {
+              _hideSearchHistory();
+            }
+          },
+          controller: _controller,
+          onSearch: (query) {
+            _hideSearchHistory();
+
+            final trimmedQuery = query.trim();
+            if (trimmedQuery.isNotEmpty) {
+              final now = DateTime.now();
+              final historyItem = HistoryItem(
+                title: trimmedQuery,
+                date: "${now.year}-${now.month}-${now.day}",
+                time: "${now.hour}:${now.minute.toString().padLeft(2, '0')}",
+              );
+
+              context.read<SearchHistoryCubit>().addItem(
+                historyItem,
+                searchCategory: HistoryPrefs.enhancedPublicSearch,
+              );
+
+              context.pushNamed(
+                Routes.publicSearchSCreen,
+                arguments: trimmedQuery,
+              );
+            }
+          },
+        ),
+      ),
     );
   }
 
   Widget _buildDailyHadithSection() {
-    return  SliverToBoxAdapter(child: HadithOfTheDayCard(repo: SaveHadithDailyRepo(),));
+    return SliverToBoxAdapter(
+      child: HadithOfTheDayCard(repo: SaveHadithDailyRepo()),
+    );
   }
 
   Widget _buildStatisticsSection(GetLivraryStatisticsSuccess state) {
@@ -705,7 +751,8 @@ class _HomeScreenState extends State<HomeScreen> {
     required String screenName,
     required String screenId,
   }) {
-    final category = state.statisticsResponse.statistics.booksByCategory[categoryKey]!;
+    final category =
+        state.statisticsResponse.statistics.booksByCategory[categoryKey]!;
 
     return BuildMainCategoryCard(
       title: category.name,

@@ -39,6 +39,7 @@ Future<void> main() async {
     isFirstTime: isFirstTime,
     isLoggedIn: isLoggedIn,
   );
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   runApp(app);
 }
