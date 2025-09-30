@@ -13,6 +13,7 @@ import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
+import 'package:mishkat_almasabih/features/random_ahadith/logic/cubit/random_ahadith_cubit.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
@@ -72,6 +73,8 @@ class AppRouter {
                   BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
                   BlocProvider(create: (context) => getIt<AddCubitCubit>()),
                   BlocProvider(create: (context) => SearchHistoryCubit()),
+                                    BlocProvider(create: (context) => customGetIt<RandomAhadithCubit>()..emitRandomStats()),
+
                 ],
                 child: const MainNavigationScreen(),
               ),
