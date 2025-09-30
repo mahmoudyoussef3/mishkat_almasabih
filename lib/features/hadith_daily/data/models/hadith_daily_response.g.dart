@@ -8,9 +8,9 @@ part of 'hadith_daily_response.dart';
 
 HadithData _$HadithDataFromJson(Map<String, dynamic> json) => HadithData(
   title: json['title'] as String?,
-  hadith: json['hadith'] as String?,
+  hadeeth: json['hadeeth'] as String?,
   attribution: json['attribution'] as String?,
-  id: (json['id'] as num?)?.toInt(),
+  id: json['id'] as String?,
   grade: json['grade'] as String?,
   explanation: json['explanation'] as String?,
   hints: (json['hints'] as List<dynamic>?)?.map((e) => e as String).toList(),
@@ -23,7 +23,7 @@ HadithData _$HadithDataFromJson(Map<String, dynamic> json) => HadithData(
 Map<String, dynamic> _$HadithDataToJson(HadithData instance) =>
     <String, dynamic>{
       'title': instance.title,
-      'hadith': instance.hadith,
+      'hadeeth': instance.hadeeth,
       'attribution': instance.attribution,
       'grade': instance.grade,
       'explanation': instance.explanation,

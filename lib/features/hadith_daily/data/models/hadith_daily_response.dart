@@ -6,19 +6,19 @@ part 'hadith_daily_response.g.dart';
 @JsonSerializable()
 class HadithData {
   final String? title;
-  final String? hadith;
+  final String? hadeeth;
   final String? attribution;
   final String? grade;
   final String? explanation;
   final List<String>? hints;
-  final int? id;
+  final String? id;
 
   @JsonKey(name: 'words_meanings')
   final List<WordMeaning>? wordsMeanings;
 
   const HadithData({
     this.title,
-    this.hadith,
+    this.hadeeth,
     this.attribution,
     this.id,
     this.grade,

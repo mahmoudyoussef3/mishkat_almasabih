@@ -196,8 +196,7 @@ class _ResultCard extends StatelessWidget {
                 Icon(
                   icon,
                   size: 20.sp,
-                  color: ColorsManager.hadithWeak,
-),
+                  color: ColorsManager.hadithWeak,),
                 SizedBox(width: 8.w),
                 Text(
                   title,

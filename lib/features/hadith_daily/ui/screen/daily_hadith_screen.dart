@@ -39,7 +39,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                   Routes.serag,
                   arguments: SeragRequestModel(
                     hadith: Hadith(
-                      hadeeth: widget.dailyHadithModel?.hadith ?? '',
+                      hadeeth: widget.dailyHadithModel?.hadeeth ?? '',
                       grade_ar: widget.dailyHadithModel?.grade ?? '',
                       source: '',
                       takhrij_ar:
@@ -88,7 +88,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    if (data?.hadith != null)
+                    if (data?.hadeeth != null)
                       Container(
                         margin: EdgeInsets.only(bottom: 10.h),
                         child: HadithContentCard(data: widget.dailyHadithModel),
@@ -269,7 +269,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
         hadithNumber: "",
         id: (Random().nextInt(10000000) + 1).toString(),
         bookName: '',
-        hadith: widget.dailyHadithModel?.hadith ?? "",
+        hadith: widget.dailyHadithModel?.hadeeth ?? "",
       ),
     );
   }

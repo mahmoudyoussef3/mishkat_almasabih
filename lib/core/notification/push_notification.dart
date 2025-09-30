@@ -98,10 +98,14 @@ class PushNotification {
         log("❌ No hadithId found in notification data");
         return;
       }
+      log("❌ vfdvfdvfdvf");
 
       // استدعاء API
       final hadith = await _repo.fetchHadith(hadithId.toString());
+      log(hadith.toString());
+            log("❌ cdscdddd");
 
+      /*
       if (hadith != null && navigate && showScreen) {
         navigatorKey.currentState?.push(
           MaterialPageRoute(
@@ -110,6 +114,7 @@ class PushNotification {
           ),
         );
       }
+      */
     } catch (e) {
       log("❌ Error handling hadith navigation: $e");
     }

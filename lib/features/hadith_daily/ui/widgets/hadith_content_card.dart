@@ -117,7 +117,7 @@ class HadithContentCard extends StatelessWidget {
 
                 // Hadith content
                 HadithRichText(
-                  hadith: data?.hadith ?? "",
+                  hadith: data?.hadeeth ?? "",
                 ),
               ],
             ),

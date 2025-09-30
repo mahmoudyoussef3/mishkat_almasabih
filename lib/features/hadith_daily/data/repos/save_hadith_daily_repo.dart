@@ -1,24 +1,28 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 
 class SaveHadithDailyRepo {
   static const String _key = "dailyHadith";
 
-  final Dio _dio;
+ static final Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: "https://hadeethenc.com/api/v1/",
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 60),
+    ),
+  )..interceptors.add(
+      PrettyDioLogger(
+        requestBody: true,
+        requestHeader: true,
+        responseHeader: true,
+      ),
+    );
 
-  SaveHadithDailyRepo({Dio? dio})
-      : _dio = dio ??
-            Dio(
-              BaseOptions(
-                baseUrl: "https://hadeethenc.com/api/v1/", 
-                connectTimeout: const Duration(seconds: 10),
-                receiveTimeout: const Duration(seconds: 10),
-              ),
-            );
-
+  static Dio get dio => _dio;
   /// حفظ الحديث في SharedPreferences
   Future<void> saveHadith(HadithData model) async {
     final prefs = await SharedPreferences.getInstance();
