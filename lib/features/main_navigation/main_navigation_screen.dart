@@ -7,6 +7,7 @@ import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.d
 import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
 
 import 'package:mishkat_almasabih/features/profile/ui/profile_screen.dart';
+import 'package:mishkat_almasabih/features/random_ahadith/logic/cubit/random_ahadith_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/search_with_filters_screen.dart';
@@ -25,8 +26,11 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [
-    BlocProvider(
-      create: (context) => SearchHistoryCubit(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => SearchHistoryCubit()),
+                                    BlocProvider(create: (context) => customGetIt<RandomAhadithCubit>()..emitRandomStats()),
+      ],
       child: HomeScreen(),
     ),
 
