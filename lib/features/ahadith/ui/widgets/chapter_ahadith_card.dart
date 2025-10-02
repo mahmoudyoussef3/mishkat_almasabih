@@ -14,6 +14,7 @@ class ChapterAhadithCard extends StatelessWidget {
     this.grade,
     this.reference,
     required this.bookName,
+    this.hadithCategory,
   });
 
   final String number;
@@ -22,6 +23,7 @@ class ChapterAhadithCard extends StatelessWidget {
   final String? grade;
   final String? reference;
   final String bookName;
+  final String? hadithCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +106,7 @@ class ChapterAhadithCard extends StatelessWidget {
                         ),
                         SizedBox(width: 10.w),
                         Text(
-                          'نص الحديث',
+                         hadithCategory==null? 'نص الحديث':hadithCategory!,
                           style: TextStyle(
                             fontSize: 15.sp,
                             fontWeight: FontWeight.w700,
@@ -116,7 +118,7 @@ class ChapterAhadithCard extends StatelessWidget {
                     ),
 
                     // Enhanced grade badge
-                    if (grade!=null && grade!.isNotEmpty)
+                    if (grade != null && grade!.isNotEmpty)
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 16.w,
@@ -138,7 +140,7 @@ class ChapterAhadithCard extends StatelessWidget {
                           ),
                         ),
                         child: Text(
-                          grade! ,
+                          grade!,
                           style: TextStyle(
                             color: gradeColor,
                             fontWeight: FontWeight.w800,

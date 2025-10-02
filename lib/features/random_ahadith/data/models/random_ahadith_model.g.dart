@@ -37,7 +37,7 @@ RandomHadithModel _$RandomHadithModelFromJson(
           .toList(),
   wordsMeanings:
       (json['wordsMeanings'] as List<dynamic>?)
-          ?.map((e) => RandomWordMeaning.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => WordMeaning.fromJson(e as Map<String, dynamic>))
           .toList(),
   reference: json['reference'] as String?,
   language: json['language'] as String?,
@@ -60,12 +60,3 @@ Map<String, dynamic> _$RandomHadithModelToJson(RandomHadithModel instance) =>
       'language': instance.language,
       'categories': instance.categories,
     };
-
-RandomWordMeaning _$RandomWordMeaningFromJson(Map<String, dynamic> json) =>
-    RandomWordMeaning(
-      word: json['word'] as String?,
-      meaning: json['meaning'] as String?,
-    );
-
-Map<String, dynamic> _$RandomWordMeaningToJson(RandomWordMeaning instance) =>
-    <String, dynamic>{'word': instance.word, 'meaning': instance.meaning};

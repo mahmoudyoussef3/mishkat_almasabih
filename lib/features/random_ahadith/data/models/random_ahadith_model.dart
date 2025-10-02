@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 
 part 'random_ahadith_model.g.dart';
 
@@ -24,7 +25,7 @@ class RandomHadithModel {
   final String? explanation;
   final List<String>? hints;
   final List<String>? categoriesIds;
-  final List<RandomWordMeaning>? wordsMeanings;
+  final List<WordMeaning>? wordsMeanings;
   final String? reference;
   final String? language;
   final List<String>? categories;
@@ -50,15 +51,4 @@ class RandomHadithModel {
   Map<String, dynamic> toJson() => _$RandomHadithModelToJson(this);
 }
 
-@JsonSerializable()
-class RandomWordMeaning {
-  final String? word;
-  final String? meaning;
 
-  RandomWordMeaning({this.word, this.meaning});
-
-  factory RandomWordMeaning.fromJson(Map<String, dynamic> json) =>
-      _$RandomWordMeaningFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RandomWordMeaningToJson(this);
-}
