@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:mishkat_almasabih/features/home/data/models/library_statistics_model.dart';
@@ -18,6 +20,7 @@ class GetLibraryStatisticsCubit extends Cubit<GetLibraryStatisticsState> {
       (error) =>
           emit(GetLivraryStatisticsError(error.apiErrorModel.msg.toString())),
       (data) {
+        log(data.toString());
         emit(GetLivraryStatisticsSuccess(statisticsResponse: data));
       },
     );

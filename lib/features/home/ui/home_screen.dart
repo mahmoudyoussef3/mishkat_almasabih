@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/networking/api_constants.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
+import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/save_hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
@@ -13,6 +17,8 @@ import 'package:mishkat_almasabih/features/home/ui/widgets/daily_hadith_card.dar
 import 'package:mishkat_almasabih/features/home/ui/widgets/home_screen_shimmer.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dart';
+import 'package:mishkat_almasabih/features/library/ui/widgets/book_card.dart';
+import 'package:mishkat_almasabih/features/library/ui/widgets/book_card_shimmer.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
@@ -406,6 +412,9 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildSearchBarSection(),
             _buildDailyHadithSection(),
             _buildDividerSection(),
+            _buildBooksSection(),
+            _buildDividerSection(),
+
             _buildStatisticsSection(state),
             _buildDividerSection(),
             _buildCategoriesSection(state),
@@ -418,6 +427,78 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildEmptyState() {
     return const SizedBox.shrink();
+  }
+
+  Widget _buildBooksSection() {
+    return SliverToBoxAdapter(
+      child: BlocBuilder<GetLibraryStatisticsCubit, GetLibraryStatisticsState>(
+        builder: (context, state) {
+          if (state is GetLivraryStatisticsLoading) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              child: SizedBox(
+                height: 260.h, // ارتفاع مناسب للكاردات
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5,
+                  separatorBuilder: (context, index) => SizedBox(width: 12.w),
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: 140.w,
+                      child: const BookCardShimmer(),
+                    );
+                  },
+                ),
+              ),
+            );
+          } else if (state is GetLivraryStatisticsSuccess) {
+            var books = state.statisticsResponse.statistics.topBooks;
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'الكتب الأكثر رواجا',
+
+                    style: TextStyles.headlineMedium.copyWith(
+                      color: ColorsManager.primaryText,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  SizedBox(
+                    height: 240.h, // ارتفاع مناسب للكاردات
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: books.length,
+                      separatorBuilder:
+                          (context, index) => SizedBox(width: 12.w),
+                      itemBuilder: (context, index) {
+                        final book = books[index];
+
+                        return SizedBox(
+                          width: 160.w,
+                          child: BookCard(
+                            book: Book(
+                              bookName: book.name,
+                              writerName: book.name,
+                              chapters_count: book.chapters,
+                              hadiths_count: book.hadiths,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+          return SizedBox.shrink();
+        },
+      ),
+    );
   }
 
   Widget _buildHeaderSection() {
@@ -803,6 +884,10 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(1.r),
       ),
     );
+  }
+
+  Widget _buildRandomAhadith() {
+    
   }
 
   void _navigateToLibrary(String screenName, String screenId) {

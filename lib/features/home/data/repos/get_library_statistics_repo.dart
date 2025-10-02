@@ -14,6 +14,7 @@ class GetLibraryStatisticsRepo {
   Future<Either<ErrorHandler, StatisticsResponse>>
   getLibraryStatistics() async {
     try {
+      /*
         final cacheKey = CacheKeys.libraryStatistics;
 
       final cachedData = await GenericCacheService.instance
@@ -25,14 +26,16 @@ class GetLibraryStatisticsRepo {
       if (cachedData != null) {
         return Right(cachedData);
       }
+      */
       final response = await _apiService.getLibraryStatisctics();
-
+/*
        await GenericCacheService.instance.saveData<StatisticsResponse>(
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
         cacheExpirationHours: 100,
       );
+      */
       return Right(response);
 
     } catch (error) {
