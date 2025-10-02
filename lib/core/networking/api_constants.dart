@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 /// Contains all the endpoint URLs and configuration constants
 class ApiConstants {
   static const String apiBaseUrl = "https://api.hadith-shareef.com/api/";
+  static const String customBaseUrl = "https://api.hadith-shareef.com/api/";
+    static const String randomAhadith = "hadith/random";
+
+
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   static const String login = "auth/login";

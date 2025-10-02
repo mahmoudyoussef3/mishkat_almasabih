@@ -17,6 +17,7 @@ import 'package:mishkat_almasabih/features/home/ui/widgets/daily_hadith_card.dar
 import 'package:mishkat_almasabih/features/home/ui/widgets/home_screen_shimmer.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
 import 'package:mishkat_almasabih/features/library/ui/screens/library_screen.dart';
+import 'package:mishkat_almasabih/features/random_ahadith/ui/widgets/random_ahadith_bloc_builder.dart';
 import 'package:mishkat_almasabih/features/library/ui/widgets/book_card.dart';
 import 'package:mishkat_almasabih/features/library/ui/widgets/book_card_shimmer.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
@@ -633,6 +634,10 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildStatisticsHeaderIcon(),
           SizedBox(width: 16.w),
           _buildStatisticsHeaderText(),
+          SizedBox(
+            width: 100,
+            height: 100,
+            child: RandomAhadithBlocBuilder())
         ],
       ),
     );

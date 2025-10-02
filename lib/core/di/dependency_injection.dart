@@ -27,6 +27,9 @@ import 'package:mishkat_almasabih/features/profile/data/repos/user_response_repo
 import 'package:mishkat_almasabih/features/profile/edit_profile/data/repos/edit_profile_repo.dart';
 import 'package:mishkat_almasabih/features/profile/edit_profile/logic/cubit/edit_profile_cubit.dart';
 import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
+import 'package:mishkat_almasabih/features/random_ahadith/data/custom_api_service.dart';
+import 'package:mishkat_almasabih/features/random_ahadith/data/repos/random_ahadith_repo.dart';
+import 'package:mishkat_almasabih/features/random_ahadith/logic/cubit/random_ahadith_cubit.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/data/repos/remaining_questions_repo.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/logic/cubit/remaining_questions_cubit.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
@@ -43,6 +46,7 @@ import '../networking/dio_factory.dart';
 import '../../features/authentication/login/data/repo/login_repo.dart';
 
 final getIt = GetIt.instance;
+final customGetIt = GetIt.instance;
 
 Future<void> setUpGetIt() async {
   Dio dio = await DioFactory.getDio();
@@ -144,5 +148,10 @@ Future<void> setUpGetIt() async {
   getIt.registerFactory<SeragCubit>(() => SeragCubit(getIt()));
 
 
+
+///customApi
+  customGetIt.registerLazySingleton<CustomApiService>(() => CustomApiService(dio));
+  customGetIt.registerLazySingleton<RandomAhadithRepo>(() => RandomAhadithRepo(customGetIt()));
+  customGetIt.registerFactory<RandomAhadithCubit>(() => RandomAhadithCubit(customGetIt()));
   
 }
