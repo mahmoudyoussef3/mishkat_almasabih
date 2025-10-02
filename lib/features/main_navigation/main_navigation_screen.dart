@@ -65,12 +65,14 @@ class _BottomNavManagerScreenState extends State<MainNavigationScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: _screens[_currentIndex],
-        extendBody: true,
-        bottomNavigationBar: BuildBottomNavBarContainer(
-          currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
+      child: SafeArea(
+        child: Scaffold(
+          body: _screens[_currentIndex],
+          extendBody: true,
+          bottomNavigationBar: BuildBottomNavBarContainer(
+            currentIndex: _currentIndex,
+            onTap: (index) => setState(() => _currentIndex = index),
+          ),
         ),
       ),
     );

@@ -361,6 +361,8 @@ class _HomeScreenState extends State<HomeScreen> {
           textDirection: TextDirection.rtl,
           child: Scaffold(
             floatingActionButton: FloatingActionButton.extended(
+              backgroundColor: ColorsManager.primaryGreen,
+              foregroundColor: ColorsManager.secondaryBackground,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -374,7 +376,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-              label: Row(children: [Icon(Icons.local_library_sharp)]),
+              label: Row(children: [
+                
+                Text('المكتبة',style: TextStyle(
+                  fontSize: 16.sp
+                ),),
+                SizedBox(width:4.w),
+
+                Icon(Icons.local_library_sharp)]),
             ),
             backgroundColor: ColorsManager.secondaryBackground,
             body: _buildBody(),
