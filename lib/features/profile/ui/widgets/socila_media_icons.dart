@@ -21,104 +21,106 @@ class SocilaMediaIcons extends StatelessWidget {
       {'icon': FontAwesomeIcons.envelope, 'url': 'mailto:test@test.com', 'color': Colors.redAccent},
     ];
 
-    return Scaffold(
-      backgroundColor: Colors.grey[50],
-      body: SafeArea(
-        top: false,
-
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          child: Column(
-            children: [
-              /// Header with Logo
-              Column(
-                children: [
-                  CircleAvatar(
-                    radius: 45.r,
-                    backgroundImage: const AssetImage("assets/images/app_logo.png"),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    "مشكاة المصابيح",
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.purple,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[50],
+        body: SafeArea(
+          top: false,
+      
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+            child: Column(
+              children: [
+                /// Header with Logo
+                Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 45.r,
+                      backgroundImage: const AssetImage("assets/images/app_logo.png"),
                     ),
-                  ),
-                  SizedBox(height: 6.h),
-                  Text(
-                    "الأحاديث النبوية الشريفة بين يديك",
-                    style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-              SizedBox(height: 30.h),
-
-              /// رسالتنا
-              _buildCard(
-                title: "رسالتنا",
-                icon: Icons.lightbulb_outline,
-                text: "تسهيل وصول المسلمين إلى سنة النبي ﷺ الصحيحة عبر التقنيات الحديثة والتصميم السهل.",
-              ),
-
-              SizedBox(height: 20.h),
-
-              /// قيمنا
-              _buildCard(
-                title: "قيمنا",
-                icon: Icons.favorite_border,
-                text: "الأمانة العلمية، الموثوقية، الابتكار، والسهولة في تقديم المعلومة.",
-              ),
-
-              SizedBox(height: 40.h),
-
-              /// Footer
-              Column(
-                children: [
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 16.w,
-                    children: socialLinks.map((link) {
-                      return GestureDetector(
-                        onTap: () => _launchUrl(link['url'] as String),
-                        child: CircleAvatar(
-                          radius: 24.r,
-                          backgroundColor: (link['color'] as Color).withOpacity(0.15),
-                          child: Icon(
-                            link['icon'] as IconData,
-                            color: link['color'] as Color,
-                            size: 22.sp,
+                    SizedBox(height: 12.h),
+                    Text(
+                      "مشكاة المصابيح",
+                      style: TextStyle(
+                        fontSize: 20.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.purple,
+                      ),
+                    ),
+                    SizedBox(height: 6.h),
+                    Text(
+                      "الأحاديث النبوية الشريفة بين يديك",
+                      style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 30.h),
+      
+                /// رسالتنا
+                _buildCard(
+                  title: "رسالتنا",
+                  icon: Icons.lightbulb_outline,
+                  text: "تسهيل وصول المسلمين إلى سنة النبي ﷺ الصحيحة عبر التقنيات الحديثة والتصميم السهل.",
+                ),
+      
+                SizedBox(height: 20.h),
+      
+                /// قيمنا
+                _buildCard(
+                  title: "قيمنا",
+                  icon: Icons.favorite_border,
+                  text: "الأمانة العلمية، الموثوقية، الابتكار، والسهولة في تقديم المعلومة.",
+                ),
+      
+                SizedBox(height: 40.h),
+      
+                /// Footer
+                Column(
+                  children: [
+                    Wrap(
+                      alignment: WrapAlignment.center,
+                      spacing: 16.w,
+                      children: socialLinks.map((link) {
+                        return GestureDetector(
+                          onTap: () => _launchUrl(link['url'] as String),
+                          child: CircleAvatar(
+                            radius: 24.r,
+                            backgroundColor: (link['color'] as Color).withOpacity(0.15),
+                            child: Icon(
+                              link['icon'] as IconData,
+                              color: link['color'] as Color,
+                              size: 22.sp,
+                            ),
                           ),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
+                          child: Text("شروط الاستخدام", style: TextStyle(color: Colors.purple, fontSize: 13.sp)),
                         ),
-                      );
-                    }).toList(),
-                  ),
-                  SizedBox(height: 20.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: Text("شروط الاستخدام", style: TextStyle(color: Colors.purple, fontSize: 13.sp)),
-                      ),
-                      SizedBox(width: 12.w),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text("سياسة الخصوصية", style: TextStyle(color: Colors.purple, fontSize: 13.sp)),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10.h),
-                  Text(
-                    "© جميع الحقوق محفوظة لتطبيق مشكاة المصابيح 2025",
-                    style: TextStyle(fontSize: 11.sp, color: Colors.grey[600]),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ],
+                        SizedBox(width: 12.w),
+                        TextButton(
+                          onPressed: () {},
+                          child: Text("سياسة الخصوصية", style: TextStyle(color: Colors.purple, fontSize: 13.sp)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      "© جميع الحقوق محفوظة لتطبيق مشكاة المصابيح 2025",
+                      style: TextStyle(fontSize: 11.sp, color: Colors.grey[600]),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

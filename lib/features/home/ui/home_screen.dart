@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/networking/api_constants.dart'
+    show bookNamesArabic;
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
@@ -18,6 +20,7 @@ import 'package:mishkat_almasabih/features/library/ui/widgets/book_card_shimmer.
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
 
@@ -359,34 +362,263 @@ class _HomeScreenState extends State<HomeScreen> {
       child: DoubleTapToExitApp(
         myScaffoldScreen: Directionality(
           textDirection: TextDirection.rtl,
-          child: Scaffold(
-            floatingActionButton: FloatingActionButton.extended(
-              backgroundColor: ColorsManager.primaryGreen,
-              foregroundColor: ColorsManager.secondaryBackground,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => BlocProvider(
-                          create:
-                              (context) => getIt<GetLibraryStatisticsCubit>(),
-                          child: LibraryBooksScreen(),
-                        ),
-                  ),
-                );
-              },
-              label: Row(children: [
-                
-                Text('المكتبة',style: TextStyle(
-                  fontSize: 16.sp
-                ),),
-                SizedBox(width:4.w),
+          child: SafeArea(
+            child: Scaffold(
+              drawer: Drawer(
+                backgroundColor: ColorsManager.secondaryBackground,
+                child: Column(
+                  children: [
+                    DrawerHeader(
+                      decoration: BoxDecoration(
+                        color: ColorsManager.primaryGreen,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: 28.r,
+                            backgroundColor: ColorsManager.secondaryBackground,
+                            child: Padding(
+                              padding: const EdgeInsets.all(6.0),
+                              child: Image.asset(
+                                'assets/images/app_logo.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'مشكاة المصابيح',
+                                style: TextStyle(
+                                  color: ColorsManager.secondaryBackground,
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 6.h),
+                              Text(
+                                'مكتبة مشكاة الإسلامية',
+                                style: TextStyle(
+                                  color: ColorsManager.secondaryBackground
+                                      .withOpacity(0.9),
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
 
-                Icon(Icons.local_library_sharp)]),
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        children: [
+                          ListTile(
+                            leading: Icon(
+                              Icons.home,
+                              color: ColorsManager.primaryText,
+                            ),
+                            title: Text(
+                              'الرئيسية',
+                              style: TextStyles.bodyMedium.copyWith(
+                                color: ColorsManager.primaryText,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.search,
+                              color: ColorsManager.primaryText,
+                            ),
+                            title: Text(
+                              'بحث متقدم',
+                              style: TextStyles.bodyMedium.copyWith(
+                                color: ColorsManager.primaryText,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              context.pushNamed(Routes.searchScreen);
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.bookmark,
+                              color: ColorsManager.primaryText,
+                            ),
+                            title: Text(
+                              'المحفوظات',
+                              style: TextStyles.bodyMedium.copyWith(
+                                color: ColorsManager.primaryText,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              context.pushNamed(Routes.bookmarkScreen);
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.menu_book,
+                              color: ColorsManager.primaryText,
+                            ),
+                            title: Text(
+                              'مكتبة مشكاة',
+                              style: TextStyles.bodyMedium.copyWith(
+                                color: ColorsManager.primaryText,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              context.pushNamed(Routes.libraryScreen);
+                            },
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.person,
+                              color: ColorsManager.primaryText,
+                            ),
+                            title: Text(
+                              'الملف الشخصي',
+                              style: TextStyles.bodyMedium.copyWith(
+                                color: ColorsManager.primaryText,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onTap: () {
+                              Navigator.pop(context);
+                              context.pushNamed(Routes.profileScreen);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Divider(color: ColorsManager.primaryText.withOpacity(0.2)),
+
+                    ListTile(
+                      leading: Icon(Icons.logout, color: Colors.redAccent),
+                      title: Text(
+                        'تسجيل الخروج',
+                        style: TextStyles.bodyMedium.copyWith(
+                          color: Colors.redAccent,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      onTap: () async {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Directionality(
+                              textDirection: TextDirection.rtl,
+                              child: AlertDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                title: const Text(
+                                  'تسجيل الخروج',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                content: const Text(
+                                  'هل أنت متأكد أنك تريد تسجيل الخروج؟',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                actionsAlignment: MainAxisAlignment.start,
+                                actions: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          ColorsManager.primaryGreen,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
+                                      await prefs.remove("token");
+
+                                      context.pushReplacementNamed(
+                                        Routes.loginScreen,
+                                      );
+                                    },
+                                    child: const Text(
+                                      'نعم',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      side: BorderSide(
+                                        color: ColorsManager.lightBlue,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'إلغاء',
+                                      style: TextStyle(
+                                        color: ColorsManager.primaryGreen,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    SizedBox(height: 12.h),
+                  ],
+                ),
+              ),
+
+              floatingActionButton: FloatingActionButton.extended(
+                backgroundColor: ColorsManager.primaryGreen,
+                foregroundColor: ColorsManager.secondaryBackground,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => BlocProvider(
+                            create:
+                                (context) => getIt<GetLibraryStatisticsCubit>(),
+                            child: LibraryBooksScreen(),
+                          ),
+                    ),
+                  );
+                },
+                label: Row(
+                  children: [
+                    Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
+                    SizedBox(width: 4.w),
+
+                    Icon(Icons.local_library_sharp),
+                  ],
+                ),
+              ),
+              backgroundColor: ColorsManager.secondaryBackground,
+              body: _buildBody(),
             ),
-            backgroundColor: ColorsManager.secondaryBackground,
-            body: _buildBody(),
           ),
         ),
       ),
@@ -454,7 +686,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
               child: SizedBox(
-                height: 260.h, // ارتفاع مناسب للكاردات
+                height: 240.h, // ارتفاع مناسب للكاردات
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: 5,
@@ -471,7 +703,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (state is GetLivraryStatisticsSuccess) {
             var books = state.statisticsResponse.statistics.topBooks;
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -499,7 +731,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: BookCard(
                             book: Book(
                               bookName: book.name,
-                              bookSlug: 'Sahih Bukhari',
+                              bookSlug:
+                                  booksMap[bookNamesArabic[book.name]] ?? '',
                               writerName: book.name,
                               chapters_count: book.chapters,
                               hadiths_count: book.hadiths,
@@ -522,10 +755,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHeaderSection() {
     return BuildHeaderAppBar(
       home: true,
+      bottomNav: true,
       title: 'مشكاة المصابيح',
       description: 'مكتبة مشكاة الإسلامية',
     );
   }
+
+  final Map<String, String> booksMap = {
+    'صحيح البخاري': 'sahih-bukhari',
+    'صحيح مسلم': 'sahih-muslim',
+    'سنن أبي داود': 'abu-dawood',
+    'سنن الترمذي': 'al-tirmidhi',
+    'سنن النسائي': 'sunan-nasai',
+    'سنن ابن ماجة': 'ibn-e-majah',
+    'موطأ مالك': 'malik',
+    'مسند أحمد': 'musnad-ahmad',
+    'سنن الدارمي': 'darimi',
+    'بلوغ المرام': 'bulugh_al_maram',
+    'رياض الصالحين': 'riyad_assalihin',
+    'مشكات المصابيح': 'mishkat',
+    'الأربعون النووية': 'nawawi40',
+    'الأربعون القدسية': 'qudsi40',
+    'أربعون ولي الله الدهلوي': 'shahwaliullah40',
+    'الأدب المفرد': 'aladab_almufrad',
+    'الشمائل المحمدية': 'shamail_muhammadiyah',
+    'حصن المسلم': 'hisnul_muslim',
+  };
 
   Widget _buildSearchBarSection() {
     return SliverToBoxAdapter(

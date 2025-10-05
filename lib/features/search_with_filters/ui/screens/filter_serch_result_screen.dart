@@ -20,87 +20,89 @@ class FilterSerchResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: ColorsManager.primaryBackground,
-        body: CustomScrollView(
-          slivers: [
-            BuildHeaderAppBar(
-              title: "نتائج البحث عن",
-              description: searchQuery ?? "",
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-            BlocBuilder<SearchWithFiltersCubit, SearchWithFiltersState>(
-              builder: (context, state) {
-                if (state is SearchWithFiltersLoading) {
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) => const HadithCardShimmer(),
-                      childCount: 6,
-                    ),
-                  );
-                } else if (state is SearchWithFiltersSuccess) {
-                  final hadiths =
-                      state.searchWithFiltersModel.search?.results?.data ?? [];
-                  if (hadiths.isEmpty) {
-                    return EmptySliverState();
-                  }
-
-                  return SliverList.separated(
-                    itemCount: hadiths.length,
-                    separatorBuilder: (_, __) => IslamicSeparator(),
-                    itemBuilder: (context, index) {
-                      final hadith = hadiths[index];
-                      return GestureDetector(
-                        onTap:
-                            () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => HadithDetailScreen(
-                                      isBookMark: false,
-                                      showNavigation: false,
-
-                                      isLocal: false,
-                                      chapterNumber:
-                                          hadith.chapter?.chapterNumber ?? '',
-                                      bookSlug: hadith.book?.bookSlug ?? '',
-                                      bookName: hadith.book?.bookName ?? '',
-                                      author: hadith.book?.writerName ?? '',
-                                      chapter:
-                                          hadith.chapter?.chapterArabic ?? '',
-                                      hadithNumber: hadith.hadithNumber ?? '',
-                                      hadithText: hadith.hadithArabic ?? '',
-                                      narrator: hadith.book?.aboutWriter ?? '',
-                                      grade: hadith.status ?? '',
-                                      authorDeath:
-                                          hadith.book?.writerDeath ?? '',
-                                    ),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: ColorsManager.primaryBackground,
+          body: CustomScrollView(
+            slivers: [
+              BuildHeaderAppBar(
+                title: "نتائج البحث عن",
+                description: searchQuery ?? "",
+              ),
+              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+              BlocBuilder<SearchWithFiltersCubit, SearchWithFiltersState>(
+                builder: (context, state) {
+                  if (state is SearchWithFiltersLoading) {
+                    return SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) => const HadithCardShimmer(),
+                        childCount: 6,
+                      ),
+                    );
+                  } else if (state is SearchWithFiltersSuccess) {
+                    final hadiths =
+                        state.searchWithFiltersModel.search?.results?.data ?? [];
+                    if (hadiths.isEmpty) {
+                      return EmptySliverState();
+                    }
+        
+                    return SliverList.separated(
+                      itemCount: hadiths.length,
+                      separatorBuilder: (_, __) => IslamicSeparator(),
+                      itemBuilder: (context, index) {
+                        final hadith = hadiths[index];
+                        return GestureDetector(
+                          onTap:
+                              () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => HadithDetailScreen(
+                                        isBookMark: false,
+                                        showNavigation: false,
+        
+                                        isLocal: false,
+                                        chapterNumber:
+                                            hadith.chapter?.chapterNumber ?? '',
+                                        bookSlug: hadith.book?.bookSlug ?? '',
+                                        bookName: hadith.book?.bookName ?? '',
+                                        author: hadith.book?.writerName ?? '',
+                                        chapter:
+                                            hadith.chapter?.chapterArabic ?? '',
+                                        hadithNumber: hadith.hadithNumber ?? '',
+                                        hadithText: hadith.hadithArabic ?? '',
+                                        narrator: hadith.book?.aboutWriter ?? '',
+                                        grade: hadith.status ?? '',
+                                        authorDeath:
+                                            hadith.book?.writerDeath ?? '',
+                                      ),
+                                ),
                               ),
-                            ),
-                        child: ChapterAhadithCard(
-                          bookName: hadith.book?.bookName ?? '',
-                          number: hadith.hadithNumber ?? '',
-                          text: hadith.hadithArabic ?? '',
-                          narrator: hadith.book?.writerName ?? '',
-                          grade:
-                              hadith.status != null
-                                  ? gradeStringArabic(hadith.status ?? '')
-                                  : '${index + 1}',
-                          reference: hadith.chapter?.chapterArabic ?? '',
-                        ),
-                      );
-                    },
-                  );
-                } else if (state is SearchWithFiltersFailure) {
-                  return SliverToBoxAdapter(
-                    child: ErrorState(error: state.errMessage),
-                  );
-                }
-
-                return SliverToBoxAdapter(child: SizedBox.shrink());
-              },
-            ),
-          ],
+                          child: ChapterAhadithCard(
+                            bookName: hadith.book?.bookName ?? '',
+                            number: hadith.hadithNumber ?? '',
+                            text: hadith.hadithArabic ?? '',
+                            narrator: hadith.book?.writerName ?? '',
+                            grade:
+                                hadith.status != null
+                                    ? gradeStringArabic(hadith.status ?? '')
+                                    : '${index + 1}',
+                            reference: hadith.chapter?.chapterArabic ?? '',
+                          ),
+                        );
+                      },
+                    );
+                  } else if (state is SearchWithFiltersFailure) {
+                    return SliverToBoxAdapter(
+                      child: ErrorState(error: state.errMessage),
+                    );
+                  }
+        
+                  return SliverToBoxAdapter(child: SizedBox.shrink());
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -34,7 +34,6 @@ Future<void> main() async {
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
   final app = MishkatAlmasabih(
-    
     appRouter: AppRouter(),
     isFirstTime: isFirstTime,
     isLoggedIn: isLoggedIn,

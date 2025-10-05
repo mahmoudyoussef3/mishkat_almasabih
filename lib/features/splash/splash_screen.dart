@@ -52,7 +52,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToNextScreen() {
     Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, Routes.mainNavigationScreen);
+      Navigator.pushReplacementNamed(context, Routes.homeScreen);
     });
   }
 

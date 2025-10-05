@@ -6,8 +6,9 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class BuildHeaderAppBar extends StatelessWidget {
-   BuildHeaderAppBar({
+  BuildHeaderAppBar({
     super.key,
     this.description,
     required this.title,
@@ -20,7 +21,7 @@ class BuildHeaderAppBar extends StatelessWidget {
   final String? description;
   final bool home;
   final bool pinned;
-   bool bottomNav;
+  bool bottomNav;
   final List<Widget>? actions;
 
   @override
@@ -28,79 +29,13 @@ class BuildHeaderAppBar extends StatelessWidget {
     return SliverAppBar(
       actions: actions,
       leading: IconButton(
-        onPressed:
+        onPressed: 
             home
-                ? () async {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Directionality(
-                        textDirection: TextDirection.rtl,
-                        child: AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          title: const Text(
-                            'تسجيل الخروج',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          content: const Text(
-                            'هل أنت متأكد أنك تريد تسجيل الخروج؟',
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          actionsAlignment: MainAxisAlignment.start,
-                          actions: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: ColorsManager.primaryGreen,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () async {
-                                final prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.remove("token");
-
-                                context.pushReplacementNamed(
-                                  Routes.loginScreen,
-                                );
-                              },
-                              child: const Text(
-                                'نعم',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            SizedBox(width: 12.w),
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                side: BorderSide(
-                                  color: ColorsManager.lightBlue,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text(
-                                'إلغاء',
-                                style: TextStyle(
-                                  color: ColorsManager.primaryGreen,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                }
+                ? ()  => Scaffold.of(context).openDrawer()
                 : () => context.pop(),
         icon: Icon(
-          home ? Icons.logout : Icons.arrow_back,
-          color: bottomNav ? Colors.transparent : Colors.white,
+          home ? Icons.list : Icons.arrow_back,
+          color: Colors.white,
         ),
       ),
 
@@ -120,11 +55,13 @@ class BuildHeaderAppBar extends StatelessWidget {
                 fontSize: 24.sp,
               ),
             ),
-            Text(
-              description ?? '',
-              style: TextStyles.bodyMedium.copyWith(
-                color: ColorsManager.white.withOpacity(0.9),
-                fontSize: 12.sp,
+            Flexible(
+              child: Text(
+                description ?? '',
+                style: TextStyles.bodyMedium.copyWith(
+                  color: ColorsManager.white.withOpacity(0.9),
+                  fontSize: 12.sp,
+                ),
               ),
             ),
           ],

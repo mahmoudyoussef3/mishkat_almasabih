@@ -31,31 +31,33 @@ class _LibraryScreenState extends State<LibraryScreen> {
       create: (context) => getIt<BookDataCubit>()..emitGetBookData(widget.id),
       child: Directionality(
         textDirection: TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: ColorsManager.primaryBackground,
-          body: CustomScrollView(
-            slivers: [
-              BuildHeaderAppBar(title: widget.name),
-
-              BlocBuilder<BookDataCubit, BookDataState>(
-                builder: (context, state) {
-                  if (state is BookDataLoading) {
-                    return BookGrid.shimmer(aspectRatio: aspectRatio);
-                  } else if (state is BookDataSuccess) {
-                    final books = state.categoryResponse.books ?? [];
-                    return BookGrid.success(
-                      books: books,
-                      aspectRatio: aspectRatio,
-                    );
-                  } else if (state is BookDataFailure) {
-                    return  SliverToBoxAdapter(
-                      child: Center(child:ErrorState(error: state.errorMessage)),
-                    );
-                  }
-                  return const SliverToBoxAdapter(child: SizedBox.shrink());
-                },
-              ),
-            ],
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: ColorsManager.primaryBackground,
+            body: CustomScrollView(
+              slivers: [
+                BuildHeaderAppBar(title: widget.name),
+          
+                BlocBuilder<BookDataCubit, BookDataState>(
+                  builder: (context, state) {
+                    if (state is BookDataLoading) {
+                      return BookGrid.shimmer(aspectRatio: aspectRatio);
+                    } else if (state is BookDataSuccess) {
+                      final books = state.categoryResponse.books ?? [];
+                      return BookGrid.success(
+                        books: books,
+                        aspectRatio: aspectRatio,
+                      );
+                    } else if (state is BookDataFailure) {
+                      return  SliverToBoxAdapter(
+                        child: Center(child:ErrorState(error: state.errorMessage)),
+                      );
+                    }
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

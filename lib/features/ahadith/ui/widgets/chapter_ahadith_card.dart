@@ -85,39 +85,46 @@ class ChapterAhadithCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(8.w),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                gradeColor.withOpacity(0.1),
-                                gradeColor.withOpacity(0.05),
-                              ],
+                    Expanded(
+                      // ✅ Added
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(8.w),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  gradeColor.withOpacity(0.1),
+                                  gradeColor.withOpacity(0.05),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
-                            borderRadius: BorderRadius.circular(12.r),
+                            child: Icon(
+                              Icons.menu_book,
+                              color: gradeColor,
+                              size: 20.r,
+                            ),
                           ),
-                          child: Icon(
-                            Icons.menu_book,
-                            color: gradeColor,
-                            size: 20.r,
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Text(
+                              hadithCategory == null
+                                  ? 'نص الحديث'
+                                  : hadithCategory!,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontSize: 15.sp,
+                                fontWeight: FontWeight.w700,
+                                color: ColorsManager.primaryText,
+                                fontFamily: 'Amiri',
+                              ),
+                            ),
                           ),
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                         hadithCategory==null? 'نص الحديث':hadithCategory!,
-                          style: TextStyle(
-                            fontSize: 15.sp,
-                            fontWeight: FontWeight.w700,
-                            color: ColorsManager.primaryText,
-                            fontFamily: 'Amiri',
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-
-                    // Enhanced grade badge
                     if (grade != null && grade!.isNotEmpty)
                       Container(
                         padding: EdgeInsets.symmetric(

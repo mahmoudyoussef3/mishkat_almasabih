@@ -25,8 +25,7 @@ class ProfileScreen extends StatelessWidget {
       },
       child: SafeArea(
         top: false,
-        child: DoubleTapToExitApp(
-          myScaffoldScreen: Directionality(
+        child: Directionality(
             textDirection: TextDirection.rtl,
             child: Scaffold(
               backgroundColor: ColorsManager.primaryBackground,
@@ -239,7 +238,7 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      
     );
   }
 

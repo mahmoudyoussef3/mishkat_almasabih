@@ -38,15 +38,16 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
     SaveHadithDailyRepo().getHadith();
     return SafeArea(
       top: false,
-      child: DoubleTapToExitApp(
-        myScaffoldScreen: Directionality(
+      child:  Directionality(
           textDirection: TextDirection.rtl,
-          child: Scaffold(
-            backgroundColor: ColorsManager.secondaryBackground,
-            body: _buildBody(),
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: ColorsManager.secondaryBackground,
+              body: _buildBody(),
+            ),
           ),
         ),
-      ),
+      
     );
   }
 
@@ -74,8 +75,8 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
     return CustomScrollView(
       slivers: [
         _buildHeaderSection(),
-        SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-        _buildDividerSection(),
+        SliverToBoxAdapter(child: SizedBox(height: 8.h)),
+      // _buildDividerSection(),
         _buildStatisticsSection(state),
         _buildDividerSection(),
         _buildCategoriesSection(state),
@@ -90,9 +91,11 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
 
   Widget _buildHeaderSection() {
     return BuildHeaderAppBar(
-      home: true,
-      title: 'مشكاة المصابيح',
-      description: 'مكتبة مشكاة الإسلامية',
+      home: false,
+      bottomNav: true,
+
+ //     title: 'مشكاة المصابيح',
+      title: 'مكتبة مشكاة الإسلامية',
     );
   }
 
