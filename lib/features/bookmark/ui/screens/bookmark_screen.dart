@@ -8,6 +8,7 @@ import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/book_collections_row.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/bookmark_list.dart';
+import 'package:mishkat_almasabih/features/chapters/ui/widgets/chapters_grid_view.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 
 class BookmarkScreen extends StatefulWidget {
@@ -21,6 +22,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   String selectedCollection = "الكل";
   final TextEditingController _searchController = TextEditingController();
   String _query = "";
+  bool showHadith = true;
 
   @override
   void dispose() {
@@ -31,13 +33,80 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   @override
   Widget build(BuildContext context) {
     return Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: ColorsManager.secondaryBackground,
-          body: CustomScrollView(
-            slivers: [
-              BuildHeaderAppBar(bottomNav: true, title: "الأحاديث المحفوظة"),
-              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: ColorsManager.secondaryBackground,
+        body: CustomScrollView(
+          slivers: [
+            BuildHeaderAppBar(bottomNav: true, title: "العلامات المرجعية"),
+            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() => showHadith = true);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            color:
+                                showHadith
+                                    ? ColorsManager.primaryGreen
+                                    : ColorsManager.lightGray,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "الأحاديث",
+                            style: TextStyle(
+                              color:
+                                  showHadith
+                                      ? ColorsManager.white
+                                      : ColorsManager.darkGray,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() => showHadith = false);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            color:
+                                !showHadith
+                                    ? ColorsManager.primaryGreen
+                                    : ColorsManager.lightGray,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            "الأبواب",
+                            style: TextStyle(
+                              color:
+                                  !showHadith
+                                      ? ColorsManager.white
+                                      : ColorsManager.darkGray,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+if(showHadith)
               SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -51,9 +120,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                     child: Container(
                       decoration: BoxDecoration(
                         color: ColorsManager.white,
-                        borderRadius: BorderRadius.circular(
-                          Spacing.cardRadius,
-                        ),
+                        borderRadius: BorderRadius.circular(Spacing.cardRadius),
                         boxShadow: [
                           BoxShadow(
                             color: ColorsManager.black.withOpacity(0.1),
@@ -79,7 +146,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                             color: ColorsManager.primaryPurple,
                             size: 24,
                           ),
-        
+
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: Spacing.md,
@@ -93,7 +160,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   ),
                 ),
               ),
-        
+if(showHadith)
+
               SliverToBoxAdapter(
                 child: BookmarkCollectionsRow(
                   selectedCollection: selectedCollection,
@@ -102,14 +170,15 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                   },
                 ),
               ),
-        
+
               BookmarkList(
                 selectedCollection: selectedCollection,
                 query: _query,
+                showHadiht: showHadith,
               ),
-            ],
-          ),
+          ],
         ),
-      );
+      ),
+    );
   }
 }
