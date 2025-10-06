@@ -60,7 +60,7 @@ class MishkatDrawer extends StatelessWidget {
                     ),
                     SizedBox(height: 6.h),
                     Text(
-                      'مكتبة مشكاة الإسلامية',
+                      'مكتبة مشكاة للأحاديث',
                       style: TextStyle(
                         color: ColorsManager.white.withOpacity(0.9),
                         fontSize: 15.sp,

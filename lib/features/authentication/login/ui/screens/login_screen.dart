@@ -15,53 +15,47 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: SafeArea(
-        child: Scaffold(
-             
-          backgroundColor: ColorsManager.white,
-          body: SafeArea(
-        top: false,
-        
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Top spacing
-                  SizedBox(height: 60.h),
-        
-                  // App Logo and Title
-                  LoginScreenHeader(),
-        
-                  SizedBox(height: 60.h),
-        
-                  // Login Form
-                  EmailAndPassword(),
-        
-                  SizedBox(height: 24.h),
-        
-         
-        
-                  // Login Button
-                  LoginBlocListener(),
-                  SizedBox(height: 18.h),
-        
-                  // Divider
-                  _buildDivider(),
-        
-                  SizedBox(height: 24.h),
-        
-                  // Don't have account
-                  const DontHaveAccountText(),
-        
-                  SizedBox(height: 32.h),
-        
-                  LoginWithGoogle(),
-        
-                  SizedBox(height: 40.h),
-                ],
-              ),
-            ),
+      child: Scaffold(
+           
+        backgroundColor: ColorsManager.white,
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Top spacing
+              SizedBox(height: 60.h),
+              
+              // App Logo and Title
+              LoginScreenHeader(),
+              
+              SizedBox(height: 60.h),
+              
+              // Login Form
+              EmailAndPassword(),
+              
+              SizedBox(height: 24.h),
+              
+               
+              
+              // Login Button
+              LoginBlocListener(),
+              SizedBox(height: 18.h),
+              
+              // Divider
+              _buildDivider(),
+              
+              SizedBox(height: 24.h),
+              
+              // Don't have account
+              const DontHaveAccountText(),
+              
+              SizedBox(height: 32.h),
+              
+              LoginWithGoogle(),
+              
+              SizedBox(height: 40.h),
+            ],
           ),
         ),
       ),

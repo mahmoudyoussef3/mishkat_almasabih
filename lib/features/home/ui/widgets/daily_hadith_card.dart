@@ -81,7 +81,7 @@ class HadithOfTheDayCard extends StatelessWidget {
           ),
           child: Container(
             margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
-            height: 220.h,
+            height: 200.h,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24.r),

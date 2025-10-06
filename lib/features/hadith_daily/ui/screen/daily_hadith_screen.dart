@@ -30,130 +30,128 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
 
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: SafeArea(
-        child: Scaffold(
-          floatingActionButton: Builder(
-            builder: (context) {
-              return FloatingActionButton.extended(
-                onPressed: () {
-                  context.pushNamed(
-                    Routes.serag,
-                    arguments: SeragRequestModel(
-                      hadith: Hadith(
-                        hadeeth: widget.dailyHadithModel?.hadeeth ?? '',
-                        grade_ar: widget.dailyHadithModel?.grade ?? '',
-                        source: '',
-                        takhrij_ar:
-                            widget.dailyHadithModel?.attribution ?? '',
-                      ),
-                      messages: [Message(role: 'user', content: '')],
+      child: Scaffold(
+        floatingActionButton: Builder(
+          builder: (context) {
+            return FloatingActionButton.extended(
+              onPressed: () {
+                context.pushNamed(
+                  Routes.serag,
+                  arguments: SeragRequestModel(
+                    hadith: Hadith(
+                      hadeeth: widget.dailyHadithModel?.hadeeth ?? '',
+                      grade_ar: widget.dailyHadithModel?.grade ?? '',
+                      source: '',
+                      takhrij_ar:
+                          widget.dailyHadithModel?.attribution ?? '',
                     ),
-                  );
-                },
-                backgroundColor: ColorsManager.primaryPurple,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                icon: CircleAvatar(
-                  radius: 20.r,
-                  backgroundImage: const AssetImage(
-                    'assets/images/serag_logo.jpg',
+                    messages: [Message(role: 'user', content: '')],
                   ),
-                  backgroundColor: Colors.transparent,
-                ),
-                label: Text(
-                  "اسأل سراج",
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: ColorsManager.secondaryBackground,
-                  ),
-                ),
-              );
-            },
-          ),
-          backgroundColor: ColorsManager.primaryBackground,
-          body: CustomScrollView(
-            slivers: [
-              BuildHeaderAppBar(
-                title: 'حديث اليوم',
-                description: 'نص حديث نبوي شريف مع شرحه',
+                );
+              },
+              backgroundColor: ColorsManager.primaryPurple,
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
               ),
-        
-              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-        
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (data?.hadeeth != null)
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10.h),
-                          child: HadithContentCard(data: widget.dailyHadithModel),
-                        ),
-                      Column(
-                        children: [
-                          SizedBox(height: 5.h),
-                          Divider(
-                            endIndent: 30.w,
-                            indent: 30.w,
-                            color: ColorsManager.gray,
-                          ),
-                          SizedBox(height: 5.h),
-                        ],
-                      ),
-                      HadithAttributionAndGrade(data: widget.dailyHadithModel),
-                      Column(
-                        children: [
-                          SizedBox(height: 5.h),
-                          Divider(
-                            endIndent: 30.w,
-                            indent: 30.w,
-                            color: ColorsManager.gray,
-                          ),
-                          SizedBox(height: 5.h),
-                        ],
-                      ),
-        
-                      // Enhanced tabs section
+              icon: CircleAvatar(
+                radius: 20.r,
+                backgroundImage: const AssetImage(
+                  'assets/images/serag_logo.jpg',
+                ),
+                backgroundColor: Colors.transparent,
+              ),
+              label: Text(
+                "اسأل سراج",
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: ColorsManager.secondaryBackground,
+                ),
+              ),
+            );
+          },
+        ),
+        backgroundColor: ColorsManager.primaryBackground,
+        body: CustomScrollView(
+          slivers: [
+            BuildHeaderAppBar(
+              title: 'حديث اليوم',
+              description: 'نص حديث نبوي شريف مع شرحه',
+            ),
+      
+            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+      
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (data?.hadeeth != null)
                       Container(
-                        margin: EdgeInsets.only(bottom: 20.h),
-                        child: _buildEnhancedTabsSection(),
+                        margin: EdgeInsets.only(bottom: 10.h),
+                        child: HadithContentCard(data: widget.dailyHadithModel),
                       ),
-        
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 16.w,
-                          vertical: 8.h,
+                    Column(
+                      children: [
+                        SizedBox(height: 5.h),
+                        Divider(
+                          endIndent: 30.w,
+                          indent: 30.w,
+                          color: ColorsManager.gray,
                         ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.r),
-                          border: Border.all(color: ColorsManager.gray),
+                        SizedBox(height: 5.h),
+                      ],
+                    ),
+                    HadithAttributionAndGrade(data: widget.dailyHadithModel),
+                    Column(
+                      children: [
+                        SizedBox(height: 5.h),
+                        Divider(
+                          endIndent: 30.w,
+                          indent: 30.w,
+                          color: ColorsManager.gray,
                         ),
-                        child: HadithTabContent(
-                          selectedTab: selectedTab,
-                          data: widget.dailyHadithModel,
-                        ),
+                        SizedBox(height: 5.h),
+                      ],
+                    ),
+      
+                    // Enhanced tabs section
+                    Container(
+                      margin: EdgeInsets.only(bottom: 20.h),
+                      child: _buildEnhancedTabsSection(),
+                    ),
+      
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 8.h,
                       ),
-                    ],
-                  ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(color: ColorsManager.gray),
+                      ),
+                      child: HadithTabContent(
+                        selectedTab: selectedTab,
+                        data: widget.dailyHadithModel,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-        
-              // Enhanced actions section
-              SliverToBoxAdapter(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-                  child: _buildEnhancedActionsSection(),
-                ),
+            ),
+      
+            // Enhanced actions section
+            SliverToBoxAdapter(
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                child: _buildEnhancedActionsSection(),
               ),
-        
-              SliverToBoxAdapter(child: SizedBox(height: 50.h)),
-            ],
-          ),
+            ),
+      
+            SliverToBoxAdapter(child: SizedBox(height: 50.h)),
+          ],
         ),
       ),
     );

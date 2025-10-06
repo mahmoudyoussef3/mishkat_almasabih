@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -33,10 +32,14 @@ Future<void> main() async {
   final isLoggedIn = token != null;
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
-  final app = MishkatAlmasabih(
-    appRouter: AppRouter(),
-    isFirstTime: isFirstTime,
-    isLoggedIn: isLoggedIn,
+  final app = DevicePreview(
+    
+    builder:
+        (context) => MishkatAlmasabih(
+          appRouter: AppRouter(),
+          isFirstTime: isFirstTime,
+          isLoggedIn: isLoggedIn,
+        ),
   );
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 

@@ -42,135 +42,133 @@ class ChapterAhadithScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: ColorsManager.primaryBackground,
-          body: CustomScrollView(
-            slivers: [
-              BuildHeaderAppBar(
-                title: arabicBookName,
-                description: arabicChapterName,
-              ),
-              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-        
-              AhadithSearchBar(controller: _controller),
-        
-              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-        
-              BlocBuilder<AhadithsCubit, AhadithsState>(
-                builder: (context, state) {
-                  if (state is AhadithsSuccess) {
-                    return state.filteredAhadith.isEmpty
-                        ? const EmptyState()
-                        : SliverList.separated(
-                          itemCount: state.filteredAhadith.length,
-                          separatorBuilder: (_, __) => const IslamicSeparator(),
-                          itemBuilder: (context, index) {
-                            final hadith = state.filteredAhadith[index];
-                            return GestureDetector(
-                              onTap:
-                                  () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (context) => HadithDetailScreen(
-                                            isLocal: false,
-                                            chapterNumber:
-                                                hadith.chapterId.toString(),
-                                            bookSlug: bookSlug,
-                                            authorDeath:
-                                                hadith.book?.writerDeath ?? '',
-                                            hadithText: hadith.hadithArabic ?? '',
-                                            narrator:
-                                                bookWriters[hadith
-                                                    .book
-                                                    ?.writerName] ??
-                                                '',
-                                            grade: hadith.status ?? '',
-                                            bookName: arabicBookName,
-                                            author:
-                                                bookWriters[hadith
-                                                    .book
-                                                    ?.writerName] ??
-                                                '',
-                                            chapter:
-                                                hadith.chapter?.chapterArabic ??
-                                                '',
-                                            hadithNumber:
-                                                hadith.hadithNumber.toString(),
-                                          ),
-                                    ),
+      child: Scaffold(
+        backgroundColor: ColorsManager.primaryBackground,
+        body: CustomScrollView(
+          slivers: [
+            BuildHeaderAppBar(
+              title: arabicBookName,
+              description: arabicChapterName,
+            ),
+            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+      
+            AhadithSearchBar(controller: _controller),
+      
+            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+      
+            BlocBuilder<AhadithsCubit, AhadithsState>(
+              builder: (context, state) {
+                if (state is AhadithsSuccess) {
+                  return state.filteredAhadith.isEmpty
+                      ? const EmptyState()
+                      : SliverList.separated(
+                        itemCount: state.filteredAhadith.length,
+                        separatorBuilder: (_, __) => const IslamicSeparator(),
+                        itemBuilder: (context, index) {
+                          final hadith = state.filteredAhadith[index];
+                          return GestureDetector(
+                            onTap:
+                                () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => HadithDetailScreen(
+                                          isLocal: false,
+                                          chapterNumber:
+                                              hadith.chapterId.toString(),
+                                          bookSlug: bookSlug,
+                                          authorDeath:
+                                              hadith.book?.writerDeath ?? '',
+                                          hadithText: hadith.hadithArabic ?? '',
+                                          narrator:
+                                              bookWriters[hadith
+                                                  .book
+                                                  ?.writerName] ??
+                                              '',
+                                          grade: hadith.status ?? '',
+                                          bookName: arabicBookName,
+                                          author:
+                                              bookWriters[hadith
+                                                  .book
+                                                  ?.writerName] ??
+                                              '',
+                                          chapter:
+                                              hadith.chapter?.chapterArabic ??
+                                              '',
+                                          hadithNumber:
+                                              hadith.hadithNumber.toString(),
+                                        ),
                                   ),
-                              child: ChapterAhadithCard(
-                                bookName: arabicBookName,
-                                number: hadith.hadithNumber.toString(),
-                                text: hadith.hadithArabic ?? "",
-                                narrator: hadith.book?.writerName ?? '',
-                                grade:
-                                    hadith.status != null
-                                        ? gradeStringArabic(hadith.status!)
-                                        : '${index + 1}',
-                                reference: hadith.chapter?.chapterArabic ?? '',
-                              ),
-                            );
-                          },
-                        );
-                  } else if (state is AhadithsLoading) {
-                    return SliverList.builder(
-                      itemCount: 6,
-                      itemBuilder: (context, index) => const HadithCardShimmer(),
-                    );
-                  } else if (state is LocalAhadithsSuccess) {
-                    final list = state.localHadithResponse.hadiths?.data ?? [];
-                    debugPrint("Local hadith count: ${list.length}");
-                    if (list.isEmpty) {
-                      return const SliverToBoxAdapter(child: EmptyState());
-                    }
-                    return SliverList.separated(
-                      itemCount: list.length,
-                      separatorBuilder: (_, __) => const IslamicSeparator(),
-                      itemBuilder: (context, index) {
-                        final hadith = list[index];
-                        return GestureDetector(
-                          onTap:
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => HadithDetailScreen(
-                                        authorDeath: authorDeath ?? "",
-                                        grade: grade ?? "",
-                                        narrator: narrator ?? "",
-                                        isLocal: true,
-                                        chapterNumber:
-                                            hadith.chapterId.toString(),
-                                        bookSlug: bookSlug,
-                                        hadithText: hadith.arabic ?? '',
-                                        bookName: arabicBookName,
-                                        author: arabicWriterName,
-                                        chapter: arabicChapterName,
-                                        hadithNumber: hadith.id.toString(),
-                                      ),
                                 ),
-                              ),
-                          child: LocalHadithCard(
-                            bookName: arabicBookName,
-                            chapterName: arabicChapterName,
-                            hadith: hadith,
-                          ),
-                        );
-                      },
-                    );
-                  } else if (state is AhadithsFailure) {
-                    return SliverToBoxAdapter(
-                      child: ErrorState(error: state.error),
-                    );
+                            child: ChapterAhadithCard(
+                              bookName: arabicBookName,
+                              number: hadith.hadithNumber.toString(),
+                              text: hadith.hadithArabic ?? "",
+                              narrator: hadith.book?.writerName ?? '',
+                              grade:
+                                  hadith.status != null
+                                      ? gradeStringArabic(hadith.status!)
+                                      : '${index + 1}',
+                              reference: hadith.chapter?.chapterArabic ?? '',
+                            ),
+                          );
+                        },
+                      );
+                } else if (state is AhadithsLoading) {
+                  return SliverList.builder(
+                    itemCount: 6,
+                    itemBuilder: (context, index) => const HadithCardShimmer(),
+                  );
+                } else if (state is LocalAhadithsSuccess) {
+                  final list = state.localHadithResponse.hadiths?.data ?? [];
+                  debugPrint("Local hadith count: ${list.length}");
+                  if (list.isEmpty) {
+                    return const SliverToBoxAdapter(child: EmptyState());
                   }
-                  return const SliverToBoxAdapter(child: SizedBox.shrink());
-                },
-              ),
-            ],
-          ),
+                  return SliverList.separated(
+                    itemCount: list.length,
+                    separatorBuilder: (_, __) => const IslamicSeparator(),
+                    itemBuilder: (context, index) {
+                      final hadith = list[index];
+                      return GestureDetector(
+                        onTap:
+                            () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder:
+                                    (context) => HadithDetailScreen(
+                                      authorDeath: authorDeath ?? "",
+                                      grade: grade ?? "",
+                                      narrator: narrator ?? "",
+                                      isLocal: true,
+                                      chapterNumber:
+                                          hadith.chapterId.toString(),
+                                      bookSlug: bookSlug,
+                                      hadithText: hadith.arabic ?? '',
+                                      bookName: arabicBookName,
+                                      author: arabicWriterName,
+                                      chapter: arabicChapterName,
+                                      hadithNumber: hadith.id.toString(),
+                                    ),
+                              ),
+                            ),
+                        child: LocalHadithCard(
+                          bookName: arabicBookName,
+                          chapterName: arabicChapterName,
+                          hadith: hadith,
+                        ),
+                      );
+                    },
+                  );
+                } else if (state is AhadithsFailure) {
+                  return SliverToBoxAdapter(
+                    child: ErrorState(error: state.error),
+                  );
+                }
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              },
+            ),
+          ],
         ),
       ),
     );

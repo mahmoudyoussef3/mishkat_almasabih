@@ -21,7 +21,6 @@ import 'package:mishkat_almasabih/features/library/ui/widgets/book_card_shimmer.
 import 'package:mishkat_almasabih/features/search/search_screen/data/models/history_search_model.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/theming/colors.dart';
 import '../../../core/theming/styles.dart';
 
@@ -357,45 +356,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SaveHadithDailyRepo().getHadith();
-    return SafeArea(
-      top: false,
-      child: DoubleTapToExitApp(
-        myScaffoldScreen: Directionality(
-          textDirection: TextDirection.rtl,
-          child: SafeArea(
-            child: Scaffold(
-              drawer:MishkatDrawer(),
+   // SaveHadithDailyRepo().getHadith();
+    return DoubleTapToExitApp(
+      myScaffoldScreen: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          drawer: MishkatDrawer(),
 
-              floatingActionButton: FloatingActionButton.extended(
-                backgroundColor: ColorsManager.primaryGreen,
-                foregroundColor: ColorsManager.secondaryBackground,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => BlocProvider(
-                            create:
-                                (context) => getIt<GetLibraryStatisticsCubit>(),
-                            child: LibraryBooksScreen(),
-                          ),
-                    ),
-                  );
-                },
-                label: Row(
-                  children: [
-                    Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
-                    SizedBox(width: 4.w),
-
-                    Icon(Icons.local_library_sharp),
-                  ],
+          floatingActionButton: FloatingActionButton.extended(
+            backgroundColor: ColorsManager.primaryGreen,
+            foregroundColor: ColorsManager.secondaryBackground,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => BlocProvider(
+                        create: (context) => getIt<GetLibraryStatisticsCubit>(),
+                        child: LibraryBooksScreen(),
+                      ),
                 ),
-              ),
-              backgroundColor: ColorsManager.secondaryBackground,
-              body: _buildBody(),
+              );
+            },
+            label: Row(
+              children: [
+                Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
+                SizedBox(width: 4.w),
+
+                Icon(Icons.local_library_sharp),
+              ],
             ),
           ),
+          backgroundColor: ColorsManager.secondaryBackground,
+          body: _buildBody(),
         ),
       ),
     );
@@ -498,12 +491,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       itemCount: books.length,
                       separatorBuilder:
-                          (context, index) => SizedBox(width: 12.w),
+                          (context, index) => SizedBox(width: 8.w),
                       itemBuilder: (context, index) {
                         final book = books[index];
 
                         return SizedBox(
-                          width: 160.w,
+                          width: 170.w,
                           child: BookCard(
                             book: Book(
                               bookName: book.name,
@@ -533,7 +526,7 @@ class _HomeScreenState extends State<HomeScreen> {
       home: true,
       bottomNav: true,
       title: 'مشكاة المصابيح',
-      description: 'مكتبة مشكاة الإسلامية',
+      description: 'مكتبة مشكاة للأحاديث',
     );
   }
 

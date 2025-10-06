@@ -50,7 +50,12 @@ class RandomAhadithBlocBuilder extends StatelessWidget {
                                     hints: hadith.hints ?? [],
                                     id: hadith.hadithId ?? '',
                                     title: hadith.title ?? "",
-                                    //     words_meanings: hadith.wordsMeanings as List<WordMeaning>,
+                                    words_meanings: hadith.words_meanings
+    ?.map((w) => WordMeaning(
+          word: w.word,
+          meaning: w.meaning,
+        ))
+    .toList(),
                                   ),
                                 ),
                           ),

@@ -25,7 +25,7 @@ class RandomHadithModel {
   final String? explanation;
   final List<String>? hints;
   final List<String>? categoriesIds;
-  final List<WordMeaning>? wordsMeanings;
+  final List<WordMeaning>? words_meanings;
   final String? reference;
   final String? language;
   final List<String>? categories;
@@ -39,7 +39,7 @@ class RandomHadithModel {
     this.explanation,
     this.hints,
     this.categoriesIds,
-    this.wordsMeanings,
+    this.words_meanings,
     this.reference,
     this.language,
     this.categories,

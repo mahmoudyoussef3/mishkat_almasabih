@@ -15,9 +15,9 @@ class HomeScreenShimmer extends StatelessWidget {
         SliverToBoxAdapter(child: SizedBox(height: 12.h)),
         
 
-        BuildDailyHadithCardShimmer(),
+       // BuildDailyHadithCardShimmer(),
         
-        _buildDividerShimmer(),
+       // _buildDividerShimmer(),
         
         _buildStatisticsSectionShimmer(),
         
@@ -32,7 +32,7 @@ class HomeScreenShimmer extends StatelessWidget {
   Widget _buildHeaderShimmer() {
     return SliverToBoxAdapter(
       child: Container(
-        height: 200.h,
+        height: 100.h,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -43,84 +43,21 @@ class HomeScreenShimmer extends StatelessWidget {
             ],
           ),
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // App bar shimmer
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    SizedBox(height: 100.h),
-                    _buildShimmerContainer(160.w, 32.h),
-                  ],
-                ),
- 
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Search Section Shimmer
-  Widget _buildSearchSectionShimmer() {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Card(
-          color: ColorsManager.secondaryBackground,
-          elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Search bar shimmer
-              Padding(
-                padding: EdgeInsets.all(16.w),
-                child: _buildShimmerContainer(
-                  double.infinity, 
-                  50.h, 
-                  borderRadius: 25.r
-                ),
+              // App bar shimmer
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+        
+                  SizedBox(height: 60.h),
+                  _buildShimmerContainer(160.w, 16.h),
+                ],
               ),
-              // Search history shimmer
-              SizedBox(
-                height: 150.h,
-                child: ListView.separated(
-                  padding: EdgeInsets.zero,
-                  itemCount: 3,
-                  separatorBuilder: (context, index) => Divider(
-                    endIndent: 30.w,
-                    indent: 30.w,
-                    height: 1.h,
-                    color: Colors.grey[300],
-                  ),
-                  itemBuilder: (context, index) => Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w, 
-                      vertical: 8.h
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              _buildShimmerContainer(120.w, 16.h),
-                              SizedBox(height: 4.h),
-                              _buildShimmerContainer(80.w, 12.h),
-                            ],
-                          ),
-                        ),
-                        _buildShimmerContainer(24.w, 24.h, circular: true),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+         
             ],
           ),
         ),
@@ -128,6 +65,7 @@ class HomeScreenShimmer extends StatelessWidget {
     );
   }
 
+ 
  
 
   // Statistics Section Shimmer

@@ -125,291 +125,284 @@ void initState() {
   Widget build(BuildContext context) {
 
 
-    return SafeArea(
-      top: false,
-
-      child:Directionality(
-          textDirection: TextDirection.rtl,
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: ColorsManager.secondaryBackground,
-              body: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 100.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: ColorsManager.primaryPurple,
-                      ),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // الخلفية
-                          Positioned.fill(
-                            child: Opacity(
-                              opacity: 0.05,
-                              child: Image.asset(
-                                'assets/images/islamic_pattern.jpg',
-                                repeat: ImageRepeat.repeat,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-            
-                          Center(
-                            child: Text(
-                              "البحث",
-                              style: TextStyles.displaySmall.copyWith(
-                                color: ColorsManager.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32.sp,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-            
-                    SizedBox(height: 20.h),
-            
-                    /// Search Bar
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12.w),
-                      child: Column(
-                        children: [
-                          SearchBarWidget(
-                            hintText: 'ابحث في الأحاديث...',
-                            controller: searchController,
-                            onSearch: (query) {
-                              final now = DateTime.now();
-                              addItemToHistory(
-                                HistoryItem(
-                                  title: query.trim(),
-                                  date: formatDateTime(now).split(' - ')[1],
-                                  time: formatDateTime(now).split(' - ')[0],
-                                ),
-                              );
-                  context.pushNamed(
-                    Routes.publicSearchSCreen,
-                    arguments: query.trim(),
-                  );
-                             /* context.pushNamed(
-                                Routes.filterResultSearch,
-                                arguments: {
-                                  'book': booksMap[_selectedBook] ?? '',
-                                  'category':
-                                      categoriesMap[_selectedCategory] ?? '',
-                                  'chapter': chapterController.text.trim(),
-                                  'grade': gradesMap[_selectedAuthenticity] ?? '',
-                                  'narrator': narratorController.text.trim(),
-                                  'search': query.trim(),
-                                },
-                              );
-                              */
-                            },
-                          ),
-            
-                          SizedBox(height: 20.h),
-            
-                          /// Filters Card
-                   /*       Container(
+    return Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: ColorsManager.secondaryBackground,
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 100.h,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: ColorsManager.primaryPurple,
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // الخلفية
+                      Positioned.fill(
+                        child: Opacity(
+                          opacity: 0.05,
+                          child: Image.asset(
+                            'assets/images/islamic_pattern.jpg',
+                            repeat: ImageRepeat.repeat,
                             width: double.infinity,
-                            padding: EdgeInsets.all(Spacing.md),
-                            decoration: BoxDecoration(
-                              color: ColorsManager.white,
-                              borderRadius: BorderRadius.circular(16.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 2),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+        
+                      Center(
+                        child: Text(
+                          "البحث",
+                          style: TextStyles.displaySmall.copyWith(
+                            color: ColorsManager.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32.sp,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+        
+                SizedBox(height: 20.h),
+        
+                /// Search Bar
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: Column(
+                    children: [
+                      SearchBarWidget(
+                        hintText: 'ابحث في الأحاديث...',
+                        controller: searchController,
+                        onSearch: (query) {
+                          final now = DateTime.now();
+                          addItemToHistory(
+                            HistoryItem(
+                              title: query.trim(),
+                              date: formatDateTime(now).split(' - ')[1],
+                              time: formatDateTime(now).split(' - ')[0],
+                            ),
+                          );
+              context.pushNamed(
+                Routes.publicSearchSCreen,
+                arguments: query.trim(),
+              );
+                         /* context.pushNamed(
+                            Routes.filterResultSearch,
+                            arguments: {
+                              'book': booksMap[_selectedBook] ?? '',
+                              'category':
+                                  categoriesMap[_selectedCategory] ?? '',
+                              'chapter': chapterController.text.trim(),
+                              'grade': gradesMap[_selectedAuthenticity] ?? '',
+                              'narrator': narratorController.text.trim(),
+                              'search': query.trim(),
+                            },
+                          );
+                          */
+                        },
+                      ),
+        
+                      SizedBox(height: 20.h),
+        
+                      /// Filters Card
+               /*       Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(Spacing.md),
+                        decoration: BoxDecoration(
+                          color: ColorsManager.white,
+                          borderRadius: BorderRadius.circular(16.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'خيارات البحث',
+                                  style: TextStyles.titleMedium.copyWith(
+                                    color: ColorsManager.primaryText,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      showFilters = !showFilters;
+                                    });
+                                  },
+                                  label: Text(
+                                    showFilters
+                                        ? 'إخفاء الفلاتر'
+                                        : 'إظهار الفلاتر',
+                                  ),
+                                  icon: Icon(
+                                    showFilters
+                                        ? Icons.arrow_drop_up
+                                        : Icons.arrow_drop_down,
+                                  ),
                                 ),
                               ],
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'خيارات البحث',
-                                      style: TextStyles.titleMedium.copyWith(
-                                        color: ColorsManager.primaryText,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    TextButton.icon(
-                                      onPressed: () {
-                                        setState(() {
-                                          showFilters = !showFilters;
-                                        });
-                                      },
-                                      label: Text(
-                                        showFilters
-                                            ? 'إخفاء الفلاتر'
-                                            : 'إظهار الفلاتر',
-                                      ),
-                                      icon: Icon(
-                                        showFilters
-                                            ? Icons.arrow_drop_up
-                                            : Icons.arrow_drop_down,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                if (showFilters) ...[
-                                  Column(
+                            if (showFilters) ...[
+                              Column(
+                                children: [
+                                  Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: _buildDropdown(
-                                              value: _selectedBook,
-                                              items: [
-                                                'جميع الكتب',
-                                                ...booksMap.keys,
-                                              ],
-                                              label: 'اختر الكتاب',
-                                              onChanged:
-                                                  (val) => setState(
-                                                    () => _selectedBook = val,
-                                                  ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 12.w),
-                                          Expanded(
-                                            child: _buildDropdown(
-                                              value: _selectedAuthenticity,
-                                              items: [
-                                                'جميع الدرجات',
-                                                ...gradesMap.keys,
-                                              ],
-                                              label: 'درجة الصحة',
-                                              onChanged:
-                                                  (val) => setState(
-                                                    () =>
-                                                        _selectedAuthenticity =
-                                                            val,
-                                                  ),
-                                            ),
-                                          ),
-                                        ],
+                                      Expanded(
+                                        child: _buildDropdown(
+                                          value: _selectedBook,
+                                          items: [
+                                            'جميع الكتب',
+                                            ...booksMap.keys,
+                                          ],
+                                          label: 'اختر الكتاب',
+                                          onChanged:
+                                              (val) => setState(
+                                                () => _selectedBook = val,
+                                              ),
+                                        ),
                                       ),
-                                      SizedBox(height: Spacing.md),
-                                      _buildDropdown(
-                                        value: _selectedCategory,
-                                        items: [
-                                          'جميع التصنيفات',
-                                          ...categoriesMap.keys,
-                                        ],
-                                        label: 'التصنيف',
-                                        onChanged:
-                                            (val) => setState(
-                                              () => _selectedCategory = val,
-                                            ),
+                                      SizedBox(width: 12.w),
+                                      Expanded(
+                                        child: _buildDropdown(
+                                          value: _selectedAuthenticity,
+                                          items: [
+                                            'جميع الدرجات',
+                                            ...gradesMap.keys,
+                                          ],
+                                          label: 'درجة الصحة',
+                                          onChanged:
+                                              (val) => setState(
+                                                () =>
+                                                    _selectedAuthenticity =
+                                                        val,
+                                              ),
+                                        ),
                                       ),
-                                      SizedBox(height: Spacing.md),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: _buildTextField(
-                                              keyboardType: TextInputType.phone,
-                                              controller: chapterController,
-                                              label: 'رقم الباب',
-                                              hint: 'أدخل رقم الباب',
-                                            ),
-                                          ),
-                                          SizedBox(width: Spacing.md),
-                                          Expanded(
-                                            child: _buildTextField(
-                                              controller: narratorController,
-                                              label: 'اسم الراوي',
-                                              hint: 'أدخل اسم الراوي',
-                                            ),
-                                          ),
-                                        ],
+                                    ],
+                                  ),
+                                  SizedBox(height: Spacing.md),
+                                  _buildDropdown(
+                                    value: _selectedCategory,
+                                    items: [
+                                      'جميع التصنيفات',
+                                      ...categoriesMap.keys,
+                                    ],
+                                    label: 'التصنيف',
+                                    onChanged:
+                                        (val) => setState(
+                                          () => _selectedCategory = val,
+                                        ),
+                                  ),
+                                  SizedBox(height: Spacing.md),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: _buildTextField(
+                                          keyboardType: TextInputType.phone,
+                                          controller: chapterController,
+                                          label: 'رقم الباب',
+                                          hint: 'أدخل رقم الباب',
+                                        ),
+                                      ),
+                                      SizedBox(width: Spacing.md),
+                                      Expanded(
+                                        child: _buildTextField(
+                                          controller: narratorController,
+                                          label: 'اسم الراوي',
+                                          hint: 'أدخل اسم الراوي',
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ],
-                              ],
-                            ),
-                          ),
-            
-                          SizedBox(height: 20.h),
-                          */
-            
-                          /// Divider
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            child: buildIslamicSeparator(),
-                          ),
-                          SizedBox(height: 12.h),
-            
-                          /// Recent Searches Header
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'البحث الأخير',
-                                style: TextStyles.titleMedium.copyWith(
-                                  color: ColorsManager.primaryText,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: clearAll,
-                                child: Text(
-                                  'مسح الكل',
-                                  style: TextStyles.bodyMedium.copyWith(
-                                    color: ColorsManager.primaryPurple,
-            
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
                               ),
                             ],
+                          ],
+                        ),
+                      ),
+        
+                      SizedBox(height: 20.h),
+                      */
+        
+                      /// Divider
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: buildIslamicSeparator(),
+                      ),
+                      SizedBox(height: 12.h),
+        
+                      /// Recent Searches Header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'البحث الأخير',
+                            style: TextStyles.titleMedium.copyWith(
+                              color: ColorsManager.primaryText,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: clearAll,
+                            child: Text(
+                              'مسح الكل',
+                              style: TextStyles.bodyMedium.copyWith(
+                                color: ColorsManager.primaryPurple,
+        
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    ),
-            
-                    /// Recent Searches List
-                    BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
-                      builder: (context, state) {
-                        if (state is SearchHistoryLoading) {
-                          return const HistoryShimmer();
-                        } else if (state is SearchHistoryError) {
-                          return const Center(
-                            child: Text("خطأ أثناء تحميل السجل"),
-                          );
-                        } else if (state is SearchHistorySuccess) {
-                          _items = List.from(state.hisoryItems);
-                          return _items.isNotEmpty
-                              ? HistoryList(
-                                items: _items,
-                                onRemove: removeItem,
-                                onClearAll: clearAll,
-                              )
-                              : const EmptyHistory();
-                        }
-                        return const SizedBox.shrink();
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+        
+                /// Recent Searches List
+                BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
+                  builder: (context, state) {
+                    if (state is SearchHistoryLoading) {
+                      return const HistoryShimmer();
+                    } else if (state is SearchHistoryError) {
+                      return const Center(
+                        child: Text("خطأ أثناء تحميل السجل"),
+                      );
+                    } else if (state is SearchHistorySuccess) {
+                      _items = List.from(state.hisoryItems);
+                      return _items.isNotEmpty
+                          ? HistoryList(
+                            items: _items,
+                            onRemove: removeItem,
+                            onClearAll: clearAll,
+                          )
+                          : const EmptyHistory();
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ],
             ),
           ),
         ),
-      
-    );
+      );
   }
 
   Widget _buildDropdown({

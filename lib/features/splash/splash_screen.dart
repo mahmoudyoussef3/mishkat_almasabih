@@ -81,32 +81,27 @@ class _SplashScreenState extends State<SplashScreen>
             stops: const [0.0, 0.9, 1.5],
           ),
         ),
-        child: SafeArea(
-
-          top: false,
-
-          child: Column(
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildLogoSection(),
-
-                    SizedBox(height: 22.h),
-
-                    _buildAppNameSection(),
-
-                    SizedBox(height: 60.h),
-
-                    _buildLoadingIndicator(),
-                  ],
-                ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildLogoSection(),
+        
+                  SizedBox(height: 22.h),
+        
+                  _buildAppNameSection(),
+        
+                  SizedBox(height: 60.h),
+        
+                  _buildLoadingIndicator(),
+                ],
               ),
-
-              SizedBox(height: 60.h),
-            ],
-          ),
+            ),
+        
+            SizedBox(height: 60.h),
+          ],
         ),
       ),
     );
@@ -155,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen>
       children: [
         // Arabic app name
         Text(
-              'مكتبة مشكاة الإسلامية ',
+                      'مكتبة مشكاة للأحاديث',
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 32.sp,

@@ -114,45 +114,39 @@ final List<OnboardingPage> _onboardingPages = [
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                _onboardingPages[_currentPage].gradient.colors.first
-                    .withOpacity(0.08),
-                Colors.white,
-                _onboardingPages[_currentPage].gradient.colors.last.withOpacity(
-                  0.03,
-                ),
-              ],
-            ),
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              _onboardingPages[_currentPage].gradient.colors.first
+                  .withOpacity(0.08),
+              Colors.white,
+              _onboardingPages[_currentPage].gradient.colors.last.withOpacity(
+                0.03,
+              ),
+            ],
           ),
-          child: SafeArea(
-            top: false,
-
-            child: Column(
-              children: [
-                _buildHeader(),
-
-                Expanded(
-                  child: PageView.builder(
-                    controller: _pageController,
-                    onPageChanged: _onPageChanged,
-                    itemCount: _onboardingPages.length,
-                    itemBuilder: (context, index) {
-                      return _buildOnboardingPage(_onboardingPages[index]);
-                    },
-                  ),
-                ),
-
-                _buildBottomNavigation(),
-              ],
+        ),
+        child: Column(
+          children: [
+            _buildHeader(),
+            
+            Expanded(
+              child: PageView.builder(
+                controller: _pageController,
+                onPageChanged: _onPageChanged,
+                itemCount: _onboardingPages.length,
+                itemBuilder: (context, index) {
+                  return _buildOnboardingPage(_onboardingPages[index]);
+                },
+              ),
             ),
-          ),
+            
+            _buildBottomNavigation(),
+          ],
         ),
       ),
     );

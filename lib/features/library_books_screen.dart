@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/save_hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_book_data_state_card.dart';
@@ -36,19 +34,13 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
   @override
   Widget build(BuildContext context) {
     SaveHadithDailyRepo().getHadith();
-    return SafeArea(
-      top: false,
-      child:  Directionality(
-          textDirection: TextDirection.rtl,
-          child: SafeArea(
-            child: Scaffold(
-              backgroundColor: ColorsManager.secondaryBackground,
-              body: _buildBody(),
-            ),
-          ),
+    return Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          backgroundColor: ColorsManager.secondaryBackground,
+          body: _buildBody(),
         ),
-      
-    );
+      );
   }
 
   Widget _buildBody() {
@@ -95,7 +87,9 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
       bottomNav: true,
 
  //     title: 'مشكاة المصابيح',
-      title: 'مكتبة مشكاة الإسلامية',
+      title:                       'مكتبة مشكاة للأحاديث',
+      description: 'مصادر الأحاديث النبوية الشريفة',
+
     );
   }
 
