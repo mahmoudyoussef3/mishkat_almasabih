@@ -38,7 +38,7 @@ class _BookmarkListState extends State<BookmarkList> {
     return DateFormat('d MMMM yyyy - h:mm a', 'ar').format(localTime);
   }
 
-  List<Bookmark> chapters = [];
+  List <Bookmark>chapters = [];
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +58,12 @@ class _BookmarkListState extends State<BookmarkList> {
           );
         } else if (state is UserBookmarksSuccess) {
           final List<Bookmark> bookmarks = state.bookmarks;
+          final List<Bookmark> ahadith =     bookmarks.where((b) => b.type == 'hadith').toSet().toList();
 
           final List<Bookmark> filteredCollection =
               widget.selectedCollection == "الكل"
-                  ? bookmarks
-                  : bookmarks
+                  ? ahadith
+                  : ahadith
                       .where((b) => b.collection == widget.selectedCollection)
                       .toList();
           chapters =
@@ -169,12 +170,17 @@ class _BookmarkListState extends State<BookmarkList> {
                         child: CustomScrollView(
                           physics: const NeverScrollableScrollPhysics(),
                           slivers: [
+                            SliverToBoxAdapter(child: SizedBox(height: 18.h),),
                             ResponsiveChapterList(
                               items: chapters,
                               primaryPurple: ColorsManager.primaryGreen,
-                              bookName:  "",
+                              bookName: chapters.isNotEmpty
+                                  ? chapters[0].bookName ?? ''
+                                  : '',
                               writerName: '',
-                              bookSlug: '',
+                              bookSlug: chapters.isNotEmpty
+                                  ? chapters[0].bookSlug ?? ''
+                                  : '',
                             ),
                           ],
                         ),

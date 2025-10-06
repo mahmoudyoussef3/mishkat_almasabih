@@ -58,13 +58,15 @@ class ChapterAhadithScreen extends StatelessWidget {
                     onPressed: () {
                       context.read<AddCubitCubit>().addBookmark(
                         Bookmark(
-                        
+                          
+                          
+                          id: chapterNumber,
                           chapterNumber:chapterNumber,
                           bookName: arabicBookName,
                           chapterName: arabicChapterName,
-                          
                           type: 'chapter',
                           bookSlug: bookSlug,
+
                         ),
                       );
                     },

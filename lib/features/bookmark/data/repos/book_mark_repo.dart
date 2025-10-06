@@ -17,6 +17,7 @@ class BookMarkRepo {
   Future<Either<ErrorHandler, BookmarksResponse>> getUserBookMarks() async {
     try {
       final token = await _getUserToken();
+      /*
       final cacheKey = CacheKeys.bookmarks;
 
       final cachedData = await GenericCacheService.instance
@@ -31,13 +32,16 @@ class BookMarkRepo {
         );
         return Right(cachedData);
       }
+      */
       final response = await _apiService.getUserBookmarks(token);
+      /*
       await GenericCacheService.instance.saveData<BookmarksResponse>(
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
         cacheExpirationHours: 100,
       );
+      */
 
       return Right(response);
     } catch (e) {
@@ -51,7 +55,7 @@ class BookMarkRepo {
     try {
       final token = await _getUserToken();
 
-      final cacheKey = CacheKeys.collectionBookmarksResponse;
+   /*   final cacheKey = CacheKeys.collectionBookmarksResponse;
 
       final cachedData = await GenericCacheService.instance
           .getData<CollectionsResponse>(
@@ -63,13 +67,15 @@ class BookMarkRepo {
         log('📂 Loaded Ahadith from cache for $id ');
         return Right(cachedData);
       }
+      */
       final response = await _apiService.getBookmarkCollection(token);
-      await GenericCacheService.instance.saveData<CollectionsResponse>(
+  /*    await GenericCacheService.instance.saveData<CollectionsResponse>(
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
         cacheExpirationHours: 100,
       );
+      */
       return Right(response);
     } catch (e) {
       return Left(ErrorHandler.handle(e));
@@ -83,11 +89,13 @@ class BookMarkRepo {
     try {
       final token = await _getUserToken();
       final response = await _apiService.deleteUserBookmsrk(bookmarkId, token);
+      /*
             await GenericCacheService.instance.clearCache(
         CacheKeys.collectionBookmarksResponse,
       );
       await GenericCacheService.instance.clearCache(CacheKeys.bookmarks);
 
+*/
 
       return Right(response);
     } catch (e) {
@@ -101,10 +109,12 @@ class BookMarkRepo {
   ) async {
     try {
       final token = await _getUserToken();
+      /*
       await GenericCacheService.instance.clearCache(
         CacheKeys.collectionBookmarksResponse,
       );
       await GenericCacheService.instance.clearCache(CacheKeys.bookmarks);
+      */
       final response = await _apiService.addBookmark(token, body);
 
 
