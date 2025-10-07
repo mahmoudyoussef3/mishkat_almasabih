@@ -12,6 +12,7 @@ import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.d
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/screens/chapters_screen.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/new_daily_hadith_model.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_categories_cubit.dart';
@@ -243,7 +244,7 @@ class AppRouter {
         );
         */
       case Routes.hadithOfTheDay:
-        final query = settings.arguments as HadithData;
+        final query = settings.arguments as NewDailyHadithModel;
 
         return MaterialPageRoute(
           builder:

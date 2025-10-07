@@ -24,7 +24,11 @@ Future<void> main() async {
   // Setup notification tap handlers
   await LocalNotification.init();
   //await PushNotification.getApnsToken();
-
+   // إعداد tap على النوتيفيكيشن
+    PushNotification.setupOnTapNotification();
+    
+    // معالجة لو الأبلكيشن فتح من نوتيفيكيشن (terminated state)
+    PushNotification.handleTerminatedNotification();
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
   final prefs = await SharedPreferences.getInstance();

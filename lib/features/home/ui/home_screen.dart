@@ -362,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
         textDirection: TextDirection.rtl,
         child: Scaffold(
           drawer: MishkatDrawer(),
-
+      
           floatingActionButton: FloatingActionButton.extended(
             backgroundColor: ColorsManager.primaryGreen,
             foregroundColor: ColorsManager.secondaryBackground,
@@ -382,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
                 SizedBox(width: 4.w),
-
+      
                 Icon(Icons.local_library_sharp),
               ],
             ),
