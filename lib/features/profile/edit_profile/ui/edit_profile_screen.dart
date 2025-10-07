@@ -76,128 +76,124 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               end: Alignment.bottomCenter,
             ),
           ),
-          child: SafeArea(
-            top: false,
-
-            child: BlocConsumer<EditProfileCubit, EditProfileState>(
-              listener: (context, state) {
-                if (state is EditProfileSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-
-                    SnackBar(
-                      
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: ColorsManager.hadithAuthentic,
-                      content: Text("تم تحديث الملف الشخصي بنجاح ",style: TextStyle(
-                        color: ColorsManager.secondaryBackground
-                      ),)),
-                  );
-                  Navigator.pop(context, state.updatedUser);
-                } else if (state is EditProfileFailure) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("فشل التحديث: ${state.errorMessage}"),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
-                }
-              },
-              builder: (context, state) {
-                return SingleChildScrollView(
-                  padding: EdgeInsets.all(20.w),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: Icon(Icons.arrow_back,
-                                color: Colors.white, size: 24.sp),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "تعديل الملف الشخصي",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'YaModernPro',
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 48.w), // space balance
-                        ],
-                      ),
-                      SizedBox(height: 30.h),
-
-                      // ===== Avatar Section =====
-                      AvatarSection(
-                        selectedImageFile: _selectedImageFile,
-                        avatarUrl:getAvatarUrl(widget.userData),
-                        onPickImage: _pickImage,
-                      ),
-                      SizedBox(height: 32.h),
-
-                      // ===== Username =====
-                      UsernameSection(controller: _usernameController),
-                      SizedBox(height: 24.h),
-
-                      // ===== InfoCard =====
-                      InfoCard(
-                        email: widget.userData.email,
-                        createdAt: _formatDate(widget.userData.createdAt),
-                        achievements:
-                            widget.userData.weeklyAchievementCount ?? 0,
-                      ),
-                      SizedBox(height: 40.h),
-
-                      // ===== Save Button =====
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: ColorsManager.primaryPurple,
-                            padding: EdgeInsets.symmetric(vertical: 14.h),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            elevation: 6,
-                          ),
-                          onPressed: state is EditProfileLoading
-                              ? null
-                              : () {
-                                  context.read<EditProfileCubit>().updateProfile(
-                                        username:
-                                            _usernameController.text.trim(),
-                                        avatarFile: _selectedImageFile,
-                                      );
-                                },
-                          child: state is EditProfileLoading
-                              ? SizedBox(
-                                  width: 20.w,
-                                  height: 20.w,
-                                  child: const CircularProgressIndicator(
-                                    color: Colors.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Text(
-                                  "حفظ",
-                                  style: TextStyle(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    fontFamily: 'YaModernPro',
-                                  ),
-                                ),
-                        ),
-                      ),
-                    ],
+          child: BlocConsumer<EditProfileCubit, EditProfileState>(
+            listener: (context, state) {
+              if (state is EditProfileSuccess) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                
+                  SnackBar(
+                    
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: ColorsManager.hadithAuthentic,
+                    content: Text("تم تحديث الملف الشخصي بنجاح ",style: TextStyle(
+                      color: ColorsManager.secondaryBackground
+                    ),)),
+                );
+                Navigator.pop(context, state.updatedUser);
+              } else if (state is EditProfileFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("فشل التحديث: ${state.errorMessage}"),
+                    backgroundColor: Colors.red,
                   ),
                 );
-              },
-            ),
+              }
+            },
+            builder: (context, state) {
+              return SingleChildScrollView(
+                padding: EdgeInsets.all(20.w),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(Icons.arrow_back,
+                              color: Colors.white, size: 24.sp),
+                        ),
+                        Expanded(
+                          child: Text(
+                            "تعديل الملف الشخصي",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'YaModernPro',
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 48.w), // space balance
+                      ],
+                    ),
+                    SizedBox(height: 30.h),
+                
+                    // ===== Avatar Section =====
+                    AvatarSection(
+                      selectedImageFile: _selectedImageFile,
+                      avatarUrl:getAvatarUrl(widget.userData),
+                      onPickImage: _pickImage,
+                    ),
+                    SizedBox(height: 32.h),
+                
+                    // ===== Username =====
+                    UsernameSection(controller: _usernameController),
+                    SizedBox(height: 24.h),
+                
+                    // ===== InfoCard =====
+                    InfoCard(
+                      email: widget.userData.email,
+                      createdAt: _formatDate(widget.userData.createdAt),
+                      achievements:
+                          widget.userData.weeklyAchievementCount ?? 0,
+                    ),
+                    SizedBox(height: 40.h),
+                
+                    // ===== Save Button =====
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: ColorsManager.primaryPurple,
+                          padding: EdgeInsets.symmetric(vertical: 14.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          elevation: 6,
+                        ),
+                        onPressed: state is EditProfileLoading
+                            ? null
+                            : () {
+                                context.read<EditProfileCubit>().updateProfile(
+                                      username:
+                                          _usernameController.text.trim(),
+                                      avatarFile: _selectedImageFile,
+                                    );
+                              },
+                        child: state is EditProfileLoading
+                            ? SizedBox(
+                                width: 20.w,
+                                height: 20.w,
+                                child: const CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                "حفظ",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                  fontFamily: 'YaModernPro',
+                                ),
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

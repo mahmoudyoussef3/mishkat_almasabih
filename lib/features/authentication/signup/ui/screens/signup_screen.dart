@@ -19,41 +19,38 @@ class SignupScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         backgroundColor: ColorsManager.white,
-        body: SafeArea(
-          top: false,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                   
-                BuildSignupHeader(),
-            
-                SizedBox(height: 24.h),
-            
-                BuildWelcomeMessage(),
-            
-                SizedBox(height: 32.h),
-            
-                SignupForm(),
-            
-                SizedBox(height: 32.h),
-            
-                SignupBlocListener(),
-            
-                SizedBox(height: 24.h),
-            
-                _buildDivider(),
-            
-                SizedBox(height: 24.h),
-            
-                AlreadyHaveAccount(),
-         //       SizedBox(height: 8.h),
-           //     LoginWithGoogle(),
-            
-                SizedBox(height: 40.h),
-              ],
-            ),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+                 
+              BuildSignupHeader(),
+          
+              SizedBox(height: 24.h),
+          
+              BuildWelcomeMessage(),
+          
+              SizedBox(height: 32.h),
+          
+              SignupForm(),
+          
+              SizedBox(height: 32.h),
+          
+              SignupBlocListener(),
+          
+              SizedBox(height: 24.h),
+          
+              _buildDivider(),
+          
+              SizedBox(height: 24.h),
+          
+              AlreadyHaveAccount(),
+                 //       SizedBox(height: 8.h),
+         //     LoginWithGoogle(),
+          
+              SizedBox(height: 40.h),
+            ],
           ),
         ),
       ),

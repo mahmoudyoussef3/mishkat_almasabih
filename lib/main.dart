@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,11 @@ Future<void> main() async {
   // Setup notification tap handlers
   await LocalNotification.init();
   //await PushNotification.getApnsToken();
-
+   // إعداد tap على النوتيفيكيشن
+    PushNotification.setupOnTapNotification();
+    
+    // معالجة لو الأبلكيشن فتح من نوتيفيكيشن (terminated state)
+    PushNotification.handleTerminatedNotification();
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
   final prefs = await SharedPreferences.getInstance();
@@ -33,11 +36,14 @@ Future<void> main() async {
   final isLoggedIn = token != null;
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
-  final app = MishkatAlmasabih(
+  final app = DevicePreview(
     
-    appRouter: AppRouter(),
-    isFirstTime: isFirstTime,
-    isLoggedIn: isLoggedIn,
+    builder:
+        (context) => MishkatAlmasabih(
+          appRouter: AppRouter(),
+          isFirstTime: isFirstTime,
+          isLoggedIn: isLoggedIn,
+        ),
   );
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 

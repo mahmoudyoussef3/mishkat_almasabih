@@ -36,7 +36,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
           body: CustomScrollView(
             slivers: [
               BuildHeaderAppBar(title: widget.name),
-
+        
               BlocBuilder<BookDataCubit, BookDataState>(
                 builder: (context, state) {
                   if (state is BookDataLoading) {

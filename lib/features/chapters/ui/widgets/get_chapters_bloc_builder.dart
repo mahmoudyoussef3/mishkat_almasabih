@@ -38,13 +38,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
               _buildStatsCards(),
               _buildSearchBar(context, controller),
 
-              SliverToBoxAdapter(
-                child: Divider(
-                  color: ColorsManager.primaryNavy,
-                  endIndent: 30.h,
-                  indent: 30.h,
-                ),
-              ),
+        
               ResponsiveChapterList(
                 isLoading: true,
                 items: [],

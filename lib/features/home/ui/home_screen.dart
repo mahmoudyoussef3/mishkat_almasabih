@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/networking/api_constants.dart'
+    show bookNamesArabic;
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
+import 'package:mishkat_almasabih/core/widgets/miskat_drawer.dart';
 import 'package:mishkat_almasabih/features/book_data/data/models/book_data_model.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/save_hadith_daily_repo.dart';
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
@@ -353,41 +356,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SaveHadithDailyRepo().getHadith();
-    return SafeArea(
-      top: false,
-      child: DoubleTapToExitApp(
-        myScaffoldScreen: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Scaffold(
-            floatingActionButton: FloatingActionButton.extended(
-              backgroundColor: ColorsManager.primaryGreen,
-              foregroundColor: ColorsManager.secondaryBackground,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => BlocProvider(
-                          create:
-                              (context) => getIt<GetLibraryStatisticsCubit>(),
-                          child: LibraryBooksScreen(),
-                        ),
-                  ),
-                );
-              },
-              label: Row(children: [
-                
-                Text('المكتبة',style: TextStyle(
-                  fontSize: 16.sp
-                ),),
-                SizedBox(width:4.w),
-
-                Icon(Icons.local_library_sharp)]),
+   // SaveHadithDailyRepo().getHadith();
+    return DoubleTapToExitApp(
+      myScaffoldScreen: Directionality(
+        textDirection: TextDirection.rtl,
+        child: Scaffold(
+          drawer: MishkatDrawer(),
+      
+          floatingActionButton: FloatingActionButton.extended(
+            backgroundColor: ColorsManager.primaryGreen,
+            foregroundColor: ColorsManager.secondaryBackground,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => BlocProvider(
+                        create: (context) => getIt<GetLibraryStatisticsCubit>(),
+                        child: LibraryBooksScreen(),
+                      ),
+                ),
+              );
+            },
+            label: Row(
+              children: [
+                Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
+                SizedBox(width: 4.w),
+      
+                Icon(Icons.local_library_sharp),
+              ],
             ),
-            backgroundColor: ColorsManager.secondaryBackground,
-            body: _buildBody(),
           ),
+          backgroundColor: ColorsManager.secondaryBackground,
+          body: _buildBody(),
         ),
       ),
     );
@@ -454,7 +455,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
               child: SizedBox(
-                height: 260.h, // ارتفاع مناسب للكاردات
+                height: 240.h, // ارتفاع مناسب للكاردات
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: 5,
@@ -471,7 +472,7 @@ class _HomeScreenState extends State<HomeScreen> {
           } else if (state is GetLivraryStatisticsSuccess) {
             var books = state.statisticsResponse.statistics.topBooks;
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -490,16 +491,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       itemCount: books.length,
                       separatorBuilder:
-                          (context, index) => SizedBox(width: 12.w),
+                          (context, index) => SizedBox(width: 8.w),
                       itemBuilder: (context, index) {
                         final book = books[index];
 
                         return SizedBox(
-                          width: 160.w,
+                          width: 170.w,
                           child: BookCard(
                             book: Book(
                               bookName: book.name,
-                              bookSlug: 'Sahih Bukhari',
+                              bookSlug:
+                                  booksMap[bookNamesArabic[book.name]] ?? '',
                               writerName: book.name,
                               chapters_count: book.chapters,
                               hadiths_count: book.hadiths,
@@ -522,10 +524,32 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildHeaderSection() {
     return BuildHeaderAppBar(
       home: true,
+      bottomNav: true,
       title: 'مشكاة المصابيح',
-      description: 'مكتبة مشكاة الإسلامية',
+      description: 'مكتبة مشكاة للأحاديث',
     );
   }
+
+  final Map<String, String> booksMap = {
+    'صحيح البخاري': 'sahih-bukhari',
+    'صحيح مسلم': 'sahih-muslim',
+    'سنن أبي داود': 'abu-dawood',
+    'سنن الترمذي': 'al-tirmidhi',
+    'سنن النسائي': 'sunan-nasai',
+    'سنن ابن ماجة': 'ibn-e-majah',
+    'موطأ مالك': 'malik',
+    'مسند أحمد': 'musnad-ahmad',
+    'سنن الدارمي': 'darimi',
+    'بلوغ المرام': 'bulugh_al_maram',
+    'رياض الصالحين': 'riyad_assalihin',
+    'مشكات المصابيح': 'mishkat',
+    'الأربعون النووية': 'nawawi40',
+    'الأربعون القدسية': 'qudsi40',
+    'أربعون ولي الله الدهلوي': 'shahwaliullah40',
+    'الأدب المفرد': 'aladab_almufrad',
+    'الشمائل المحمدية': 'shamail_muhammadiyah',
+    'حصن المسلم': 'hisnul_muslim',
+  };
 
   Widget _buildSearchBarSection() {
     return SliverToBoxAdapter(

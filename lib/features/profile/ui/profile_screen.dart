@@ -23,223 +23,219 @@ class ProfileScreen extends StatelessWidget {
       onRefresh: () async {
         await context.read<ProfileCubit>().getUserProfile();
       },
-      child: SafeArea(
-        top: false,
-        child: DoubleTapToExitApp(
-          myScaffoldScreen: Directionality(
-            textDirection: TextDirection.rtl,
-            child: Scaffold(
-              backgroundColor: ColorsManager.primaryBackground,
-              body: BlocBuilder<ProfileCubit, ProfileState>(
-                builder: (context, state) {
-                  if (state is ProfileLoading) {
-                    return ProfileShimmerScreen();
-                  } else if (state is ProfileError) {
-                    return Center(
-                      child: ErrorState(error: state.message)
-                    );
-                  } else if (state is ProfileLoaded) {
-                    final user = state.user;
-
-                    return CustomScrollView(
-                      slivers: [
-                        ProfileHeader(user: user),
-
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.all(20.w),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                           //     const SectionTitle(title: "الإعدادات"),
-                             //   SizedBox(height: 16.h),
-                             //   const DarkModeToggle(),
-                               // SizedBox(height: 16.h),
-                                const SectionTitle(title: "من نحن"),
-                                SizedBox(height: 12.h),
-                                _buildSection(
-                                  title: "",
-                                  icon: Icons.info_outline,
-                                  text:
-                                      "مشروع متخصص في نشر العلوم الإسلامية والحديثية بأسلوب معاصر وسلس. نهدف إلى تقريب تراث الإسلام وعلومه للمسلمين والمهتمين بطريقة سهلة وموثوقة",
-                                ),
-                                SizedBox(height: 12.h),
-
-                                const SectionTitle(title: "رؤيتنا"),
-                                SizedBox(height: 12.h),
-                                _buildSection(
-                                  title: "",
-                                  icon: Icons.visibility_outlined,
-                                  text:
-                                      "أن نكون المرجع الأول والأكثر موثوقية في تقديم العلوم الحديثية بشكل سهل ومفهوم للجميع.",
-                                ),
-                                SizedBox(height: 12.h),
-
-                                const SectionTitle(title: "رسالتنا"),
-                                SizedBox(height: 12.h),
-                                _buildSection(
-                                  title: "",
-                                  icon: Icons.lightbulb_outline,
-                                  text:
-                                      "توفير مصادر علمية دقيقة للأحاديث النبوية وشروحها، مع الحرص على الوضوح والدقة العلمية.",
-                                ),
-                                SizedBox(height: 12.h),
-
-                                const SectionTitle(title: "قيمنا"),
-                                SizedBox(height: 12.h),
-                                _buildSection(
-                                  title: "",
-                                  icon: Icons.favorite_outline,
-                                  text:
-                                      "الأمانة العلمية، الموثوقية، الابتكار، والسهولة في تقديم المعلومة.",
-                                ),
-                              ],
-                            ),
+      child: Directionality(
+          textDirection: TextDirection.rtl,
+          child: Scaffold(
+            backgroundColor: ColorsManager.primaryBackground,
+            body: BlocBuilder<ProfileCubit, ProfileState>(
+              builder: (context, state) {
+                if (state is ProfileLoading) {
+                  return ProfileShimmerScreen();
+                } else if (state is ProfileError) {
+                  return Center(
+                    child: ErrorState(error: state.message)
+                  );
+                } else if (state is ProfileLoaded) {
+                  final user = state.user;
+      
+                  return CustomScrollView(
+                    slivers: [
+                      ProfileHeader(user: user),
+      
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.all(20.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                         //     const SectionTitle(title: "الإعدادات"),
+                           //   SizedBox(height: 16.h),
+                           //   const DarkModeToggle(),
+                             // SizedBox(height: 16.h),
+                              const SectionTitle(title: "من نحن"),
+                              SizedBox(height: 12.h),
+                              _buildSection(
+                                title: "",
+                                icon: Icons.info_outline,
+                                text:
+                                    "مشروع متخصص في نشر العلوم الإسلامية والحديثية بأسلوب معاصر وسلس. نهدف إلى تقريب تراث الإسلام وعلومه للمسلمين والمهتمين بطريقة سهلة وموثوقة",
+                              ),
+                              SizedBox(height: 12.h),
+      
+                              const SectionTitle(title: "رؤيتنا"),
+                              SizedBox(height: 12.h),
+                              _buildSection(
+                                title: "",
+                                icon: Icons.visibility_outlined,
+                                text:
+                                    "أن نكون المرجع الأول والأكثر موثوقية في تقديم العلوم الحديثية بشكل سهل ومفهوم للجميع.",
+                              ),
+                              SizedBox(height: 12.h),
+      
+                              const SectionTitle(title: "رسالتنا"),
+                              SizedBox(height: 12.h),
+                              _buildSection(
+                                title: "",
+                                icon: Icons.lightbulb_outline,
+                                text:
+                                    "توفير مصادر علمية دقيقة للأحاديث النبوية وشروحها، مع الحرص على الوضوح والدقة العلمية.",
+                              ),
+                              SizedBox(height: 12.h),
+      
+                              const SectionTitle(title: "قيمنا"),
+                              SizedBox(height: 12.h),
+                              _buildSection(
+                                title: "",
+                                icon: Icons.favorite_outline,
+                                text:
+                                    "الأمانة العلمية، الموثوقية، الابتكار، والسهولة في تقديم المعلومة.",
+                              ),
+                            ],
                           ),
                         ),
-
-                        /// Footer
-                        SliverToBoxAdapter(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 28.h,
-                              horizontal: 20.w,
+                      ),
+      
+                      /// Footer
+                      SliverToBoxAdapter(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 28.h,
+                            horizontal: 20.w,
+                          ),
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                ColorsManager.primaryPurple,
+                                Colors.deepPurple,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                colors: [
-                                  ColorsManager.primaryPurple,
-                                  Colors.deepPurple,
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(30),
-                              ),
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(30),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                              Container(
-          width: 120.w,
-          height: 120.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: ColorsManager.white,
-            boxShadow: [
-              BoxShadow(
-                color: ColorsManager.black.withOpacity(0.2),
-                blurRadius: 30,
-                spreadRadius: 5,
-                offset: const Offset(0, 15),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(18.w),
-            child: Image.asset(
-              'assets/images/app_logo.png',
-              fit: BoxFit.contain,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                            Container(
+        width: 120.w,
+        height: 120.w,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: ColorsManager.white,
+          boxShadow: [
+            BoxShadow(
+              color: ColorsManager.black.withOpacity(0.2),
+              blurRadius: 30,
+              spreadRadius: 5,
+              offset: const Offset(0, 15),
             ),
-          ),
+          ],
         ),
-                                SizedBox(height: 5.h),
-
-                                Text(
-                                  style: TextStyle(
-                                    color: ColorsManager.secondaryBackground,
-                                  ),
-                                  'منصة رقمية متكاملة لدراسة الأحاديث النبوية الشريفة مع تحليل ذكي وفوائد عملية',
-                                ),
-                                SizedBox(height: 5.h),
-
-                                Divider(
-                                  color: ColorsManager.gray,
-                                  endIndent: 50.w,
-                                  indent: 50.w,
-                                ),
-                                SizedBox(height: 5.h),
-
-                                /// Social Media Icons
-                                Wrap(
-                                  alignment: WrapAlignment.center,
-                                  spacing: 18.w,
-                                  children: [
-                                    _socialIcon(FontAwesomeIcons.whatsapp, () {
-                                      _launchUrl('https://whatsapp.com/channel/0029VazdI4N84OmAWA8h4S2F');
-                                    }),
-                                    _socialIcon(
-                                      FontAwesomeIcons.instagram,
-                                      () {
-                                                                              _launchUrl('https://www.instagram.com/mishkahcom1');
-
-                                      },
-                                    ),
-                                    _socialIcon(
-                                      FontAwesomeIcons.twitter,
-                                      () {                                      _launchUrl('https://x.com/mishkahcom1');
-},
-                                    ),
-                                    _socialIcon(
-                                      FontAwesomeIcons.facebook,
-                                      () {                                      _launchUrl('https://www.facebook.com/mishkahcom1');
-},
-                                    ),
-                                    _socialIcon(
-                                      FontAwesomeIcons.envelope,
-                                      () {                                      _launchUrl('mailto:Meshkah@hadith-shareef.com');
-},
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10.h),
-
-                                /// Links
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: ()=>_launchUrl('https://hadith-shareef.com/privacy-policy'),
-                                      child: const Text(
-                                        "شروط الاستخدام",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                    SizedBox(width: 16.w),
-                                    TextButton(
-                                      onPressed: ()=>_launchUrl('https://hadith-shareef.com/privacy-policy'),
-                                      child: const Text(
-                                        "سياسة الخصوصية",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                SizedBox(height: 10.h),
-                                Text(
-                                  "© جميع الحقوق محفوظة لتطبيق مشكاة المصابيح 2025",
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                    color: Colors.white70,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
-            ),
+        child: Padding(
+          padding: EdgeInsets.all(18.w),
+          child: Image.asset(
+            'assets/images/app_logo.png',
+            fit: BoxFit.contain,
           ),
         ),
       ),
+                              SizedBox(height: 5.h),
+      
+                              Text(
+                                style: TextStyle(
+                                  color: ColorsManager.secondaryBackground,
+                                ),
+                                'منصة رقمية متكاملة لدراسة الأحاديث النبوية الشريفة مع تحليل ذكي وفوائد عملية',
+                              ),
+                              SizedBox(height: 5.h),
+      
+                              Divider(
+                                color: ColorsManager.gray,
+                                endIndent: 50.w,
+                                indent: 50.w,
+                              ),
+                              SizedBox(height: 5.h),
+      
+                              /// Social Media Icons
+                              Wrap(
+                                alignment: WrapAlignment.center,
+                                spacing: 18.w,
+                                children: [
+                                  _socialIcon(FontAwesomeIcons.whatsapp, () {
+                                    _launchUrl('https://whatsapp.com/channel/0029VazdI4N84OmAWA8h4S2F');
+                                  }),
+                                  _socialIcon(
+                                    FontAwesomeIcons.instagram,
+                                    () {
+                                                                            _launchUrl('https://www.instagram.com/mishkahcom1');
+      
+                                    },
+                                  ),
+                                  _socialIcon(
+                                    FontAwesomeIcons.twitter,
+                                    () {                                      _launchUrl('https://x.com/mishkahcom1');
+      },
+                                  ),
+                                  _socialIcon(
+                                    FontAwesomeIcons.facebook,
+                                    () {                                      _launchUrl('https://www.facebook.com/mishkahcom1');
+      },
+                                  ),
+                                  _socialIcon(
+                                    FontAwesomeIcons.envelope,
+                                    () {                                      _launchUrl('mailto:Meshkah@hadith-shareef.com');
+      },
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10.h),
+      
+                              /// Links
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: ()=>_launchUrl('https://hadith-shareef.com/privacy-policy'),
+                                    child: const Text(
+                                      "شروط الاستخدام",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  SizedBox(width: 16.w),
+                                  TextButton(
+                                    onPressed: ()=>_launchUrl('https://hadith-shareef.com/privacy-policy'),
+                                    child: const Text(
+                                      "سياسة الخصوصية",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ],
+                              ),
+      
+                              SizedBox(height: 10.h),
+                              Text(
+                                "© جميع الحقوق محفوظة لتطبيق مشكاة المصابيح 2025",
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  color: Colors.white70,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+      
     );
   }
 

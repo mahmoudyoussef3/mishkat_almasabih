@@ -5,6 +5,7 @@ import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/new_daily_hadith_model.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_content_card.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_attribution_and_grade.dart';
@@ -15,7 +16,7 @@ import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model
 
 class HadithDailyScreen extends StatefulWidget {
   const HadithDailyScreen({super.key, required this.dailyHadithModel});
-  final HadithData dailyHadithModel;
+  final NewDailyHadithModel dailyHadithModel;
 
   @override
   State<HadithDailyScreen> createState() => _HadithDailyScreenState();
@@ -79,9 +80,9 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
               title: 'حديث اليوم',
               description: 'نص حديث نبوي شريف مع شرحه',
             ),
-
+      
             SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-
+      
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -116,13 +117,13 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                         SizedBox(height: 5.h),
                       ],
                     ),
-
+      
                     // Enhanced tabs section
                     Container(
                       margin: EdgeInsets.only(bottom: 20.h),
                       child: _buildEnhancedTabsSection(),
                     ),
-
+      
                     Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 16.w,
@@ -141,7 +142,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                 ),
               ),
             ),
-
+      
             // Enhanced actions section
             SliverToBoxAdapter(
               child: Container(
@@ -149,7 +150,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                 child: _buildEnhancedActionsSection(),
               ),
             ),
-
+      
             SliverToBoxAdapter(child: SizedBox(height: 50.h)),
           ],
         ),

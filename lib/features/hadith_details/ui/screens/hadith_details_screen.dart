@@ -143,7 +143,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           body: CustomScrollView(
             slivers: [
               BuildHeaderAppBar(title: 'تفاصيل الحديث'),
-
+        
               if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
                 SliverToBoxAdapter(
                   child: Padding(
@@ -154,7 +154,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     child: _buildHadithHeader(),
                   ),
                 ),
-
+        
               if (_isValid(widget.hadithText))
                 SliverToBoxAdapter(
                   child: HadithTextCard(
@@ -164,10 +164,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                             : widget.hadithText ?? "الحديث غير متوفر",
                   ),
                 ),
-
-       
+        
+               
                             SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-      if (widget.showNavigation && !widget.isBookMark)
+              if (widget.showNavigation && !widget.isBookMark)
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
@@ -182,8 +182,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                 ),
                 
                             
-
-
+        
+        
               HadithAnalysis(
                 attribution: widget.narrator ?? '',
                 hadith:
@@ -193,9 +193,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                 grade: widget.grade ?? '',
                 reference: widget.bookName ?? '',
               ),
-
+        
               if (_isValid(widget.grade)) _buildDividerSection(),
-
+        
               if (_isValid(widget.grade))
                 SliverToBoxAdapter(
                   child: Padding(
@@ -236,12 +236,12 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     ),
                   ),
                 ),
-
+        
               if (_isValid(widget.bookName) ||
                   _isValid(widget.author) ||
                   _isValid(widget.chapter))
                 _buildDividerSection(),
-
+        
               if (_isValid(widget.bookName) ||
                   _isValid(widget.author) ||
                   _isValid(widget.chapter))
@@ -256,9 +256,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     ),
                   ),
                 ),
-
+        
               _buildDividerSection(),
-
+        
               /// Actions Section
               SliverToBoxAdapter(
                 child: Container(
@@ -269,10 +269,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   child: _buildEnhancedActionsSection(),
                 ),
               ),
-
+        
               /// Navigation Section
         
-
+        
               SliverToBoxAdapter(child: SizedBox(height: 40.h)),
             ],
           ),

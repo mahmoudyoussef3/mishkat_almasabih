@@ -44,7 +44,7 @@ class FilterSerchResultScreen extends StatelessWidget {
                   if (hadiths.isEmpty) {
                     return EmptySliverState();
                   }
-
+      
                   return SliverList.separated(
                     itemCount: hadiths.length,
                     separatorBuilder: (_, __) => IslamicSeparator(),
@@ -59,7 +59,7 @@ class FilterSerchResultScreen extends StatelessWidget {
                                     (context) => HadithDetailScreen(
                                       isBookMark: false,
                                       showNavigation: false,
-
+      
                                       isLocal: false,
                                       chapterNumber:
                                           hadith.chapter?.chapterNumber ?? '',
@@ -96,7 +96,7 @@ class FilterSerchResultScreen extends StatelessWidget {
                     child: ErrorState(error: state.errMessage),
                   );
                 }
-
+      
                 return SliverToBoxAdapter(child: SizedBox.shrink());
               },
             ),

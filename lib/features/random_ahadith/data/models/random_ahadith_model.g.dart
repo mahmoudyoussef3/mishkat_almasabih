@@ -35,8 +35,8 @@ RandomHadithModel _$RandomHadithModelFromJson(
       (json['categoriesIds'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
-  wordsMeanings:
-      (json['wordsMeanings'] as List<dynamic>?)
+  words_meanings:
+      (json['words_meanings'] as List<dynamic>?)
           ?.map((e) => WordMeaning.fromJson(e as Map<String, dynamic>))
           .toList(),
   reference: json['reference'] as String?,
@@ -45,18 +45,19 @@ RandomHadithModel _$RandomHadithModelFromJson(
       (json['categories'] as List<dynamic>?)?.map((e) => e as String).toList(),
 );
 
-Map<String, dynamic> _$RandomHadithModelToJson(RandomHadithModel instance) =>
-    <String, dynamic>{
-      'hadithId': instance.hadithId,
-      'hadith': instance.hadith,
-      'title': instance.title,
-      'attribution': instance.attribution,
-      'grade': instance.grade,
-      'explanation': instance.explanation,
-      'hints': instance.hints,
-      'categoriesIds': instance.categoriesIds,
-      'wordsMeanings': instance.wordsMeanings?.map((e) => e.toJson()).toList(),
-      'reference': instance.reference,
-      'language': instance.language,
-      'categories': instance.categories,
-    };
+Map<String, dynamic> _$RandomHadithModelToJson(
+  RandomHadithModel instance,
+) => <String, dynamic>{
+  'hadithId': instance.hadithId,
+  'hadith': instance.hadith,
+  'title': instance.title,
+  'attribution': instance.attribution,
+  'grade': instance.grade,
+  'explanation': instance.explanation,
+  'hints': instance.hints,
+  'categoriesIds': instance.categoriesIds,
+  'words_meanings': instance.words_meanings?.map((e) => e.toJson()).toList(),
+  'reference': instance.reference,
+  'language': instance.language,
+  'categories': instance.categories,
+};

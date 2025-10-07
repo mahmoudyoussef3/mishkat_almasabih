@@ -16,7 +16,7 @@ class BookmarkEmptyState extends StatelessWidget {
               size: 60.r, color: ColorsManager.secondaryText),
           SizedBox(height: 12.h),
           Text(
-            "لا توجد أحاديث في هذه المجموعة",
+            "لا توجد علامات مرجعية في هذه المجموعة",
             style: TextStyle(
               color: ColorsManager.secondaryText,
               fontSize: 14.sp,

@@ -46,7 +46,7 @@ class _SeragChatScreenState extends State<SeragChatScreen> {
                   BuildHeaderAppBar(title: "سراج", description: "مساعد الحديث"),
                   SliverToBoxAdapter(child: RemainingQuestionsCard()),
                   const ChatMessagesList(),
-                  SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 10.h)),
                 ],
               ),
             ),

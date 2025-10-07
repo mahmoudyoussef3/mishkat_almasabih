@@ -7,7 +7,6 @@ import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_title.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_tabs.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
@@ -91,13 +90,7 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      /*
-                      if (data.title != null)
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10.h),
-                          child: HadithTitle(title: data.title!),
-                        ),
-                        */
+                   
                       if (data.hadeeth != null)
                         Container(
                           margin: EdgeInsets.only(bottom: 10.h),
@@ -156,7 +149,6 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                 ),
               ),
 
-              // Enhanced actions section
               SliverToBoxAdapter(
                 child: Container(
                   margin: EdgeInsets.symmetric(

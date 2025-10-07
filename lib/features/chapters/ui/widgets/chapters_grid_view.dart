@@ -4,6 +4,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/build_chapter_card.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/widgets/chapter_card_shimmer.dart';
 import 'package:mishkat_almasabih/features/ahadith/logic/cubit/ahadiths_cubit.dart';
@@ -73,31 +75,40 @@ class ResponsiveChapterList extends StatelessWidget {
             log(bookName);
             log(writerName);
             log(items[index].chapterNumber.toString());
-            log(items[index].chapterArabic);
+       //     log(items[index].chapterArabic);
 
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder:
-                    (context) => BlocProvider(
-                      create:
-                          (context) =>
-                              getIt<AhadithsCubit>()..emitAhadiths(
-                                isArbainBooks: checkThreeBooks(bookSlug),
-                                hadithLocal: checkBookSlug(bookSlug),
-                                bookSlug: bookSlug,
-                                chapterId: items[index].chapterNumber,
-                              ),
+                    (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create:
+                              (context) =>
+                                  getIt<AhadithsCubit>()..emitAhadiths(
+                                    isArbainBooks: checkThreeBooks(bookSlug),
+                                    hadithLocal: checkBookSlug(bookSlug),
+                                    bookSlug: bookSlug,
+                                    chapterId: items[index].chapterNumber,
+                                  ),
+                        ),
+                        BlocProvider(create: (context) => getIt<AddCubitCubit>()),
+                      ],
                       child: ChapterAhadithScreen(
-                        authorDeath:  "",
+                        chapterNumber: items[index].chapterNumber,
+                        authorDeath: "",
                         grade: "",
-                        narrator:  "",
-
+                        narrator: "",
                         bookSlug: bookSlug,
                         bookId: items[index].chapterNumber,
                         arabicBookName: bookName,
                         arabicWriterName: writerName,
-                        arabicChapterName: items[index].chapterArabic,
+                        arabicChapterName: 
+                        items is List<Bookmark> ? items[index].chapterName:
+                        
+                        items[index].chapterArabic 
+                           
                       ),
                     ),
               ),
@@ -108,13 +119,13 @@ class ResponsiveChapterList extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.w),
             child: ChapterCard(
-                  chapterNumber: items[index].chapterNumber,
-                  ar: items[index].chapterArabic,
-                  primaryPurple: primaryPurple,
-                )
-           //     .animate()
+              chapterNumber: items[index].chapterNumber,
+              ar: items is List<Bookmark>? items[index].chapterName ??'jhjkjnk' : items[index].chapterArabic,
+              primaryPurple: primaryPurple,
+            ),
+            //     .animate()
             //    .fadeIn(duration: 1.seconds)
-             //   .scale(duration: 1.seconds, curve: Curves.easeOutBack),
+            //   .scale(duration: 1.seconds, curve: Curves.easeOutBack),
           ),
         );
       }, childCount: isLoading ? 12 : items.length),

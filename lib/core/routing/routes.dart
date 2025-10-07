@@ -12,4 +12,11 @@ class Routes {
 
   static const String hadithOfTheDay = '/hadithOfTheDay';
   static const String serag = '/serag';
+  static const String profileScreen = '/profileScreen';
+  static const String bookmarkScreen = '/bookmarkScreen';
+  static const String searchScreen = '/searchScreen';
+  static const String libraryScreen = '/libraryScreen';
+
+
+  static const String homeScreen = '/homeScreen';
 }

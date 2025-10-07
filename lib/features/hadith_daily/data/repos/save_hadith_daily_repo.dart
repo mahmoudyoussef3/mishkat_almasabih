@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
+import 'package:mishkat_almasabih/features/hadith_daily/data/models/new_daily_hadith_model.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
@@ -24,7 +24,7 @@ class SaveHadithDailyRepo {
 
   static Dio get dio => _dio;
   /// حفظ الحديث في SharedPreferences
-  Future<void> saveHadith(HadithData model) async {
+  Future<void> saveHadith(NewDailyHadithModel model) async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = jsonEncode(model.toJson());
 
@@ -33,13 +33,13 @@ class SaveHadithDailyRepo {
   }
 
   /// جلب الحديث المخزن
-  Future<HadithData?> getHadith() async {
+  Future<NewDailyHadithModel?> getHadith() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonString = prefs.getString(_key);
     if (jsonString == null) return null;
 
     final Map<String, dynamic> jsonMap = jsonDecode(jsonString);
-    return HadithData.fromJson(jsonMap);
+    return NewDailyHadithModel.fromJson(jsonMap);
   }
 
   /// حذف الحديث
@@ -50,7 +50,7 @@ class SaveHadithDailyRepo {
   }
 
   /// جلب حديث جديد من API وحفظه فوراً
-  Future<HadithData?> fetchHadith(String id) async {
+  Future<NewDailyHadithModel?> fetchHadith(String id) async {
     try {
       final response =
           await _dio.get("hadeeths/one/", queryParameters: {
@@ -58,7 +58,7 @@ class SaveHadithDailyRepo {
         "id": id,
       });
 
-      final hadithModel = HadithData.fromJson(response.data);
+      final hadithModel = NewDailyHadithModel.fromJson(response.data);
 
       await saveHadith(hadithModel);
       debugPrint('✅ New hadith fetched and saved');

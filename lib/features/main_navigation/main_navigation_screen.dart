@@ -5,13 +5,11 @@ import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
 import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
-
 import 'package:mishkat_almasabih/features/profile/ui/profile_screen.dart';
 import 'package:mishkat_almasabih/features/random_ahadith/logic/cubit/random_ahadith_cubit.dart';
 import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/search_with_filters_screen.dart';
-
 import '../home/ui/home_screen.dart';
 import 'widgets/build_bottom_nva_container.dart';
 
