@@ -150,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen>
       children: [
         // Arabic app name
         Text(
-                      'مكتبة مشكاة للأحاديث',
+                      'مشكاة الأحاديث',
               style: TextStyle(
                 fontFamily: 'Cairo',
                 fontSize: 32.sp,

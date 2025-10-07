@@ -51,6 +51,9 @@ class SaveHadithDailyRepo {
 
   /// جلب حديث جديد من API وحفظه فوراً
   Future<NewDailyHadithModel?> fetchHadith(String id) async {
+
+
+    
     try {
       final response =
           await _dio.get("hadeeths/one/", queryParameters: {

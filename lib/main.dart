@@ -24,11 +24,14 @@ Future<void> main() async {
   // Setup notification tap handlers
   await LocalNotification.init();
   //await PushNotification.getApnsToken();
-   // إعداد tap على النوتيفيكيشن
+
+    
+    // إعداد tap على النوتيفيكيشن
     PushNotification.setupOnTapNotification();
     
     // معالجة لو الأبلكيشن فتح من نوتيفيكيشن (terminated state)
     PushNotification.handleTerminatedNotification();
+  
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
   final prefs = await SharedPreferences.getInstance();
@@ -36,14 +39,10 @@ Future<void> main() async {
   final isLoggedIn = token != null;
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
-  final app = DevicePreview(
-    
-    builder:
-        (context) => MishkatAlmasabih(
-          appRouter: AppRouter(),
-          isFirstTime: isFirstTime,
-          isLoggedIn: isLoggedIn,
-        ),
+  final app = MishkatAlmasabih(
+    appRouter: AppRouter(),
+    isFirstTime: isFirstTime,
+    isLoggedIn: isLoggedIn,
   );
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 

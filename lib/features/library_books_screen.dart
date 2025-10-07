@@ -87,7 +87,7 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
       bottomNav: true,
 
  //     title: 'مشكاة المصابيح',
-      title:                       'مكتبة مشكاة للأحاديث',
+      title:                       'مشكاة الأحاديث',
       description: 'مصادر الأحاديث النبوية الشريفة',
 
     );

@@ -216,7 +216,7 @@ class ProfileScreen extends StatelessWidget {
       
                               SizedBox(height: 10.h),
                               Text(
-                                "© جميع الحقوق محفوظة لتطبيق مشكاة المصابيح 2025",
+                                "© جميع الحقوق محفوظة لتطبيق مشكاة الأحاديث 2025",
                                 style: TextStyle(
                                   fontSize: 12.sp,
                                   color: Colors.white70,

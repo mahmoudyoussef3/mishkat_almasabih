@@ -36,7 +36,7 @@ class SocilaMediaIcons extends StatelessWidget {
                 ),
                 SizedBox(height: 12.h),
                 Text(
-                  "مشكاة المصابيح",
+                  "مشكاة الأحاديث",
                   style: TextStyle(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.bold,
@@ -109,7 +109,7 @@ class SocilaMediaIcons extends StatelessWidget {
                 ),
                 SizedBox(height: 10.h),
                 Text(
-                  "© جميع الحقوق محفوظة لتطبيق مشكاة المصابيح 2025",
+                  "© جميع الحقوق محفوظة لتطبيق مشكاة الأحاديث 2025",
                   style: TextStyle(fontSize: 11.sp, color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),

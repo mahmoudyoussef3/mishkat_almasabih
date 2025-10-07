@@ -25,7 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
  
 final List<OnboardingPage> _onboardingPages = [
   OnboardingPage(
-    title: 'مشكاة المصابيح',
+    title: 'مشكاة الأحاديث',
     subtitle: 'مكتبة حديثية بين يديك',
     description:
         'استكشف 17 كتاباً من أمهات كتب الحديث مثل صحيح البخاري، مسلم، أبي داود، الترمذي، النسائي، وابن ماجه، والمزيد.',
@@ -114,39 +114,41 @@ final List<OnboardingPage> _onboardingPages = [
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              _onboardingPages[_currentPage].gradient.colors.first
-                  .withOpacity(0.08),
-              Colors.white,
-              _onboardingPages[_currentPage].gradient.colors.last.withOpacity(
-                0.03,
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                _onboardingPages[_currentPage].gradient.colors.first
+                    .withOpacity(0.08),
+                Colors.white,
+                _onboardingPages[_currentPage].gradient.colors.last.withOpacity(
+                  0.03,
+                ),
+              ],
+            ),
+          ),
+          child: Column(
+            children: [
+              _buildHeader(),
+              
+              Expanded(
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: _onPageChanged,
+                  itemCount: _onboardingPages.length,
+                  itemBuilder: (context, index) {
+                    return _buildOnboardingPage(_onboardingPages[index]);
+                  },
+                ),
               ),
+              
+              _buildBottomNavigation(),
             ],
           ),
-        ),
-        child: Column(
-          children: [
-            _buildHeader(),
-            
-            Expanded(
-              child: PageView.builder(
-                controller: _pageController,
-                onPageChanged: _onPageChanged,
-                itemCount: _onboardingPages.length,
-                itemBuilder: (context, index) {
-                  return _buildOnboardingPage(_onboardingPages[index]);
-                },
-              ),
-            ),
-            
-            _buildBottomNavigation(),
-          ],
         ),
       ),
     );
@@ -185,7 +187,7 @@ final List<OnboardingPage> _onboardingPages = [
               ),
               SizedBox(width: 8.w),
               Text(
-                'مشكاة المصابيح',
+                'مشكاة الأحاديث',
                 style: TextStyle(
                   fontSize: 16.sp,
                   fontWeight: FontWeight.bold,

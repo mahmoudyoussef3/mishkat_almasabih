@@ -360,35 +360,46 @@ class _HomeScreenState extends State<HomeScreen> {
     return DoubleTapToExitApp(
       myScaffoldScreen: Directionality(
         textDirection: TextDirection.rtl,
-        child: Scaffold(
-          drawer: MishkatDrawer(),
-      
-          floatingActionButton: FloatingActionButton.extended(
-            backgroundColor: ColorsManager.primaryGreen,
-            foregroundColor: ColorsManager.secondaryBackground,
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => BlocProvider(
-                        create: (context) => getIt<GetLibraryStatisticsCubit>(),
-                        child: LibraryBooksScreen(),
-                      ),
-                ),
-              );
-            },
-            label: Row(
-              children: [
-                Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
-                SizedBox(width: 4.w),
-      
-                Icon(Icons.local_library_sharp),
-              ],
+        child:
+           RefreshIndicator(
+        onRefresh: () async {
+          setState(() {
+            SaveHadithDailyRepo().getHadith();
+          });
+        },
+    
+          child: Scaffold(
+            drawer: MishkatDrawer(),
+                
+            floatingActionButton: FloatingActionButton.extended(
+              backgroundColor: ColorsManager.primaryGreen,
+              foregroundColor: ColorsManager.secondaryBackground,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => BlocProvider(
+                          create: (context) => getIt<GetLibraryStatisticsCubit>(),
+                          child: LibraryBooksScreen(),
+                        ),
+                  ),
+                );
+              },
+              label: Row(
+                children: [
+                  Icon(Icons.local_library_sharp),
+                                  SizedBox(width: 4.w),
+          
+                  Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
+                
+                  
+                ],
+              ),
             ),
+            backgroundColor: ColorsManager.secondaryBackground,
+            body: _buildBody(),
           ),
-          backgroundColor: ColorsManager.secondaryBackground,
-          body: _buildBody(),
         ),
       ),
     );
@@ -525,8 +536,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return BuildHeaderAppBar(
       home: true,
       bottomNav: true,
-      title: 'مشكاة المصابيح',
-      description: 'مكتبة مشكاة للأحاديث',
+      title: 'مشكاة الأحاديث',
+      description: 'مصادر الأحاديث النبوية الشريفة',
     );
   }
 

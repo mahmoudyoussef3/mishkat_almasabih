@@ -50,7 +50,7 @@ class MishkatDrawer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'مشكاة المصابيح',
+                      'مشكاة الأحاديث',
                       style: TextStyle(
                         color: ColorsManager.secondaryBackground,
                         fontSize: 22.sp,
@@ -60,7 +60,7 @@ class MishkatDrawer extends StatelessWidget {
                     ),
                     SizedBox(height: 6.h),
                     Text(
-                      'مكتبة مشكاة للأحاديث',
+                      'تطبيق شامل للأحاديث النبوية',
                       style: TextStyle(
                         color: ColorsManager.white.withOpacity(0.9),
                         fontSize: 15.sp,

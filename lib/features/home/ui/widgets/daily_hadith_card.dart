@@ -18,7 +18,6 @@ class HadithOfTheDayCard extends StatefulWidget {
 }
 
 class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
-  // مفتاح للتحكم في إعادة بناء الـ FutureBuilder
   late ValueNotifier<int> _refreshKey;
 
   @override
@@ -33,7 +32,6 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
     super.dispose();
   }
 
-  /// دالة لإعادة تحميل الحديث من الخارج
   void refresh() {
     _refreshKey.value++;
   }
@@ -52,10 +50,7 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                 baseColor: Colors.grey.shade300,
                 highlightColor: Colors.grey.shade100,
                 child: Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: 12.h,
-                    horizontal: 16.w,
-                  ),
+                  margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
                   height: 200.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -90,19 +85,38 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
 
             final hadith = snapshot.data;
 
+            // ✅ في حالة الحديث مش متخزن، نعمل fetch ثم rebuild
             if (hadith == null) {
-              widget.repo.fetchHadith(
-                65060.toString()
+              widget.repo.fetchHadith("65060").then((_) {
+                _refreshKey.value++;
+              });
+              return Container(
+                margin:
+                    EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
+                height: 180.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: BorderRadius.circular(24.r),
+                ),
+                child: Center(
+                  child: Text(
+                    "جاري تحميل الحديث...",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                ),
               );
-           
             }
 
+            // ✅ لو فيه حديث جاهز، نعرضه
             return GestureDetector(
-              onTap:
-                  () => context.pushNamed(
-                    Routes.hadithOfTheDay,
-                    arguments: hadith,
-                  ),
+              onTap: () => context.pushNamed(
+                Routes.hadithOfTheDay,
+                arguments: hadith,
+              ),
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
                 height: 200.h,
@@ -119,11 +133,12 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                           borderRadius: BorderRadius.circular(24.r),
                           child: FadeInImage(
                             placeholder: MemoryImage(kTransparentImage),
-                            image: AssetImage(
+                            image: const AssetImage(
                               "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
                             ),
                             fit: BoxFit.cover,
-                            fadeInDuration: Duration(milliseconds: 700),
+                            fadeInDuration:
+                                const Duration(milliseconds: 700),
                           ),
                         ),
                       ),
@@ -154,11 +169,26 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                                   color: ColorsManager.secondaryBackground,
                                 ),
                               ),
+                              /*
+                              Spacer(),
+                             
+                              GestureDetector(
+                                onTap: () async {
+                                  await widget.repo.getHadith();
+                                  refresh();
+                                },
+                                child: Icon(
+                                Icons.refresh,
+                                color: ColorsManager.secondaryBackground,
+                                size: 20.sp,
+                              ),
+                              ),
+                              */
                             ],
                           ),
                           Flexible(
                             child: Text(
-                              hadith?.hadeeth ?? "حديث اليوم",
+                              hadith.hadeeth ?? "حديث اليوم",
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.start,
