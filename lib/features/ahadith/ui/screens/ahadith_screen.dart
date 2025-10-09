@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/utils/constants.dart';
 import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
@@ -15,6 +17,7 @@ import 'package:mishkat_almasabih/features/hadith_details/ui/screens/hadith_deta
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/features/ahadith/ui/widgets/local_hadith_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChapterAhadithScreen extends StatelessWidget {
   ChapterAhadithScreen({
@@ -27,7 +30,7 @@ class ChapterAhadithScreen extends StatelessWidget {
     required this.narrator,
     required this.grade,
     required this.authorDeath,
-    required this.chapterNumber
+    required this.chapterNumber,
   });
 
   final String bookSlug;
@@ -41,6 +44,47 @@ class ChapterAhadithScreen extends StatelessWidget {
   final int? chapterNumber;
 
   final _controller = TextEditingController();
+  Future<void> _checkToken(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedToken = prefs.getString('token');
+
+    if (storedToken != null) {
+      context.read<AddCubitCubit>().addBookmark(
+        Bookmark(
+          id: chapterNumber,
+          chapterNumber: chapterNumber,
+          bookName: arabicBookName,
+          chapterName: arabicChapterName,
+          type: 'chapter',
+          bookSlug: bookSlug,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          //  behavior: SnackBarBehavior.floating,
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                textDirection: TextDirection.rtl,
+                style: TextStyle(color: ColorsManager.secondaryBackground),
+              ),
+              IconButton(
+                onPressed: () => context.pushNamed(Routes.loginScreen),
+                icon: Icon(
+                  Icons.login,
+                  color: ColorsManager.secondaryBackground,
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: ColorsManager.primaryGreen,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,21 +99,7 @@ class ChapterAhadithScreen extends StatelessWidget {
                 actions: [
                   AppBarActionButton(
                     icon: Icons.bookmark_border_rounded,
-                    onPressed: () {
-                      context.read<AddCubitCubit>().addBookmark(
-                        Bookmark(
-                          
-                          
-                          id: chapterNumber,
-                          chapterNumber:chapterNumber,
-                          bookName: arabicBookName,
-                          chapterName: arabicChapterName,
-                          type: 'chapter',
-                          bookSlug: bookSlug,
-
-                        ),
-                      );
-                    },
+                    onPressed: () => _checkToken(context),
                   ),
                 ],
                 title: arabicBookName,
@@ -85,27 +115,53 @@ class ChapterAhadithScreen extends StatelessWidget {
                   child: SizedBox.shrink(),
                   listener: (context, state) {
                     if (state is AddLoading) {
-                      {                      ScaffoldMessenger.of(context).clearSnackBars();
+                      {
+                        ScaffoldMessenger.of(context).clearSnackBars();
 
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: ColorsManager.hadithAuthentic,
-                      behavior: SnackBarBehavior.floating,
-                        content: Text('جاري التحميل...',style: TextStyle(color: ColorsManager.secondaryBackground),)));
-                  }
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: ColorsManager.hadithAuthentic,
+                            behavior: SnackBarBehavior.floating,
+                            content: Text(
+                              'جاري التحميل...',
+                              style: TextStyle(
+                                color: ColorsManager.secondaryBackground,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
                     } else if (state is AddSuccess) {
-                {
+                      {
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: ColorsManager.hadithAuthentic,
+                            behavior: SnackBarBehavior.floating,
+                            content: Text(
+                              'تم إضافة الباب بنجاح.',
+                              style: TextStyle(
+                                color: ColorsManager.secondaryBackground,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                    } else if (state is AddFailure) {
                       ScaffoldMessenger.of(context).clearSnackBars();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: ColorsManager.hadithAuthentic,
-                        behavior: SnackBarBehavior.floating,
-                        content: Text('تم إضافة الباب بنجاح.',style: TextStyle(color: ColorsManager.secondaryBackground),)));
-                    }
-                    } else if (state is AddFailure) {                      ScaffoldMessenger.of(context).clearSnackBars();
 
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        backgroundColor: Colors.red,
-                        behavior: SnackBarBehavior.floating,
-                        content: Text('حدث خطأ. حاول مرة أخري.',style: TextStyle(color: ColorsManager.secondaryBackground),)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: Colors.red,
+                          behavior: SnackBarBehavior.floating,
+                          content: Text(
+                            'حدث خطأ. حاول مرة أخري.',
+                            style: TextStyle(
+                              color: ColorsManager.secondaryBackground,
+                            ),
+                          ),
+                        ),
+                      );
                     }
                   },
                 ),

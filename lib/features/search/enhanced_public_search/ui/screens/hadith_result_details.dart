@@ -15,6 +15,7 @@ import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widg
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widgets/result_hadith_tab_content.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/ui/widgets/search_hadith_attribution_and_grade.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HadithResultDetails extends StatefulWidget {
   const HadithResultDetails({super.key, required this.enhancedHadithModel});
@@ -26,6 +27,21 @@ class HadithResultDetails extends StatefulWidget {
 
 class _HadithDailyScreenState extends State<HadithResultDetails> {
   String selectedTab = "شرح";
+  String? token;
+  Future<void> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedToken = prefs.getString('token');
+
+    setState(() {
+      token = storedToken;
+    });
+  }
+
+  @override
+  void initState() {
+    getToken();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +55,34 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
           floatingActionButton: Builder(
             builder: (context) {
               return FloatingActionButton.extended(
-                onPressed: () {
+                onPressed:token == null? (){
+
+  ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                      //  behavior: SnackBarBehavior.floating,
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                              Text(
+                              'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                color: ColorsManager.secondaryBackground,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed:
+                                  () => context.pushNamed(Routes.loginScreen),
+                              icon: Icon(Icons.login,color: ColorsManager.secondaryBackground,),
+                            ),
+                          
+                          ],
+                        ),
+                        backgroundColor: ColorsManager.primaryGreen,
+                      ),
+                    );
+
+                }: () {
                   context.pushNamed(
                     Routes.serag,
                     arguments: SeragRequestModel(
@@ -90,7 +133,6 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                   
                       if (data.hadeeth != null)
                         Container(
                           margin: EdgeInsets.only(bottom: 10.h),

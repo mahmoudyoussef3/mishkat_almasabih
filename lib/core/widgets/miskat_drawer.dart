@@ -6,8 +6,29 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MishkatDrawer extends StatelessWidget {
+class MishkatDrawer extends StatefulWidget {
   const MishkatDrawer({super.key});
+
+  @override
+  State<MishkatDrawer> createState() => _MishkatDrawerState();
+}
+
+class _MishkatDrawerState extends State<MishkatDrawer> {
+  String? token;
+  Future<void> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedToken = prefs.getString('token');
+
+    setState(() {
+      token = storedToken;
+    });
+  }
+
+  @override
+  void initState() {
+    getToken();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +40,7 @@ class MishkatDrawer extends StatelessWidget {
           DrawerHeader(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [
-                  ColorsManager.primaryPurple,
-                  ColorsManager.darkPurple,
-                ],
+                colors: [ColorsManager.primaryPurple, ColorsManager.darkPurple],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
@@ -129,18 +147,18 @@ class MishkatDrawer extends StatelessWidget {
             indent: 20.w,
             endIndent: 20.w,
           ),
-
-          // 🚪 Logout
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            child: _buildDrawerItem(
-              context,
-              icon: Icons.logout_rounded,
-              title: 'تسجيل الخروج',
-              color: ColorsManager.error,
-              onTap: () => _showLogoutDialog(context),
+          if (token != null)
+            // 🚪 Logout
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
+              child: _buildDrawerItem(
+                context,
+                icon: Icons.logout_rounded,
+                title: 'تسجيل الخروج',
+                color: ColorsManager.error,
+                onTap: () => _showLogoutDialog(context),
+              ),
             ),
-          ),
           SizedBox(height: 16.h),
         ],
       ),
@@ -179,8 +197,11 @@ class MishkatDrawer extends StatelessWidget {
             ),
             child: Row(
               children: [
-                Icon(icon,
-                    color: color ?? ColorsManager.primaryPurple, size: 22.sp),
+                Icon(
+                  icon,
+                  color: color ?? ColorsManager.primaryPurple,
+                  size: 22.sp,
+                ),
                 SizedBox(width: 14.w),
                 Text(
                   title,
@@ -231,10 +252,7 @@ class MishkatDrawer extends StatelessWidget {
                   // ignore: use_build_context_synchronously
                   context.pushReplacementNamed(Routes.loginScreen);
                 },
-                child: const Text(
-                  'نعم',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: const Text('نعم', style: TextStyle(color: Colors.white)),
               ),
               SizedBox(width: 12.w),
               OutlinedButton(
