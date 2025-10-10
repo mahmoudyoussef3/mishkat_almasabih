@@ -72,6 +72,8 @@ class PushNotification {
 
     // الاشتراك في topic
     await messaging.subscribeToTopic('daily_hadith');
+    await messaging.subscribeToTopic('update');
+
     log("📌 Subscribed to topic: daily_hadith");
 
     // إعداد استقبال الإشعارات في الـ foreground
@@ -168,7 +170,7 @@ class PushNotification {
         log("❌ No hadith found to navigate to");
         return;
       }
-/*
+
       // استخدام نفس الطريقة اللي في الكارد بتاعك
       if (context.mounted) {
         Navigator.of(context).pushNamed(
@@ -179,7 +181,7 @@ class PushNotification {
         
         log("✅ Navigated to Hadith Daily Screen");
       }
-      */
+      
     } catch (e) {
       log("❌ Navigation error: $e");
     }

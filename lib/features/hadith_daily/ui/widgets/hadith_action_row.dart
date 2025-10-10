@@ -57,7 +57,6 @@ class _HadithActionsRowState extends State<HadithActionsRow> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _checkToken(context);
   }
@@ -201,57 +200,7 @@ class _HadithActionsRowState extends State<HadithActionsRow> {
                 },
               ),
 
-            /*
-              
-                 Flexible(
-                child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40.h),
-                        child: Column(
-                          children: [
-                            Icon(
-                FontAwesomeIcons.userLock,
-                size: 70.sp,
-                color: ColorsManager.primaryPurple,
-                            ),
-                            SizedBox(height: 12.h),
-                            Text(
-                "يجب تسجيل الدخول لعرض بيانات الملف الشخصي",
-                style: TextStyle(
-                  fontSize: 15.sp,
-                  color: ColorsManager.darkGray,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: 16.h),
-                            ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: ColorsManager.primaryGreen,
-                  padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 12.h),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/login');
-                },
-                child: Text(
-                  "تسجيل الدخول",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                            ),
-                          ],
-                        ),
-                      ),
-                ),
-              )
   
-*/
           ],
         ),
       ),

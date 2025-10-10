@@ -67,7 +67,7 @@ class PublicSearchResult extends StatelessWidget {
 
                         child: ChapterAhadithCard(
                           number: hadith.id ?? '',
-                          bookName: hadith.reference ?? '',
+                          //bookName:  '',
 
                           text: hadith.hadeeth ?? '',
                           narrator: hadith.attribution ?? '',

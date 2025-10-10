@@ -63,7 +63,7 @@ class RandomAhadithBlocBuilder extends StatelessWidget {
                     child: ChapterAhadithCard(
                       hadithCategory: hadith.categories?.first ?? "",
                       number: hadith.hadithId ?? '',
-                      bookName: hadith.reference ?? '',
+                 //     bookName: hadith.reference ?? '',
                       text: hadith.hadith ?? '',
                       narrator: hadith.attribution ?? '',
                       grade:

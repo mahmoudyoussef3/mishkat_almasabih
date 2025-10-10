@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/ui/widgets/hadith_analysis.dart';
@@ -118,11 +119,11 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   if (token == null) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                      //  behavior: SnackBarBehavior.floating,
+                        //  behavior: SnackBarBehavior.floating,
                         content: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                              Text(
+                            Text(
                               'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
                               textDirection: TextDirection.rtl,
                               style: TextStyle(
@@ -132,9 +133,11 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                             IconButton(
                               onPressed:
                                   () => context.pushNamed(Routes.loginScreen),
-                              icon: Icon(Icons.login,color: ColorsManager.secondaryBackground,),
+                              icon: Icon(
+                                Icons.login,
+                                color: ColorsManager.secondaryBackground,
+                              ),
                             ),
-                          
                           ],
                         ),
                         backgroundColor: ColorsManager.primaryGreen,
@@ -181,7 +184,60 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           backgroundColor: ColorsManager.secondaryBackground,
           body: CustomScrollView(
             slivers: [
-              BuildHeaderAppBar(title: 'تفاصيل الحديث'),
+              BuildHeaderAppBar(
+  title: 'تفاصيل الحديث',
+  actions: [
+    AppBarActionButton(
+      icon: Icons.bookmark_border_rounded,
+      onPressed: () {
+        if (token == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: ColorsManager.primaryGreen,
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  IconButton(
+                    onPressed: () => context.pushNamed(Routes.loginScreen),
+                    icon: const Icon(
+                      Icons.login,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (dialogContext) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                    value: context.read<AddCubitCubit>(),
+                  ),
+                ],
+                child: AddToFavoritesDialog(
+                  bookName: widget.bookName??"",
+                  bookSlug: widget.bookSlug??'',
+                  chapter: widget.chapter??'',
+                  hadithNumber: widget.hadithNumber??"",
+                  hadithText: widget.hadithText??'', id: widget.hadithNumber??' ',
+                ),
+              );
+            },
+          );
+        }
+      },
+    ),
+  ],
+),
 
               if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
                 SliverToBoxAdapter(
@@ -295,7 +351,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               _buildDividerSection(),
 
               /// Actions Section
-              SliverToBoxAdapter(
+     /*         SliverToBoxAdapter(
                 child: Container(
                   margin: EdgeInsets.symmetric(
                     horizontal: 20.w,
@@ -304,6 +360,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   child: _buildEnhancedActionsSection(),
                 ),
               ),
+              */
 
               /// Navigation Section
               SliverToBoxAdapter(child: SizedBox(height: 40.h)),
