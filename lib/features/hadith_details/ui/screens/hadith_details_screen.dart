@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
@@ -94,6 +95,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         BlocProvider(create: (context) => getIt<AddCubitCubit>()),
         BlocProvider(create: (context) => getIt<NavigationCubit>()),
         BlocProvider(create: (context) => getIt<LocalHadithNavigationCubit>()),
+                BlocProvider(create: (context) => getIt<GetCollectionsBookmarkCubit>()),
+
+
         BlocProvider(
           create:
               (context) =>
@@ -221,6 +225,10 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                 providers: [
                   BlocProvider.value(
                     value: context.read<AddCubitCubit>(),
+                  ),
+                  BlocProvider.value(
+                    value: context.read<GetCollectionsBookmarkCubit>()
+                      ..getBookMarkCollections(),
                   ),
                 ],
                 child: AddToFavoritesDialog(
