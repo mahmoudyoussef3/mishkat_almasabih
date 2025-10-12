@@ -180,30 +180,41 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                               ),
                             );
                           } else {
-                          showDialog(
-  context: context,
-  builder: (dialogContext) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => getIt<AddCubitCubit>(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<GetCollectionsBookmarkCubit>()..getBookMarkCollections(),
-        ),
-      ],
-      child: AddToFavoritesDialog(
-        chapter: "",
-        bookSlug: "",
-        hadithNumber: widget.enhancedHadithModel.id ?? "",
-        id: (Random().nextInt(10000000) + 1).toString(),
-        bookName: widget.enhancedHadithModel.reference ?? "",
-        hadithText: widget.enhancedHadithModel.hadeeth ?? "",
-      ),
-    );
-  },
-);
-
+                            showDialog(
+                              context: context,
+                              builder: (dialogContext) {
+                                return MultiBlocProvider(
+                                  providers: [
+                                    BlocProvider(
+                                      create: (_) => getIt<AddCubitCubit>(),
+                                    ),
+                                    BlocProvider(
+                                      create:
+                                          (_) =>
+                                              getIt<
+                                                  GetCollectionsBookmarkCubit
+                                                >()
+                                                ..getBookMarkCollections(),
+                                    ),
+                                  ],
+                                  child: AddToFavoritesDialog(
+                                    chapter: "",
+                                    bookSlug: "",
+                                    hadithNumber:
+                                        widget.enhancedHadithModel.id ?? "",
+                                    id:
+                                        (Random().nextInt(10000000) + 1)
+                                            .toString(),
+                                    bookName:
+                                        widget.enhancedHadithModel.reference ??
+                                        "",
+                                    hadithText:
+                                        widget.enhancedHadithModel.hadeeth ??
+                                        "",
+                                  ),
+                                );
+                              },
+                            );
                           }
                         },
                       ),
