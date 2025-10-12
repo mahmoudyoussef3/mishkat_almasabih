@@ -99,7 +99,7 @@ final List<OnboardingPage> _onboardingPages = [
   void _getStarted() async {
     await SaveDataForFirstTime.setNotFirstTime();
 
-    context.pushNamed(Routes.homeScreen);
+    context.pushNamed(Routes.loginScreen);
   }
 
   void _onPageChanged(int index) {

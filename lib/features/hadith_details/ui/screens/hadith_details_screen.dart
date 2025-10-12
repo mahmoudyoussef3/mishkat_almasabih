@@ -371,7 +371,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               */
 
               /// Navigation Section
-              SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 100.h)),
             ],
           ),
         ),

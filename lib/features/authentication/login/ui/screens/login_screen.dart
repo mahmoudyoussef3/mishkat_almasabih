@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
+import 'package:mishkat_almasabih/features/authentication/login/ui/widgets/login_as_guest_button.dart';
 import '../../../../../core/theming/colors.dart';
 import '../widgets/don`t_have_account_text.dart';
 import '../widgets/email_and_password.dart';
@@ -45,16 +48,22 @@ class LoginScreen extends StatelessWidget {
               // Divider
               _buildDivider(),
               
-              SizedBox(height: 24.h),
+              SizedBox(height: 18.h),
               
               // Don't have account
               const DontHaveAccountText(),
               
-              SizedBox(height: 32.h),
+              SizedBox(height: 16.h),
               
               LoginWithGoogle(),
+              SizedBox(height: 16.h),
+LoginAsGuestButton(
+  onTap: () {
+     context.pushNamedAndRemoveUntil(Routes.searchScreen, predicate: (route) => false );
+  },
+),
               
-              SizedBox(height: 40.h),
+              SizedBox(height: 80.h),
             ],
           ),
         ),
