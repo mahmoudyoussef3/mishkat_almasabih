@@ -252,6 +252,8 @@ class AppRouter {
                 providers: [
                   BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
                   BlocProvider(create: (context) => getIt<AddCubitCubit>()),
+                                    BlocProvider(create: (context) => getIt<GetCollectionsBookmarkCubit>()..getBookMarkCollections()),
+
                 ],
                 child: HadithDailyScreen(dailyHadithModel: query),
               ),

@@ -124,7 +124,7 @@ class HadithTextCard extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: 20.h),
+              SizedBox(height: 10.h),
 
               /// أيقونات النسخ والمشاركة والإضافة للمفضلة
               Align(

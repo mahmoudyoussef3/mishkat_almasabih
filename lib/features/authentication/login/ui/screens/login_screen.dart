@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
               SizedBox(height: 16.h),
 LoginAsGuestButton(
   onTap: () {
-     context.pushNamedAndRemoveUntil(Routes.searchScreen, predicate: (route) => false );
+     context.pushNamedAndRemoveUntil(Routes.homeScreen, predicate: (route) => false );
   },
 ),
               

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/new_daily_hadith_model.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_rich_text.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HadithContentCard extends StatelessWidget {
   final NewDailyHadithModel data;
@@ -120,12 +122,47 @@ class HadithContentCard extends StatelessWidget {
                 HadithRichText(
                   hadith: data?.hadeeth ?? "",
                 ),
+                                SizedBox(height: 10.h),
+
+                           Align(
+                alignment: Alignment.bottomLeft,
+                child: Wrap(
+                  spacing: 10.w,
+                  children: [
+                    _buildActionIcon(
+                      context,
+                      icon: Icons.copy_rounded,
+                      color: ColorsManager.primaryPurple,
+                      tooltip: "نسخ الحديث",
+                     onTap: () {
+                Clipboard.setData(ClipboardData(text: data.hadeeth??""));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text("تم نسخ الحديث"),
+                  ),
+                );
+              },
+                    ),
+                    _buildActionIcon(
+                      context,
+                      icon: Icons.share_rounded,
+                      color: ColorsManager.primaryGreen,
+                      tooltip: "مشاركة الحديث",
+                      onTap: () async {
+                await Share.share(data.hadeeth??"", subject: "شارك الحديث");
+              },
+                    ),
+                 
+                  ],
+                ),
+              ),
               ],
             ),
           ),
 
           // Bottom decorative element
-          Positioned(
+        /*  Positioned(
             bottom: 0,
             left: 0,
             child: Container(
@@ -145,7 +182,37 @@ class HadithContentCard extends StatelessWidget {
               ),
             ),
           ),
+          */
         ],
+      ),
+    );
+  }
+    Widget _buildActionIcon(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required String tooltip,
+    required VoidCallback onTap,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12.r),
+        child: Container(
+          width: 36.w,
+          height: 36.h,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(color: color.withOpacity(0.2)),
+          ),
+          child: Icon(
+            icon,
+            color: color,
+            size: 20.sp,
+          ),
+        ),
       ),
     );
   }
