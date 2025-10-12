@@ -34,15 +34,15 @@ Future<void> main() async {
   
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
-  final prefs = await SharedPreferences.getInstance();
-  final token = prefs.getString('token');
-  final isLoggedIn = token != null;
+  //final prefs = await SharedPreferences.getInstance();
+  //final token = prefs.getString('token');
+ // final isLoggedIn = token != null;
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
   final app = MishkatAlmasabih(
     appRouter: AppRouter(),
     isFirstTime: isFirstTime,
-    isLoggedIn: isLoggedIn,
+   // isLoggedIn: isLoggedIn,
   );
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 

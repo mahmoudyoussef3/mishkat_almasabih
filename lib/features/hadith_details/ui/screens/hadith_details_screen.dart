@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/loading_progress_indicator.dart';
+import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
+import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/widgets/hadith_action_row.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/ui/widgets/hadith_analysis.dart';
@@ -18,6 +20,7 @@ import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.
 import 'package:mishkat_almasabih/features/navigation/logic/cubit/navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/navigation/logic/local/cubit/local_hadith_navigation_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
 class HadithDetailScreen extends StatefulWidget {
@@ -71,7 +74,18 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
   @override
   void initState() {
     _currentHadithId = widget.hadithNumber ?? '';
+    getToken();
     super.initState();
+  }
+
+  String? token;
+  Future<void> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedToken = prefs.getString('token');
+
+    setState(() {
+      token = storedToken;
+    });
   }
 
   @override
@@ -81,6 +95,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         BlocProvider(create: (context) => getIt<AddCubitCubit>()),
         BlocProvider(create: (context) => getIt<NavigationCubit>()),
         BlocProvider(create: (context) => getIt<LocalHadithNavigationCubit>()),
+                BlocProvider(create: (context) => getIt<GetCollectionsBookmarkCubit>()),
+
+
         BlocProvider(
           create:
               (context) =>
@@ -103,18 +120,47 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
             builder: (context) {
               return FloatingActionButton.extended(
                 onPressed: () {
-                  context.pushNamed(
-                    Routes.serag,
-                    arguments: SeragRequestModel(
-                      hadith: Hadith(
-                        hadeeth: widget.hadithText ?? '',
-                        grade_ar: widget.grade ?? '',
-                        source: widget.bookName ?? '',
-                        takhrij_ar: widget.narrator ?? '',
+                  if (token == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        //  behavior: SnackBarBehavior.floating,
+                        content: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                color: ColorsManager.secondaryBackground,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed:
+                                  () => context.pushNamed(Routes.loginScreen),
+                              icon: Icon(
+                                Icons.login,
+                                color: ColorsManager.secondaryBackground,
+                              ),
+                            ),
+                          ],
+                        ),
+                        backgroundColor: ColorsManager.primaryGreen,
                       ),
-                      messages: [Message(role: 'user', content: '')],
-                    ),
-                  );
+                    );
+                  } else {
+                    context.pushNamed(
+                      Routes.serag,
+                      arguments: SeragRequestModel(
+                        hadith: Hadith(
+                          hadeeth: widget.hadithText ?? '',
+                          grade_ar: widget.grade ?? '',
+                          source: widget.bookName ?? '',
+                          takhrij_ar: widget.narrator ?? '',
+                        ),
+                        messages: [Message(role: 'user', content: '')],
+                      ),
+                    );
+                  }
                 },
                 backgroundColor: ColorsManager.primaryPurple,
                 elevation: 10,
@@ -142,8 +188,65 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
           backgroundColor: ColorsManager.secondaryBackground,
           body: CustomScrollView(
             slivers: [
-              BuildHeaderAppBar(title: 'تفاصيل الحديث'),
-        
+              BuildHeaderAppBar(
+  title: 'تفاصيل الحديث',
+  actions: [
+    AppBarActionButton(
+      icon: Icons.bookmark_border_rounded,
+      onPressed: () {
+        if (token == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: ColorsManager.primaryGreen,
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                    textDirection: TextDirection.rtl,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  IconButton(
+                    onPressed: () => context.pushNamed(Routes.loginScreen),
+                    icon: const Icon(
+                      Icons.login,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        } else {
+          showDialog(
+            context: context,
+            builder: (dialogContext) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider.value(
+                    value: context.read<AddCubitCubit>(),
+                  ),
+                  BlocProvider.value(
+                    value: context.read<GetCollectionsBookmarkCubit>()
+                      ..getBookMarkCollections(),
+                  ),
+                ],
+                child: AddToFavoritesDialog(
+                  bookName: widget.bookName??"",
+                  bookSlug: widget.bookSlug??'',
+                  chapter: widget.chapter??'',
+                  hadithNumber: widget.hadithNumber??"",
+                  hadithText: widget.hadithText??'', id: widget.hadithNumber??' ',
+                ),
+              );
+            },
+          );
+        }
+      },
+    ),
+  ],
+),
+
               if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
                 SliverToBoxAdapter(
                   child: Padding(
@@ -154,7 +257,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     child: _buildHadithHeader(),
                   ),
                 ),
-        
+
               if (_isValid(widget.hadithText))
                 SliverToBoxAdapter(
                   child: HadithTextCard(
@@ -164,9 +267,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                             : widget.hadithText ?? "الحديث غير متوفر",
                   ),
                 ),
-        
-               
-                            SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+
+              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
               if (widget.showNavigation && !widget.isBookMark)
                 SliverToBoxAdapter(
                   child: Padding(
@@ -180,10 +282,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                             : _buildRemoteNavigation(),
                   ),
                 ),
-                
-                            
-        
-        
+
               HadithAnalysis(
                 attribution: widget.narrator ?? '',
                 hadith:
@@ -193,9 +292,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                 grade: widget.grade ?? '',
                 reference: widget.bookName ?? '',
               ),
-        
+
               if (_isValid(widget.grade)) _buildDividerSection(),
-        
+
               if (_isValid(widget.grade))
                 SliverToBoxAdapter(
                   child: Padding(
@@ -236,12 +335,12 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     ),
                   ),
                 ),
-        
+
               if (_isValid(widget.bookName) ||
                   _isValid(widget.author) ||
                   _isValid(widget.chapter))
                 _buildDividerSection(),
-        
+
               if (_isValid(widget.bookName) ||
                   _isValid(widget.author) ||
                   _isValid(widget.chapter))
@@ -256,11 +355,11 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                     ),
                   ),
                 ),
-        
+
               _buildDividerSection(),
-        
+
               /// Actions Section
-              SliverToBoxAdapter(
+     /*         SliverToBoxAdapter(
                 child: Container(
                   margin: EdgeInsets.symmetric(
                     horizontal: 20.w,
@@ -269,10 +368,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   child: _buildEnhancedActionsSection(),
                 ),
               ),
-        
+              */
+
               /// Navigation Section
-        
-        
               SliverToBoxAdapter(child: SizedBox(height: 40.h)),
             ],
           ),

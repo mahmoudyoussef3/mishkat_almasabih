@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_analysis/logic/cubit/hadith_analysis_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
-class HadithAnalysis extends StatelessWidget {
+class HadithAnalysis extends StatefulWidget {
   HadithAnalysis({
     super.key,
     required this.attribution,
@@ -19,7 +22,29 @@ class HadithAnalysis extends StatelessWidget {
   final String hadith;
   final String grade;
   final String reference;
+
+  @override
+  State<HadithAnalysis> createState() => _HadithAnalysisState();
+}
+
+class _HadithAnalysisState extends State<HadithAnalysis> {
   bool tapped = false;
+  String? token;
+  Future<void> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedToken = prefs.getString('token');
+
+    setState(() {
+      token = storedToken;
+    });
+  }
+
+  @override
+  void initState() {
+    getToken();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
@@ -29,15 +54,46 @@ class HadithAnalysis extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _AnalyzeButton(
-              onTap: () {
-                tapped = true;
-                context.read<HadithAnalysisCubit>().analyzeHadith(
-                  attribution: attribution,
-                  hadith: hadith,
-                  grade: grade,
-                  reference: reference,
-                );
-              },
+              onTap:
+                  token == null
+                      ? () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            //  behavior: SnackBarBehavior.floating,
+                            content: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                                  textDirection: TextDirection.rtl,
+                                  style: TextStyle(
+                                    color: ColorsManager.secondaryBackground,
+                                  ),
+                                ),
+                                IconButton(
+                                  onPressed:
+                                      () =>
+                                          context.pushNamed(Routes.loginScreen),
+                                  icon: Icon(
+                                    Icons.login,
+                                    color: ColorsManager.secondaryBackground,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            backgroundColor: ColorsManager.primaryGreen,
+                          ),
+                        );
+                      }
+                      : () {
+                        tapped = true;
+                        context.read<HadithAnalysisCubit>().analyzeHadith(
+                          attribution: widget.attribution,
+                          hadith: widget.hadith,
+                          grade: widget.grade,
+                          reference: widget.reference,
+                        );
+                      },
             ),
             SizedBox(height: 20.h),
             BlocConsumer<HadithAnalysisCubit, HadithAnalysisState>(
@@ -193,10 +249,7 @@ class _ResultCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(
-                  icon,
-                  size: 20.sp,
-                  color: ColorsManager.hadithWeak,),
+                Icon(icon, size: 20.sp, color: ColorsManager.hadithWeak),
                 SizedBox(width: 8.w),
                 Text(
                   title,
@@ -221,8 +274,10 @@ class _ResultCard extends StatelessWidget {
         ),
       ),
     );
-  }}
-  class _ShimmerResultCard extends StatelessWidget {
+  }
+}
+
+class _ShimmerResultCard extends StatelessWidget {
   const _ShimmerResultCard();
 
   @override
@@ -283,5 +338,3 @@ class _ResultCard extends StatelessWidget {
     );
   }
 }
-
-

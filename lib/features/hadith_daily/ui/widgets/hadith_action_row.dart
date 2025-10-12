@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
@@ -9,8 +12,10 @@ import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
+import 'package:shared_preferences/shared_preferences.dart'
+    show SharedPreferences;
 
-class HadithActionsRow extends StatelessWidget {
+class HadithActionsRow extends StatefulWidget {
   final String hadith;
   final String bookName;
   final String bookSlug;
@@ -36,16 +41,33 @@ class HadithActionsRow extends StatelessWidget {
   });
 
   @override
+  State<HadithActionsRow> createState() => _HadithActionsRowState();
+}
+
+bool hasToken = false;
+
+class _HadithActionsRowState extends State<HadithActionsRow> {
+  Future<void> _checkToken(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    final storedToken = prefs.getString('token');
+    if (storedToken != null) {
+      hasToken = true;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _checkToken(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-  providers: [
-    BlocProvider(
-      create: (_) => getIt<GetCollectionsBookmarkCubit>(),
-    ),
-    BlocProvider(
-      create: (_) => getIt<AddCubitCubit>(),
-    ),
-  ],
+      providers: [
+        BlocProvider(create: (_) => getIt<GetCollectionsBookmarkCubit>()),
+        BlocProvider(create: (_) => getIt<AddCubitCubit>()),
+      ],
       child: Container(
         padding: EdgeInsetsDirectional.symmetric(
           horizontal: 16.w,
@@ -62,7 +84,7 @@ class HadithActionsRow extends StatelessWidget {
               icon: Icons.copy,
               label: "نسخ",
               onTap: () {
-                Clipboard.setData(ClipboardData(text: hadith));
+                Clipboard.setData(ClipboardData(text: widget.hadith));
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     behavior: SnackBarBehavior.floating,
@@ -75,10 +97,11 @@ class HadithActionsRow extends StatelessWidget {
               icon: Icons.share,
               label: "مشاركة",
               onTap: () async {
-                await Share.share(hadith, subject: "شارك الحديث");
+                await Share.share(widget.hadith, subject: "شارك الحديث");
               },
             ),
-            if (!isBookmarked)
+
+            if (!widget.isBookmarked)
               BlocConsumer<AddCubitCubit, AddCubitState>(
                 listener: (context, state) {
                   if (!context.mounted) return;
@@ -115,30 +138,69 @@ class HadithActionsRow extends StatelessWidget {
                     icon: Icons.bookmark,
                     label: "حفظ",
                     onTap: () {
-showDialog(
-  context: context,
-  builder: (dialogContext) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider.value(value: context.read<GetCollectionsBookmarkCubit>()),
-        BlocProvider.value(value: context.read<AddCubitCubit>()),
-      ],
-      child: AddToFavoritesDialog(
-        bookName: bookName,
-        bookSlug: bookSlug,
-        chapter: chapter,
-        hadithNumber: hadithNumber,
-        hadithText: hadith,
-        id: id,
-      ),
-    );
-  },
-);
-
+                      hasToken
+                          ? showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return MultiBlocProvider(
+                                providers: [
+                                  BlocProvider.value(
+                                    value:
+                                        context
+                                            .read<
+                                              GetCollectionsBookmarkCubit
+                                            >(),
+                                  ),
+                                  BlocProvider.value(
+                                    value: context.read<AddCubitCubit>(),
+                                  ),
+                                ],
+                                child: AddToFavoritesDialog(
+                                  bookName: widget.bookName,
+                                  bookSlug: widget.bookSlug,
+                                  chapter: widget.chapter,
+                                  hadithNumber: widget.hadithNumber,
+                                  hadithText: widget.hadith,
+                                  id: widget.id,
+                                ),
+                              );
+                            },
+                          )
+                          : ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              //  behavior: SnackBarBehavior.floating,
+                              content: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                                    textDirection: TextDirection.rtl,
+                                    style: TextStyle(
+                                      color: ColorsManager.secondaryBackground,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed:
+                                        () => context.pushNamed(
+                                          Routes.loginScreen,
+                                        ),
+                                    icon: Icon(
+                                      Icons.login,
+                                      color: ColorsManager.secondaryBackground,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              backgroundColor: ColorsManager.primaryGreen,
+                            ),
+                          );
                     },
                   );
                 },
               ),
+
+  
           ],
         ),
       ),

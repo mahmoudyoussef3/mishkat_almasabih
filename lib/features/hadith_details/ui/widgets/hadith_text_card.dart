@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class HadithTextCard extends StatelessWidget {
@@ -18,7 +20,6 @@ class HadithTextCard extends StatelessWidget {
           colors: [
             ColorsManager.secondaryBackground,
             ColorsManager.primaryPurple.withOpacity(0.1),
-            //   ColorsManager.primaryGold.withOpacity(0.02),
           ],
         ),
         borderRadius: BorderRadius.circular(24.r),
@@ -36,6 +37,7 @@ class HadithTextCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
+          /// الخلفية الزخرفية
           Positioned.fill(
             child: Opacity(
               opacity: 0.0005,
@@ -48,7 +50,8 @@ class HadithTextCard extends StatelessWidget {
               ),
             ),
           ),
-          // Decorative corner elements
+
+          /// الأيقونة الذهبية العلوية
           Positioned(
             top: 0,
             right: 0,
@@ -70,11 +73,11 @@ class HadithTextCard extends StatelessWidget {
             ),
           ),
 
-          // Main text content
+          /// النص والمحتوى
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Hadith label
+              /// عنوان الكارد
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
                 decoration: BoxDecoration(
@@ -108,7 +111,7 @@ class HadithTextCard extends StatelessWidget {
 
               SizedBox(height: 20.h),
 
-              // Hadith text with enhanced typography
+              /// نص الحديث
               Text(
                 hadithText,
                 textAlign: TextAlign.right,
@@ -120,9 +123,76 @@ class HadithTextCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+
+              SizedBox(height: 20.h),
+
+              /// أيقونات النسخ والمشاركة والإضافة للمفضلة
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Wrap(
+                  spacing: 10.w,
+                  children: [
+                    _buildActionIcon(
+                      context,
+                      icon: Icons.copy_rounded,
+                      color: ColorsManager.primaryPurple,
+                      tooltip: "نسخ الحديث",
+                     onTap: () {
+                Clipboard.setData(ClipboardData(text: hadithText));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    content: Text("تم نسخ الحديث"),
+                  ),
+                );
+              },
+                    ),
+                    _buildActionIcon(
+                      context,
+                      icon: Icons.share_rounded,
+                      color: ColorsManager.primaryGreen,
+                      tooltip: "مشاركة الحديث",
+                      onTap: () async {
+                await Share.share(hadithText, subject: "شارك الحديث");
+              },
+                    ),
+                 
+                  ],
+                ),
+              ),
             ],
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildActionIcon(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required String tooltip,
+    required VoidCallback onTap,
+  }) {
+    return Tooltip(
+      message: tooltip,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12.r),
+        child: Container(
+          width: 36.w,
+          height: 36.h,
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12.r),
+            border: Border.all(color: color.withOpacity(0.2)),
+          ),
+          child: Icon(
+            icon,
+            color: color,
+            size: 20.sp,
+          ),
+        ),
       ),
     );
   }

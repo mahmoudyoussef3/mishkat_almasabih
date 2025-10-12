@@ -13,7 +13,7 @@ class ChapterAhadithCard extends StatelessWidget {
     this.narrator,
     this.grade,
     this.reference,
-    required this.bookName,
+     this.bookName,
     this.hadithCategory,
   });
 
@@ -22,7 +22,7 @@ class ChapterAhadithCard extends StatelessWidget {
   final String? narrator;
   final String? grade;
   final String? reference;
-  final String bookName;
+  final String? bookName;
   final String? hadithCategory;
 
   @override
@@ -198,29 +198,30 @@ class ChapterAhadithCard extends StatelessWidget {
                 // Enhanced book and chapter pills
                 Row(
                   children: [
-                    if (bookName.isNotEmpty)
-                      Flexible(
-                        child: _buildGradientPill(
-                          text: bookName,
-                          colors: [
-                            ColorsManager.primaryPurple.withOpacity(0.8),
-                            ColorsManager.primaryPurple.withOpacity(0.6),
-                          ],
-                          textColor: ColorsManager.white,
+                      if (reference != null && reference!.isNotEmpty)
+                        Flexible(
+                          child: _buildGradientPill(
+                            text: reference!,
+                            colors: [
+                              gradeColor.withOpacity(0.8),
+                              gradeColor.withOpacity(0.6),
+                            ],
+                            textColor: ColorsManager.white,
+                          ),
                         ),
-                      ),
                     SizedBox(width: 12.w),
-                    if (reference != null && reference!.isNotEmpty)
-                      Flexible(
-                        child: _buildGradientPill(
-                          text: reference!,
-                          colors: [
-                            gradeColor.withOpacity(0.8),
-                            gradeColor.withOpacity(0.6),
-                          ],
-                          textColor: ColorsManager.white,
-                        ),
+                    if (bookName!=null &&bookName!.isNotEmpty)
+
+                    Flexible(
+                      child: _buildGradientPill(
+                        text: bookName!,
+                        colors: [
+                          ColorsManager.primaryPurple.withOpacity(0.8),
+                          ColorsManager.primaryPurple.withOpacity(0.6),
+                        ],
+                        textColor: ColorsManager.white,
                       ),
+                    ),
                   ],
                 ),
 

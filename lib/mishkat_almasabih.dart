@@ -8,28 +8,27 @@ import 'core/routing/routes.dart';
 class MishkatAlmasabih extends StatelessWidget {
   final AppRouter appRouter;
   final bool isFirstTime;
-  final bool isLoggedIn;
-  
+//  final bool isLoggedIn;
+
   const MishkatAlmasabih({
     super.key,
     required this.appRouter,
     required this.isFirstTime,
-    required this.isLoggedIn,
+ //   required this.isLoggedIn,
   });
 
   String _getStartScreen() {
     log("Determining start screen...");
-    
+
     if (isFirstTime) {
       log("Going to onboarding screen");
       return Routes.onBoardingScreen;
-    } else if (!isLoggedIn) {
+    } 
+    /*else if (!isLoggedIn) {
       log("Going to login screen");
       return Routes.loginScreen;
-    }
-    
-    
-     else {
+    } 
+    */else {
       log("Going to splash screen");
       return Routes.splashScreen;
     }
@@ -38,8 +37,8 @@ class MishkatAlmasabih extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     log("isFirstTime is $isFirstTime");
-    log("is logged in $isLoggedIn");
-    
+    //log("is logged in $isLoggedIn");
+
     final startScreen = _getStartScreen();
     log("Start screen: $startScreen");
 
@@ -58,19 +57,18 @@ class MishkatAlmasabih extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: _getStartScreen(),
           onGenerateRoute: appRouter.generateRoute,
-          
+
           onUnknownRoute: (settings) {
             log("Unknown route: ${settings.name}");
             return MaterialPageRoute(
-              builder: (context) => Scaffold(
-                appBar: AppBar(title: const Text('خطأ')),
-                body: const Center(
-                  child: Text('الصفحة غير موجودة'),
-                ),
-              ),
+              builder:
+                  (context) => Scaffold(
+                    appBar: AppBar(title: const Text('خطأ')),
+                    body: const Center(child: Text('الصفحة غير موجودة')),
+                  ),
             );
           },
-          
+
           // إضافة home fallback
           home: null, // تأكد إن home = null عشان يستخدم initialRoute
         );
