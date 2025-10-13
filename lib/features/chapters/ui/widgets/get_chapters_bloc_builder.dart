@@ -37,6 +37,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
               _buildStatsCards(),
               _buildSearchBar(context, controller),
+              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
 
         
               ResponsiveChapterList(
@@ -54,7 +55,6 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
         if (state is ChaptersFailure) {
           return Center(
             child: ErrorState(
-            
               error: state.errorMessage??'حدث خطأ. حاول مرة أخري'),
           );
 

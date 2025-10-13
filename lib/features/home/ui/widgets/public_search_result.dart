@@ -23,95 +23,97 @@ class PublicSearchResult extends StatelessWidget {
       builder: (context) {
         return Directionality(
           textDirection: TextDirection.rtl,
-          child: Scaffold(
-            backgroundColor: ColorsManager.primaryBackground,
-            body: CustomScrollView(
-              slivers: [
-                BuildHeaderAppBar(
-                  title: "نتائج البحث عن",
-                  description: searchQuery ?? "",
-                ),
-                SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-                BlocBuilder<EnhancedSearchCubit, EnhancedSearchState>(
-                  builder: (context, state) {
-                    if (state is EnhancedSearchLoading) {
-                      return SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => const HadithCardShimmer(),
-                          childCount: 6,
-                        ),
-                      );
-                    } else if (state is EnhancedSearchLoaded) {
-                      final hadiths = state.enhancedSearch.results ?? [];
-                      if (hadiths.isEmpty) {
-                        return SliverToBoxAdapter(
-                          child: Center(
-                            child: EmptyState(
-                              subtitle: 'حاول تغيير كلمات البحث',
-                            ),
+          child: SafeArea(
+            child: Scaffold(
+              backgroundColor: ColorsManager.primaryBackground,
+              body: CustomScrollView(
+                slivers: [
+                  BuildHeaderAppBar(
+                    title: "نتائج البحث عن",
+                    description: searchQuery ?? "",
+                  ),
+                  SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+                  BlocBuilder<EnhancedSearchCubit, EnhancedSearchState>(
+                    builder: (context, state) {
+                      if (state is EnhancedSearchLoading) {
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) => const HadithCardShimmer(),
+                            childCount: 6,
                           ),
                         );
-                      }
-
-                      return SliverList.separated(
-                        itemCount: hadiths.length,
-                        separatorBuilder: (_, __) => IslamicSeparator(),
-                        itemBuilder: (context, index) {
-                          final hadith = hadiths[index];
-                          return GestureDetector(
-                            onTap:
-                                () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => MultiBlocProvider(
-                                          providers: [
-                                            BlocProvider(
-                                              create:
-                                                  (context) =>
-                                                      getIt<
-                                                          GetCollectionsBookmarkCubit
-                                                        >()
-                                                        ..getBookMarkCollections(),
-                                            ),
-                                            BlocProvider(
-                                              create:
-                                                  (context) =>
-                                                      getIt<AddCubitCubit>(),
-                                            ),
-                                          ],
-                                          child: HadithResultDetails(
-                                            enhancedHadithModel: hadith,
-                                          ),
-                                        ),
-                                  ),
-                                ),
-
-                            child: ChapterAhadithCard(
-                              number: hadith.id ?? '',
-
-                              //bookName:  '',
-                              text: hadith.hadeeth ?? '',
-                              narrator: hadith.attribution ?? '',
-                              grade:
-                                  hadith.grade != null
-                                      ? gradeStringArabic(hadith.grade ?? '')
-                                      : '${index + 1}',
-                              reference: hadith.reference ?? '',
+                      } else if (state is EnhancedSearchLoaded) {
+                        final hadiths = state.enhancedSearch.results ?? [];
+                        if (hadiths.isEmpty) {
+                          return SliverToBoxAdapter(
+                            child: Center(
+                              child: EmptyState(
+                                subtitle: 'حاول تغيير كلمات البحث',
+                              ),
                             ),
                           );
-                        },
-                      );
-                    } else if (state is EnhancedSearchError) {
-                      return SliverToBoxAdapter(
-                        child: Center(child: Text("خطأ: ${state.message}")),
-                      );
-                    }
-
-                    return SliverToBoxAdapter(child: SizedBox.shrink());
-                  },
-                ),
-              ],
+                        }
+            
+                        return SliverList.separated(
+                          itemCount: hadiths.length,
+                          separatorBuilder: (_, __) => IslamicSeparator(),
+                          itemBuilder: (context, index) {
+                            final hadith = hadiths[index];
+                            return GestureDetector(
+                              onTap:
+                                  () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => MultiBlocProvider(
+                                            providers: [
+                                              BlocProvider(
+                                                create:
+                                                    (context) =>
+                                                        getIt<
+                                                            GetCollectionsBookmarkCubit
+                                                          >()
+                                                          ..getBookMarkCollections(),
+                                              ),
+                                              BlocProvider(
+                                                create:
+                                                    (context) =>
+                                                        getIt<AddCubitCubit>(),
+                                              ),
+                                            ],
+                                            child: HadithResultDetails(
+                                              enhancedHadithModel: hadith,
+                                            ),
+                                          ),
+                                    ),
+                                  ),
+            
+                              child: ChapterAhadithCard(
+                                number: hadith.id ?? '',
+            
+                                //bookName:  '',
+                                text: hadith.hadeeth ?? '',
+                                narrator: hadith.attribution ?? '',
+                                grade:
+                                    hadith.grade != null
+                                        ? gradeStringArabic(hadith.grade ?? '')
+                                        : '${index + 1}',
+                                reference: hadith.reference ?? '',
+                              ),
+                            );
+                          },
+                        );
+                      } else if (state is EnhancedSearchError) {
+                        return SliverToBoxAdapter(
+                          child: Center(child: Text("خطأ: ${state.message}")),
+                        );
+                      }
+            
+                      return SliverToBoxAdapter(child: SizedBox.shrink());
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

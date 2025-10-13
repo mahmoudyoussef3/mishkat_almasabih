@@ -49,7 +49,7 @@ class MishkatAlmasabih extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           navigatorKey: navigatorKey,
-          title: 'Mishkat Almasabih',
+          title: 'مشكاة الأحاديث',
           theme: ThemeData(
             fontFamily: 'Cairo',
             useMaterial3: true, // إضافة Material 3

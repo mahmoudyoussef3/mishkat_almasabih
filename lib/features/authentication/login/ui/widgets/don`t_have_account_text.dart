@@ -14,7 +14,7 @@ class DontHaveAccountText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'لديك حساب بالفعل؟ ',
+          'ليس لديك حساب ؟ ',
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,

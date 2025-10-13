@@ -25,8 +25,7 @@ Future<void> main() async {
   await LocalNotification.init();
   //await PushNotification.getApnsToken();
 
-    
-    // إعداد tap على النوتيفيكيشن
+      // إعداد tap على النوتيفيكيشن
     PushNotification.setupOnTapNotification();
     
     // معالجة لو الأبلكيشن فتح من نوتيفيكيشن (terminated state)

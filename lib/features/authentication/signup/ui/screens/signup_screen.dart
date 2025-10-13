@@ -24,7 +24,8 @@ class SignupScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-                 
+                               SizedBox(height: 40.h),
+
               BuildSignupHeader(),
           
               SizedBox(height: 24.h),

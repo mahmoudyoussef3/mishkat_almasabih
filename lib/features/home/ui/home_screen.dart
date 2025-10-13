@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
-import 'package:mishkat_almasabih/core/networking/api_constants.dart'
-    show bookNamesArabic;
+import 'package:mishkat_almasabih/core/networking/api_constants.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/widgets/double_tap_to_exot.dart';
 import 'package:mishkat_almasabih/core/widgets/miskat_drawer.dart';
@@ -102,14 +101,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: BlocBuilder<SearchHistoryCubit, SearchHistoryState>(
                       builder: (context, state) {
                         if (state is SearchHistoryLoading) {
-                          return Container(
+                          return SizedBox(
                             height: 100.h,
                             child: const Center(
                               child: CircularProgressIndicator(strokeWidth: 2),
                             ),
                           );
                         } else if (state is SearchHistoryError) {
-                          return Container(
+                          return SizedBox(
                             height: 60.h,
                             child: Center(
                               child: Text(
@@ -122,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         } else if (state is SearchHistorySuccess) {
                           if (state.hisoryItems.isEmpty) {
-                            return Container(
+                            return SizedBox(
                               height: 80.h,
                               child: Center(
                                 child: Column(
@@ -181,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     const Spacer(),
                                     GestureDetector(
-                                      onTap: _hideSearchHistory,
+                                      onTap: hideSearchHistory,
                                       child: Icon(
                                         Icons.close,
                                         size: 18.r,
@@ -213,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     final item = state.hisoryItems[index];
                                     return InkWell(
                                       onTap: () {
-                                        _hideSearchHistory();
+                                        hideSearchHistory();
                                         context.pushNamed(
                                           Routes.publicSearchSCreen,
                                           arguments: item.title,
@@ -319,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   child: TextButton(
                                     onPressed: () {
-                                      _hideSearchHistory();
+                                      hideSearchHistory();
                                       // Navigate to full search history page if needed
                                     },
                                     child: Text(
@@ -347,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Overlay.of(context).insert(_overlayEntry!);
   }
 
-  void _hideSearchHistory() {
+  void hideSearchHistory() {
     setState(() {
       showSearch = false;
     });
@@ -356,49 +355,50 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-   // SaveHadithDailyRepo().getHadith();
     return DoubleTapToExitApp(
       myScaffoldScreen: Directionality(
         textDirection: TextDirection.rtl,
-        child:
-           RefreshIndicator(
-        onRefresh: () async {
-          setState(() {
-            SaveHadithDailyRepo().getHadith();
-          });
-        },
-    
-          child: Scaffold(
-            drawer: MishkatDrawer(),
+        child: RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              SaveHadithDailyRepo().getHadith();
+            });
+          },
+
+          child: SafeArea(
+            child: Scaffold(
+              drawer: MishkatDrawer(
                 
-            floatingActionButton: FloatingActionButton.extended(
-              backgroundColor: ColorsManager.primaryGreen,
-              foregroundColor: ColorsManager.secondaryBackground,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) => BlocProvider(
-                          create: (context) => getIt<GetLibraryStatisticsCubit>(),
-                          child: LibraryBooksScreen(),
-                        ),
-                  ),
-                );
-              },
-              label: Row(
-                children: [
-                  Icon(Icons.local_library_sharp),
-                                  SizedBox(width: 4.w),
-          
-                  Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
-                
-                  
-                ],
               ),
+            
+              floatingActionButton: FloatingActionButton.extended(
+                backgroundColor: ColorsManager.primaryGreen,
+                foregroundColor: ColorsManager.secondaryBackground,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => BlocProvider(
+                            create:
+                                (context) => getIt<GetLibraryStatisticsCubit>(),
+                            child: LibraryBooksScreen(),
+                          ),
+                    ),
+                  );
+                },
+                label: Row(
+                  children: [
+                    Icon(Icons.local_library_sharp),
+                    SizedBox(width: 4.w),
+            
+                    Text('المكتبة', style: TextStyle(fontSize: 16.sp)),
+                  ],
+                ),
+              ),
+              backgroundColor: ColorsManager.secondaryBackground,
+              body: _buildBody(),
             ),
-            backgroundColor: ColorsManager.secondaryBackground,
-            body: _buildBody(),
           ),
         ),
       ),
@@ -413,13 +413,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return NotificationListener<ScrollNotification>(
       onNotification: (scrollNotification) {
         if (showSearch) {
-          _hideSearchHistory();
+          hideSearchHistory();
         }
         return false;
       },
       child: GestureDetector(
         onTap: () {
-          if (showSearch) _hideSearchHistory();
+          if (showSearch) hideSearchHistory();
         },
         child: CustomScrollView(
           slivers: [
@@ -537,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
       home: true,
       bottomNav: true,
       title: 'مشكاة الأحاديث',
-      description: 'مصادر الأحاديث النبوية الشريفة',
+      description: 'نُحْيِي السُّنَّةَ... فَتُحْيِينَا',
     );
   }
 
@@ -589,12 +589,12 @@ class _HomeScreenState extends State<HomeScreen> {
               );
               _showSearchHistory();
             } else {
-              _hideSearchHistory();
+              hideSearchHistory();
             }
           },
           controller: _controller,
           onSearch: (query) {
-            _hideSearchHistory();
+            hideSearchHistory();
 
             final trimmedQuery = query.trim();
             if (trimmedQuery.isNotEmpty) {

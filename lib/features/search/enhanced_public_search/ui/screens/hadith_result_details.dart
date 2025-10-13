@@ -53,253 +53,255 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
       create: (context) => getIt<AddCubitCubit>(),
       child: Builder(
         builder: (context) {
-          return Directionality(
-            textDirection: TextDirection.rtl,
-            child: Scaffold(
-              floatingActionButton: Builder(
-                builder: (context) {
-                  return FloatingActionButton.extended(
-                    onPressed:
-                        token == null
-                            ? () {
+          return SafeArea(
+            child: Directionality(
+              textDirection: TextDirection.rtl,
+              child: Scaffold(
+                floatingActionButton: Builder(
+                  builder: (context) {
+                    return FloatingActionButton.extended(
+                      onPressed:
+                          token == null
+                              ? () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    //  behavior: SnackBarBehavior.floating,
+                                    content: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                                          textDirection: TextDirection.rtl,
+                                          style: TextStyle(
+                                            color:
+                                                ColorsManager.secondaryBackground,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed:
+                                              () => context.pushNamed(
+                                                Routes.loginScreen,
+                                              ),
+                                          icon: Icon(
+                                            Icons.login,
+                                            color:
+                                                ColorsManager.secondaryBackground,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    backgroundColor: ColorsManager.primaryGreen,
+                                  ),
+                                );
+                              }
+                              : () {
+                                context.pushNamed(
+                                  Routes.serag,
+                                  arguments: SeragRequestModel(
+                                    hadith: Hadith(
+                                      hadeeth:
+                                          widget.enhancedHadithModel.hadeeth ??
+                                          '',
+                                      grade_ar:
+                                          widget.enhancedHadithModel.grade ?? '',
+                                      source:
+                                          widget.enhancedHadithModel.reference ??
+                                          "",
+                                      takhrij_ar:
+                                          widget
+                                              .enhancedHadithModel
+                                              .attribution ??
+                                          '',
+                                    ),
+                                    messages: [
+                                      Message(role: 'user', content: ''),
+                                    ],
+                                  ),
+                                );
+                              },
+                      backgroundColor: ColorsManager.primaryPurple,
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      icon: CircleAvatar(
+                        radius: 20.r,
+                        backgroundImage: const AssetImage(
+                          'assets/images/serag_logo.jpg',
+                        ),
+                        backgroundColor: Colors.transparent,
+                      ),
+                      label: Text(
+                        "اسأل سراج",
+                        style: TextStyle(
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold,
+                          color: ColorsManager.secondaryBackground,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                backgroundColor: ColorsManager.primaryBackground,
+                body: CustomScrollView(
+                  slivers: [
+                    BuildHeaderAppBar(
+                      title: 'معلومات عن الحديث',
+            
+                      actions: [
+                        AppBarActionButton(
+                          icon: Icons.bookmark_border_rounded,
+                          onPressed: () {
+                            if (token == null) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  //  behavior: SnackBarBehavior.floating,
+                                  backgroundColor: ColorsManager.primaryGreen,
                                   content: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
+                                      const Text(
                                         'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
                                         textDirection: TextDirection.rtl,
-                                        style: TextStyle(
-                                          color:
-                                              ColorsManager.secondaryBackground,
-                                        ),
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                       IconButton(
                                         onPressed:
                                             () => context.pushNamed(
                                               Routes.loginScreen,
                                             ),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.login,
-                                          color:
-                                              ColorsManager.secondaryBackground,
+                                          color: Colors.white,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  backgroundColor: ColorsManager.primaryGreen,
                                 ),
+                              );
+                            } else {
+                              showDialog(
+                                context: context,
+                                builder: (dialogContext) {
+                                  return MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider(
+                                        create: (_) => getIt<AddCubitCubit>(),
+                                      ),
+                                      BlocProvider(
+                                        create:
+                                            (_) =>
+                                                getIt<
+                                                    GetCollectionsBookmarkCubit
+                                                  >()
+                                                  ..getBookMarkCollections(),
+                                      ),
+                                    ],
+                                    child: AddToFavoritesDialog(
+                                      chapter: "",
+                                      bookSlug: "",
+                                      hadithNumber:
+                                          widget.enhancedHadithModel.id ?? "",
+                                      id:
+                                          (Random().nextInt(10000000) + 1)
+                                              .toString(),
+                                      bookName:
+                                          widget.enhancedHadithModel.reference ??
+                                          "",
+                                      hadithText:
+                                          widget.enhancedHadithModel.hadeeth ??
+                                          "",
+                                    ),
+                                  );
+                                },
                               );
                             }
-                            : () {
-                              context.pushNamed(
-                                Routes.serag,
-                                arguments: SeragRequestModel(
-                                  hadith: Hadith(
-                                    hadeeth:
-                                        widget.enhancedHadithModel.hadeeth ??
-                                        '',
-                                    grade_ar:
-                                        widget.enhancedHadithModel.grade ?? '',
-                                    source:
-                                        widget.enhancedHadithModel.reference ??
-                                        "",
-                                    takhrij_ar:
-                                        widget
-                                            .enhancedHadithModel
-                                            .attribution ??
-                                        '',
-                                  ),
-                                  messages: [
-                                    Message(role: 'user', content: ''),
-                                  ],
-                                ),
-                              );
-                            },
-                    backgroundColor: ColorsManager.primaryPurple,
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                          },
+                        ),
+                      ],
                     ),
-                    icon: CircleAvatar(
-                      radius: 20.r,
-                      backgroundImage: const AssetImage(
-                        'assets/images/serag_logo.jpg',
-                      ),
-                      backgroundColor: Colors.transparent,
-                    ),
-                    label: Text(
-                      "اسأل سراج",
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: ColorsManager.secondaryBackground,
-                      ),
-                    ),
-                  );
-                },
-              ),
-              backgroundColor: ColorsManager.primaryBackground,
-              body: CustomScrollView(
-                slivers: [
-                  BuildHeaderAppBar(
-                    title: 'معلومات عن الحديث',
-
-                    actions: [
-                      AppBarActionButton(
-                        icon: Icons.bookmark_border_rounded,
-                        onPressed: () {
-                          if (token == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: ColorsManager.primaryGreen,
-                                content: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    const Text(
-                                      'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
-                                      textDirection: TextDirection.rtl,
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    IconButton(
-                                      onPressed:
-                                          () => context.pushNamed(
-                                            Routes.loginScreen,
-                                          ),
-                                      icon: const Icon(
-                                        Icons.login,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
+            
+                    SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+            
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (data.hadeeth != null)
+                              Container(
+                                margin: EdgeInsets.only(bottom: 10.h),
+                                child: ResultHadithContentCard(
+                                  data: widget.enhancedHadithModel,
                                 ),
                               ),
-                            );
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (dialogContext) {
-                                return MultiBlocProvider(
-                                  providers: [
-                                    BlocProvider(
-                                      create: (_) => getIt<AddCubitCubit>(),
-                                    ),
-                                    BlocProvider(
-                                      create:
-                                          (_) =>
-                                              getIt<
-                                                  GetCollectionsBookmarkCubit
-                                                >()
-                                                ..getBookMarkCollections(),
-                                    ),
-                                  ],
-                                  child: AddToFavoritesDialog(
-                                    chapter: "",
-                                    bookSlug: "",
-                                    hadithNumber:
-                                        widget.enhancedHadithModel.id ?? "",
-                                    id:
-                                        (Random().nextInt(10000000) + 1)
-                                            .toString(),
-                                    bookName:
-                                        widget.enhancedHadithModel.reference ??
-                                        "",
-                                    hadithText:
-                                        widget.enhancedHadithModel.hadeeth ??
-                                        "",
-                                  ),
-                                );
-                              },
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-
-                  SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          if (data.hadeeth != null)
+                            Column(
+                              children: [
+                                SizedBox(height: 5.h),
+                                Divider(
+                                  endIndent: 30.w,
+                                  indent: 30.w,
+                                  color: ColorsManager.gray,
+                                ),
+                                SizedBox(height: 5.h),
+                              ],
+                            ),
+                            searchHadithAttributionAndGrade(
+                              enhancedHadithModel: widget.enhancedHadithModel,
+                            ),
+                            Column(
+                              children: [
+                                SizedBox(height: 5.h),
+                                Divider(
+                                  endIndent: 30.w,
+                                  indent: 30.w,
+                                  color: ColorsManager.gray,
+                                ),
+                                SizedBox(height: 5.h),
+                              ],
+                            ),
+            
+                            // Enhanced tabs section
                             Container(
-                              margin: EdgeInsets.only(bottom: 10.h),
-                              child: ResultHadithContentCard(
+                              margin: EdgeInsets.only(bottom: 20.h),
+                              child: _buildEnhancedTabsSection(),
+                            ),
+            
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 8.h,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16.r),
+                                border: Border.all(color: ColorsManager.gray),
+                              ),
+                              child: ResultHadithTabContent(
+                                selectedTab: selectedTab,
                                 data: widget.enhancedHadithModel,
                               ),
                             ),
-                          Column(
-                            children: [
-                              SizedBox(height: 5.h),
-                              Divider(
-                                endIndent: 30.w,
-                                indent: 30.w,
-                                color: ColorsManager.gray,
-                              ),
-                              SizedBox(height: 5.h),
-                            ],
-                          ),
-                          searchHadithAttributionAndGrade(
-                            enhancedHadithModel: widget.enhancedHadithModel,
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(height: 5.h),
-                              Divider(
-                                endIndent: 30.w,
-                                indent: 30.w,
-                                color: ColorsManager.gray,
-                              ),
-                              SizedBox(height: 5.h),
-                            ],
-                          ),
-
-                          // Enhanced tabs section
-                          Container(
-                            margin: EdgeInsets.only(bottom: 20.h),
-                            child: _buildEnhancedTabsSection(),
-                          ),
-
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 8.h,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16.r),
-                              border: Border.all(color: ColorsManager.gray),
-                            ),
-                            child: ResultHadithTabContent(
-                              selectedTab: selectedTab,
-                              data: widget.enhancedHadithModel,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  /*
-                    SliverToBoxAdapter(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 20.w,
-                          vertical: 20.h,
+                          ],
                         ),
-                        child: _buildEnhancedActionsSection(),
                       ),
                     ),
-                    */
-                  SliverToBoxAdapter(child: SizedBox(height: 120.h)),
-                ],
+            
+                    /*
+                      SliverToBoxAdapter(
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 20.w,
+                            vertical: 20.h,
+                          ),
+                          child: _buildEnhancedActionsSection(),
+                        ),
+                      ),
+                      */
+                    SliverToBoxAdapter(child: SizedBox(height: 120.h)),
+                  ],
+                ),
               ),
             ),
           );

@@ -21,7 +21,6 @@ class BuildHeaderAppBar extends StatelessWidget {
   final bool pinned;
   final bool bottomNav;
   final List<Widget>? actions;
-
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -68,88 +67,86 @@ class BuildHeaderAppBar extends StatelessWidget {
             ),
 
             // Content
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Top row with leading and actions
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Leading button
-                        _buildIconButton(
-                          icon:
-                              home
-                                  ? Icons.menu_rounded
-                                  : Icons.arrow_back_ios_new_rounded,
-                          onPressed: () {
-                            if (home) {
-                              Scaffold.of(context).openDrawer();
-                            } else {
-                              context.pop();
-                            }
-                          },
-                        ),
-
-                        // Actions
-                        if (actions != null && actions!.isNotEmpty)
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children:
-                                actions!.map((action) {
-                                  return Padding(
-                                    padding: EdgeInsets.only(left: 8.w),
-                                    child: action,
-                                  );
-                                }).toList(),
-                          )
-                        else
-                          SizedBox(width: 40.w),
-                      ],
-                    ),
-
-                    // Title section (centered)
-                    Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  // Top row with leading and actions
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Leading button
+                      _buildIconButton(
+                        icon:
+                            home
+                                ? Icons.menu_rounded
+                                : Icons.arrow_back_ios_new_rounded,
+                        onPressed: () {
+                          if (home) {
+                            Scaffold.of(context).openDrawer();
+                          } else {
+                            context.pop();
+                          }
+                        },
+                      ),
+            
+                      // Actions
+                      if (actions != null && actions!.isNotEmpty)
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children:
+                              actions!.map((action) {
+                                return Padding(
+                                  padding: EdgeInsets.only(left: 8.w),
+                                  child: action,
+                                );
+                              }).toList(),
+                        )
+                      else
+                        SizedBox(width: 40.w),
+                    ],
+                  ),
+            
+                  // Title section (centered)
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyles.displaySmall.copyWith(
+                              color: ColorsManager.white,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 26.sp,
+                              letterSpacing: 0.5,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          if (description != null &&
+                              description!.isNotEmpty) ...[
+                            //   SizedBox(height: 3.h),
                             Text(
-                              title,
-                              style: TextStyles.displaySmall.copyWith(
-                                color: ColorsManager.white,
+                              description!,
+                              style: TextStyles.bodyMedium.copyWith(
+                                color: ColorsManager.white.withOpacity(0.85),
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w700,
-                                fontSize: 26.sp,
-                                letterSpacing: 0.5,
                               ),
                               textAlign: TextAlign.center,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            if (description != null &&
-                                description!.isNotEmpty) ...[
-                              //   SizedBox(height: 3.h),
-                              Text(
-                                description!,
-                                style: TextStyles.bodyMedium.copyWith(
-                                  color: ColorsManager.white.withOpacity(0.85),
-                                  fontSize: 13.sp,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
                           ],
-                        ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

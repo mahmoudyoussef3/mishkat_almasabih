@@ -35,27 +35,29 @@ class _SeragChatScreenState extends State<SeragChatScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: ColorsManager.secondaryBackground,
-        body: Column(
-          children: [
-            Expanded(
-              child: CustomScrollView(
-                controller: _scrollController,
-                slivers: [
-                  BuildHeaderAppBar(title: "سراج", description: "مساعد الحديث"),
-                  SliverToBoxAdapter(child: RemainingQuestionsCard()),
-                  const ChatMessagesList(),
-                  SliverToBoxAdapter(child: SizedBox(height: 10.h)),
-                ],
-              ),
-            ),
-           ChatInputSection(
-                  controller: _controller,
-                  scrollToBottom: _scrollToBottom,
-                  model: widget.model,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: ColorsManager.secondaryBackground,
+          body: Column(
+            children: [
+              Expanded(
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    BuildHeaderAppBar(title: "سراج", description: "مساعد الحديث"),
+                    SliverToBoxAdapter(child: RemainingQuestionsCard()),
+                    const ChatMessagesList(),
+                    SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+                  ],
                 ),
-          ],
+              ),
+             ChatInputSection(
+                    controller: _controller,
+                    scrollToBottom: _scrollToBottom,
+                    model: widget.model,
+                  ),
+            ],
+          ),
         ),
       ),
     );

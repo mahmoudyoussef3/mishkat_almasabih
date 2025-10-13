@@ -78,7 +78,7 @@ class _MishkatDrawerState extends State<MishkatDrawer> {
                     ),
                     SizedBox(height: 6.h),
                     Text(
-                      'تطبيق شامل للأحاديث النبوية',
+                      'نُحْيِي السُّنَّةَ... فَتُحْيِينَا',
                       style: TextStyle(
                         color: ColorsManager.white.withOpacity(0.9),
                         fontSize: 15.sp,

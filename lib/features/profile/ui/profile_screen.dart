@@ -8,6 +8,7 @@ import 'package:mishkat_almasabih/features/profile/ui/widgets/profile_screen_shi
 import 'package:mishkat_almasabih/features/profile/ui/widgets/section_title.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../core/routing/routes.dart';
 import '../logic/cubit/profile_cubit.dart';
 import 'widgets/profile_header.dart';
 
@@ -54,15 +55,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             builder: (context, state) {
               return CustomScrollView(
                 slivers: [
-                  /// 🔹 هنا الجزء اللي اتعدل — Profile Header فقط
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 10.h),
-                      child: token == null
-                          ? _buildLoginPrompt(context)
-                          : _buildProfileHeaderByState(state),
-                    ),
-                  ),
+                  token == null ?   SliverPadding(
+                    padding: EdgeInsets.only(top: 10.h),
+                    sliver:SliverToBoxAdapter(
+                      child:
+                         _buildLoginPrompt(context)
+                         
+                    )
+                  ):_buildProfileHeaderByState(state), 
+                
 
                   /// باقي الشاشة ثابت
                   SliverToBoxAdapter(
@@ -122,16 +123,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   /// 🔹 Profile Header logic
-  Widget _buildProfileHeaderByState(ProfileState state) {
-    if (state is ProfileLoading) {
-      return const ProfileShimmerScreen();
-    } else if (state is ProfileError) {
-      return Center(child: ErrorState(error: state.message));
-    } else if (state is ProfileLoaded) {
-      return ProfileHeader(user: state.user);
-    }
-    return const SizedBox.shrink();
+Widget _buildProfileHeaderByState(ProfileState state) {
+  if (state is ProfileLoading) {
+    return const SliverToBoxAdapter(
+      child: ProfileShimmerScreen(),
+    );
+  } else if (state is ProfileError) {
+    return SliverToBoxAdapter(
+      child: Center(child: ErrorState(error: state.message)),
+    );
+  } else if (state is ProfileLoaded) {
+    return ProfileHeader(user: state.user); 
   }
+  return const SliverToBoxAdapter(
+    child: SizedBox.shrink(),
+  );
+}
 
   /// 🔹 واجهة تسجيل الدخول فقط للهيدر
   Widget _buildLoginPrompt(BuildContext context) {
@@ -165,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
+                Navigator.pushNamed(context,Routes.loginScreen);
               },
               child: Text(
                 "تسجيل الدخول",

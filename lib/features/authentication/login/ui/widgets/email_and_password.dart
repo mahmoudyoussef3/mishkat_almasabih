@@ -14,7 +14,7 @@ class EmailAndPassword extends StatefulWidget {
 }
 
 class _EmailAndPasswordState extends State<EmailAndPassword> {
-  bool isObscureText = true;
+  bool isObscureText = false;
 
   late TextEditingController passwordController;
 

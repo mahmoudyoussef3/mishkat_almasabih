@@ -36,9 +36,12 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
     SaveHadithDailyRepo().getHadith();
     return Directionality(
         textDirection: TextDirection.rtl,
-        child: Scaffold(
-          backgroundColor: ColorsManager.secondaryBackground,
-          body: _buildBody(),
+        child: SafeArea(
+          
+          child: Scaffold(
+            backgroundColor: ColorsManager.secondaryBackground,
+            body: _buildBody(),
+          ),
         ),
       );
   }
@@ -68,7 +71,6 @@ class _HomeScreenState extends State<LibraryBooksScreen> {
       slivers: [
         _buildHeaderSection(),
         SliverToBoxAdapter(child: SizedBox(height: 8.h)),
-      // _buildDividerSection(),
         _buildStatisticsSection(state),
         _buildDividerSection(),
         _buildCategoriesSection(state),

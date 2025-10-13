@@ -14,8 +14,8 @@ class SignupForm extends StatefulWidget {
 }
 
 class _SignupFormState extends State<SignupForm> {
-  bool isPasswordObscureText = true;
-  bool isPasswordConfirmationObscureText = true;
+  bool isPasswordObscureText = false;
+  bool isPasswordConfirmationObscureText = false;
 
   late TextEditingController passwordController;
   @override

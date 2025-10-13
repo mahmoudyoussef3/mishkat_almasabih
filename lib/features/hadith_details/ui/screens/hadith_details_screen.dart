@@ -115,302 +115,259 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       ],
       child: Directionality(
         textDirection: TextDirection.rtl,
-        child: Scaffold(
-          floatingActionButton: Builder(
-            builder: (context) {
-              return FloatingActionButton.extended(
-                onPressed: () {
-                  if (token == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        //  behavior: SnackBarBehavior.floating,
-                        content: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
-                              textDirection: TextDirection.rtl,
-                              style: TextStyle(
-                                color: ColorsManager.secondaryBackground,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed:
-                                  () => context.pushNamed(Routes.loginScreen),
-                              icon: Icon(
-                                Icons.login,
-                                color: ColorsManager.secondaryBackground,
-                              ),
-                            ),
-                          ],
-                        ),
-                        backgroundColor: ColorsManager.primaryGreen,
-                      ),
-                    );
-                  } else {
-                    context.pushNamed(
-                      Routes.serag,
-                      arguments: SeragRequestModel(
-                        hadith: Hadith(
-                          hadeeth: widget.hadithText ?? '',
-                          grade_ar: widget.grade ?? '',
-                          source: widget.bookName ?? '',
-                          takhrij_ar: widget.narrator ?? '',
-                        ),
-                        messages: [Message(role: 'user', content: '')],
-                      ),
-                    );
-                  }
-                },
-                backgroundColor: ColorsManager.primaryPurple,
-                elevation: 10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                icon: CircleAvatar(
-                  radius: 20.r,
-                  backgroundImage: const AssetImage(
-                    'assets/images/serag_logo.jpg',
-                  ),
-                  backgroundColor: Colors.transparent,
-                ),
-                label: Text(
-                  "اسأل سراج",
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.bold,
-                    color: ColorsManager.secondaryBackground,
-                  ),
-                ),
-              );
-            },
-          ),
-          backgroundColor: ColorsManager.secondaryBackground,
-          body: CustomScrollView(
-            slivers: [
-              BuildHeaderAppBar(
-  title: 'تفاصيل الحديث',
-  actions: [
-    AppBarActionButton(
-      icon: Icons.bookmark_border_rounded,
-      onPressed: () {
-        if (token == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: ColorsManager.primaryGreen,
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
-                    textDirection: TextDirection.rtl,
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  IconButton(
-                    onPressed: () => context.pushNamed(Routes.loginScreen),
-                    icon: const Icon(
-                      Icons.login,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        } else {
-          showDialog(
-            context: context,
-            builder: (dialogContext) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider.value(
-                    value: context.read<AddCubitCubit>(),
-                  ),
-                  BlocProvider.value(
-                    value: context.read<GetCollectionsBookmarkCubit>()
-                      ..getBookMarkCollections(),
-                  ),
-                ],
-                child: AddToFavoritesDialog(
-                  bookName: widget.bookName??"",
-                  bookSlug: widget.bookSlug??'',
-                  chapter: widget.chapter??'',
-                  hadithNumber: widget.hadithNumber??"",
-                  hadithText: widget.hadithText??'', id: widget.hadithNumber??' ',
-                ),
-              );
-            },
-          );
-        }
-      },
-    ),
-  ],
-),
-
-              if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 22.w,
-                      vertical: 16.h,
-                    ),
-                    child: _buildHadithHeader(),
-                  ),
-                ),
-
-              if (_isValid(widget.hadithText))
-                SliverToBoxAdapter(
-                  child: HadithTextCard(
-                    hadithText:
-                        isNavigated
-                            ? newTextOfHadith
-                            : widget.hadithText ?? "الحديث غير متوفر",
-                  ),
-                ),
-
-              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
-              if (widget.showNavigation && !widget.isBookMark)
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 16.h,
-                    ),
-                    child:
-                        widget.isLocal
-                            ? _buildLocalNavigation()
-                            : _buildRemoteNavigation(),
-                  ),
-                ),
-
-              HadithAnalysis(
-                attribution: widget.narrator ?? '',
-                hadith:
-                    newTextOfHadith.isEmpty
-                        ? widget.hadithText ?? ''
-                        : newTextOfHadith,
-                grade: widget.grade ?? '',
-                reference: widget.bookName ?? '',
-              ),
-
-              if (_isValid(widget.grade)) _buildDividerSection(),
-
-              if (_isValid(widget.grade))
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: HadithGradeTile(
-                      grade: widget.grade ?? '',
-                      onTap: () {
-                        Clipboard.setData(
-                          ClipboardData(text: widget.hadithText ?? ''),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            behavior: SnackBarBehavior.floating,
-                            backgroundColor: ColorsManager.success,
-                            content: Row(
-                              children: [
-                                Icon(
-                                  Icons.check_circle,
-                                  color: Colors.white,
-                                  size: 20.sp,
+        child: SafeArea(
+          child: Scaffold(
+            floatingActionButton: Builder(
+              builder: (context) {
+                return FloatingActionButton.extended(
+                  onPressed: () {
+                    if (token == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                                textDirection: TextDirection.rtl,
+                                style: TextStyle(
+                                  color: ColorsManager.secondaryBackground,
                                 ),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  "تم نسخ الحديث بنجاح",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                              ),
+                              IconButton(
+                                onPressed:
+                                    () => context.pushNamed(Routes.loginScreen),
+                                icon: Icon(
+                                  Icons.login,
+                                  color: ColorsManager.secondaryBackground,
                                 ),
-                              ],
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
+                          backgroundColor: ColorsManager.primaryGreen,
+                        ),
+                      );
+                    } else {
+                      context.pushNamed(
+                        Routes.serag,
+                        arguments: SeragRequestModel(
+                          hadith: Hadith(
+                            hadeeth: widget.hadithText ?? '',
+                            grade_ar: widget.grade ?? '',
+                            source: widget.bookName ?? '',
+                            takhrij_ar: widget.narrator ?? '',
+                          ),
+                          messages: [Message(role: 'user', content: '')],
+                        ),
+                      );
+                    }
+                  },
+                  backgroundColor: ColorsManager.primaryPurple,
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  icon: CircleAvatar(
+                    radius: 20.r,
+                    backgroundImage: const AssetImage(
+                      'assets/images/serag_logo.jpg',
+                    ),
+                    backgroundColor: Colors.transparent,
+                  ),
+                  label: Text(
+                    "اسأل سراج",
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: ColorsManager.secondaryBackground,
                     ),
                   ),
-                ),
-
-              if (_isValid(widget.bookName) ||
-                  _isValid(widget.author) ||
-                  _isValid(widget.chapter))
-                _buildDividerSection(),
-
-              if (_isValid(widget.bookName) ||
-                  _isValid(widget.author) ||
-                  _isValid(widget.chapter))
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
-                    child: HadithBookSection(
-                      bookName: widget.bookName ?? '',
-                      author: widget.author,
-                      authorDeath: widget.authorDeath,
-                      chapter: widget.chapter ?? '',
+                );
+              },
+            ),
+            backgroundColor: ColorsManager.secondaryBackground,
+            body: CustomScrollView(
+              slivers: [
+                BuildHeaderAppBar(
+            title: 'تفاصيل الحديث',
+            actions: [
+              AppBarActionButton(
+                icon: Icons.bookmark_border_rounded,
+                onPressed: () {
+          if (token == null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: ColorsManager.primaryGreen,
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(color: Colors.white),
                     ),
-                  ),
-                ),
-
-              _buildDividerSection(),
-
-              /// Actions Section
-     /*         SliverToBoxAdapter(
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 20.w,
-                    vertical: 20.h,
-                  ),
-                  child: _buildEnhancedActionsSection(),
+                    IconButton(
+                      onPressed: () => context.pushNamed(Routes.loginScreen),
+                      icon: const Icon(
+                        Icons.login,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              */
-
-              /// Navigation Section
-              SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+            );
+          } else {
+            showDialog(
+              context: context,
+              builder: (dialogContext) {
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider.value(
+                      value: context.read<AddCubitCubit>(),
+                    ),
+                    BlocProvider.value(
+                      value: context.read<GetCollectionsBookmarkCubit>()
+                        ..getBookMarkCollections(),
+                    ),
+                  ],
+                  child: AddToFavoritesDialog(
+                    bookName: widget.bookName??"",
+                    bookSlug: widget.bookSlug??'',
+                    chapter: widget.chapter??'',
+                    hadithNumber: widget.hadithNumber??"",
+                    hadithText: widget.hadithText??'', id: widget.hadithNumber??' ',
+                  ),
+                );
+              },
+            );
+          }
+                },
+              ),
             ],
           ),
+          
+                if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 22.w,
+                        vertical: 16.h,
+                      ),
+                      child: _buildHadithHeader(),
+                    ),
+                  ),
+          
+                if (_isValid(widget.hadithText))
+                  SliverToBoxAdapter(
+                    child: HadithTextCard(
+                      hadithText:
+                          isNavigated
+                              ? newTextOfHadith
+                              : widget.hadithText ?? "الحديث غير متوفر",
+                    ),
+                  ),
+          
+                SliverToBoxAdapter(child: SizedBox(height: 20.h)),
+                if (widget.showNavigation && !widget.isBookMark)
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 16.h,
+                      ),
+                      child:
+                          widget.isLocal
+                              ? _buildLocalNavigation()
+                              : _buildRemoteNavigation(),
+                    ),
+                  ),
+          
+                HadithAnalysis(
+                  attribution: widget.narrator ?? '',
+                  hadith:
+                      newTextOfHadith.isEmpty
+                          ? widget.hadithText ?? ''
+                          : newTextOfHadith,
+                  grade: widget.grade ?? '',
+                  reference: widget.bookName ?? '',
+                ),
+          
+                if (_isValid(widget.grade)) _buildDividerSection(),
+          
+                if (_isValid(widget.grade))
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: HadithGradeTile(
+                        grade: widget.grade ?? '',
+                        onTap: () {
+                          Clipboard.setData(
+                            ClipboardData(text: widget.hadithText ?? ''),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              backgroundColor: ColorsManager.success,
+                              content: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check_circle,
+                                    color: Colors.white,
+                                    size: 20.sp,
+                                  ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    "تم نسخ الحديث بنجاح",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.r),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+          
+                if (_isValid(widget.bookName) ||
+                    _isValid(widget.author) ||
+                    _isValid(widget.chapter))
+                  _buildDividerSection(),
+          
+                if (_isValid(widget.bookName) ||
+                    _isValid(widget.author) ||
+                    _isValid(widget.chapter))
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: HadithBookSection(
+                        bookName: widget.bookName ?? '',
+                        author: widget.author,
+                        authorDeath: widget.authorDeath,
+                        chapter: widget.chapter ?? '',
+                      ),
+                    ),
+                  ),
+          
+                _buildDividerSection(),
+          
+                SliverToBoxAdapter(child: SizedBox(height: 50.h)),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildEnhancedActionsSection() {
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          colors: [
-            ColorsManager.primaryGreen.withOpacity(0.1),
-            ColorsManager.primaryPurple.withOpacity(0.05),
-          ],
-        ),
-        borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(
-          color: ColorsManager.primaryGold.withOpacity(0.2),
-          width: 1,
-        ),
-      ),
-      child: HadithActionsRow(
-        author: widget.author ?? "",
-        authorDeath: widget.authorDeath ?? "",
-        grade: widget.grade ?? "",
-        isBookmarked: widget.isBookMark,
-        bookName: widget.bookName ?? "",
-        bookSlug: widget.bookSlug ?? "",
-        chapter: widget.chapterNumber,
-        hadithNumber: _currentHadithId,
-        id: _currentHadithId,
-        hadith: widget.hadithText ?? "",
-      ),
-    );
-  }
+
 
   Widget _buildHadithHeader() {
     return Container(

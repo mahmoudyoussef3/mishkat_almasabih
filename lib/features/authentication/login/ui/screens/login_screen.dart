@@ -27,28 +27,28 @@ class LoginScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // Top spacing
-              SizedBox(height: 60.h),
+              SizedBox(height: 40.h),
               
               // App Logo and Title
               LoginScreenHeader(),
               
-              SizedBox(height: 60.h),
+              SizedBox(height: 40.h),
               
               // Login Form
               EmailAndPassword(),
               
-              SizedBox(height: 24.h),
+              SizedBox(height: 22.h),
               
                
               
               // Login Button
               LoginBlocListener(),
-              SizedBox(height: 18.h),
+              SizedBox(height: 16.h),
               
               // Divider
               _buildDivider(),
               
-              SizedBox(height: 18.h),
+              SizedBox(height: 16.h),
               
               // Don't have account
               const DontHaveAccountText(),
