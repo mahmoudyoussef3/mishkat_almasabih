@@ -49,7 +49,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: SafeArea(child:Scaffold(
+      child: SafeArea(
+          top: true,
+        bottom: false,
+        child:Scaffold(
         backgroundColor: ColorsManager.secondaryBackground,
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())

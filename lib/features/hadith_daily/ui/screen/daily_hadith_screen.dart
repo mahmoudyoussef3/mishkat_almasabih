@@ -53,6 +53,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
+          top: true,
+        bottom: false,
         child: Scaffold(
           floatingActionButton: Builder(
             builder: (context) {

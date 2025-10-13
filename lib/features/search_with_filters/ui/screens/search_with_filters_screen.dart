@@ -128,6 +128,8 @@ void initState() {
     return Directionality(
         textDirection: TextDirection.rtl,
         child: SafeArea(
+            top: true,
+        bottom: false,
           child: Scaffold(
             backgroundColor: ColorsManager.secondaryBackground,
             body: SingleChildScrollView(

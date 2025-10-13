@@ -366,6 +366,8 @@ class _HomeScreenState extends State<HomeScreen> {
           },
 
           child: SafeArea(
+              top: true,
+        bottom: false,
             child: Scaffold(
               drawer: MishkatDrawer(
                 

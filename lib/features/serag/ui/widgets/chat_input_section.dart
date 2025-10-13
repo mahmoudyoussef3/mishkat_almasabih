@@ -129,26 +129,36 @@ class ChatInputSection extends StatelessWidget {
                       child: Material(
                         color: Colors.transparent,
                         child: GestureDetector(
-                       //   borderRadius: BorderRadius.circular(25.r),
+                          //   borderRadius: BorderRadius.circular(25.r),
                           onTap:
                               seragState is SeragLoading
                                   ? null
                                   : () {
-                                    context.read<RemainingQuestionsCubit>().remaining==0?
-                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                      behavior: SnackBarBehavior.floating,
-                                      backgroundColor:  Colors.red.shade300,
+                                    context
+                                                .read<RemainingQuestionsCubit>()
+                                                .remaining ==
+                                            0
+                                        ? ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            behavior: SnackBarBehavior.floating,
+                                            backgroundColor:
+                                                Colors.red.shade300,
 
-                                      
-                                      content: Text(
-              "عذراً، لقد استنفذت الحد اليومي.\nيرجى المحاولة مرة أخرى غداً.",
-              style:  TextStyle(
-                color: ColorsManager.secondaryBackground,
-                fontSize: 14.sp,
-                height: 1.4,
-              ),
-            ),)):
-                                    _handleSendMessage(context);
+                                            content: Text(
+                                              "عذراً، لقد استنفذت الحد اليومي.\nيرجى المحاولة مرة أخرى غداً.",
+                                              style: TextStyle(
+                                                color:
+                                                    ColorsManager
+                                                        .secondaryBackground,
+                                                fontSize: 14.sp,
+                                                height: 1.4,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                        : _handleSendMessage(context);
                                   },
                           child: SizedBox(
                             width: 50.w,
@@ -209,10 +219,12 @@ class ChatInputSection extends StatelessWidget {
     final text = controller.text.trim();
     if (text.isNotEmpty) {
       HapticFeedback.lightImpact();
+      context.read<RemainingQuestionsCubit>().emitRemainingQuestions();
       context.read<ChatHistoryCubit>().addMessage(
         Message(role: "user", content: text),
       );
-      context.read<SeragCubit>().sendMessage(        hadeeth: model.hadith.hadeeth,
+      context.read<SeragCubit>().sendMessage(
+        hadeeth: model.hadith.hadeeth,
         grade_ar: model.hadith.grade_ar,
         source: model.hadith.source,
         takhrij_ar: model.hadith.takhrij_ar,
