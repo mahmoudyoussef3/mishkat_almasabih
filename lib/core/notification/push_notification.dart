@@ -173,11 +173,18 @@ class PushNotification {
 
       // استخدام نفس الطريقة اللي في الكارد بتاعك
       if (context.mounted) {
-        Navigator.of(context).pushNamed(
+            Navigator.of(context).pushNamed(
           
+          Routes.homeScreen,
+        );
+        
+        /*
+        Navigator.of(context).pushNamed(
+
           Routes.hadithOfTheDay,
           arguments: hadith,
         );
+        */
         
         log("✅ Navigated to Hadith Daily Screen");
       }

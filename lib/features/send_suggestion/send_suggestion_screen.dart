@@ -59,7 +59,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: ColorsManager.secondaryBackground,
+      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -92,7 +92,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           // Spacer for centering
-                          const Spacer(),
+                          const Spacer(flex: 1,),
 
                           // Main Card
                           Center(
@@ -101,7 +101,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
                                 maxWidth: isTablet ? 550 : double.infinity,
                               ),
                               child: Card(
-                                elevation: 8,
+                                elevation: 10,
                                 shadowColor: ColorsManager.primaryPurple.withOpacity(0.15),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24.r),
@@ -192,7 +192,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
                                           borderRadius: BorderRadius.circular(16.r),
                                           boxShadow: [
                                             BoxShadow(
-                                              color: ColorsManager.primaryPurple.withOpacity(0.08),
+                                              color: ColorsManager.white.withOpacity(0.08),
                                               blurRadius: 10,
                                               offset: const Offset(0, 4),
                                             ),
@@ -206,7 +206,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
                                           decoration: InputDecoration(
                                             hintText: 'اكتب اقتراحك هنا...',
                                             hintStyle: TextStyle(
-                                              color: Colors.grey.shade400,
+                                              color: Colors.grey,
                                               fontSize: isTablet ? 15.sp : 14.sp,
                                             ),
                                             filled: true,
@@ -214,10 +214,11 @@ class _SuggestionFormState extends State<SuggestionForm> {
                                             enabledBorder: OutlineInputBorder(
                                               borderRadius: BorderRadius.circular(16.r),
                                               borderSide: BorderSide(
-                                                color: ColorsManager.lightGray.withOpacity(0.3),
+                                                color: ColorsManager.primaryPurple,
                                                 width: 1.5,
                                               ),
                                             ),
+
                                             focusedBorder: OutlineInputBorder(
                                               borderRadius: BorderRadius.circular(16.r),
                                               borderSide: const BorderSide(
@@ -308,7 +309,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
                           ),
 
                           // Spacer for centering
-                          const Spacer(),
+                          const Spacer(flex: 2,),
 
                           // Footer note
                           Padding(

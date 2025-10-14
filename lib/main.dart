@@ -17,7 +17,7 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
 
   // تهيئة الـ FCM (مرة واحدة بس)
   await PushNotification.init();

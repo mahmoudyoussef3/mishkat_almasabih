@@ -154,9 +154,7 @@ class _SearchWithFiltersScreenState extends State<SearchWithFiltersScreen> {
                   builder: (context, state) {
                     if (state is SearchHistoryLoading) {
                       return const HistoryShimmer();
-                    } else if (state is SearchHistoryError) {
-                      return Center(child: Text("خطأ أثناء تحميل السجل"));
-                    } else if (state is SearchHistorySuccess) {
+                    }  else if (state is SearchHistorySuccess) {
                       final List<SearchHistoryItem> items = List.from(
                         state.historyItems,
                       );

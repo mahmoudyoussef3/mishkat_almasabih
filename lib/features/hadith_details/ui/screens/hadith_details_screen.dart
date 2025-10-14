@@ -95,8 +95,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
         BlocProvider(create: (context) => getIt<AddCubitCubit>()),
         BlocProvider(create: (context) => getIt<NavigationCubit>()),
         BlocProvider(create: (context) => getIt<LocalHadithNavigationCubit>()),
-                BlocProvider(create: (context) => getIt<GetCollectionsBookmarkCubit>()),
-
+        BlocProvider(create: (context) => getIt<GetCollectionsBookmarkCubit>()),
 
         BlocProvider(
           create:
@@ -116,8 +115,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       child: Directionality(
         textDirection: TextDirection.rtl,
         child: SafeArea(
-            top: true,
-        bottom: false,
+          top: true,
+          bottom: false,
           child: Scaffold(
             floatingActionButton: Builder(
               builder: (context) {
@@ -191,64 +190,71 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
             body: CustomScrollView(
               slivers: [
                 BuildHeaderAppBar(
-            title: 'تفاصيل الحديث',
-            actions: [
-              AppBarActionButton(
-                icon: Icons.bookmark_border_rounded,
-                onPressed: () {
-          if (token == null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: ColorsManager.primaryGreen,
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
-                      textDirection: TextDirection.rtl,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    IconButton(
-                      onPressed: () => context.pushNamed(Routes.loginScreen),
-                      icon: const Icon(
-                        Icons.login,
-                        color: Colors.white,
-                      ),
+                  title: 'تفاصيل الحديث',
+                  actions: [
+                    AppBarActionButton(
+                      icon: Icons.bookmark_border_rounded,
+                      onPressed: () {
+                        if (token == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: ColorsManager.primaryGreen,
+                              content: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  const Text(
+                                    'يجب تسجيل الدخول أولاً لاستخدام هذه الميزة',
+                                    textDirection: TextDirection.rtl,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  IconButton(
+                                    onPressed:
+                                        () => context.pushNamed(
+                                          Routes.loginScreen,
+                                        ),
+                                    icon: const Icon(
+                                      Icons.login,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (dialogContext) {
+                              return MultiBlocProvider(
+                                providers: [
+                                  BlocProvider.value(
+                                    value: context.read<AddCubitCubit>(),
+                                  ),
+                                  BlocProvider.value(
+                                    value:
+                                        context
+                                            .read<GetCollectionsBookmarkCubit>()
+                                          ..getBookMarkCollections(),
+                                  ),
+                                ],
+                                child: AddToFavoritesDialog(
+                                  bookName: widget.bookName ?? "",
+                                  bookSlug: widget.bookSlug ?? '',
+                                  chapter: widget.chapter ?? '',
+                                  hadithNumber: widget.hadithNumber ?? "",
+                                  hadithText: widget.hadithText ?? '',
+                                  id: widget.hadithNumber ?? ' ',
+                                ),
+                              );
+                            },
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
-              ),
-            );
-          } else {
-            showDialog(
-              context: context,
-              builder: (dialogContext) {
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider.value(
-                      value: context.read<AddCubitCubit>(),
-                    ),
-                    BlocProvider.value(
-                      value: context.read<GetCollectionsBookmarkCubit>()
-                        ..getBookMarkCollections(),
-                    ),
-                  ],
-                  child: AddToFavoritesDialog(
-                    bookName: widget.bookName??"",
-                    bookSlug: widget.bookSlug??'',
-                    chapter: widget.chapter??'',
-                    hadithNumber: widget.hadithNumber??"",
-                    hadithText: widget.hadithText??'', id: widget.hadithNumber??' ',
-                  ),
-                );
-              },
-            );
-          }
-                },
-              ),
-            ],
-          ),
-          
+
                 if (_isValid(widget.hadithNumber) || _isValid(widget.bookName))
                   SliverToBoxAdapter(
                     child: Padding(
@@ -259,7 +265,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                       child: _buildHadithHeader(),
                     ),
                   ),
-          
+
                 if (_isValid(widget.hadithText))
                   SliverToBoxAdapter(
                     child: HadithTextCard(
@@ -269,7 +275,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                               : widget.hadithText ?? "الحديث غير متوفر",
                     ),
                   ),
-          
+
                 SliverToBoxAdapter(child: SizedBox(height: 20.h)),
                 if (widget.showNavigation && !widget.isBookMark)
                   SliverToBoxAdapter(
@@ -284,7 +290,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                               : _buildRemoteNavigation(),
                     ),
                   ),
-          
+
                 HadithAnalysis(
                   attribution: widget.narrator ?? '',
                   hadith:
@@ -294,9 +300,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                   grade: widget.grade ?? '',
                   reference: widget.bookName ?? '',
                 ),
-          
+
                 if (_isValid(widget.grade)) _buildDividerSection(),
-          
+
                 if (_isValid(widget.grade))
                   SliverToBoxAdapter(
                     child: Padding(
@@ -337,12 +343,12 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                       ),
                     ),
                   ),
-          
+
                 if (_isValid(widget.bookName) ||
                     _isValid(widget.author) ||
                     _isValid(widget.chapter))
                   _buildDividerSection(),
-          
+
                 if (_isValid(widget.bookName) ||
                     _isValid(widget.author) ||
                     _isValid(widget.chapter))
@@ -357,9 +363,9 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                       ),
                     ),
                   ),
-          
+
                 _buildDividerSection(),
-          
+
                 SliverToBoxAdapter(child: SizedBox(height: 50.h)),
               ],
             ),
@@ -368,8 +374,6 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
       ),
     );
   }
-
-
 
   Widget _buildHadithHeader() {
     return Container(

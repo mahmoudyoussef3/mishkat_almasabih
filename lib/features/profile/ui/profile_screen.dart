@@ -140,7 +140,7 @@ Widget _buildProfileHeaderByState(ProfileState state) {
 
 Widget _buildLoginPrompt(BuildContext context) {
   return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.8, // ✅ قيود ارتفاع
+    height: MediaQuery.of(context).size.height * 0.3, 
     child: SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
