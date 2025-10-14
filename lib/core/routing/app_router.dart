@@ -28,6 +28,7 @@ import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/sear
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/filter_serch_result_screen.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/ui/screens/search_with_filters_screen.dart';
+import 'package:mishkat_almasabih/features/send_suggestion/send_suggestion_screen.dart';
 import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model.dart';
 import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
@@ -232,6 +233,13 @@ class AppRouter {
                 child: FilterSerchResultScreen(
                   searchQuery: query['search'] ?? '',
                 ),
+              ),
+        );
+        
+      case Routes.usersSuggestions:
+        return MaterialPageRoute(
+          builder:
+              (_) => SuggestionForm(
               ),
         );
       /*

@@ -137,6 +137,15 @@ class _MishkatDrawerState extends State<MishkatDrawer> {
                     context.pushNamed(Routes.profileScreen);
                   },
                 ),
+                    _buildDrawerItem(
+                  context,
+                  icon: Icons.person_rounded,
+                  title: 'إضافة مقترحات',
+                  onTap: () {
+                    Navigator.pop(context);
+                    context.pushNamed(Routes.usersSuggestions);
+                  },
+                ),
               ],
             ),
           ),
