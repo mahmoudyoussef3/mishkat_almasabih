@@ -29,19 +29,18 @@ class AddToFavoritesDialog extends StatefulWidget {
 
 class _AddToFavoritesDialogState extends State<AddToFavoritesDialog> {
   bool showCreateNew = false;
-  String selectedCollection = "الإفتراضي";
+  String? selectedCollection; // ❌ شيل القيمة الافتراضية وخليها nullable
   final TextEditingController notesController = TextEditingController();
 
-@override
-void initState() {
-  super.initState();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    if (mounted) {
-      context.read<GetCollectionsBookmarkCubit>().getBookMarkCollections();
-    }
-  });
-}
-
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<GetCollectionsBookmarkCubit>().getBookMarkCollections();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,12 +62,16 @@ void initState() {
             transitionBuilder: (Widget child, Animation<double> animation) {
               return SlideTransition(
                 position: Tween<Offset>(
-                  begin: showCreateNew ? const Offset(1.0, 0.0) : const Offset(-1.0, 0.0),
+                  begin: showCreateNew
+                      ? const Offset(1.0, 0.0)
+                      : const Offset(-1.0, 0.0),
                   end: Offset.zero,
-                ).animate(CurvedAnimation(
-                  parent: animation,
-                  curve: Curves.easeInOut,
-                )),
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeInOut,
+                  ),
+                ),
                 child: child,
               );
             },
@@ -77,7 +80,6 @@ void initState() {
                     key: const ValueKey('create'),
                     bookName: widget.bookName,
                     bookSlug: widget.bookSlug,
-
                     chapter: widget.chapter,
                     hadithNumber: widget.hadithNumber,
                     hadithText: widget.hadithText,
@@ -95,8 +97,9 @@ void initState() {
                     hadithNumber: widget.hadithNumber,
                     hadithText: widget.hadithText,
                     notesController: notesController,
-                    selectedCollection: selectedCollection,
-                    onCollectionSelected: (value) => setState(() => selectedCollection = value),
+                    selectedCollection: selectedCollection ?? "",
+                    onCollectionSelected: (value) =>
+                        setState(() => selectedCollection = value),
                     onCreateNewPressed: () {
                       setState(() {
                         showCreateNew = true;
@@ -113,5 +116,7 @@ void initState() {
   void dispose() {
     notesController.dispose();
     super.dispose();
-  }
+  
+}
+
 }

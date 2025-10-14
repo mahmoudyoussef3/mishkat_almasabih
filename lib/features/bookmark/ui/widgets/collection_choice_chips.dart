@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 
-import '../../../../core/theming/colors.dart';
-
 class CollectionsChoiceChips extends StatelessWidget {
-  final List<dynamic> collections;
+  final List<String> collections;
   final String selectedCollection;
   final void Function(String) onSelected;
+
   const CollectionsChoiceChips({
     super.key,
     required this.collections,
@@ -27,11 +26,11 @@ class CollectionsChoiceChips extends StatelessWidget {
         runSpacing: 10,
         alignment: WrapAlignment.center,
         children: collections.map((c) {
-          final isSelected = selectedCollection == (c.collection ?? "");
+          final isSelected = selectedCollection == c;
           return ChoiceChip(
             showCheckmark: false,
             label: Text(
-              c.collection?.isEmpty ?? true ? "الإفتراضي" : c.collection!,
+              c.isEmpty ? "بدون اسم" : c,
               style: TextStyle(
                 color: isSelected
                     ? ColorsManager.inverseText
@@ -52,7 +51,7 @@ class CollectionsChoiceChips extends StatelessWidget {
                     : ColorsManager.mediumGray,
               ),
             ),
-            onSelected: (_) => onSelected(c.collection ?? ""),
+            onSelected: (_) => onSelected(c),
           );
         }).toList(),
       ),

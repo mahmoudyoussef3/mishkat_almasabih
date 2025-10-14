@@ -115,7 +115,6 @@ class ResponsiveChapterList extends StatelessWidget {
             );
           },
 
-          //     onTap: ()=> context.pushNamed(Routes.chapterAhadithsScreen,arguments: ['bulugh_al_maram',items[index].chapterNumber]),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 8.w),
             child: ChapterCard(
@@ -123,9 +122,7 @@ class ResponsiveChapterList extends StatelessWidget {
               ar: items is List<Bookmark>? items[index].chapterName ??'jhjkjnk' : items[index].chapterArabic,
               primaryPurple: primaryPurple,
             ),
-            //     .animate()
-            //    .fadeIn(duration: 1.seconds)
-            //   .scale(duration: 1.seconds, curve: Curves.easeOutBack),
+          
           ),
         );
       }, childCount: isLoading ? 12 : items.length),

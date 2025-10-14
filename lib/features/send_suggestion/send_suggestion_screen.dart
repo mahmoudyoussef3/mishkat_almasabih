@@ -59,7 +59,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+      backgroundColor: Colors.white,
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -84,15 +84,12 @@ class _SuggestionFormState extends State<SuggestionForm> {
                     vertical: 20.h,
                   ),
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: constraints.maxHeight,
-                    ),
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
                     child: IntrinsicHeight(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Spacer for centering
-                          const Spacer(flex: 1,),
+                          const Spacer(flex: 1),
 
                           // Main Card
                           Center(
@@ -116,16 +113,13 @@ class _SuggestionFormState extends State<SuggestionForm> {
                                     mainAxisSize: MainAxisSize.min,
                                     crossAxisAlignment: CrossAxisAlignment.stretch,
                                     children: [
-                                      // Header icon with animation
+                                      // Animated Icon
                                       TweenAnimationBuilder<double>(
                                         tween: Tween(begin: 0.0, end: 1.0),
                                         duration: const Duration(milliseconds: 600),
                                         curve: Curves.elasticOut,
                                         builder: (context, value, child) {
-                                          return Transform.scale(
-                                            scale: value,
-                                            child: child,
-                                          );
+                                          return Transform.scale(scale: value, child: child);
                                         },
                                         child: Container(
                                           width: isTablet ? 90.w : 70.w,
@@ -186,60 +180,74 @@ class _SuggestionFormState extends State<SuggestionForm> {
                                       ),
                                       SizedBox(height: isTablet ? 28.h : 24.h),
 
-                                      // TextField
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(16.r),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: ColorsManager.white.withOpacity(0.08),
-                                              blurRadius: 10,
-                                              offset: const Offset(0, 4),
-                                            ),
-                                          ],
-                                        ),
-                                        child: TextField(
-                                          controller: _ctrl,
-                                          maxLines: screenHeight > 700 ? 6 : 4,
-                                          maxLength: 500,
-                                          textAlign: TextAlign.right,
-                                          decoration: InputDecoration(
-                                            hintText: 'اكتب اقتراحك هنا...',
-                                            hintStyle: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: isTablet ? 15.sp : 14.sp,
-                                            ),
-                                            filled: true,
-                                            fillColor: ColorsManager.lightGray.withOpacity(0.1),
-                                            enabledBorder: OutlineInputBorder(
+                                      // TextField + Privacy Note
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(16.r),
-                                              borderSide: BorderSide(
-                                                color: ColorsManager.primaryPurple,
-                                                width: 1.5,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: ColorsManager.white.withOpacity(0.08),
+                                                  blurRadius: 10,
+                                                  offset: const Offset(0, 4),
+                                                ),
+                                              ],
+                                            ),
+                                            child: TextField(
+                                              controller: _ctrl,
+                                              maxLines: screenHeight > 700 ? 6 : 4,
+                                              maxLength: 500,
+                                              textAlign: TextAlign.right,
+                                              decoration: InputDecoration(
+                                                hintText: 'اكتب اقتراحك هنا...',
+                                                hintStyle: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: isTablet ? 15.sp : 14.sp,
+                                                ),
+                                                filled: true,
+                                                fillColor: ColorsManager.lightGray.withOpacity(0.1),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(16.r),
+                                                  borderSide: BorderSide(
+                                                    color: ColorsManager.primaryPurple,
+                                                    width: 1.5,
+                                                  ),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(16.r),
+                                                  borderSide: const BorderSide(
+                                                    color: ColorsManager.primaryPurple,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                contentPadding: EdgeInsets.symmetric(
+                                                  horizontal: 16.w,
+                                                  vertical: 14.h,
+                                                ),
+                                                counterStyle: TextStyle(
+                                                  fontSize: 12.sp,
+                                                  color: ColorsManager.gray,
+                                                ),
+                                              ),
+                                              style: TextStyle(
+                                                fontSize: isTablet ? 16.sp : 15.sp,
+                                                height: 1.6,
                                               ),
                                             ),
-
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(16.r),
-                                              borderSide: const BorderSide(
-                                                color: ColorsManager.primaryPurple,
-                                                width: 2,
-                                              ),
-                                            ),
-                                            contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 16.w,
-                                              vertical: 14.h,
-                                            ),
-                                            counterStyle: TextStyle(
-                                              fontSize: 12.sp,
-                                              color: ColorsManager.gray,
+                                          ),
+                                          SizedBox(height: 6.h),
+                                          Text(
+                                            'لن يتم إرسال بريدك الإلكتروني أو اسم المستخدم، مجرد اقتراحك فقط.',
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              fontSize: isTablet ? 12.sp : 11.sp,
+                                              color: ColorsManager.gray.withOpacity(0.8),
+                                              fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                          style: TextStyle(
-                                            fontSize: isTablet ? 16.sp : 15.sp,
-                                            height: 1.6,
-                                          ),
-                                        ),
+                                        ],
                                       ),
                                       SizedBox(height: isTablet ? 28.h : 24.h),
 
@@ -308,8 +316,7 @@ class _SuggestionFormState extends State<SuggestionForm> {
                             ),
                           ),
 
-                          // Spacer for centering
-                          const Spacer(flex: 2,),
+                          const Spacer(flex: 2),
 
                           // Footer note
                           Padding(

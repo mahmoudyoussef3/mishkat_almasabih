@@ -43,88 +43,95 @@ class CollectionsView extends StatelessWidget {
         } else if (state is GetCollectionsBookmarkError) {
           return Center(child: Text("خطأ: ${state.errMessage}"));
         } else if (state is GetCollectionsBookmarkSuccess) {
-          final collections = state.collectionsResponse.collections;
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                DialogHeader(title: "إضافة للمفضلة"),
-                const SizedBox(height: 8),
-                Text(
-                  "اختر مجموعة من الإشارات المرجعية",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: ColorsManager.secondaryText,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                CollectionsChoiceChips(
-                  collections: collections!,
-                  selectedCollection: selectedCollection,
-                  onSelected: onCollectionSelected,
-                ),
-                const SizedBox(height: 12),
-                
-                Container(
-                  width: double.infinity,
-                  height: 45,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: ColorsManager.primaryPurple.withOpacity(0.3),
-                      width: 1.5,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.transparent,
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: GestureDetector(
-                  //    borderRadius: BorderRadius.circular(12),
-                      onTap: onCreateNewPressed,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.add_circle_outline,
-                            color: ColorsManager.primaryPurple,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            "إنشاء مجموعة جديدة",
-                            style: TextStyle(
-                              color: ColorsManager.primaryPurple,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                
-                const SizedBox(height: 20),
-                InputLabel("ملاحظات (اختياري)"),
-                const SizedBox(height: 6),
-                StyledTextField(controller: notesController, hint: "أدخل ملاحظاتك هنا", maxLines: 3),
-                const SizedBox(height: 28),
-                AddButton(
-                  bookName: bookName,
-                  bookSlug: bookSlug,
-                  chapter: chapter,
-                  hadithNumber: hadithNumber,
-                  hadithText: hadithText,
-                  notesController: notesController,
-                  collection: selectedCollection,
-                ),
-              ],
+  final collections = state.collectionsResponse.collections;
+  final uniqueCollections = collections!
+      .where((c) => c.collection != null && c.collection!.isNotEmpty)
+      .map((c) => c.collection!)
+      .toSet()
+      .toList();
+
+  return SingleChildScrollView(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        DialogHeader(title: "إضافة للمفضلة"),
+        const SizedBox(height: 8),
+        Text(
+          "اختر مجموعة من الإشارات المرجعية",
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: ColorsManager.secondaryText,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 20),
+        CollectionsChoiceChips(
+          collections: uniqueCollections,
+          selectedCollection: selectedCollection,
+          onSelected: onCollectionSelected,
+        ),
+        const SizedBox(height: 12),
+        Container(
+          width: double.infinity,
+          height: 45,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: ColorsManager.primaryPurple.withOpacity(0.3),
+              width: 1.5,
             ),
-          );
-        }
+            borderRadius: BorderRadius.circular(12),
+            color: Colors.transparent,
+          ),
+          child: Material(
+            color: Colors.transparent,
+            child: GestureDetector(
+              onTap: onCreateNewPressed,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.add_circle_outline,
+                    color: ColorsManager.primaryPurple,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "إنشاء مجموعة جديدة",
+                    style: TextStyle(
+                      color: ColorsManager.primaryPurple,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
+        InputLabel("ملاحظات (اختياري)"),
+        const SizedBox(height: 6),
+        StyledTextField(
+          controller: notesController,
+          hint: "أدخل ملاحظاتك هنا",
+          maxLines: 3,
+        ),
+        const SizedBox(height: 28),
+        AddButton(
+          bookName: bookName,
+          bookSlug: bookSlug,
+          chapter: chapter,
+          hadithNumber: hadithNumber,
+          hadithText: hadithText,
+          notesController: notesController,
+          collection: selectedCollection,
+        ),
+      ],
+    ),
+  );
+}
         return const SizedBox();
       },
     );

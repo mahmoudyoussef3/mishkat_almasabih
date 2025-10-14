@@ -26,9 +26,20 @@ class BookmarkCollectionsRow extends StatelessWidget {
           return _buildLoadingShimmer();
         } else if (state is GetCollectionsBookmarkSuccess) {
           final collections = state.collectionsResponse.collections;
+
+          // فلترة العناصر الفارغة أو null
+          final filteredCollections =
+              collections!
+                  .where(
+                    (e) =>
+                        (e.collection != null &&
+                            e.collection!.trim().isNotEmpty),
+                  )
+                  .toList();
+
           final allCollections = [
             "الكل",
-            ...collections!.map((e) => e.collection ?? ""),
+            ...filteredCollections.map((e) => e.collection!),
           ];
 
           return Padding(
@@ -52,7 +63,6 @@ class BookmarkCollectionsRow extends StatelessWidget {
                     final isSelected = selectedCollection == c;
 
                     return GestureDetector(
-                   //   borderRadius: BorderRadius.circular(16.r),
                       onTap: () => onCollectionSelected(c),
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 250),
@@ -101,6 +111,7 @@ class BookmarkCollectionsRow extends StatelessWidget {
             ),
           );
         }
+
         return const SizedBox.shrink();
       },
     );
