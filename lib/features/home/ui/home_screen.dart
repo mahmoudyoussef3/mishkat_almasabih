@@ -35,6 +35,7 @@ class HomeScreenWrapper extends StatelessWidget {
               (_) =>
                   getIt<GetLibraryStatisticsCubit>()..emitGetStatisticsCubit(),
         ),
+        
       ],
       child: const HomeScreen(),
     );
@@ -156,25 +157,30 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   );
 
-  Widget _buildBooksSection() {
+ Widget _buildBooksSection() {
     return SliverToBoxAdapter(
       child: BlocBuilder<GetLibraryStatisticsCubit, GetLibraryStatisticsState>(
         builder: (context, state) {
           if (state is GetLivraryStatisticsLoading) {
-            return SizedBox(
-              height: 240.h,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
-                itemCount: 5,
-                separatorBuilder: (_, __) => SizedBox(width: 12.w),
-                itemBuilder:
-                    (_, __) =>
-                        SizedBox(width: 140.w, child: const BookCardShimmer()),
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
+              child: SizedBox(
+                height: 240.h, // ارتفاع مناسب للكاردات
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5,
+                  separatorBuilder: (context, index) => SizedBox(width: 12.w),
+                  itemBuilder: (context, index) {
+                    return SizedBox(
+                      width: 140.w,
+                      child: const BookCardShimmer(),
+                    );
+                  },
+                ),
               ),
             );
           } else if (state is GetLivraryStatisticsSuccess) {
-            final books = state.statisticsResponse.statistics.topBooks;
+            var books = state.statisticsResponse.statistics.topBooks;
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
               child: Column(
@@ -182,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     'الكتب الأكثر رواجا',
+
                     style: TextStyles.headlineMedium.copyWith(
                       color: ColorsManager.primaryText,
                       fontWeight: FontWeight.bold,
@@ -189,13 +196,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   SizedBox(height: 12.h),
                   SizedBox(
-                    height: 240.h,
+                    height: 240.h, // ارتفاع مناسب للكاردات
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: books.length,
-                      separatorBuilder: (_, __) => SizedBox(width: 8.w),
-                      itemBuilder: (_, index) {
+                      separatorBuilder:
+                          (context, index) => SizedBox(width: 8.w),
+                      itemBuilder: (context, index) {
                         final book = books[index];
+
                         return SizedBox(
                           width: 170.w,
                           child: BookCard(
@@ -216,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           }
-          return const SizedBox.shrink();
+          return SizedBox.shrink();
         },
       ),
     );

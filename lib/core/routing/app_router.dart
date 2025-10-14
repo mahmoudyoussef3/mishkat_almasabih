@@ -101,10 +101,10 @@ class AppRouter {
                 providers: [
                   BlocProvider(
                     create:
-                        (context) => getIt<GetAllBooksWithCategoriesCubit>(),
+                        (context) => getIt<GetAllBooksWithCategoriesCubit>()..emitGetAllBooksWithCategories(),
                   ),
                   BlocProvider(
-                    create: (context) => getIt<GetLibraryStatisticsCubit>(),
+                    create: (context) => getIt<GetLibraryStatisticsCubit>()..emitGetStatisticsCubit(),
                   ),
 
                   BlocProvider(create: (context) => getIt<BookDataCubit>()),

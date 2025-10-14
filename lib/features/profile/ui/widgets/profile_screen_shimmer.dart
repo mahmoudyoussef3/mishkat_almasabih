@@ -9,140 +9,87 @@ class ProfileShimmerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ColorsManager.primaryBackground,
-      body: CustomScrollView(
-        slivers: [
-          /// Header Shimmer
-          SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.w),
-              child: Row(
-                children: [
-                  _shimmerCircle(70.w, 70.w),
-                  SizedBox(width: 16.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _shimmerBox(120.w, 16.h),
-                        SizedBox(height: 8.h),
-                        _shimmerBox(80.w, 14.h),
-                      ],
-                    ),
-                  )
-                ],
-              ),
+    // ✅ Match the SliverAppBar structure from ProfileHeader
+    return SliverAppBar(
+      foregroundColor: ColorsManager.secondaryBackground,
+      expandedHeight: 200.h,
+      pinned: true,
+      backgroundColor: Colors.transparent,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                ColorsManager.primaryPurple,
+                ColorsManager.secondaryPurple,
+              ],
             ),
           ),
-    
-          /// Sections
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.all(20.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: List.generate(
-                  4,
-                  (index) => Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
-                    child: _shimmerSection(),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 16.h),
+
+                // ✅ Avatar Shimmer
+                Shimmer.fromColors(
+                  baseColor: Colors.white.withOpacity(0.3),
+                  highlightColor: Colors.white.withOpacity(0.6),
+                  child: const CircleAvatar(
+                    radius: 46,
+                    backgroundColor: Colors.white,
                   ),
                 ),
-              ),
-            ),
-          ),
-    
-          /// Footer Shimmer
-          SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 28.h, horizontal: 20.w),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    ColorsManager.primaryPurple,
-                    Colors.deepPurple,
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(30),
-                ),
-              ),
-              child: Column(
-                children: [
-                  _shimmerCircle(120.w, 120.w),
-                  SizedBox(height: 10.h),
-                  _shimmerBox(200.w, 14.h),
-                  SizedBox(height: 10.h),
-                  _shimmerBox(150.w, 12.h),
-                  SizedBox(height: 20.h),
-    
-                  Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 18.w,
-                    children: List.generate(
-                      5,
-                      (_) => _shimmerCircle(50.w, 50.w),
+                
+                const SizedBox(height: 16),
+                
+                // ✅ Username Shimmer
+                Shimmer.fromColors(
+                  baseColor: Colors.white.withOpacity(0.3),
+                  highlightColor: Colors.white.withOpacity(0.6),
+                  child: Container(
+                    width: 150.w,
+                    height: 22.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.r),
                     ),
                   ),
-                  SizedBox(height: 20.h),
-    
-                  _shimmerBox(250.w, 12.h),
-                  SizedBox(height: 10.h),
-                  _shimmerBox(220.w, 12.h),
-                ],
-              ),
+                ),
+                
+                const SizedBox(height: 8),
+                
+                // ✅ Email Shimmer
+                Shimmer.fromColors(
+                  baseColor: Colors.white.withOpacity(0.3),
+                  highlightColor: Colors.white.withOpacity(0.6),
+                  child: Container(
+                    width: 180.w,
+                    height: 15.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _shimmerBox(double width, double height) {
-    return Shimmer.fromColors(
-      baseColor: ColorsManager.gray.withOpacity(0.3),
-      highlightColor: ColorsManager.white.withOpacity(0.6),
-      child: Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: ColorsManager.white,
-          borderRadius: BorderRadius.circular(8.r),
         ),
       ),
-    );
-  }
-
-  Widget _shimmerCircle(double width, double height) {
-    return Shimmer.fromColors(
-      baseColor: ColorsManager.gray.withOpacity(0.3),
-      highlightColor: ColorsManager.white.withOpacity(0.6),
-      child: Container(
-        width: width,
-        height: height,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
+      actions: [
+        // ✅ Edit Button Shimmer
+        Padding(
+          padding: EdgeInsets.only(right: 8.w),
+          child: Shimmer.fromColors(
+            baseColor: Colors.white.withOpacity(0.3),
+            highlightColor: Colors.white.withOpacity(0.6),
+            child: const Icon(Icons.edit, color: Colors.white),
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget _shimmerSection() {
-    return Shimmer.fromColors(
-      baseColor: ColorsManager.gray.withOpacity(0.3),
-      highlightColor: ColorsManager.white.withOpacity(0.6),
-      child: Container(
-        height: 80.h,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: ColorsManager.white,
-          borderRadius: BorderRadius.circular(16.r),
-        ),
-      ),
+      ],
     );
   }
 }

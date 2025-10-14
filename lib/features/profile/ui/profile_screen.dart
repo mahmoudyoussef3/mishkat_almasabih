@@ -122,12 +122,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  /// 🔹 Profile Header logic
+/// 🔹 Profile Header logic - FIXED VERSION
 Widget _buildProfileHeaderByState(ProfileState state) {
   if (state is ProfileLoading) {
-    return const SliverToBoxAdapter(
-      child: ProfileShimmerScreen(),
-    );
+    return const ProfileShimmerScreen();
   } else if (state is ProfileError) {
     return SliverToBoxAdapter(
       child: Center(child: ErrorState(error: state.message)),
@@ -140,12 +138,15 @@ Widget _buildProfileHeaderByState(ProfileState state) {
   );
 }
 
-  /// 🔹 واجهة تسجيل الدخول فقط للهيدر
-  Widget _buildLoginPrompt(BuildContext context) {
-    return Center(
+Widget _buildLoginPrompt(BuildContext context) {
+  return SizedBox(
+    height: MediaQuery.of(context).size.height * 0.8, // ✅ قيود ارتفاع
+    child: SingleChildScrollView(
+      physics: const AlwaysScrollableScrollPhysics(),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 40.h),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               FontAwesomeIcons.userLock,
@@ -172,7 +173,7 @@ Widget _buildProfileHeaderByState(ProfileState state) {
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(context,Routes.loginScreen);
+                Navigator.pushNamed(context, Routes.loginScreen);
               },
               child: Text(
                 "تسجيل الدخول",
@@ -186,8 +187,10 @@ Widget _buildProfileHeaderByState(ProfileState state) {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   /// باقي الأقسام ثابتة
   Widget _buildSection({
