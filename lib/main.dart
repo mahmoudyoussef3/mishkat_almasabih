@@ -38,13 +38,10 @@ Future<void> main() async {
  // final isLoggedIn = token != null;
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
-  final app = DevicePreview(
-    builder: (context) => 
-    MishkatAlmasabih(
-      appRouter: AppRouter(),
-      isFirstTime: isFirstTime,
-     // isLoggedIn: isLoggedIn,
-    ),
+  final app = MishkatAlmasabih(
+    appRouter: AppRouter(),
+    isFirstTime: isFirstTime,
+   // isLoggedIn: isLoggedIn,
   );
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
