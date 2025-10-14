@@ -64,6 +64,7 @@ class AppRouter {
                 child: LoginScreen(),
               ),
         );
+        /*
       case Routes.mainNavigationScreen:
         return MaterialPageRoute(
           builder:
@@ -92,7 +93,7 @@ class AppRouter {
                 child: const MainNavigationScreen(),
               ),
         );
-
+*/
       case Routes.homeScreen:
         return MaterialPageRoute(
           builder:
@@ -108,7 +109,7 @@ class AppRouter {
 
                   BlocProvider(create: (context) => getIt<BookDataCubit>()),
                   BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
-                  BlocProvider(create: (context) => SearchHistoryCubit()),
+                  BlocProvider(create: (context) =>getIt<SearchHistoryCubit>()..init()),
                   BlocProvider(
                     create:
                         (context) =>
@@ -126,7 +127,7 @@ class AppRouter {
                 providers: [
               
                   BlocProvider(create: (context) => getIt<SearchWithFiltersCubit>()),
-        BlocProvider(create: (context) => SearchHistoryCubit()),
+        BlocProvider(create: (context) => getIt<SearchHistoryCubit>()..init()),
 
                   BlocProvider(create: (context) => getIt<GetBookmarksCubit>()),
                   BlocProvider(create: (context) => getIt<AddCubitCubit>()),

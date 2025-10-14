@@ -1,62 +1,90 @@
 import 'package:flutter/material.dart';
 
 /// API Constants for Mishkat Al-Masabih Islamic Library App
-/// Contains all the endpoint URLs and configuration constants
+/// Contains all endpoint URLs and configuration constants
 class ApiConstants {
+  // -----------------------------
+  // Base URLs
+  // -----------------------------
   static const String apiBaseUrl = "https://api.hadith-shareef.com/api/";
   static const String customBaseUrl = "https://api.hadith-shareef.com/api/";
-    static const String randomAhadith = "hadith/random";
+  static const String randomAhadith = "hadith/random";
 
+  // -----------------------------
+  // Navigator Key
+  // -----------------------------
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
+  // -----------------------------
+  // Authentication
+  // -----------------------------
   static const String login = "auth/login";
   static const String signup = "auth/register";
+  static const String googleLogin = "auth/google-login";
   static const String getUserProfile = "auth/profile";
   static const String updateUserProfile = "auth/update-profile";
-  static const String googleLogin = "auth/google-login";
 
-
-
+  // -----------------------------
+  // Islamic Library
+  // -----------------------------
   static const String getAllBooksWithCategories = "islamic-library/books";
-
   static const String getLibraryStatistics = "islamic-library/statistics";
   static const String getBooksByCategory =
-      "/islamic-library/categories/{categoryId}/books";
+      "islamic-library/categories/{categoryId}/books";
   static const String getBookChapters =
-      "/islamic-library/books/{bookSlug}/chapters";
-
+      "islamic-library/books/{bookSlug}/chapters";
   static const String getChapterAhadiths =
-      "/islamic-library/books/{bookSlug}/chapters/{chapterId}/hadiths";
-
+      "islamic-library/books/{bookSlug}/chapters/{chapterId}/hadiths";
   static const String getLocalChapterAhadiths =
-      "/islamic-library/local-books/{bookSlug}/chapters/{chapterId}/hadiths";
-  static const String getBookmarks = "/islamic-bookmarks/user";
-  static const String addBookmark = "/islamic-bookmarks/add";
-  static const String deleteBookmark = "/islamic-bookmarks/remove/{bookmarkId}";
-  static const String publicSearch = "/islamic-library/search?q={query}";
+      "islamic-library/local-books/{bookSlug}/chapters/{chapterId}/hadiths";
+
+  // -----------------------------
+  // Bookmarks
+  // -----------------------------
+  static const String getBookmarks = "islamic-bookmarks/user";
+  static const String addBookmark = "islamic-bookmarks/add";
+  static const String deleteBookmark = "islamic-bookmarks/remove/{bookmarkId}";
+  static const String bookmarkCollection = "islamic-bookmarks/collections";
+
+  // -----------------------------
+  // Search
+  // -----------------------------
+  static const String publicSearch = "islamic-library/search?q={query}";
   static const String hadithSearch =
-      "/islamic-library/search?q={query}&book={bookSlug}&chapter={chapter}";
-  static const String dailyHadith = "/daily-hadith";
-  static const String bookmarkCollection = "/islamic-bookmarks/collections";
-
-  static const String navigationHadith =
-      "/islamic-library/books/{bookSlug}/chapter/{chapterNumber}/hadith/{hadithNumber}/navigation";
-
-  static const String localNavigationHadith =
-      "/islamic-library/local-books/{bookSlug}/hadiths/{hadithNumber}/navigation";
-
+      "islamic-library/search?q={query}&book={bookSlug}&chapter={chapter}";
   static const String searchWithFilters =
-      "/islamic-library/search?q={searchQuery}&book={bookSlug}&narrator={narrator}&status={grade}&category={category}&chapter={chapter}&includeLocal=true&includeAPI=true";
+      "islamic-library/search?q={searchQuery}&book={bookSlug}&narrator={narrator}&status={grade}&category={category}&chapter={chapter}&includeLocal=true&includeAPI=true";
+  static const String enhancedSearch = "search";
 
-      static const String enhancedSearch = "/search";
-      static const String hadithAnalysis = "/ai/analyze-hadith";
-            static const String serag = "/ai/chat";
-            static const String remainingQuestions = "/ai/remaining-questions";
+  // -----------------------------
+  // Navigation
+  // -----------------------------
+  static const String navigationHadith =
+      "islamic-library/books/{bookSlug}/chapter/{chapterNumber}/hadith/{hadithNumber}/navigation";
+  static const String localNavigationHadith =
+      "islamic-library/local-books/{bookSlug}/hadiths/{hadithNumber}/navigation";
 
+  // -----------------------------
+  // AI / Hadith Analysis
+  // -----------------------------
+  static const String hadithAnalysis = "ai/analyze-hadith";
+  static const String serag = "ai/chat";
+  static const String remainingQuestions = "ai/remaining-questions";
 
+  // -----------------------------
+  // Daily Hadith
+  // -----------------------------
+  static const String dailyHadith = "daily-hadith";
+
+  // -----------------------------
+  // Search History
+  // -----------------------------
+  static const String addSearch = "/search-history";
+  static const String getSearchHistory = "/search-history/user";
+  static const String deleteSearch = "/search-history"; // /:id
+  static const String deleteAllSearch = "/search-history/user";
 }
+
    const Map<String, String> bookWriters = {
     "Sahih Bukhari": "الإمام البخاري",
     "Sahih Muslim": "الإمام مسلم",

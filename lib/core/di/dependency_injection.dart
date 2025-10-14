@@ -36,6 +36,8 @@ import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/re
 import 'package:mishkat_almasabih/features/search/home_screen/data/repos/public_search_repo.dart';
 import 'package:mishkat_almasabih/features/search/home_screen/logic/cubit/public_search_cubit.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/logic/cubit/enhanced_search_cubit.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/data/repos/shared_pref_history_item_repo.dart';
+import 'package:mishkat_almasabih/features/search/search_screen/logic/cubit/search_history_cubit.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/repos/search_with_filters_repo.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/logic/cubit/search_with_filters_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/data/repos/serag_repo.dart';
@@ -153,5 +155,9 @@ Future<void> setUpGetIt() async {
   customGetIt.registerLazySingleton<CustomApiService>(() => CustomApiService(dio));
   customGetIt.registerLazySingleton<RandomAhadithRepo>(() => RandomAhadithRepo(customGetIt()));
   customGetIt.registerFactory<RandomAhadithCubit>(() => RandomAhadithCubit(customGetIt()));
+
+
+    customGetIt.registerLazySingleton<SearchHistoryRepo>(() => SearchHistoryRepo(getIt()));
+  customGetIt.registerFactory<SearchHistoryCubit>(() => SearchHistoryCubit(getIt()));
   
 }

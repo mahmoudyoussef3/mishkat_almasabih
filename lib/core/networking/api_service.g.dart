@@ -167,7 +167,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/categories/${categoryId}/books',
+            'islamic-library/categories/${categoryId}/books',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -194,7 +194,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/books/${bookSlug}/chapters',
+            'islamic-library/books/${bookSlug}/chapters',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -224,7 +224,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/books/${bookSlug}/chapters/${chapterId}/hadiths',
+            'islamic-library/books/${bookSlug}/chapters/${chapterId}/hadiths',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -254,7 +254,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/books/${bookSlug}/chapters/${chapterId}/hadiths',
+            'islamic-library/books/${bookSlug}/chapters/${chapterId}/hadiths',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -284,7 +284,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/local-books/${bookSlug}/chapters/${chapterId}/hadiths',
+            'islamic-library/local-books/${bookSlug}/chapters/${chapterId}/hadiths',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -312,7 +312,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-bookmarks/user',
+            'islamic-bookmarks/user',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -343,7 +343,7 @@ class _ApiService implements ApiService {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-bookmarks/remove/${bookmarkId}',
+            'islamic-bookmarks/remove/${bookmarkId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -372,7 +372,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-bookmarks/add',
+            'islamic-bookmarks/add',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -399,7 +399,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/search?q=${query}',
+            'islamic-library/search?q=${query}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -430,7 +430,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/search?q=${query}&book=${bookSlug}&chapter=${chapterName}',
+            'islamic-library/search?q=${query}&book=${bookSlug}&chapter=${chapterName}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -458,7 +458,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-bookmarks/collections',
+            'islamic-bookmarks/collections',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -489,7 +489,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/books/${bookSlug}/chapter/${chapterNumber}/hadith/${hadithNumber}/navigation',
+            'islamic-library/books/${bookSlug}/chapter/${chapterNumber}/hadith/${hadithNumber}/navigation',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -519,7 +519,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/local-books/${bookSlug}/hadiths/${hadithNumber}/navigation',
+            'islamic-library/local-books/${bookSlug}/hadiths/${hadithNumber}/navigation',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -553,7 +553,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/islamic-library/search?q=${searchQuery}&book=${bookSlug}&narrator=${narrator}&status=${grade}&category=${category}&chapter=${chapter}&includeLocal=true&includeAPI=true',
+            'islamic-library/search?q=${searchQuery}&book=${bookSlug}&narrator=${narrator}&status=${grade}&category=${category}&chapter=${chapter}&includeLocal=true&includeAPI=true',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -581,7 +581,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/search',
+            'search',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -691,7 +691,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/ai/analyze-hadith',
+            'ai/analyze-hadith',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -723,7 +723,7 @@ class _ApiService implements ApiService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/ai/chat',
+            'ai/chat',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -751,7 +751,7 @@ class _ApiService implements ApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/ai/remaining-questions',
+            'ai/remaining-questions',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -761,6 +761,126 @@ class _ApiService implements ApiService {
     late RmainingQuestionsResponse _value;
     try {
       _value = RmainingQuestionsResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<AddSearchResponse> addSearch(
+    String token,
+    AddSearchRequest body,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'x-auth-token': token};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body.toJson());
+    final _options = _setStreamType<AddSearchResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/search-history',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late AddSearchResponse _value;
+    try {
+      _value = AddSearchResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<GetSearchHistoryResponse> getSearchHistory(String token) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'x-auth-token': token};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<GetSearchHistoryResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/search-history/user',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late GetSearchHistoryResponse _value;
+    try {
+      _value = GetSearchHistoryResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<DeleteSearchResponse> deleteSearch(String token, int searchId) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'x-auth-token': token};
+    _headers.removeWhere((k, v) => v == null);
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<DeleteSearchResponse>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/search-history/${searchId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late DeleteSearchResponse _value;
+    try {
+      _value = DeleteSearchResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<DeleteAllSearchResponse> deleteAllSearch(
+    String token,
+    Map<String, dynamic> body,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{r'x-auth-token': token};
+    _headers.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    _data.addAll(body);
+    final _options = _setStreamType<DeleteAllSearchResponse>(
+      Options(method: 'DELETE', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/search-history/user',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late DeleteAllSearchResponse _value;
+    try {
+      _value = DeleteAllSearchResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;
