@@ -85,7 +85,6 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
 
             final hadith = snapshot.data;
 
-            // ✅ في حالة الحديث مش متخزن، نعمل fetch ثم rebuild
             if (hadith == null) {
               widget.repo.fetchHadith("65060").then((_) {
                 _refreshKey.value++;
