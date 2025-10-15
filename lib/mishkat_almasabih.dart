@@ -24,11 +24,7 @@ class MishkatAlmasabih extends StatelessWidget {
       log("Going to onboarding screen");
       return Routes.onBoardingScreen;
     } 
-    /*else if (!isLoggedIn) {
-      log("Going to login screen");
-      return Routes.loginScreen;
-    } 
-    */else {
+    else {
       log("Going to splash screen");
       return Routes.splashScreen;
     }
