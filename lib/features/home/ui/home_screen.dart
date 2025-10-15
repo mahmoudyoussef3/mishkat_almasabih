@@ -35,7 +35,6 @@ class HomeScreenWrapper extends StatelessWidget {
               (_) =>
                   getIt<GetLibraryStatisticsCubit>()..emitGetStatisticsCubit(),
         ),
-        
       ],
       child: const HomeScreen(),
     );
@@ -157,7 +156,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   );
 
- Widget _buildBooksSection() {
+  Widget _buildBooksSection() {
     return SliverToBoxAdapter(
       child: BlocBuilder<GetLibraryStatisticsCubit, GetLibraryStatisticsState>(
         builder: (context, state) {
@@ -241,20 +240,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
           onSearch: (query) {
             final now = DateTime.now();
-        
 
             final trimmedQuery = query.trim();
             if (trimmedQuery.isEmpty) return;
 
-            context.read<SearchHistoryCubit>().addSearchItem(
-              AddSearchRequest(title: trimmedQuery,
-      date: "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
-      time: "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}",               ),
-            ).then((value) => 
-            context.pushNamed(
-              Routes.publicSearchSCreen,
-              arguments: trimmedQuery,
-            ),);
+            context
+                .read<SearchHistoryCubit>()
+                .addSearchItem(
+                  AddSearchRequest(
+                    title: trimmedQuery,
+                    date:
+                        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
+                    time:
+                        "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}",
+                  ),
+                )
+                .then(
+                  (value) => context.pushNamed(
+                    Routes.publicSearchSCreen,
+                    arguments: trimmedQuery,
+                  ),
+                );
           },
         ),
       ),
