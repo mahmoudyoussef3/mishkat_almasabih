@@ -266,25 +266,4 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  final Map<String, String> booksMap = {
-    'صحيح البخاري': 'sahih-bukhari',
-    'صحيح مسلم': 'sahih-muslim',
-    'سنن أبي داود': 'abu-dawood',
-    'سنن الترمذي': 'al-tirmidhi',
-    'سنن النسائي': 'sunan-nasai',
-    'سنن ابن ماجة': 'ibn-e-majah',
-    'موطأ مالك': 'malik',
-    'مسند أحمد': 'musnad-ahmad',
-    'سنن الدارمي': 'darimi',
-    'بلوغ المرام': 'bulugh_al_maram',
-    'رياض الصالحين': 'riyad_assalihin',
-    'مشكات المصابيح': 'mishkat',
-    'الأربعون النووية': 'nawawi40',
-    'الأربعون القدسية': 'qudsi40',
-    'أربعون ولي الله الدهلوي': 'shahwaliullah40',
-    'الأدب المفرد': 'aladab_almufrad',
-    'الشمائل المحمدية': 'shamail_muhammadiyah',
-    'حصن المسلم': 'hisnul_muslim',
-  };
 }
