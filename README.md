@@ -321,31 +321,14 @@ The app supports multiple environments:
 ### **أوامر البناء | Build Commands**
 ```bash
 # Android APK
-flutter build apk --flavor production
+flutter build apk 
 
 # Android App Bundle (للنشر على Google Play)
-flutter build appbundle --flavor production
+flutter build appbundle
 
 # iOS
-flutter build ios --flavor production
 
-# Web
-flutter build web
-```
 
----
-
-## 📚 التوثيق | Documentation
-
-### **توثيق الـ API | API Documentation**
-- [🔗 نقاط نهاية المكتبة | Library Endpoints](docs/ISLAMIC_LIBRARY_17_BOOKS_ENDPOINTS.md)
-
-### **أدلة الاستخدام | Usage Guides**
-- [📖 دليل المستخدم | User Guide](docs/USER_GUIDE.md)
-- [👨‍💻 دليل المطور | Developer Guide](docs/DEVELOPER_GUIDE.md)
-- [🎨 دليل التصميم | Design Guide](docs/DESIGN_GUIDE.md)
-
----
 
 ## 🤝 المساهمة | Contributing
 
@@ -380,13 +363,6 @@ We welcome contributions from the community! Please read our contributing guidel
 
 ---
 
-## 📄 الترخيص | License
-
-هذا المشروع مرخص بموجب رخصة MIT - انظر ملف [LICENSE](LICENSE) للحصول على التفاصيل.
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 شكر وتقدير | Acknowledgments
 
@@ -397,13 +373,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 التواصل | Contact
-
-- **البريد الإلكتروني | Email**: support@mishkat-ahadith.com
-- **موقع الويب | Website**: [mishkat-ahadith.com](https://mishkat-ahadith.com)
-- **Twitter**: [@MishkatApp](https://twitter.com/MishkatApp)
-
----
 
 ## 🔗 روابط مهمة | Important Links
 
