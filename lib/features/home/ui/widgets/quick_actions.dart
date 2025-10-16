@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/theming/colors.dart';
 import '../../../../core/theming/styles.dart';
 import '../../../../core/helpers/spacing.dart';
@@ -16,36 +14,28 @@ class QuickActions extends StatelessWidget {
         'subtitle': 'Daily Hadith',
         'icon': Icons.lightbulb_outline,
         'color': ColorsManager.primaryGold,
-        'onTap': () {
-          // TODO: Navigate to daily hadith
-        },
+        'onTap': () {},
       },
       {
         'title': 'المحفوظات',
         'subtitle': 'Bookmarks',
         'icon': Icons.bookmark_outline,
         'color': ColorsManager.primaryPurple,
-        'onTap': () {
-          // TODO: Navigate to bookmarks
-        },
+        'onTap': () {},
       },
       {
         'title': 'البحث المتقدم',
         'subtitle': 'Advanced Search',
         'icon': Icons.search,
         'color': ColorsManager.secondaryPurple,
-        'onTap': () {
-          // TODO: Navigate to advanced search
-        },
+        'onTap': () {},
       },
       {
         'title': 'الإعدادات',
         'subtitle': 'Settings',
         'icon': Icons.settings_outlined,
         'color': ColorsManager.lightPurple,
-        'onTap': () {
-          // TODO: Navigate to settings
-        },
+        'onTap': () {},
       },
     ];
 
