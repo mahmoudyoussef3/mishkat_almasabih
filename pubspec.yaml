@@ -73,6 +73,7 @@ flutter:
 
   assets:
     - assets/images/
+    - screenshots/
     - assets/images/first_onboardin.jpeg
     - assets/images/search_logo.jpg
     - assets/images/icons/search_icon.png
