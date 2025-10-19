@@ -173,6 +173,7 @@ class _BookmarkListState extends State<BookmarkList> {
       height: 600.h,
       child: CustomScrollView(
         physics: const NeverScrollableScrollPhysics(),
+        
         slivers: [
           SliverToBoxAdapter(child: SizedBox(height: 18.h)),
           ResponsiveChapterList(

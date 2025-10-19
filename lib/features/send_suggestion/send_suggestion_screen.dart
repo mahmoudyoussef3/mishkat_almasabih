@@ -37,7 +37,11 @@ class _SuggestionFormState extends State<SuggestionForm> {
           content: const Text('تم إرسال الاقتراح بنجاح ✓'),
         ),
       );
+  Navigator.of(context).pop();
     } else {
+
+
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: ColorsManager.error,

@@ -1,28 +1,16 @@
-import 'dart:async';
+import 'package:flutter/material.dart';
 
-/// Singleton class لإرسال إشعارات عند تحديث الحديث
-class HadithRefreshNotifier {
+/// Singleton pattern عشان نضمن instance واحد بس في كل التطبيق
+class HadithRefreshNotifier extends ChangeNotifier {
   static final HadithRefreshNotifier _instance = HadithRefreshNotifier._internal();
   
   factory HadithRefreshNotifier() => _instance;
   
   HadithRefreshNotifier._internal();
 
-  // StreamController للإشعار بالتحديث
-  final _controller = StreamController<bool>.broadcast();
-
-  /// Stream للاستماع للتحديثات
-  Stream<bool> get onRefresh => _controller.stream;
-
-  /// إشعار بتحديث الحديث
+  /// دالة لإشعار جميع المستمعين بالتحديث
   void notifyRefresh() {
-    if (!_controller.isClosed) {
-      _controller.add(true);
-    }
-  }
-
-  /// تنظيف الموارد
-  void dispose() {
-    _controller.close();
+    debugPrint('🔔 Notifying all listeners to refresh hadith');
+    notifyListeners();
   }
 }

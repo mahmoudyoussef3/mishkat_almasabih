@@ -168,7 +168,7 @@ class _MishkatDrawerState extends State<MishkatDrawer> {
                 onTap: () => _showLogoutDialog(context),
               ),
             ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 32.h),
         ],
       ),
     );

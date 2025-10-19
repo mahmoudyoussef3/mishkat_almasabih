@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
+import 'package:mishkat_almasabih/core/notification/hadith_refresh_notifier.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/new_daily_hadith_model.dart';
@@ -19,20 +20,39 @@ class HadithOfTheDayCard extends StatefulWidget {
 
 class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
   late ValueNotifier<int> _refreshKey;
+  final HadithRefreshNotifier _notifier = HadithRefreshNotifier();
 
   @override
   void initState() {
     super.initState();
     _refreshKey = ValueNotifier<int>(0);
+    
+    // ✅ ربط الكارد بالـ Notifier عشان تسمع التحديثات
+    _notifier.addListener(_onHadithRefresh);
+    
+    debugPrint('🎧 HadithCard: Listening for notification updates');
   }
 
   @override
   void dispose() {
+    // ✅ إزالة الـ Listener قبل الـ dispose
+    _notifier.removeListener(_onHadithRefresh);
     _refreshKey.dispose();
+    debugPrint('👋 HadithCard: Stopped listening');
     super.dispose();
   }
 
+  /// يتم استدعاؤها تلقائياً لما notification تيجي
+  void _onHadithRefresh() {
+    debugPrint('🔄 HadithCard: Refresh triggered from notification');
+    if (mounted) {
+      _refreshKey.value++;
+    }
+  }
+
+  /// دالة refresh يدوية (لو حابب تستخدمها من أي مكان)
   void refresh() {
+    debugPrint('🔄 HadithCard: Manual refresh');
     _refreshKey.value++;
   }
 
@@ -45,6 +65,7 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
           key: ValueKey(value),
           future: widget.repo.getHadith(),
           builder: (context, snapshot) {
+            // حالة التحميل
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Shimmer.fromColors(
                 baseColor: Colors.grey.shade300,
@@ -61,7 +82,9 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
               );
             }
 
+            // حالة الخطأ
             if (snapshot.hasError) {
+              debugPrint('❌ HadithCard: Error loading hadith - ${snapshot.error}');
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
                 height: 180.h,
@@ -86,12 +109,18 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
             final hadith = snapshot.data;
 
             if (hadith == null) {
-              widget.repo.fetchHadith("65060").then((_) {
-                _refreshKey.value++;
+              debugPrint('⚠️ HadithCard: No hadith found, fetching default...');
+              widget.repo.fetchHadith("65060").then((fetchedHadith) {
+                if (fetchedHadith != null && mounted) {
+                  debugPrint('✅ HadithCard: Default hadith fetched');
+                  _refreshKey.value++;
+                }
+              }).catchError((error) {
+                debugPrint('❌ HadithCard: Failed to fetch default hadith - $error');
               });
+
               return Container(
-                margin:
-                    EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
+                margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
                 height: 180.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -99,18 +128,25 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                   borderRadius: BorderRadius.circular(24.r),
                 ),
                 child: Center(
-                  child: Text(
-                    "جاري تحميل الحديث...",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.grey.shade600,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                  
+                      Text(
+                        "جاري تحميل الحديث...",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );
             }
 
             // ✅ لو فيه حديث جاهز، نعرضه
+            debugPrint('📖 HadithCard: Displaying hadith - ${hadith.title}');
             return GestureDetector(
               onTap: () => context.pushNamed(
                 Routes.hadithOfTheDay,
@@ -136,8 +172,7 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                               "assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg",
                             ),
                             fit: BoxFit.cover,
-                            fadeInDuration:
-                                const Duration(milliseconds: 700),
+                            fadeInDuration: const Duration(milliseconds: 700),
                           ),
                         ),
                       ),
@@ -168,21 +203,6 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                                   color: ColorsManager.secondaryBackground,
                                 ),
                               ),
-                              /*
-                              Spacer(),
-                             
-                              GestureDetector(
-                                onTap: () async {
-                                  await widget.repo.getHadith();
-                                  refresh();
-                                },
-                                child: Icon(
-                                Icons.refresh,
-                                color: ColorsManager.secondaryBackground,
-                                size: 20.sp,
-                              ),
-                              ),
-                              */
                             ],
                           ),
                           Flexible(

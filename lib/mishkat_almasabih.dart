@@ -8,13 +8,13 @@ import 'core/routing/routes.dart';
 class MishkatAlmasabih extends StatelessWidget {
   final AppRouter appRouter;
   final bool isFirstTime;
-//  final bool isLoggedIn;
+  //  final bool isLoggedIn;
 
   const MishkatAlmasabih({
     super.key,
     required this.appRouter,
     required this.isFirstTime,
- //   required this.isLoggedIn,
+    //   required this.isLoggedIn,
   });
 
   String _getStartScreen() {
@@ -23,12 +23,7 @@ class MishkatAlmasabih extends StatelessWidget {
     if (isFirstTime) {
       log("Going to onboarding screen");
       return Routes.onBoardingScreen;
-    } 
-    /*else if (!isLoggedIn) {
-      log("Going to login screen");
-      return Routes.loginScreen;
-    } 
-    */else {
+    } else {
       log("Going to splash screen");
       return Routes.splashScreen;
     }
@@ -69,8 +64,7 @@ class MishkatAlmasabih extends StatelessWidget {
             );
           },
 
-          // إضافة home fallback
-          home: null, // تأكد إن home = null عشان يستخدم initialRoute
+          home: null, 
         );
       },
     );

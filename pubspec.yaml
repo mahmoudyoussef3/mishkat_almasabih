@@ -2,7 +2,7 @@ name: mishkat_almasabih
 description: "A new Flutter project."
 publish_to: 'none' 
 
-version: 1.0.1
+version: 3.0.0+8
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
@@ -49,6 +49,7 @@ dependencies:
   firebase_messaging: ^16.0.2
   flutter_local_notifications: ^17.2.4
   infinite_scroll_pagination: ^5.1.1
+  custom_snackbar_plus: ^8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,7 @@ flutter:
 
   assets:
     - assets/images/
+    - screenshots/
     - assets/images/first_onboardin.jpeg
     - assets/images/search_logo.jpg
     - assets/images/icons/search_icon.png

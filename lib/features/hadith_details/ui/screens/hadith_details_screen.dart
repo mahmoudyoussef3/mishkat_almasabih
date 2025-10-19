@@ -191,7 +191,8 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
               slivers: [
                 BuildHeaderAppBar(
                   title: 'تفاصيل الحديث',
-                  actions: [
+                  actions:                  widget.isBookMark ?[]:
+ [
                     AppBarActionButton(
                       icon: Icons.bookmark_border_rounded,
                       onPressed: () {
@@ -366,7 +367,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
 
                 _buildDividerSection(),
 
-                SliverToBoxAdapter(child: SizedBox(height: 50.h)),
+                    SliverToBoxAdapter(child: SizedBox(height: 120.h)),
               ],
             ),
           ),

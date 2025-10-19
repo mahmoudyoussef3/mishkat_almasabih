@@ -36,7 +36,6 @@ class HomeScreenWrapper extends StatelessWidget {
               (_) =>
                   getIt<GetLibraryStatisticsCubit>()..emitGetStatisticsCubit(),
         ),
-        
       ],
       child: const HomeScreen(),
     );
@@ -161,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   );
 
- Widget _buildBooksSection() {
+  Widget _buildBooksSection() {
     return SliverToBoxAdapter(
       child: BlocBuilder<GetLibraryStatisticsCubit, GetLibraryStatisticsState>(
         builder: (context, state) {
@@ -245,44 +244,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
           onSearch: (query) {
             final now = DateTime.now();
-        
 
             final trimmedQuery = query.trim();
             if (trimmedQuery.isEmpty) return;
 
-            context.read<SearchHistoryCubit>().addSearchItem(
-              AddSearchRequest(title: trimmedQuery,
-      date: "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
-      time: "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}",               ),
-            ).then((value) => 
-            context.pushNamed(
-              Routes.publicSearchSCreen,
-              arguments: trimmedQuery,
-            ),);
+            context
+                .read<SearchHistoryCubit>()
+                .addSearchItem(
+                  AddSearchRequest(
+                    title: trimmedQuery,
+                    date:
+                        "${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}",
+                    time:
+                        "${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}",
+                  ),
+                )
+                .then(
+                  (value) => context.pushNamed(
+                    Routes.publicSearchSCreen,
+                    arguments: trimmedQuery,
+                  ),
+                );
           },
         ),
       ),
     );
   }
-
-  final Map<String, String> booksMap = {
-    'صحيح البخاري': 'sahih-bukhari',
-    'صحيح مسلم': 'sahih-muslim',
-    'سنن أبي داود': 'abu-dawood',
-    'سنن الترمذي': 'al-tirmidhi',
-    'سنن النسائي': 'sunan-nasai',
-    'سنن ابن ماجة': 'ibn-e-majah',
-    'موطأ مالك': 'malik',
-    'مسند أحمد': 'musnad-ahmad',
-    'سنن الدارمي': 'darimi',
-    'بلوغ المرام': 'bulugh_al_maram',
-    'رياض الصالحين': 'riyad_assalihin',
-    'مشكات المصابيح': 'mishkat',
-    'الأربعون النووية': 'nawawi40',
-    'الأربعون القدسية': 'qudsi40',
-    'أربعون ولي الله الدهلوي': 'shahwaliullah40',
-    'الأدب المفرد': 'aladab_almufrad',
-    'الشمائل المحمدية': 'shamail_muhammadiyah',
-    'حصن المسلم': 'hisnul_muslim',
-  };
 }
