@@ -28,43 +28,33 @@ class ErrorHandler {
     return ApiErrorModel(message: "حدث خطأ غير متوقع");
   }
 
-  static ApiErrorModel _handleError(dynamic data, {int? statusCode}) {
-    if (data == null) {
-      return ApiErrorModel(message: "حدث خطأ، حاول مرة أخرى.");
-    }
-
-    try {
-      if (data is String) {
-        return ApiErrorModel(message: data);
-      }
-
-      if (data is Map<String, dynamic>) {
-        final message = data['message']?.toString();
-        final messageAr = data['messageAr']?.toString();
-        final success = data['success'] is bool ? data['success'] as bool : null;
-        final status = data['status'] is int ? data['status'] as int : statusCode;
-
-    
-        if (status == 400) {
-          return ApiErrorModel(
-            message:  message ,
-            success: success,
-            messageAr: messageAr,
-            status: status,
-          );
-        }
-
-        // ✅ لباقي الحالات نرجع الرسالة اللي جاية من السيرفر
-        return ApiErrorModel(
-          message: messageAr ?? message ?? "حدث خطأ غير متوقع",
-          success: success,
-          status: status,
-        );
-      }
-
-      return ApiErrorModel(message: data.toString());
-    } catch (_) {
-      return ApiErrorModel(message: "حدث خطأ أثناء معالجة الرد.");
-    }
+static ApiErrorModel _handleError(dynamic data, {int? statusCode}) {
+  if (data == null) {
+    return ApiErrorModel(message: "حدث خطأ، حاول مرة أخرى.");
   }
+
+  try {
+    if (data is String) {
+      return ApiErrorModel(message: data);
+    }
+
+    if (data is Map<String, dynamic>) {
+      final message = data['message']?.toString();
+      final messageAr = data['messageAr']?.toString();
+      final success = data['success'] is bool ? data['success'] as bool : null;
+      final status = data['status'] is int ? data['status'] as int : statusCode;
+
+      return ApiErrorModel(
+        message: message,
+        messageAr: messageAr,
+        success: success,
+        status: status,
+      );
+    }
+
+    return ApiErrorModel(message: data.toString());
+  } catch (_) {
+    return ApiErrorModel(message: "حدث خطأ أثناء معالجة الرد.");
+  }
+}
 }
