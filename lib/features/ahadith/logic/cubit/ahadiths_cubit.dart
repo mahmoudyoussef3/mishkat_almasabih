@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:mishkat_almasabih/core/helpers/functions.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/local_books_model.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/repos/ahadiths_repo.dart';
@@ -25,9 +26,7 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         chapterId: chapterId,
       );
       result.fold(
-        (l) => emit(
-          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
-        ),
+        (l) => emit(AhadithsFailure(l.getAllErrorMessages())),
         (r) => emit(LocalAhadithsSuccess(r)),
       );
     } else if (hadithLocal) {
@@ -36,9 +35,7 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         chapterId: chapterId,
       );
       result.fold(
-        (l) => emit(
-          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
-        ),
+        (l) => emit(AhadithsFailure(l.getAllErrorMessages())),
         (r) => emit(LocalAhadithsSuccess(r)),
       );
     } else {
@@ -46,20 +43,15 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         bookSlug: bookSlug,
         chapterId: chapterId,
       );
-      result.fold(
-        (l) => emit(
-          AhadithsFailure(l.apiErrorModel.msg ?? 'Unknown error occurred'),
-        ),
-        (r) {
-          final hadithsList = r.hadiths?.data ?? [];
-          emit(
-            AhadithsSuccess(
-              filteredAhadith: hadithsList,
-              allAhadith: hadithsList,
-            ),
-          );
-        },
-      );
+      result.fold((l) => emit(AhadithsFailure(l.getAllErrorMessages())), (r) {
+        final hadithsList = r.hadiths?.data ?? [];
+        emit(
+          AhadithsSuccess(
+            filteredAhadith: hadithsList,
+            allAhadith: hadithsList,
+          ),
+        );
+      });
     }
   }
 
@@ -97,14 +89,14 @@ class AhadithsCubit extends Cubit<AhadithsState> {
                 .where(
                   (hadith) =>
                       hadith.arabic != null &&
-                      normalizeArabic(hadith.arabic!).contains(normalizedQuery.trim()),
+                      normalizeArabic(
+                        hadith.arabic!,
+                      ).contains(normalizedQuery.trim()),
                 )
                 .toList();
-
 
         emit(currentState);
       }
     }
   }
-
 }

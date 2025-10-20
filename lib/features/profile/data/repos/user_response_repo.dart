@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_model.dart';
 import 'package:mishkat_almasabih/core/networking/api_service.dart';
 import 'package:mishkat_almasabih/core/networking/caching_helper.dart';
 import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
@@ -10,7 +11,7 @@ class UserResponseRepo {
 
   UserResponseRepo(this.apiService);
 
-  Future<Either<ErrorHandler, UserResponseModel>> getUserProfile() async {
+  Future<Either<ApiErrorModel, UserResponseModel>> getUserProfile() async {
     try {
       final String token = await _getUserToken();
       final response = await apiService.getUserProfile(token);

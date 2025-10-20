@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_model.dart';
 import 'package:mishkat_almasabih/features/chapters/data/models/chapters_model.dart';
 import 'package:mishkat_almasabih/features/chapters/data/repos/chapters_repo.dart';
 
@@ -13,7 +14,7 @@ class ChaptersCubit extends Cubit<ChaptersState> {
     emit(ChaptersLoading());
     final result = await _bookChaptersRepo.getBookChapters(bookSlug);
     result.fold(
-      (l) => emit(ChaptersFailure(l.apiErrorModel.msg)),
+      (l) => emit(ChaptersFailure(l.getAllErrorMessages())),
       (r) => emit(
         ChaptersSuccess(
           allChapters: r.chapters ?? [],

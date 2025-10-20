@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_handler.dart';
+import 'package:mishkat_almasabih/core/networking/api_error_model.dart';
 import 'package:mishkat_almasabih/core/networking/api_service.dart';
 import 'package:mishkat_almasabih/core/networking/caching_helper.dart';
 import 'package:mishkat_almasabih/features/ahadith/data/models/ahadiths_model.dart';
@@ -10,7 +11,7 @@ class AhadithsRepo {
   AhadithsRepo(this._apiService);
   final ApiService _apiService;
 
-  Future<Either<ErrorHandler, HadithResponse>> getAhadith({
+  Future<Either<ApiErrorModel, HadithResponse>> getAhadith({
     required String bookSlug,
     required int chapterId,
   }) async {
@@ -38,7 +39,7 @@ class AhadithsRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        cacheExpirationHours: 100, 
+        cacheExpirationHours: 100,
       );
 
       log(
@@ -51,7 +52,7 @@ class AhadithsRepo {
     }
   }
 
-  Future<Either<ErrorHandler, LocalHadithResponse>> getLocalAhadith({
+  Future<Either<ApiErrorModel, LocalHadithResponse>> getLocalAhadith({
     required String bookSlug,
     required int chapterId,
   }) async {
@@ -79,7 +80,6 @@ class AhadithsRepo {
         key: cacheKey,
         data: response,
         toJson: (data) => data.toJson(),
-        
       );
 
       log('🌍 Loaded Local Ahadith from API and cached it');
@@ -91,7 +91,7 @@ class AhadithsRepo {
   }
 
   /// 📦 Get Three Books Local Ahadith (with caching)
-  Future<Either<ErrorHandler, LocalHadithResponse>> getThreeAhadith({
+  Future<Either<ApiErrorModel, LocalHadithResponse>> getThreeAhadith({
     required String bookSlug,
     required int chapterId,
   }) async {
