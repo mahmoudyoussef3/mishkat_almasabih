@@ -18,6 +18,8 @@ class ErrorHandler {
           return ApiErrorModel(message: "انتهت مهلة استقبال البيانات");
         case DioExceptionType.connectionError:
           return ApiErrorModel(message: "فشل الاتصال بالخادم");
+        case DioExceptionType.badResponse:
+          return _handleError(error.response?.data);
         case DioExceptionType.cancel:
           return ApiErrorModel(message: "تم إلغاء الطلب");
         default:

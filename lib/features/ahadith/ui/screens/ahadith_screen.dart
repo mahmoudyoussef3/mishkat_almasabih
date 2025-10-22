@@ -11,7 +11,6 @@ import 'package:mishkat_almasabih/features/ahadith/ui/widgets/local_hadith_list_
 import 'package:mishkat_almasabih/core/widgets/hadith_card_shimer.dart';
 import 'package:mishkat_almasabih/core/widgets/error_dialg.dart';
 
-
 class ChapterAhadithScreen extends StatelessWidget {
   ChapterAhadithScreen({
     super.key,
@@ -43,7 +42,7 @@ class ChapterAhadithScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: SafeArea(
-          top: true,
+        top: true,
         bottom: false,
         child: Scaffold(
           backgroundColor: ColorsManager.primaryBackground,
@@ -59,12 +58,8 @@ class ChapterAhadithScreen extends StatelessWidget {
               AhadithSearchBar(controller: _controller),
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 
-              // BlocListener for bookmarks
-              const SliverToBoxAdapter(
-                child: BookmarkListener(),
-              ),
+              const SliverToBoxAdapter(child: BookmarkListener()),
 
-              // Main Hadith builder
               BlocBuilder<AhadithsCubit, AhadithsState>(
                 builder: (context, state) {
                   if (state is AhadithsSuccess) {
@@ -76,8 +71,8 @@ class ChapterAhadithScreen extends StatelessWidget {
                   } else if (state is AhadithsLoading) {
                     return SliverList.builder(
                       itemCount: 6,
-                      itemBuilder: (context, index) =>
-                          const HadithCardShimmer(),
+                      itemBuilder:
+                          (context, index) => const HadithCardShimmer(),
                     );
                   } else if (state is LocalAhadithsSuccess) {
                     return LocalHadithListBuilder(
