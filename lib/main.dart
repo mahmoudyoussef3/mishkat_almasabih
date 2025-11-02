@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:device_preview/device_preview.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +13,15 @@ import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.d
 import 'package:mishkat_almasabih/firebase_options.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'mishkat_almasabih.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
   //await Firebase.initializeApp();
 
   // تهيئة الـ FCM (مرة واحدة بس)
@@ -25,25 +30,34 @@ Future<void> main() async {
   await LocalNotification.init();
   //await PushNotification.getApnsToken();
 
-      // إعداد tap على النوتيفيكيشن
-    PushNotification.setupOnTapNotification();
-    
-    // معالجة لو الأبلكيشن فتح من نوتيفيكيشن (terminated state)
-    PushNotification.handleTerminatedNotification();
-  
+  // إعداد tap على النوتيفيكيشن
+  PushNotification.setupOnTapNotification();
+
+  // معالجة لو الأبلكيشن فتح من نوتيفيكيشن (terminated state)
+  PushNotification.handleTerminatedNotification();
+
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
   //final prefs = await SharedPreferences.getInstance();
   //final token = prefs.getString('token');
- // final isLoggedIn = token != null;
+  // final isLoggedIn = token != null;
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
 
   final app = MishkatAlmasabih(
+    analytics: observer,
     appRouter: AppRouter(),
     isFirstTime: isFirstTime,
-   // isLoggedIn: isLoggedIn,
+    // isLoggedIn: isLoggedIn,
   );
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  // ربط Flutter errors بـ Crashlytics
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  // التعامل مع الأخطاء الغير متوقعة (خارج Flutter)
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
   runApp(app);
 }

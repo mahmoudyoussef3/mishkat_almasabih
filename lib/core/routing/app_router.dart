@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
@@ -43,13 +44,23 @@ import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
 
 class AppRouter {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  void _logScreenView(String screenName) {
+    analytics.logScreenView(
+      screenName: screenName,
+      screenClass: screenName,
+    );
+  }
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.splashScreen:
+      _logScreenView('SplashScreen');
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.onBoardingScreen:
+        _logScreenView('OnboardingScreen');
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case Routes.signupScreen:
+        _logScreenView('SignupScreen');
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
@@ -58,6 +69,7 @@ class AppRouter {
               ),
         );
       case Routes.loginScreen:
+        _logScreenView('LoginScreen');
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
@@ -96,6 +108,7 @@ class AppRouter {
         );
 */
       case Routes.homeScreen:
+        _logScreenView('HomeScreen');
         return MaterialPageRoute(
           builder:
               (_) => MultiBlocProvider(
@@ -122,6 +135,7 @@ class AppRouter {
               ),
         );
       case Routes.searchScreen:
+        _logScreenView('SearchScreen');
         return MaterialPageRoute(
           builder:
               (_) => MultiBlocProvider(
@@ -138,6 +152,7 @@ class AppRouter {
               ),
         );
      case Routes.profileScreen:
+        _logScreenView('ProfileScreen');
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
@@ -149,6 +164,7 @@ class AppRouter {
         );
 
      case Routes.bookmarkScreen:
+        _logScreenView('BookmarkScreen');
         return MaterialPageRoute(
           builder:
               (_) => MultiBlocProvider(
@@ -169,6 +185,7 @@ class AppRouter {
               ),
         );
            case Routes.libraryScreen:
+        _logScreenView('LibraryScreen');
         return MaterialPageRoute(
           builder:
               (_) => MultiBlocProvider(
@@ -188,6 +205,7 @@ class AppRouter {
 
 
       case Routes.bookChaptersScreen:
+        _logScreenView('BookChaptersScreen');
         final args = settings.arguments as List<dynamic>;
         final bookSlug = args[0];
         return MaterialPageRoute(
@@ -200,6 +218,8 @@ class AppRouter {
               ),
         );
       case Routes.publicSearchSCreen:
+              _logScreenView('publicSearchSCreen');
+
         final query = settings.arguments as String;
         log(query);
 
@@ -216,6 +236,8 @@ class AppRouter {
         );
 
       case Routes.filterResultSearch:
+                    _logScreenView('FilterResultSearch');
+
         final query = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder:
@@ -237,6 +259,7 @@ class AppRouter {
         );
         
       case Routes.usersSuggestions:
+        _logScreenView('UsersSuggestions');
         return MaterialPageRoute(
           builder:
               (_) => SuggestionForm(
@@ -253,6 +276,7 @@ class AppRouter {
         );
         */
       case Routes.hadithOfTheDay:
+        _logScreenView('HadithOfTheDay');
         final query = settings.arguments as NewDailyHadithModel;
 
         return MaterialPageRoute(
@@ -268,6 +292,7 @@ class AppRouter {
               ),
         );
       case Routes.serag:
+        _logScreenView('SeragScreen');
         final query = settings.arguments as SeragRequestModel;
 
         return MaterialPageRoute(
