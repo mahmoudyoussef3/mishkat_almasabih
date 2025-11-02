@@ -8,6 +8,7 @@ import 'package:mishkat_almasabih/features/hadith_daily/data/models/new_daily_ha
 import 'package:mishkat_almasabih/features/hadith_daily/data/repos/save_hadith_daily_repo.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:home_widget/home_widget.dart';
 
 class HadithOfTheDayCard extends StatefulWidget {
   final SaveHadithDailyRepo repo;
@@ -26,10 +27,10 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
   void initState() {
     super.initState();
     _refreshKey = ValueNotifier<int>(0);
-    
+
     // ✅ ربط الكارد بالـ Notifier عشان تسمع التحديثات
     _notifier.addListener(_onHadithRefresh);
-    
+
     debugPrint('🎧 HadithCard: Listening for notification updates');
   }
 
@@ -47,6 +48,7 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
     debugPrint('🔄 HadithCard: Refresh triggered from notification');
     if (mounted) {
       _refreshKey.value++;
+      _updateHadithWidget(); // Call to update the native widget
     }
   }
 
@@ -71,7 +73,10 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                 baseColor: Colors.grey.shade300,
                 highlightColor: Colors.grey.shade100,
                 child: Container(
-                  margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
+                  margin: EdgeInsets.symmetric(
+                    vertical: 12.h,
+                    horizontal: 16.w,
+                  ),
                   height: 200.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -84,7 +89,9 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
 
             // حالة الخطأ
             if (snapshot.hasError) {
-              debugPrint('❌ HadithCard: Error loading hadith - ${snapshot.error}');
+              debugPrint(
+                '❌ HadithCard: Error loading hadith - ${snapshot.error}',
+              );
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
                 height: 180.h,
@@ -111,14 +118,20 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
             // ✅ في حالة الحديث مش متخزن، نعمل fetch ثم rebuild
             if (hadith == null) {
               debugPrint('⚠️ HadithCard: No hadith found, fetching default...');
-              widget.repo.fetchHadith("65060").then((fetchedHadith) {
-                if (fetchedHadith != null && mounted) {
-                  debugPrint('✅ HadithCard: Default hadith fetched');
-                  _refreshKey.value++;
-                }
-              }).catchError((error) {
-                debugPrint('❌ HadithCard: Failed to fetch default hadith - $error');
-              });
+              widget.repo
+                  .fetchHadith("65060")
+                  .then((fetchedHadith) {
+                    if (fetchedHadith != null && mounted) {
+                      debugPrint('✅ HadithCard: Default hadith fetched');
+                      _refreshKey.value++;
+                      _updateHadithWidget(); // Call to update the native widget after fetching default
+                    }
+                  })
+                  .catchError((error) {
+                    debugPrint(
+                      '❌ HadithCard: Failed to fetch default hadith - $error',
+                    );
+                  });
 
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
@@ -132,7 +145,6 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                  
                       Text(
                         "جاري تحميل الحديث...",
                         style: TextStyle(
@@ -148,11 +160,15 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
 
             // ✅ لو فيه حديث جاهز، نعرضه
             debugPrint('📖 HadithCard: Displaying hadith - ${hadith.title}');
+            _updateHadithWidget(
+              hadithText: hadith.hadeeth,
+            ); // Update widget with the displayed hadith
             return GestureDetector(
-              onTap: () => context.pushNamed(
-                Routes.hadithOfTheDay,
-                arguments: hadith,
-              ),
+              onTap:
+                  () => context.pushNamed(
+                    Routes.hadithOfTheDay,
+                    arguments: hadith,
+                  ),
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
                 height: 200.h,
@@ -272,5 +288,34 @@ class _HadithOfTheDayCardState extends State<HadithOfTheDayCard> {
         );
       },
     );
+  }
+
+  Future<void> _updateHadithWidget({String? hadithText}) async {
+    // Only update if a hadith text is provided or can be fetched
+    if (hadithText != null) {
+      await HomeWidget.saveWidgetData<String>('hadith_text', hadithText);
+      await HomeWidget.updateWidget(
+        name: 'HadithWidgetProvider',
+        iOSName: 'HadithWidget',
+      );
+      debugPrint(
+        '⬆️ HomeWidget: Data saved and widget updated with: $hadithText',
+      );
+    } else {
+      final currentHadith = await widget.repo.getHadith();
+      if (currentHadith != null) {
+        await HomeWidget.saveWidgetData<String>(
+          'hadith_text',
+          currentHadith.hadeeth,
+        );
+        await HomeWidget.updateWidget(
+          name: 'HadithWidgetProvider',
+          iOSName: 'HadithWidget',
+        );
+        debugPrint(
+          '⬆️ HomeWidget: Data saved and widget updated with current hadith: ${currentHadith.hadeeth}',
+        );
+      }
+    }
   }
 }

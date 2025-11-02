@@ -14,6 +14,19 @@
         android:icon="@mipmap/launcher_icon"
         android:allowBackup="false"
         android:fullBackupContent="false">
+<receiver
+    android:name=".HadithWidgetProvider"
+    android:exported="true">
+    <intent-filter>
+        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+    </intent-filter>
+
+    <meta-data
+        android:name="android.appwidget.provider"
+        android:resource="@xml/hadith_widget_info" />
+</receiver>
+
+
 
         <!-- Main Activity -->
         <activity
