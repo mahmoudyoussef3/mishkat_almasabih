@@ -113,12 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverToBoxAdapter(
           child: HadithOfTheDayCard(repo: SaveHadithDailyRepo()),
         ),
-        SliverToBoxAdapter(
-          child: TextButton(
-              onPressed: () => throw Exception(),
-              child: const Text("Throw Test Exception"),
-          ),
-        ),
 
         _buildDividerSection(),
         _buildBooksSection(),

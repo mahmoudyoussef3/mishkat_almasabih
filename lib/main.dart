@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,7 +9,6 @@ import 'package:mishkat_almasabih/core/notification/push_notification.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
 import 'package:mishkat_almasabih/firebase_options.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'mishkat_almasabih.dart';
