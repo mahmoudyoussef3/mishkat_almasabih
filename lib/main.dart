@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_performance/firebase_performance.dart';
 import 'package:flutter/material.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/notification/local_notification.dart';
@@ -55,6 +56,7 @@ final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: 
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+   await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
 
   runApp(app);
 }
