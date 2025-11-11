@@ -53,24 +53,34 @@ abstract class ApiService {
   Future<CategoryResponse> getBookData(@Path("categoryId") String categoryId);
 
   @GET(ApiConstants.getBookChapters)
-  Future<ChaptersModel> getBookChapters(@Path("bookSlug") String bookSlug);
+  Future<ChaptersModel> getBookChapters(
+    @Path("bookSlug") String bookSlug,
+    @Query("page") int page,
+    @Query("paginate") int paginate,
+  );
 
   @GET(ApiConstants.getChapterAhadiths)
   Future<HadithResponse> getChapterAhadiths(
     @Path("bookSlug") String bookSlug,
     @Path("chapterId") int chapterId,
+    @Query("page") int page,
+    @Query("paginate") int paginate,
   );
 
   @GET(ApiConstants.getChapterAhadiths)
   Future<LocalHadithResponse> getLocalChapterAhadiths(
     @Path("bookSlug") String bookSlug,
     @Path("chapterId") int chapterId,
+    @Query("page") int page,
+    @Query("paginate") int paginate,
   );
 
   @GET(ApiConstants.getLocalChapterAhadiths)
   Future<LocalHadithResponse> getThreeBooksLocalChapterAhadiths(
     @Path("bookSlug") String bookSlug,
     @Path("chapterId") int chapterId,
+    @Query("page") int page,
+    @Query("paginate") int paginate,
   );
 
   @GET(ApiConstants.getBookmarks)
@@ -103,10 +113,6 @@ abstract class ApiService {
     @Path("chapter") String chapterName,
   );
 
-  /*
-  @GET(ApiConstants.dailyHadith)
-  Future<HadithData> getDailyHadith();
-  */
   @GET(ApiConstants.bookmarkCollection)
   Future<CollectionsResponse> getBookmarkCollection(
     @Header("x-auth-token") String token,
@@ -169,37 +175,34 @@ abstract class ApiService {
     @Header("x-auth-token") String token,
   );
 
-
   // -----------------------------
-// Search History APIs
-// -----------------------------
+  // Search History APIs
+  // -----------------------------
 
-// 1. إضافة بحث جديد
-@POST(ApiConstants.addSearch)
-Future<AddSearchResponse> addSearch(
-  @Header("x-auth-token") String token,
-  @Body() AddSearchRequest body,
-);
+  // 1. إضافة بحث جديد
+  @POST(ApiConstants.addSearch)
+  Future<AddSearchResponse> addSearch(
+    @Header("x-auth-token") String token,
+    @Body() AddSearchRequest body,
+  );
 
-// 2. جلب تاريخ البحث
-@GET(ApiConstants.getSearchHistory)
-Future<GetSearchHistoryResponse> getSearchHistory(
-  @Header("x-auth-token") String token, 
-);
+  // 2. جلب تاريخ البحث
+  @GET(ApiConstants.getSearchHistory)
+  Future<GetSearchHistoryResponse> getSearchHistory(
+    @Header("x-auth-token") String token,
+  );
 
+  // 4. حذف بحث محدد
+  @DELETE("${ApiConstants.deleteSearch}/{id}")
+  Future<DeleteSearchResponse> deleteSearch(
+    @Header("x-auth-token") String token,
+    @Path("id") int searchId,
+  );
 
-// 4. حذف بحث محدد
-@DELETE("${ApiConstants.deleteSearch}/{id}")
-Future<DeleteSearchResponse> deleteSearch(
-  @Header("x-auth-token") String token,
-  @Path("id") int searchId,
-);
-
-// 5. حذف كل تاريخ البحث
-@DELETE(ApiConstants.deleteAllSearch)
-Future<DeleteAllSearchResponse> deleteAllSearch(
-  @Header("x-auth-token") String token,
-  @Body() Map<String, dynamic> body,
-);
-
+  // 5. حذف كل تاريخ البحث
+  @DELETE(ApiConstants.deleteAllSearch)
+  Future<DeleteAllSearchResponse> deleteAllSearch(
+    @Header("x-auth-token") String token,
+    @Body() Map<String, dynamic> body,
+  );
 }

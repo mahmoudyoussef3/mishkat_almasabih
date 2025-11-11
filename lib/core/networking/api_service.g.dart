@@ -185,9 +185,17 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<ChaptersModel> getBookChapters(String bookSlug) async {
+
+  Future<ChaptersModel> getBookChapters(
+    String bookSlug,
+    int page,
+    int paginate,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'paginate': paginate,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<ChaptersModel>(
@@ -215,9 +223,14 @@ class _ApiService implements ApiService {
   Future<HadithResponse> getChapterAhadiths(
     String bookSlug,
     int chapterId,
+    int page,
+    int paginate,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'paginate': paginate,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HadithResponse>(
@@ -245,9 +258,14 @@ class _ApiService implements ApiService {
   Future<LocalHadithResponse> getLocalChapterAhadiths(
     String bookSlug,
     int chapterId,
+    int page,
+    int paginate,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'paginate': paginate,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<LocalHadithResponse>(
@@ -275,9 +293,14 @@ class _ApiService implements ApiService {
   Future<LocalHadithResponse> getThreeBooksLocalChapterAhadiths(
     String bookSlug,
     int chapterId,
+    int page,
+    int paginate,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'paginate': paginate,
+    };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<LocalHadithResponse>(

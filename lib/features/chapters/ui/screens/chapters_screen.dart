@@ -18,6 +18,7 @@ class BookChaptersScreen extends StatelessWidget {
         child: Scaffold(
           backgroundColor: ColorsManager.secondaryBackground,
           body: GetBookChaptersBlocBuilder(
+            
             bookSlug: bookSlug,
             bookData: bookData,
           ),

@@ -17,6 +17,8 @@ class AhadithsCubit extends Cubit<AhadithsState> {
     required int chapterId,
     required bool hadithLocal,
     required bool isArbainBooks,
+      required int page,
+  int paginate = 10,
   }) async {
     emit(AhadithsLoading());
 
@@ -24,6 +26,8 @@ class AhadithsCubit extends Cubit<AhadithsState> {
       final result = await _chapterAhadithsRepo.getThreeAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
+        page: page,
+  paginate: paginate,
       );
       result.fold(
         (l) => emit(AhadithsFailure(l.getAllErrorMessages())),
@@ -33,6 +37,8 @@ class AhadithsCubit extends Cubit<AhadithsState> {
       final result = await _chapterAhadithsRepo.getLocalAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
+        page: page,
+  paginate: paginate,
       );
       result.fold(
         (l) => emit(AhadithsFailure(l.getAllErrorMessages())),
@@ -42,6 +48,8 @@ class AhadithsCubit extends Cubit<AhadithsState> {
       final result = await _chapterAhadithsRepo.getAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
+        page: page,
+  paginate: paginate,
       );
       result.fold((l) => emit(AhadithsFailure(l.getAllErrorMessages())), (r) {
         final hadithsList = r.hadiths?.data ?? [];

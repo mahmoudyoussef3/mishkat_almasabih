@@ -10,9 +10,13 @@ class ChaptersCubit extends Cubit<ChaptersState> {
   final BookChaptersRepo _bookChaptersRepo;
   ChaptersCubit(this._bookChaptersRepo) : super(ChaptersInitial());
 
-  Future<void> emitGetBookChapters(String bookSlug) async {
+  Future<void> emitGetBookChapters({
+    required String bookSlug,
+   required int page,
+    int paginate = 10,
+  }) async {
     emit(ChaptersLoading());
-    final result = await _bookChaptersRepo.getBookChapters(bookSlug);
+    final result = await _bookChaptersRepo.getBookChapters(bookSlug, page, paginate);
     result.fold(
       (l) => emit(ChaptersFailure(l.getAllErrorMessages())),
       (r) => emit(
@@ -30,17 +34,15 @@ class ChaptersCubit extends Cubit<ChaptersState> {
       final normalizedQuery = normalizeArabic(query);
 
       if (normalizedQuery.isEmpty) {
-        emit(
-          currentState.copyWith(filteredChapters: currentState.allChapters),
-        );
+        emit(currentState.copyWith(filteredChapters: currentState.allChapters));
       } else {
-        final filtered = currentState.allChapters
-            .where((chapter) {
-              final normalizedChapter =
-                  normalizeArabic(chapter.chapterArabic ?? '');
+        final filtered =
+            currentState.allChapters.where((chapter) {
+              final normalizedChapter = normalizeArabic(
+                chapter.chapterArabic ?? '',
+              );
               return normalizedChapter.contains(normalizedQuery.trim());
-            })
-            .toList();
+            }).toList();
 
         emit(currentState.copyWith(filteredChapters: filtered));
       }
