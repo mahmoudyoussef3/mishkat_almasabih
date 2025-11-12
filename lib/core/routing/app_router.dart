@@ -2,17 +2,17 @@ import 'dart:developer';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mishkat_almasabih/features/about_us/logic/cubit/about_us_cubit.dart' show AboutUsCubit;
+import 'package:mishkat_almasabih/features/about_us/ui/screens/about_us_screen.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/ui/screens/signup_screen.dart';
 import 'package:mishkat_almasabih/features/book_data/logic/cubit/book_data_cubit.dart';
-import 'package:mishkat_almasabih/features/bookmark/data/models/book_mark_model.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/get_cubit/user_bookmarks_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/screens/bookmark_screen.dart';
 import 'package:mishkat_almasabih/features/chapters/logic/cubit/chapters_cubit.dart';
 import 'package:mishkat_almasabih/features/chapters/ui/screens/chapters_screen.dart';
-import 'package:mishkat_almasabih/features/hadith_daily/data/models/hadith_daily_response.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/data/models/new_daily_hadith_model.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/logic/cubit/daily_hadith_cubit.dart';
 import 'package:mishkat_almasabih/features/hadith_daily/ui/screen/daily_hadith_screen.dart';
@@ -35,7 +35,6 @@ import 'package:mishkat_almasabih/features/serag/logic/chat_history/chat_history
 import 'package:mishkat_almasabih/features/serag/logic/cubit/serag_cubit.dart';
 import 'package:mishkat_almasabih/features/serag/ui/serag_chat_screen.dart';
 import '../../features/home/ui/widgets/public_search_result.dart';
-import '../../features/main_navigation/main_navigation_screen.dart';
 import '../di/dependency_injection.dart';
 import 'routes.dart';
 import '../../features/authentication/login/logic/cubit/login_cubit.dart';
@@ -44,17 +43,15 @@ import '../../features/onboarding/onboarding_screen.dart';
 import '../../features/splash/splash_screen.dart';
 
 class AppRouter {
-    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   void _logScreenView(String screenName) {
-    analytics.logScreenView(
-      screenName: screenName,
-      screenClass: screenName,
-    );
+    analytics.logScreenView(screenName: screenName, screenClass: screenName);
   }
+
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.splashScreen:
-      _logScreenView('SplashScreen');
+        _logScreenView('SplashScreen');
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case Routes.onBoardingScreen:
         _logScreenView('OnboardingScreen');
@@ -77,36 +74,6 @@ class AppRouter {
                 child: LoginScreen(),
               ),
         );
-        /*
-      case Routes.mainNavigationScreen:
-        return MaterialPageRoute(
-          builder:
-              (_) => MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create:
-                        (context) => getIt<GetAllBooksWithCategoriesCubit>(),
-                  ),
-                  BlocProvider(
-                    create: (context) => getIt<GetLibraryStatisticsCubit>(),
-                  ),
-
-                  BlocProvider(create: (context) => getIt<BookDataCubit>()),
-                  BlocProvider(create: (context) => getIt<GetBookmarksCubit>()),
-                  BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
-                  BlocProvider(create: (context) => getIt<AddCubitCubit>()),
-                  BlocProvider(create: (context) => SearchHistoryCubit()),
-                  BlocProvider(
-                    create:
-                        (context) =>
-                            customGetIt<RandomAhadithCubit>()
-                              ..emitRandomStats(),
-                  ),
-                ],
-                child: const MainNavigationScreen(),
-              ),
-        );
-*/
       case Routes.homeScreen:
         _logScreenView('HomeScreen');
         return MaterialPageRoute(
@@ -115,15 +82,22 @@ class AppRouter {
                 providers: [
                   BlocProvider(
                     create:
-                        (context) => getIt<GetAllBooksWithCategoriesCubit>()..emitGetAllBooksWithCategories(),
+                        (context) =>
+                            getIt<GetAllBooksWithCategoriesCubit>()
+                              ..emitGetAllBooksWithCategories(),
                   ),
                   BlocProvider(
-                    create: (context) => getIt<GetLibraryStatisticsCubit>()..emitGetStatisticsCubit(),
+                    create:
+                        (context) =>
+                            getIt<GetLibraryStatisticsCubit>()
+                              ..emitGetStatisticsCubit(),
                   ),
 
                   BlocProvider(create: (context) => getIt<BookDataCubit>()),
                   BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
-                  BlocProvider(create: (context) =>getIt<SearchHistoryCubit>()..init()),
+                  BlocProvider(
+                    create: (context) => getIt<SearchHistoryCubit>()..init(),
+                  ),
                   BlocProvider(
                     create:
                         (context) =>
@@ -140,69 +114,67 @@ class AppRouter {
           builder:
               (_) => MultiBlocProvider(
                 providers: [
-              
-                  BlocProvider(create: (context) => getIt<SearchWithFiltersCubit>()),
-        BlocProvider(create: (context) => getIt<SearchHistoryCubit>()..init()),
+                  BlocProvider(
+                    create: (context) => getIt<SearchWithFiltersCubit>(),
+                  ),
+                  BlocProvider(
+                    create: (context) => getIt<SearchHistoryCubit>()..init(),
+                  ),
 
                   BlocProvider(create: (context) => getIt<GetBookmarksCubit>()),
                   BlocProvider(create: (context) => getIt<AddCubitCubit>()),
-                
                 ],
                 child: const SearchWithFiltersScreen(),
               ),
         );
-     case Routes.profileScreen:
+      case Routes.profileScreen:
         _logScreenView('ProfileScreen');
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-                      create: (context) => getIt<ProfileCubit>()..getUserProfile(),
+                create: (context) => getIt<ProfileCubit>()..getUserProfile(),
 
-       
                 child: const ProfileScreen(),
               ),
         );
 
-     case Routes.bookmarkScreen:
+      case Routes.bookmarkScreen:
         _logScreenView('BookmarkScreen');
         return MaterialPageRoute(
           builder:
               (_) => MultiBlocProvider(
                 providers: [
-                BlocProvider(
-          create: (_) => getIt<GetBookmarksCubit>()..getUserBookmarks(),
-        ),
-        BlocProvider(
-          create:
-              (_) =>
-                  getIt<GetCollectionsBookmarkCubit>()
-                    ..getBookMarkCollections(),
-        ),
-
-                
+                  BlocProvider(
+                    create:
+                        (_) => getIt<GetBookmarksCubit>()..getUserBookmarks(),
+                  ),
+                  BlocProvider(
+                    create:
+                        (_) =>
+                            getIt<GetCollectionsBookmarkCubit>()
+                              ..getBookMarkCollections(),
+                  ),
                 ],
                 child: const BookmarkScreen(),
               ),
         );
-           case Routes.libraryScreen:
+      case Routes.libraryScreen:
         _logScreenView('LibraryScreen');
         return MaterialPageRoute(
           builder:
               (_) => MultiBlocProvider(
                 providers: [
-          BlocProvider(
+                  BlocProvider(
                     create:
                         (context) => getIt<GetAllBooksWithCategoriesCubit>(),
                   ),
                   BlocProvider(
                     create: (context) => getIt<GetLibraryStatisticsCubit>(),
                   ),
-                
                 ],
                 child: const LibraryBooksScreen(),
               ),
         );
-
 
       case Routes.bookChaptersScreen:
         _logScreenView('BookChaptersScreen');
@@ -218,7 +190,7 @@ class AppRouter {
               ),
         );
       case Routes.publicSearchSCreen:
-              _logScreenView('publicSearchSCreen');
+        _logScreenView('publicSearchSCreen');
 
         final query = settings.arguments as String;
         log(query);
@@ -236,7 +208,7 @@ class AppRouter {
         );
 
       case Routes.filterResultSearch:
-                    _logScreenView('FilterResultSearch');
+        _logScreenView('FilterResultSearch');
 
         final query = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
@@ -257,14 +229,10 @@ class AppRouter {
                 ),
               ),
         );
-        
+
       case Routes.usersSuggestions:
         _logScreenView('UsersSuggestions');
-        return MaterialPageRoute(
-          builder:
-              (_) => SuggestionForm(
-              ),
-        );
+        return MaterialPageRoute(builder: (_) => SuggestionForm());
       /*
       case Routes.searchScreen:
         return MaterialPageRoute(
@@ -285,11 +253,23 @@ class AppRouter {
                 providers: [
                   BlocProvider(create: (context) => getIt<DailyHadithCubit>()),
                   BlocProvider(create: (context) => getIt<AddCubitCubit>()),
-                                    BlocProvider(create: (context) => getIt<GetCollectionsBookmarkCubit>()..getBookMarkCollections()),
-
+                  BlocProvider(
+                    create:
+                        (context) =>
+                            getIt<GetCollectionsBookmarkCubit>()
+                              ..getBookMarkCollections(),
+                  ),
                 ],
                 child: HadithDailyScreen(dailyHadithModel: query),
               ),
+        );
+      case Routes.aboutUs:
+        _logScreenView('AboutUsScreen');
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(create:
+              (context) => getIt<AboutUsCubit>(), 
+            child: const AboutUsScreen(),
+          ),
         );
       case Routes.serag:
         _logScreenView('SeragScreen');
