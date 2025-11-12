@@ -35,15 +35,13 @@ class AhadithsRepo {
   Future<Either<ApiErrorModel, LocalHadithResponse>> getLocalAhadith({
     required String bookSlug,
     required int chapterId,
-      required int page,
-  required int paginate,
+
   }) async {
     try {
       final response = await _apiService.getLocalChapterAhadiths(
         bookSlug,
         chapterId,
-        page,
-  paginate,
+
       );
 
       return Right(response);
@@ -56,15 +54,11 @@ class AhadithsRepo {
   Future<Either<ApiErrorModel, LocalHadithResponse>> getThreeAhadith({
     required String bookSlug,
     required int chapterId,
-      required int page,
-  required int paginate,
   }) async {
     try {
       final response = await _apiService.getThreeBooksLocalChapterAhadiths(
         bookSlug,
         chapterId,
-        page,
-  paginate,
       );
 
       return Right(response);

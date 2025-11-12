@@ -67,8 +67,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
             color: ColorsManager.primaryGreen,
             onRefresh: () async {
               context.read<ChaptersCubit>().emitGetBookChapters(
-                page:1 ,
-                paginate: 10,
+         
                 bookSlug:  bookSlug);
             },
             child: CustomScrollView(

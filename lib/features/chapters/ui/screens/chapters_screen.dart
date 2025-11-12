@@ -14,7 +14,7 @@ class BookChaptersScreen extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: SafeArea(
           top: true,
-        bottom: false,
+        bottom: true,
         child: Scaffold(
           backgroundColor: ColorsManager.secondaryBackground,
           body: GetBookChaptersBlocBuilder(

@@ -12,11 +12,10 @@ class ChaptersCubit extends Cubit<ChaptersState> {
 
   Future<void> emitGetBookChapters({
     required String bookSlug,
-   required int page,
-    int paginate = 10,
+
   }) async {
     emit(ChaptersLoading());
-    final result = await _bookChaptersRepo.getBookChapters(bookSlug, page, paginate);
+    final result = await _bookChaptersRepo.getBookChapters(bookSlug);
     result.fold(
       (l) => emit(ChaptersFailure(l.getAllErrorMessages())),
       (r) => emit(

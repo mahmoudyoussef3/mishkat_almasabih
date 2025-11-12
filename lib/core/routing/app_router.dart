@@ -185,7 +185,7 @@ class AppRouter {
               (_) => BlocProvider(
                 create:
                     (context) =>
-                        getIt<ChaptersCubit>()..emitGetBookChapters(bookSlug: bookSlug, page: 1, paginate: 10),
+                        getIt<ChaptersCubit>()..emitGetBookChapters(bookSlug: bookSlug),
                 child: BookChaptersScreen(args: args),
               ),
         );

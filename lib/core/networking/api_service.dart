@@ -55,8 +55,7 @@ abstract class ApiService {
   @GET(ApiConstants.getBookChapters)
   Future<ChaptersModel> getBookChapters(
     @Path("bookSlug") String bookSlug,
-    @Query("page") int page,
-    @Query("paginate") int paginate,
+
   );
 
   @GET(ApiConstants.getChapterAhadiths)
@@ -71,16 +70,14 @@ abstract class ApiService {
   Future<LocalHadithResponse> getLocalChapterAhadiths(
     @Path("bookSlug") String bookSlug,
     @Path("chapterId") int chapterId,
-    @Query("page") int page,
-    @Query("paginate") int paginate,
+
   );
 
   @GET(ApiConstants.getLocalChapterAhadiths)
   Future<LocalHadithResponse> getThreeBooksLocalChapterAhadiths(
     @Path("bookSlug") String bookSlug,
     @Path("chapterId") int chapterId,
-    @Query("page") int page,
-    @Query("paginate") int paginate,
+
   );
 
   @GET(ApiConstants.getBookmarks)

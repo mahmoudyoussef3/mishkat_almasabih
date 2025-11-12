@@ -11,14 +11,11 @@ class BookChaptersRepo {
 
   Future<Either<ApiErrorModel, ChaptersModel>> getBookChapters(
     String bookSlug,
-    int page,
-    int paginate,
+
   ) async {
     try {
       final response = await _apiService.getBookChapters(
         bookSlug,
-        page,
-        paginate,
       );
 
       return Right(response);
