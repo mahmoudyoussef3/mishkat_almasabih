@@ -81,6 +81,7 @@ abstract class ApiService {
   );
 
   @GET(ApiConstants.getBookmarks)
+
   Future<BookmarksResponse> getUserBookmarks(
     @Header("x-auth-token") String token,
   );

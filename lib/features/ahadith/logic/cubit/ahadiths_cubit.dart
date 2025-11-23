@@ -13,7 +13,7 @@ class AhadithsCubit extends Cubit<AhadithsState> {
 
   bool _isLoadingMore = false;
   bool _hasMore = true;
-  String? _lastSourceKey; 
+  String? _lastSourceKey;
 
   Future<void> emitAhadiths({
     required String bookSlug,
@@ -45,7 +45,6 @@ class AhadithsCubit extends Cubit<AhadithsState> {
       final result = await _chapterAhadithsRepo.getThreeAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
-  
       );
 
       result.fold(
@@ -58,13 +57,10 @@ class AhadithsCubit extends Cubit<AhadithsState> {
           emit(LocalAhadithsSuccess(hadiths: r.hadiths?.data ?? []));
         },
       );
-    }
-
-    else if (hadithLocal) {
+    } else if (hadithLocal) {
       final result = await _chapterAhadithsRepo.getLocalAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
-        
       );
 
       result.fold(
@@ -73,13 +69,9 @@ class AhadithsCubit extends Cubit<AhadithsState> {
         },
         (r) {
           emit(LocalAhadithsSuccess(hadiths: r.hadiths?.data ?? []));
-    
-
         },
       );
-    }
-
-    else {
+    } else {
       final result = await _chapterAhadithsRepo.getAhadith(
         bookSlug: bookSlug,
         chapterId: chapterId,
@@ -101,15 +93,16 @@ class AhadithsCubit extends Cubit<AhadithsState> {
             final current = state as AhadithsSuccess;
             final combined = List.of(current.allAhadith)..addAll(newHadiths);
 
-            emit(current.copyWith(
-              filteredAhadith: combined,
-              allAhadith: combined,
-            ));
+            emit(
+              current.copyWith(filteredAhadith: combined, allAhadith: combined),
+            );
           } else {
-            emit(AhadithsSuccess(
-              filteredAhadith: newHadiths,
-              allAhadith: newHadiths,
-            ));
+            emit(
+              AhadithsSuccess(
+                filteredAhadith: newHadiths,
+                allAhadith: newHadiths,
+              ),
+            );
           }
 
           _isLoadingMore = false;
@@ -128,11 +121,16 @@ class AhadithsCubit extends Cubit<AhadithsState> {
       if (normalizedQuery.isEmpty) {
         emit(currentState.copyWith(filteredAhadith: currentState.allAhadith));
       } else {
-        final filtered = currentState.allAhadith
-            .where((h) =>
-                h.hadithArabic != null &&
-                normalizeArabic(h.hadithArabic!).contains(normalizedQuery))
-            .toList();
+        final filtered =
+            currentState.allAhadith
+                .where(
+                  (h) =>
+                      h.hadithArabic != null &&
+                      normalizeArabic(
+                        h.hadithArabic!,
+                      ).contains(normalizedQuery),
+                )
+                .toList();
         emit(currentState.copyWith(filteredAhadith: filtered));
       }
     }
