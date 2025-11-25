@@ -33,7 +33,7 @@ class HomeScreenWrapper extends StatelessWidget {
         BlocProvider(
           create:
               (_) =>
-                  getIt<GetLibraryStatisticsCubit>()..emitGetStatisticsCubit(),
+                  getIt<GetLibraryStatisticsCubit>(),
         ),
       ],
       child: const HomeScreen(),
