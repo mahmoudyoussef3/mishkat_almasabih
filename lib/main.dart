@@ -8,6 +8,7 @@ import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/notification/local_notification.dart';
 import 'package:mishkat_almasabih/core/notification/push_notification.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
+import 'package:mishkat_almasabih/core/services/widget_navigation_service.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
 import 'package:mishkat_almasabih/firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -18,8 +19,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+  final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
+    analytics: analytics,
+  );
   //await Firebase.initializeApp();
 
   // تهيئة الـ FCM (مرة واحدة بس)
@@ -36,6 +39,10 @@ final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: 
 
   await setUpGetIt();
   await initializeDateFormatting('ar', null);
+
+  // Initialize widget navigation service to handle widget clicks
+  WidgetNavigationService.initialize();
+
   //final prefs = await SharedPreferences.getInstance();
   //final token = prefs.getString('token');
   // final isLoggedIn = token != null;
@@ -56,7 +63,7 @@ final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: 
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-   await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
+  await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
 
   runApp(app);
 }
