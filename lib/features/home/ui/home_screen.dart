@@ -30,11 +30,7 @@ class HomeScreenWrapper extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<SearchHistoryCubit>()),
-        BlocProvider(
-          create:
-              (_) =>
-                  getIt<GetLibraryStatisticsCubit>(),
-        ),
+        BlocProvider(create: (_) => getIt<GetLibraryStatisticsCubit>()),
       ],
       child: const HomeScreen(),
     );

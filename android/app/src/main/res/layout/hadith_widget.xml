@@ -30,6 +30,7 @@
             android:textColor="#F4F1E6"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:fontFamily="@font/cairo_bold"
             android:layout_marginStart="8dp"/>
     </LinearLayout>
 
@@ -46,6 +47,7 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:fontFamily="@font/cairo_medium"
         android:gravity="center_vertical|start"
         android:textDirection="rtl"
         android:maxLines="4"
@@ -79,7 +81,8 @@
                 android:text="اقرأ الحديث"
                 android:textColor="#F4F1E6"
                 android:textSize="14sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"/>
         </LinearLayout>
 
         <!-- Decorative Quote Icon -->
