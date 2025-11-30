@@ -84,6 +84,7 @@ flutter:
     - assets/images/book_covers/
     - assets/images/islamic_pattern.jpg
     - assets/images/moon-light-shine-through-window-into-islamic-mosque-interior.jpg
+    - assets/images/book_covers/riyadiah40.jpeg
 
   fonts:
   - family: Amiri

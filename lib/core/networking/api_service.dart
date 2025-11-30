@@ -17,6 +17,7 @@ import 'package:mishkat_almasabih/features/home/data/models/library_statistics_m
 import 'package:mishkat_almasabih/features/home/data/models/search_history_models.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/local_hadith_navigation_model.dart';
 import 'package:mishkat_almasabih/features/navigation/data/models/navigation_hadith_model.dart';
+import 'package:mishkat_almasabih/features/profile/data/models/stats_model.dart';
 import 'package:mishkat_almasabih/features/profile/data/models/user_response_model.dart';
 import 'package:mishkat_almasabih/features/remaining_questions/data/models/remaining_questions_response_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
@@ -187,6 +188,12 @@ abstract class ApiService {
   // 2. جلب تاريخ البحث
   @GET(ApiConstants.getSearchHistory)
   Future<GetSearchHistoryResponse> getSearchHistory(
+    @Header("x-auth-token") String token,
+  );
+
+  // 3. جلب إحصائيات المستخدم
+  @GET(ApiConstants.getUserStats)
+  Future<StatsModel> getUserStats(
     @Header("x-auth-token") String token,
   );
 

@@ -80,6 +80,7 @@ class _ChapterAhadithScreenState extends State<ChapterAhadithScreen> {
   bool checkThreeBooks(String bookSlug) {
     if (bookSlug == 'qudsi40' ||
         bookSlug == 'nawawi40' ||
+        bookSlug == 'riyadiah40' ||
         bookSlug == 'shahwaliullah40') {
       return true;
     } else {

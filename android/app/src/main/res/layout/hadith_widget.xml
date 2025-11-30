@@ -47,7 +47,8 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:fontFamily="@font/cairo_medium"
+
+        android:fontFamily="@font/ya_modernpro_bold"
         android:gravity="center_vertical|start"
         android:textDirection="rtl"
         android:maxLines="4"

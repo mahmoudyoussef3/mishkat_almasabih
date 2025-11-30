@@ -20,6 +20,7 @@ import 'package:mishkat_almasabih/features/home/logic/cubit/get_all_books_with_c
 import 'package:mishkat_almasabih/features/home/logic/cubit/get_library_statistics_cubit.dart';
 import 'package:mishkat_almasabih/features/home/ui/home_screen.dart';
 import 'package:mishkat_almasabih/features/library_books_screen.dart';
+import 'package:mishkat_almasabih/features/profile/logic/cubit/cubit/user_stats_cubit.dart';
 import 'package:mishkat_almasabih/features/profile/logic/cubit/profile_cubit.dart';
 import 'package:mishkat_almasabih/features/profile/ui/profile_screen.dart';
 import 'package:mishkat_almasabih/features/random_ahadith/logic/cubit/random_ahadith_cubit.dart';
@@ -131,9 +132,15 @@ class AppRouter {
         _logScreenView('ProfileScreen');
         return MaterialPageRoute(
           builder:
-              (_) => BlocProvider(
-                create: (context) => getIt<ProfileCubit>()..getUserProfile(),
-
+              (_) => MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) => getIt<ProfileCubit>(),
+                  ),
+                  BlocProvider(
+                    create: (context) => getIt<UserStatsCubit>(),
+                  ),
+                ],
                 child: const ProfileScreen(),
               ),
         );
@@ -233,16 +240,7 @@ class AppRouter {
       case Routes.usersSuggestions:
         _logScreenView('UsersSuggestions');
         return MaterialPageRoute(builder: (_) => SuggestionForm());
-      /*
-      case Routes.searchScreen:
-        return MaterialPageRoute(
-          builder:
-              (context) => BlocProvider(
-                create: (context) => SearchHistoryCubit(),
-                child: SearchScreen(),
-              ),
-        );
-        */
+  
       case Routes.hadithOfTheDay:
         _logScreenView('HadithOfTheDay');
         final query = settings.arguments as NewDailyHadithModel;
