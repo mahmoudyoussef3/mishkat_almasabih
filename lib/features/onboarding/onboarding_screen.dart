@@ -135,7 +135,6 @@ final List<OnboardingPage> _onboardingPages = [
           child: Column(
             children: [
               _buildHeader(),
-              
               Expanded(
                 child: PageView.builder(
                   controller: _pageController,
