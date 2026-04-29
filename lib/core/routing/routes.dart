@@ -29,6 +29,6 @@ class Routes {
   static const String qiblahFinder = '/qiblahFinder';
   static const String categoriesScreen = '/categoriesScreen';
   static const String ahadithListScreen = '/ahadithListScreen';
-  //static const String ramadanTasksScreen = '/ramadanTasks';
-  //static const String ramadanProgressScreen = '/ramadanProgress';
+  static const String shareHadithLink = '/api/hadith';
+
 }

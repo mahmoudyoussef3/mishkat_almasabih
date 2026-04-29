@@ -9,14 +9,10 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
-import 'package:mishkat_almasabih/core/helpers/deep_linker_helper.dart';
-import 'package:mishkat_almasabih/core/deep_links/deep_link_router.dart';
-import 'package:mishkat_almasabih/core/notification/firebase_service/notification_handler.dart';
 import 'package:mishkat_almasabih/core/notification/local_notification.dart';
 import 'package:mishkat_almasabih/core/notification/notification_helper.dart';
 import 'package:mishkat_almasabih/core/notification/push_notification.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
-import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/services/widget_navigation_service.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
 import 'package:mishkat_almasabih/mishkat_almasabih.dart';
@@ -58,13 +54,6 @@ Future<void> main() async {
 
   // Check first-time launch
   final isFirstTime = await SaveDataForFirstTime.isFirstTime();
-
-  // Deep link handling (cold start + runtime)
-  final deepLinkHandler = DeepLinkHandler();
-  await deepLinkHandler.init((uri) async {
-    debugPrint('Received deep link: $uri');
-    await DeepLinkRouter.handle(uri);
-  });
 
   // Background messaging handler
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);

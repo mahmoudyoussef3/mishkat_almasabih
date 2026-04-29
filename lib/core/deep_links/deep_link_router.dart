@@ -1,60 +1,79 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mishkat_almasabih/core/notification/firebase_service/notification_handler.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 
 class DeepLinkRouter {
   static const String _apiHost = 'api.hadith-shareef.com';
+  static const Set<String> _reservedSegments = {'api', 'hadith'};
+
+  static String? extractHadithId(Uri uri) =>
+      _extractHadithIdFromPathOrQuery(uri);
 
   static Future<void> handle(Uri uri) async {
     final action = _parse(uri);
+
     if (action == null) {
-      if (kDebugMode) debugPrint('Unhandled deep link: $uri');
+      if (kDebugMode) debugPrint('❌ Unhandled deep link: $uri');
       return;
     }
 
     await _waitForNavigator();
 
-    switch (action) {
-      case _OpenHadithById(:final id):
-        navigatorKey.currentState?.pushNamed(
-          Routes.deepLinkHadith,
-          arguments: id,
-        );
-    }
+    // 🔥 مهم: تأخير التنفيذ بعد أول frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      switch (action) {
+        case _OpenHadithById(:final id):
+          navigatorKey.currentState?.pushReplacementNamed(
+            Routes.deepLinkHadith,
+            arguments: id,
+          );
+      }
+    });
   }
 
   static _DeepLinkAction? _parse(Uri uri) {
-    // HTTPS: https://api.hadith-shareef.com/hadith/<id>
+    // ✅ https link
     if (uri.scheme == 'https' && uri.host == _apiHost) {
-      final segments = uri.pathSegments;
-      if (segments.isNotEmpty && segments.first == 'hadith') {
-        final id =
-            segments.length >= 2 ? segments[1] : uri.queryParameters['id'];
+      final id = extractHadithId(uri);
+      if (_isValidId(id)) return _OpenHadithById(id!);
+    }
+
+    // ✅ custom scheme
+    if (uri.scheme == 'mishkat') {
+      if (uri.host == 'hadith' || uri.host == _apiHost) {
+        final id = extractHadithId(uri);
         if (_isValidId(id)) return _OpenHadithById(id!);
       }
     }
 
-    // Custom scheme: mishkat://hadith/<id>
-    if (uri.scheme == 'mishkat') {
-      if (uri.host == 'hadith') {
-        final id =
-            uri.pathSegments.isNotEmpty
-                ? uri.pathSegments.first
-                : uri.queryParameters['id'];
-        if (_isValidId(id)) return _OpenHadithById(id!);
-      }
+    return null;
+  }
 
-      // Alternative: mishkat://api.hadith-shareef.com/hadith/<id>
-      if (uri.host == _apiHost) {
-        final segments = uri.pathSegments;
-        if (segments.isNotEmpty && segments.first == 'hadith') {
-          final id =
-              segments.length >= 2 ? segments[1] : uri.queryParameters['id'];
-          if (_isValidId(id)) return _OpenHadithById(id!);
-        }
-      }
+  static String? _extractHadithIdFromPathOrQuery(Uri uri) {
+    // 1. query param
+    final fromQuery = uri.queryParameters['id'];
+    if (_isValidId(fromQuery)) return fromQuery;
+
+    final segments = uri.pathSegments
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    if (segments.isEmpty) return null;
+
+    // 2. /hadith/:id
+    final hadithIndex = segments.indexOf('hadith');
+    if (hadithIndex != -1 && hadithIndex + 1 < segments.length) {
+      final next = segments[hadithIndex + 1];
+      if (_isValidId(next)) return next;
+    }
+
+    // 3. fallback (last valid segment)
+    for (final seg in segments.reversed) {
+      if (_reservedSegments.contains(seg)) continue;
+      if (_isValidId(seg)) return seg;
     }
 
     return null;
@@ -63,7 +82,7 @@ class DeepLinkRouter {
   static bool _isValidId(String? value) {
     if (value == null) return false;
     final v = value.trim();
-    return v.isNotEmpty;
+    return v.isNotEmpty && !_reservedSegments.contains(v);
   }
 
   static Future<void> _waitForNavigator() async {
@@ -71,13 +90,18 @@ class DeepLinkRouter {
     const step = Duration(milliseconds: 50);
 
     final start = DateTime.now();
+
     while (navigatorKey.currentState == null) {
       if (DateTime.now().difference(start) > maxWait) return;
-      await Future<void>.delayed(step);
+      await Future.delayed(step);
     }
-    await Future<void>.delayed(const Duration(milliseconds: 10));
+
+    // delay صغير بعد توفر navigator
+    await Future.delayed(const Duration(milliseconds: 50));
   }
 }
+
+// ==========================
 
 sealed class _DeepLinkAction {
   const _DeepLinkAction();

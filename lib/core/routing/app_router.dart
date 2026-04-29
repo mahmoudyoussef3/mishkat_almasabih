@@ -383,26 +383,19 @@ class AppRouter {
                 ),
               ),
         );
-      /*  case Routes.ramadanTasksScreen:
-        _logScreenView('RamadanTasksScreen');
+        case Routes.shareHadithLink:
+        _logScreenView('ShareHadithLink');
+        final hadithId = settings.arguments as String;
         return MaterialPageRoute(
           builder:
               (_) => BlocProvider(
-                create: (context) => getIt<RamadanTasksCubit>()..init(),
-                child: const RamadanTasksScreen(),
+                create:
+                    (context) =>
+                        getIt<EnhancedSearchCubit>()..fetchEnhancedSearchResults(hadithId),
+                child: DeepLinkHadithScreen(hadithId: hadithId),  
               ),
         );
-
-      case Routes.ramadanProgressScreen:
-        _logScreenView('RamadanProgressScreen');
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create: (context) => getIt<RamadanTasksCubit>()..init(),
-                child: const RamadanProgressScreen(),
-              ),
-        );
-        */
+   
 
       default:
         return null;
