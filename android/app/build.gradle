@@ -21,6 +21,8 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace "com.mishkat_almasabih.app"
 
+    flavorDimensions "environment"
+
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -30,6 +32,17 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutter.versionCode
         versionName flutter.versionName
+    }
+
+    productFlavors {
+        development {
+            dimension "environment"
+            applicationIdSuffix ".dev"
+        }
+
+        production {
+            dimension "environment"
+        }
     }
 
     compileOptions {

@@ -1,82 +1,173 @@
-# Copilot Instructions for Mishkat Al-Masabih
+# Copilot Instructions — Flutter Clean Architecture Project
 
-These guidelines help AI assistants contribute safely and consistently to this Flutter project. Follow them to keep the architecture clean, the UI cohesive, and the app fully RTL-friendly.
+<!--
+Golden Test: "Would removing this rule cause incorrect behavior?"
+If not → remove it.
+Avoid duplication of defaults already handled by Copilot or Dart/Flutter best practices.
+-->
 
-## Project Architecture
-- Clean Architecture per feature:
-  - data: models, datasources, repositories (interfaces + implementations)
-  - logic: Cubit/Bloc, states
-  - ui: screens, widgets
-- Dependency Injection: GetIt
-  - Register interfaces with `registerLazySingleton` and factories with `registerFactory`
-  - Keep registrations in `lib/core/di/dependency_injection.dart`
-- Routing: Centralized in `lib/core/routing/app_router.dart` with names in `lib/core/routing/routes.dart`
-- Theming: Use `ColorsManager` and `TextStyles`. Fonts: Cairo/Amiri only.
-- RTL: All screens and widgets must work Right-To-Left. Prefer `EdgeInsetsDirectional` and avoid `left/right`-only paddings.
+---
 
-## Conventions
-- Files and folders: `lower_snake_case`
-- Feature structure: `lib/features/<feature>/{data,logic,ui}`
-- Public APIs: Preserve existing signatures unless a change is required and all usages are updated.
-- Responsiveness: Use `flutter_screenutil` sizes and `LayoutBuilder` for breakpoints (e.g., switch to grid when width >= 700).
-- State classes: Keep simple, sealed-like states (Loading/Loaded/Error) when appropriate.
-- Null-safety: Avoid `dynamic`; prefer explicit types.
+# A — Core Engineering Rules
 
-## Data and Networking
-- Use `dio` + `retrofit` for HTTP APIs; annotate models with `json_serializable`.
-- Do not edit generated files in `build/`.
-- For local persistence, prefer `SharedPreferences` for simple key-value, Hive for complex if needed.
+## 1. Architecture (STRICT)
 
-## Notifications
-- Use `flutter_local_notifications` via our `LocalNotification` helper.
-  - Schedule/cancel reminders through provided methods (e.g., hourly section reminders for Daily Zekr).
-  - Keep iOS/Android platform differences in mind.
+Follow clean architecture:
 
-## Prayer Times
-- Use `egyptian_prayer_times` for calculation.
-  - Set coordinates, method, and timezone correctly.
-  - Provide a next-prayer countdown updated with a ticker.
-  - Display a responsive grid of prayer times.
+```
+Presentation → Domain → Data
+```
 
-## UI/UX Guidelines
-- Use `BuildHeaderAppBar` for section headers.
-- Match app style from Home/Profile/Library screens.
-- Arabic copy: clear, concise, respectful tone.
-- Keep widgets reusable (e.g., cards, rows, list items) and RTL-aware.
-- Avoid over-animation; use subtle transitions (`AnimatedSwitcher`, `FadeTransition`).
+Rules:
 
-## Adding a New Feature (example flow)
-1. Create folders under `lib/features/<feature>/{data,logic,ui}`.
-2. Define models and repository interfaces in `data`; implement with a concrete datasource.
-3. Add a Cubit in `logic` with states.
-4. Build UI widgets and screen in `ui`, wire to Cubit.
-5. Register DI in `core/di/dependency_injection.dart`.
-6. Add route in `core/routing/app_router.dart` and constant in `core/routing/routes.dart`.
-7. Ensure RTL, theming, and responsiveness.
+- Presentation = UI + state observation only
+- Domain = business logic only (pure Dart)
+- Data = API / DB / external sources only
+- Never bypass layers
+- Never mix responsibilities
 
-## Testing and Quality
-- Write unit tests for pure logic (e.g., Cubit methods) and widget tests for UI states when feasible.
-- Keep changes incremental; run analysis/formatting.
-- Avoid refactoring unrelated files.
+---
 
-## Security and Secrets
-- Never hardcode secrets/api keys. Use platform configs (e.g., `google-services.json`) or environment placeholders.
-- Do not commit credentials.
+## 2. Shared Code
 
-## What to Ask For (when using Copilot)
-- Provide clear task goals, file paths, constraints, and expected behavior.
-- Request minimal, focused changes that respect existing patterns.
-- Ask to update DI and routing when adding screens.
-- Specify RTL and responsiveness requirements explicitly.
+- Any reusable logic used in 2+ places MUST go to `core/`
+- Always check `core/` before creating new utilities
+- Never duplicate logic across features
 
-## Do and Don't
-- Do: Use `EdgeInsetsDirectional`, `TextDirection.rtl`, `ScreenUtil`, `GetIt`, `Cubit`.
-- Do: Keep styles from `ColorsManager`/`TextStyles`.
-- Don't: Introduce new state libraries, change font families, or bypass DI.
-- Don't: Edit files under `build/` or reformat large unrelated areas.
+---
 
-## References in Repo
-- Daily Zekr feature: shows repository, Cubit, notification scheduling, and RTL-first UI.
-- Prayer Times screen: shows package integration, ticker-based countdown, and responsive grid layout.
+## 3. Error Handling
 
-By following these, AI-generated changes will remain consistent, safe, and mergeable.
+- Errors must flow through layers properly
+- No silent failures
+- Handle:
+  - null
+  - empty
+  - loading
+  - error states explicitly
+- Catch exceptions ONLY in data layer boundary
+
+---
+
+## 4. Change Discipline
+
+- Make minimal required change only
+- Fix root cause, not symptoms
+- Do not refactor unrelated code
+- Never break existing flows unless explicitly asked
+- Always read relevant code before modifying
+
+---
+
+## 5. Dependencies
+
+- Do NOT add packages without justification
+- Must be:
+  - stable
+  - maintained
+  - production ready
+
+---
+
+## 6. Security
+
+- No hardcoded secrets or tokens
+- No sensitive logging
+- Validate all external input
+- Flag security risks immediately
+
+---
+
+## 7. Testing Rules
+
+- Test domain + data layers
+- Bug fixes MUST include reproduction test
+- Tests must be deterministic
+- One behavior per test
+
+---
+
+## 8. Workflow Rules (MANDATORY)
+
+Before:
+
+- Feature creation → use `flutter-feature` skill
+- Task completion → run `flutter-code-review` skill
+- After approval → use `git-expert` agent for PR workflow
+
+---
+
+## 9. Agent Usage (IMPORTANT)
+
+Always proactively suggest:
+
+- `@debugger` → for crashes, bugs, unexpected behavior
+- `@code-reviewer` → after code-review skill passes, before PR
+- `@test-writer` → when tests are missing or feature changed
+- `@git-expert` → for commits, branches, PRs, conflicts, rebases
+
+---
+
+# B — Flutter / Dart Rules
+
+## 1. State Management
+
+- Use Cubit/Bloc ONLY
+- Cubits depend ONLY on use cases
+- No direct repository access in Cubit
+- `setState` allowed ONLY for local UI state
+
+---
+
+## 2. No Code Generation Policy
+
+- No Freezed
+- No build_runner
+- Use Dart 3 features:
+  - sealed classes
+  - pattern matching
+  - switch expressions
+
+---
+
+## 3. Domain Purity
+
+- Domain layer = pure Dart only
+- No Flutter imports in domain
+
+---
+
+## 4. Feature Structure
+
+```
+features/{feature}/
+  data/
+  domain/
+  presentation/
+```
+
+---
+
+## 5. Error Contract
+
+- Data layer → maps exceptions → Failure types
+- Domain layer → returns ApiResult<T>
+- Presentation → converts failures into UI states
+
+---
+
+## 6. Dependency Injection
+
+- Use `get_it`
+- All DI in `core/di/`
+- No manual instantiation of repositories/use cases in UI
+
+---
+
+## 7. Build Method Rules
+
+- Use `const` wherever possible
+- NEVER create controllers inside build()
+- Dispose controllers properly
+- Avoid heavy logic in build()
+- Use smallest possible BlocBuilder scope
