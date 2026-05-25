@@ -13,6 +13,7 @@ import 'package:mishkat_almasabih/core/config/app_config.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/notification/local_notification.dart';
 import 'package:mishkat_almasabih/core/notification/notification_helper.dart';
+import 'package:mishkat_almasabih/core/notification/prayer_time_notification_scheduler.dart';
 import 'package:mishkat_almasabih/core/notification/push_notification.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
 import 'package:mishkat_almasabih/core/services/hive_service.dart';
@@ -35,6 +36,7 @@ Future<void> bootstrapApp(AppConfig config) async {
 
   await NotificationHelper.init();
   await LocalNotification.init();
+  await PrayerNotificationScheduler.bootstrap();
   PushNotification.setupOnTapNotification();
   PushNotification.handleTerminatedNotification();
 
