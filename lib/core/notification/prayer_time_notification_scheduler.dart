@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:adhan/adhan.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mishkat_almasabih/core/services/prayer_times_home_widget_sync.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -103,6 +104,7 @@ class PrayerNotificationScheduler {
         'schedulePrayerNotifications',
         jsonEncode({'items': schedule.map((entry) => entry.toJson()).toList()}),
       );
+      await PrayerTimesHomeWidgetSync.refresh();
 
       return PrayerNotificationActionResult(
         success: true,
@@ -332,10 +334,16 @@ class PrayerNotificationScheduler {
       id: dateKey * 10 + prayerIndex,
       prayerKey: prayerKey,
       prayerLabel: arabicLabel,
-      title: 'حان الآن موعد صلاة $arabicLabel',
-      body: 'تقبل الله طاعتك. حان الآن موعد صلاة $arabicLabel.',
+      title: 'تذكير صلاة $arabicLabel',
+      body: 'حان الآن وقت صلاة $arabicLabel (${_formatPrayerTime(fireAt)}).',
       fireAt: fireAt,
     );
+  }
+
+  static String _formatPrayerTime(DateTime dateTime) {
+    final hour = dateTime.hour.toString().padLeft(2, '0');
+    final minute = dateTime.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
   }
 
   static Future<void> _persistLocation(

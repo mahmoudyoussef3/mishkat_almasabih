@@ -17,6 +17,7 @@ import 'package:mishkat_almasabih/core/notification/prayer_time_notification_sch
 import 'package:mishkat_almasabih/core/notification/push_notification.dart';
 import 'package:mishkat_almasabih/core/routing/app_router.dart';
 import 'package:mishkat_almasabih/core/services/hive_service.dart';
+import 'package:mishkat_almasabih/core/services/prayer_times_home_widget_sync.dart';
 import 'package:mishkat_almasabih/core/services/widget_navigation_service.dart';
 import 'package:mishkat_almasabih/features/onboarding/sava_date_for_first_time.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/domain/repositories/ramadan_config_repository.dart';
@@ -37,6 +38,7 @@ Future<void> bootstrapApp(AppConfig config) async {
   await NotificationHelper.init();
   await LocalNotification.init();
   await PrayerNotificationScheduler.bootstrap();
+  await PrayerTimesHomeWidgetSync.refresh();
   PushNotification.setupOnTapNotification();
   PushNotification.handleTerminatedNotification();
 

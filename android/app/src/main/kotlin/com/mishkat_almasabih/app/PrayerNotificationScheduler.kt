@@ -11,13 +11,18 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
+import androidx.core.app.NotificationCompat.Action
 import androidx.core.app.NotificationCompat
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 data class PrayerNotificationEntry(
     val id: Int,
     val prayerKey: String,
+    val prayerLabel: String,
     val title: String,
     val body: String,
     val fireAtMillis: Long,
@@ -32,8 +37,10 @@ object PrayerNotificationScheduler {
     private const val CHANNEL_DESCRIPTION = "Exact prayer time reminders"
     const val EXTRA_NOTIFICATION_ID = "extra_notification_id"
     const val EXTRA_PRAYER_KEY = "extra_prayer_key"
+    const val EXTRA_PRAYER_LABEL = "extra_prayer_label"
     const val EXTRA_TITLE = "extra_title"
     const val EXTRA_BODY = "extra_body"
+    const val EXTRA_FIRE_AT_MILLIS = "extra_fire_at_millis"
     private const val ACTION_FIRE = "com.mishkat_almasabih.app.action.PRAYER_NOTIFICATION"
     private const val ACTION_TEST_FIRE = "com.mishkat_almasabih.app.action.PRAYER_NOTIFICATION_TEST"
 
@@ -105,6 +112,11 @@ object PrayerNotificationScheduler {
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val prayerLabel = entry.prayerLabel.ifBlank { prayerLabelFromKey(entry.prayerKey) }
+        val reminderTime = formatReminderTime(entry.fireAtMillis)
+        val reminderTitle = "تذكير صلاة $prayerLabel"
+        val reminderBody = "وقت التذكير: $reminderTime"
+        val detailsText = "$reminderBody\n${entry.body}"
 
         val contentIntent = PendingIntent.getActivity(
             context,
@@ -115,12 +127,26 @@ object PrayerNotificationScheduler {
             pendingIntentFlags(),
         )
 
+        val openAction = Action.Builder(
+            0,
+            "فتح التطبيق",
+            contentIntent,
+        ).build()
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.mipmap.launcher_icon)
-            .setContentTitle(entry.title)
-            .setContentText(entry.body)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(entry.body))
+            .setContentTitle(reminderTitle)
+            .setContentText(reminderBody)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .setBigContentTitle(reminderTitle)
+                    .bigText(detailsText),
+            )
+            .setSubText("مواقيت الصلاة")
+            .setWhen(entry.fireAtMillis)
+            .setShowWhen(true)
             .setContentIntent(contentIntent)
+            .addAction(openAction)
             .setAutoCancel(true)
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -167,8 +193,10 @@ object PrayerNotificationScheduler {
             action = ACTION_FIRE
             putExtra(EXTRA_NOTIFICATION_ID, entry.id)
             putExtra(EXTRA_PRAYER_KEY, entry.prayerKey)
+            putExtra(EXTRA_PRAYER_LABEL, entry.prayerLabel)
             putExtra(EXTRA_TITLE, entry.title)
             putExtra(EXTRA_BODY, entry.body)
+            putExtra(EXTRA_FIRE_AT_MILLIS, entry.fireAtMillis)
         }
 
         return PendingIntent.getBroadcast(
@@ -206,14 +234,14 @@ object PrayerNotificationScheduler {
         val prefs = getPrefs(context)
         val json = JSONArray()
         entries.forEach { entry ->
-            json.put(
-                JSONObject()
-                    .put("id", entry.id)
-                    .put("prayerKey", entry.prayerKey)
-                    .put("title", entry.title)
-                    .put("body", entry.body)
-                    .put("fireAtMillis", entry.fireAtMillis),
-            )
+            val item = JSONObject()
+                .put("id", entry.id)
+                .put("prayerKey", entry.prayerKey)
+                .put("prayerLabel", entry.prayerLabel)
+                .put("title", entry.title)
+                .put("body", entry.body)
+                .put("fireAtMillis", entry.fireAtMillis)
+            json.put(item)
         }
         prefs.edit().putString(KEY_SCHEDULES, json.toString()).apply()
     }
@@ -230,6 +258,7 @@ object PrayerNotificationScheduler {
                         PrayerNotificationEntry(
                             id = item.getInt("id"),
                             prayerKey = item.getString("prayerKey"),
+                            prayerLabel = item.optString("prayerLabel", ""),
                             title = item.getString("title"),
                             body = item.getString("body"),
                             fireAtMillis = item.getLong("fireAtMillis"),
@@ -254,6 +283,7 @@ object PrayerNotificationScheduler {
                         PrayerNotificationEntry(
                             id = item.getInt("id"),
                             prayerKey = item.getString("prayerKey"),
+                            prayerLabel = item.optString("prayerLabel", ""),
                             title = item.getString("title"),
                             body = item.getString("body"),
                             fireAtMillis = item.getLong("fireAtMillis"),
@@ -319,8 +349,10 @@ object PrayerNotificationScheduler {
             action = ACTION_TEST_FIRE
             putExtra(EXTRA_NOTIFICATION_ID, entry.id)
             putExtra(EXTRA_PRAYER_KEY, entry.prayerKey)
+            putExtra(EXTRA_PRAYER_LABEL, entry.prayerLabel)
             putExtra(EXTRA_TITLE, entry.title)
             putExtra(EXTRA_BODY, entry.body)
+            putExtra(EXTRA_FIRE_AT_MILLIS, entry.fireAtMillis)
         }
 
         return PendingIntent.getBroadcast(
@@ -329,5 +361,22 @@ object PrayerNotificationScheduler {
             intent,
             pendingIntentFlags(),
         )
+    }
+
+    private fun prayerLabelFromKey(prayerKey: String): String {
+        return when (prayerKey.lowercase(Locale.US)) {
+            "fajr" -> "الفجر"
+            "dhuhr" -> "الظهر"
+            "asr" -> "العصر"
+            "maghrib" -> "المغرب"
+            "isha" -> "العشاء"
+            else -> prayerKey
+        }
+    }
+
+    private fun formatReminderTime(fireAtMillis: Long): String {
+        val locale = Locale("ar")
+        val formatter = SimpleDateFormat("HH:mm", locale)
+        return formatter.format(Date(fireAtMillis))
     }
 }

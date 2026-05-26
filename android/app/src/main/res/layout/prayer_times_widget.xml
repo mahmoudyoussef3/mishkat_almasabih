@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/prayer_widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/prayer_widget_background"
+    android:padding="14dp"
+    android:layoutDirection="rtl">
+
+    <LinearLayout
+        android:id="@+id/prayer_widget_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/prayer_widget_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="القاهرة"
+                android:textColor="#F7FAFC"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/prayer_widget_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="الثلاثاء 26/05"
+                android:textColor="#B6C4D8"
+                android:textSize="11sp"
+                android:fontFamily="@font/cairo_regular"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@drawable/prayer_widget_time_badge"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@android:drawable/ic_lock_idle_alarm"
+                android:tint="#57D3C6"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/prayer_widget_now_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:text="12:21"
+                android:textColor="#EAF6FF"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/prayer_widget_times_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/prayer_widget_header"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:id="@+id/prayer_item_fajr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/prayer_time_item_default">
+
+            <TextView
+                android:id="@+id/prayer_label_fajr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="الفجر"
+                android:textColor="#AFC0D8"
+                android:textSize="11sp"
+                android:fontFamily="@font/cairo_medium"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/prayer_time_fajr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="04:21"
+                android:textColor="#EEF3FF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/prayer_item_sunrise"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/prayer_time_item_default">
+
+            <TextView
+                android:id="@+id/prayer_label_sunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="الشروق"
+                android:textColor="#AFC0D8"
+                android:textSize="11sp"
+                android:fontFamily="@font/cairo_medium"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/prayer_time_sunrise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="05:55"
+                android:textColor="#EEF3FF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/prayer_item_dhuhr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/prayer_time_item_default">
+
+            <TextView
+                android:id="@+id/prayer_label_dhuhr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="الظهر"
+                android:textColor="#AFC0D8"
+                android:textSize="11sp"
+                android:fontFamily="@font/cairo_medium"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/prayer_time_dhuhr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="12:53"
+                android:textColor="#EEF3FF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/prayer_item_asr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/prayer_time_item_default">
+
+            <TextView
+                android:id="@+id/prayer_label_asr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="العصر"
+                android:textColor="#AFC0D8"
+                android:textSize="11sp"
+                android:fontFamily="@font/cairo_medium"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/prayer_time_asr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="16:30"
+                android:textColor="#EEF3FF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/prayer_item_maghrib"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/prayer_time_item_default">
+
+            <TextView
+                android:id="@+id/prayer_label_maghrib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="المغرب"
+                android:textColor="#AFC0D8"
+                android:textSize="11sp"
+                android:fontFamily="@font/cairo_medium"
+                android:maxLines="1" />
+
+            <TextView
+                android:id="@+id/prayer_time_maghrib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="19:49"
+                android:textColor="#EEF3FF"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/cairo_bold"
+                android:maxLines="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/prayer_widget_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/prayer_widget_times_row"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/prayer_widget_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="الصلاة القادمة: الفجر"
+            android:textColor="#8EDFD6"
+            android:textSize="11sp"
+            android:fontFamily="@font/cairo_bold"
+            android:maxLines="1"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/prayer_widget_isha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="العشاء 21:05"
+            android:textColor="#B6C4D8"
+            android:textSize="11sp"
+            android:fontFamily="@font/cairo_regular"
+            android:maxLines="1" />
+    </LinearLayout>
+
+</RelativeLayout>
