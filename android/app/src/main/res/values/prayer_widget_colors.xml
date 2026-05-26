@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="prayer_widget_background_start">#2A174C</color>
+    <color name="prayer_widget_background_end">#13172B</color>
+    <color name="prayer_widget_border">#3A2366</color>
+    <color name="prayer_widget_surface">#201A3D</color>
+    <color name="prayer_widget_surface_border">#4A2D7A</color>
+    <color name="prayer_widget_surface_active_start">#7440E9</color>
+    <color name="prayer_widget_surface_active_end">#5E35B1</color>
+    <color name="prayer_widget_surface_active_border">#FFB300</color>
+    <color name="prayer_widget_text_primary">#F8F5FF</color>
+    <color name="prayer_widget_text_secondary">#C8BFE3</color>
+    <color name="prayer_widget_accent">#FFB300</color>
+</resources>

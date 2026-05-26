@@ -3,7 +3,7 @@
     android:id="@+id/hadith_widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_background_gradient"
+    android:background="@drawable/prayer_widget_background"
     android:padding="16dp">
 
     <!-- Header: Icon + Title -->
@@ -11,27 +11,27 @@
         android:id="@+id/header_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:src="@drawable/ic_book"
             android:contentDescription="@null"
-            android:tint="#F4F1E6"/>
+            android:src="@drawable/ic_book"
+            android:tint="@color/prayer_widget_accent"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="حديث اليوم"
-            android:textColor="#F4F1E6"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/cairo_bold"
-            android:layout_marginStart="8dp"/>
+            android:text="حديث اليوم"
+                android:textColor="@color/prayer_widget_text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <!-- Hadith Text -->
@@ -44,10 +44,9 @@
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:text="جاري تحميل الحديث..."
-        android:textColor="#FFFFFF"
+        android:textColor="@color/prayer_widget_text_primary"
         android:textSize="18sp"
         android:textStyle="bold"
-
         android:fontFamily="@font/ya_modernpro_bold"
         android:gravity="center_vertical|start"
         android:textDirection="rtl"
@@ -80,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="اقرأ الحديث"
-                android:textColor="#F4F1E6"
+                android:textColor="@color/prayer_widget_text_primary"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:fontFamily="@font/cairo_bold"/>
@@ -95,7 +94,7 @@
             android:background="@drawable/quote_background"
             android:padding="8dp"
             android:contentDescription="@null"
-            android:tint="#F4F1E6"/>
+            android:tint="@color/prayer_widget_accent"/>
     </RelativeLayout>
 
 </RelativeLayout>

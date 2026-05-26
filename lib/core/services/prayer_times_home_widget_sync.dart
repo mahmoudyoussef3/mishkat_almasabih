@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:adhan/adhan.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,15 +32,13 @@ class PrayerTimesHomeWidgetSync {
       ];
 
       final next = _resolveNextPrayer(prayers, now);
+      final hijriDate = _formatHijriDate(now);
+      final gregorianDate = _formatGregorianDate(now);
 
-      await HomeWidget.saveWidgetData<String>('prayer_city', location.cityName);
+      await HomeWidget.saveWidgetData<String>('prayer_hijri_date', hijriDate);
       await HomeWidget.saveWidgetData<String>(
-        'prayer_current_date',
-        '${_arabicWeekday(now.weekday)} ${now.day.toString().padLeft(2, '0')}/${now.month.toString().padLeft(2, '0')}',
-      );
-      await HomeWidget.saveWidgetData<String>(
-        'prayer_current_time',
-        _formatTime(now),
+        'prayer_gregorian_date',
+        gregorianDate,
       );
 
       await HomeWidget.saveWidgetData<String>(
@@ -68,8 +67,6 @@ class PrayerTimesHomeWidgetSync {
       );
 
       await HomeWidget.saveWidgetData<String>('prayer_next_key', next.key);
-      await HomeWidget.saveWidgetData<String>('prayer_next_label', next.label);
-      await HomeWidget.saveWidgetData<String>('prayer_next_time', _formatTime(next.time));
 
       await HomeWidget.updateWidget(
         name: 'PrayerTimesWidgetProvider',
@@ -80,7 +77,10 @@ class PrayerTimesHomeWidgetSync {
     }
   }
 
-  static _PrayerItem _resolveNextPrayer(List<_PrayerItem> prayers, DateTime now) {
+  static _PrayerItem _resolveNextPrayer(
+    List<_PrayerItem> prayers,
+    DateTime now,
+  ) {
     for (final prayer in prayers) {
       if (prayer.time.isAfter(now)) {
         return prayer;
@@ -88,7 +88,11 @@ class PrayerTimesHomeWidgetSync {
     }
 
     final fajr = prayers.firstWhere((prayer) => prayer.key == 'fajr');
-    return _PrayerItem(fajr.key, 'الفجر', fajr.time.add(const Duration(days: 1)));
+    return _PrayerItem(
+      fajr.key,
+      'الفجر',
+      fajr.time.add(const Duration(days: 1)),
+    );
   }
 
   static String _formatTime(DateTime time) {
@@ -110,9 +114,44 @@ class PrayerTimesHomeWidgetSync {
     };
   }
 
+  static String _formatHijriDate(DateTime now) {
+    HijriCalendar.setLocal('ar');
+    final hijri = HijriCalendar.fromDate(now);
+    return '${_toArabicNumerals(hijri.hDay)} ${hijri.getLongMonthName()} ${_toArabicNumerals(hijri.hYear)} هـ';
+  }
+
+  static String _formatGregorianDate(DateTime now) {
+    final months = <String>[
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ];
+
+    return '${_arabicWeekday(now.weekday)}، ${_toArabicNumerals(now.day)} ${months[now.month - 1]} ${_toArabicNumerals(now.year)} م';
+  }
+
+  static String _toArabicNumerals(int number) {
+    const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    return number
+        .toString()
+        .split('')
+        .map((digit) => arabicDigits[int.parse(digit)])
+        .join();
+  }
+
   static Future<_WidgetLocation> _resolveLocation() async {
     final prefs = await SharedPreferences.getInstance();
-    final raw = prefs.getString(_locationKey) ?? prefs.getString(_legacyLocationKey);
+    final raw =
+        prefs.getString(_locationKey) ?? prefs.getString(_legacyLocationKey);
 
     if (raw != null && raw.isNotEmpty) {
       try {
@@ -120,9 +159,10 @@ class PrayerTimesHomeWidgetSync {
         return _WidgetLocation(
           latitude: (json['latitude'] as num?)?.toDouble() ?? 30.0444,
           longitude: (json['longitude'] as num?)?.toDouble() ?? 31.2357,
-          cityName: (json['cityName'] as String?)?.trim().isNotEmpty == true
-              ? json['cityName'] as String
-              : 'القاهرة، مصر',
+          cityName:
+              (json['cityName'] as String?)?.trim().isNotEmpty == true
+                  ? json['cityName'] as String
+                  : 'القاهرة، مصر',
         );
       } catch (_) {
         // Fall back to default location.
