@@ -11,6 +11,7 @@ class NewDailyHadithModel {
   final String? grade;
   final String? explanation;
   final List<String>? hints;
+  final List<String>? categories;
   final String? id;
 
   @JsonKey(name: 'words_meanings')
@@ -24,6 +25,7 @@ class NewDailyHadithModel {
     this.grade,
     this.explanation,
     this.hints,
+    this.categories,
     this.words_meanings,
   });
   factory NewDailyHadithModel.fromJson(Map<String, dynamic> json) =>

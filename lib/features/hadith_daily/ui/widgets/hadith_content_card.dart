@@ -50,36 +50,61 @@ class HadithContentCard extends StatelessWidget {
 
           // Main content
           Padding(
-            padding: EdgeInsets.all(24.w),
+            padding: EdgeInsets.fromLTRB(22.w, 22.w, 22.w, 20.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Hadith content label
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 6.h,
-                  ),
-                  decoration: DailyHadithDecorations.labelChip(),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.auto_stories,
-                        color: ColorsManager.primaryPurple,
-                        size: 16.sp,
+                Row(
+                  children: [
+                    Container(
+                      width: 42.w,
+                      height: 42.w,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            ColorsManager.primaryPurple.withOpacity(0.14),
+                            ColorsManager.secondaryPurple.withOpacity(0.1),
+                          ],
+                        ),
+                        borderRadius: BorderRadius.circular(14.r),
                       ),
-                      SizedBox(width: 6.w),
-                      Text("نص الحديث", style: DailyHadithTextStyles.labelChip),
-                    ],
-                  ),
+                      child: Icon(
+                        Icons.auto_stories_rounded,
+                        color: ColorsManager.primaryPurple,
+                        size: 20.sp,
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'نص الحديث',
+                            style: DailyHadithTextStyles.labelChip.copyWith(
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                          SizedBox(height: 3.h),
+                          Text(
+                            'اقرأ الحديث كاملًا مع خيارات النسخ والمشاركة',
+                            style: TextStyle(
+                              fontSize: 11.sp,
+                              color: ColorsManager.secondaryText,
+                              height: 1.3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
 
-                SizedBox(height: 20.h),
+                SizedBox(height: 18.h),
 
                 // Hadith content
                 HadithRichText(hadith: data.hadeeth ?? ""),
-                SizedBox(height: 10.h),
+                SizedBox(height: 14.h),
 
                 Align(
                   alignment: Alignment.bottomLeft,

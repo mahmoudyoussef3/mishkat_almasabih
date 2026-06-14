@@ -16,6 +16,8 @@ NewDailyHadithModel _$NewDailyHadithModelFromJson(
   grade: json['grade'] as String?,
   explanation: json['explanation'] as String?,
   hints: (json['hints'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  categories:
+      (json['categories'] as List<dynamic>?)?.map((e) => e.toString()).toList(),
   words_meanings:
       (json['words_meanings'] as List<dynamic>?)
           ?.map(
@@ -33,6 +35,7 @@ Map<String, dynamic> _$NewDailyHadithModelToJson(
   'grade': instance.grade,
   'explanation': instance.explanation,
   'hints': instance.hints,
+  'categories': instance.categories,
   'id': instance.id,
   'words_meanings': instance.words_meanings,
 };

@@ -19,18 +19,25 @@ class HadithCategoryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsetsDirectional.only(top: 6.h, bottom: 6.h),
-      padding: EdgeInsetsDirectional.fromSTEB(18.w, 16.h, 18.w, 18.h),
+      padding: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 18.h),
       decoration: BoxDecoration(
-        color: ColorsManager.cardBackground,
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: [
+            ColorsManager.cardBackground,
+            ColorsManager.primaryPurple.withOpacity(0.03),
+          ],
+        ),
         borderRadius: BorderRadius.circular(18.r),
         border: Border.all(
-          color: ColorsManager.primaryPurple.withAlpha(14),
+          color: ColorsManager.primaryPurple.withAlpha(18),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: ColorsManager.black.withAlpha(10),
-            blurRadius: 22,
+            color: ColorsManager.black.withAlpha(8),
+            blurRadius: 24,
             offset: const Offset(0, 10),
           ),
         ],
@@ -38,32 +45,101 @@ class HadithCategoryCard extends StatelessWidget {
       child: Stack(
         children: [
           PositionedDirectional(
-            top: 4.h,
-            end: 6.w,
+            top: 0,
+            start: 0,
+            end: 0,
+            child: Container(
+              height: 3.h,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    ColorsManager.primaryPurple.withOpacity(0.85),
+                    ColorsManager.secondaryPurple.withOpacity(0.7),
+                    ColorsManager.primaryGold.withOpacity(0.55),
+                  ],
+                ),
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(18.r),
+                ),
+              ),
+            ),
+          ),
+          PositionedDirectional(
+            top: 8.h,
+            end: 2.w,
             child: Icon(
               Icons.format_quote,
-              size: 36.sp,
-              color: ColorsManager.primaryPurple.withAlpha(24),
+              size: 40.sp,
+              color: ColorsManager.primaryPurple.withAlpha(22),
             ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: _IndexBadge(index: index),
+              Row(
+                children: [
+                  _IndexBadge(index: index),
+                  const Spacer(),
+                  Container(
+                    padding: EdgeInsetsDirectional.symmetric(
+                      horizontal: 10.w,
+                      vertical: 6.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: ColorsManager.primaryPurple.withAlpha(12),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.touch_app_rounded,
+                          size: 14.sp,
+                          color: ColorsManager.primaryPurple,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          'عرض الحديث',
+                          style: TextStyles.labelMedium.copyWith(
+                            color: ColorsManager.primaryPurple,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 14.h),
               Text(
                 hadith.title,
                 textDirection: TextDirection.rtl,
                 textAlign: TextAlign.justify,
                 style: TextStyles.hadithText.copyWith(
-                  fontSize: 17.sp,
-                  height: 1.8,
+                  fontSize: 16.5.sp,
+                  height: 1.95,
                   color: ColorsManager.primaryText,
                   fontStyle: FontStyle.normal,
                 ),
+              ),
+              SizedBox(height: 8.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.arrow_back_rounded,
+                    size: 15.sp,
+                    color: ColorsManager.primaryPurple,
+                  ),
+                  SizedBox(width: 4.w),
+                  Text(
+                    'اضغط لفتح التفاصيل',
+                    style: TextStyles.font12GrayRegular.copyWith(
+                      color: ColorsManager.primaryPurple,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
