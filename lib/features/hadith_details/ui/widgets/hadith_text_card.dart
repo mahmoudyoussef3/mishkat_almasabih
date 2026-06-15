@@ -8,7 +8,8 @@ import 'package:mishkat_almasabih/core/theming/hadith_details_styles.dart';
 
 class HadithTextCard extends StatefulWidget {
   final String hadithText;
-  const HadithTextCard({super.key, required this.hadithText});
+  final String? hadithId;
+  const HadithTextCard({super.key, required this.hadithText, this.hadithId});
 
   @override
   State<HadithTextCard> createState() => _HadithTextCardState();
@@ -111,11 +112,29 @@ class _HadithTextCardState extends State<HadithTextCard> {
                             icon: Icons.share_rounded,
                             color: ColorsManager.primaryGreen,
                             tooltip: "مشاركة الحديث",
-                            onTap:
-                                () => shareHadithAsImage(
-                                  context,
-                                  text: widget.hadithText,
-                                ),
+                            onTap: () {
+                              String? link;
+                              if (widget.hadithId != null &&
+                                  widget.hadithId!.isNotEmpty) {
+                                link =
+                                    "https://api.hadith-shareef.com/api/hadith/${widget.hadithId}";
+                              }
+                              shareHadithAsImage(
+                                context,
+                                text: widget.hadithText,
+                                deepLink: link,
+                              );
+                            },
+                          ),
+                          _buildActionIcon(
+                            context,
+                            icon: Icons.link_rounded,
+                            color: ColorsManager.primaryGreen,
+                            tooltip: "مشاركة كرابط",
+                            onTap: () => shareHadithLink(
+                              context,
+                              hadithId:  widget.hadithId,
+                            ),
                           ),
                         ],
                       ),

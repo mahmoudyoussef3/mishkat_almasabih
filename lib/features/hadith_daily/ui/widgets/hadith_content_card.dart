@@ -140,6 +140,16 @@ class HadithContentCard extends StatelessWidget {
                               text: data.hadeeth ?? '',
                             ),
                       ),
+                      _buildActionIcon(
+                        context,
+                        icon: Icons.link_rounded,
+                        color: ColorsManager.primaryGold,
+                        tooltip: "مشاركة كرابط",
+                        onTap: () => shareHadithLink(
+                          context,
+                          hadithId: data.id?.toString(),
+                        ),
+                      ),
                     ],
                   ),
                 ),

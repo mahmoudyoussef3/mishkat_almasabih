@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/ui/widgets/share_image_editor.dart';
+import 'package:share_plus/share_plus.dart';
 import '../theming/styles.dart';
 
 
@@ -91,6 +92,7 @@ String convertToArabicNumber(int number) {
 Future<void> shareHadithAsImage(
   BuildContext context, {
   required String text,
+  String? deepLink,
 }) async {
   await showModalBottomSheet(
     context: context,
@@ -98,10 +100,26 @@ Future<void> shareHadithAsImage(
     useSafeArea: true,
     backgroundColor: Colors.transparent,
     builder: (_) {
-      return ShareImageEditorBottomSheet(text: text);
+      return ShareImageEditorBottomSheet(
+        text: text,
+        deepLink: deepLink,
+      );
     },
   );
 }
+
+Future<void> shareHadithLink(
+  BuildContext context, {
+  required String? hadithId,
+}) async {
+  if (hadithId == null || hadithId.toString().isEmpty) {
+    return;
+  }
+  final String link = "https://api.hadith-shareef.com/api/hadith/$hadithId";
+  final String shareText = "اقرأ هذا الحديث عبر الرابط:\n$link";
+  Share.share(shareText);
+}
+
   bool checkBookSlug(String bookSlug) {
     if (bookSlug == 'sahih-bukhari' ||
         bookSlug == 'sahih-muslim' ||

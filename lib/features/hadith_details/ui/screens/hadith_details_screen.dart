@@ -175,6 +175,7 @@ class _HadithDetailScreenState extends State<HadithDetailScreen> {
                           isNavigated
                               ? newTextOfHadith
                               : widget.hadithText ?? "الحديث غير متوفر",
+                      hadithId: newHadithId.isNotEmpty ? newHadithId : _currentHadithId,
                     ),
                   ),
 

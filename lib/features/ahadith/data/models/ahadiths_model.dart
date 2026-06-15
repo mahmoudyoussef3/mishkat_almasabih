@@ -2,6 +2,9 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'ahadiths_model.g.dart';
 
+String? _stringFromJson(dynamic value) => value?.toString();
+dynamic _stringToJson(String? value) => value;
+
 @JsonSerializable()
 class HadithResponse {
   final int? status;
@@ -27,6 +30,7 @@ class Hadiths {
   final List<HadithLink>? links;
   final String? next_page_url;
   final String? path;
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
   final String? per_page;
   final String? prev_page_url;
   final int? to;
@@ -56,6 +60,7 @@ class Hadiths {
 @JsonSerializable()
 class Hadith {
   final int? id;
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
   final String? hadithNumber;
   final String? englishNarrator;
   final String? hadithEnglish;
@@ -65,9 +70,12 @@ class Hadith {
   final String? headingArabic;
   final String? headingUrdu;
   final String? headingEnglish;
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
   final String? chapterId;
   final String? bookSlug;
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
   final String? volume;
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
   final String? status;
   final HadithBook? book;
   final HadithChapter? chapter;
@@ -124,6 +132,7 @@ class HadithBook {
 @JsonSerializable()
 class HadithChapter {
   final int? id;
+  @JsonKey(fromJson: _stringFromJson, toJson: _stringToJson)
   final String? chapterNumber;
   final String? chapterEnglish;
   final String? chapterUrdu;
