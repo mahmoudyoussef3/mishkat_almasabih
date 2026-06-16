@@ -271,7 +271,7 @@ class CacheKeys {
   static const String chaptersResponse = 'chaptersResponse';
   static const String hadithDaily = 'hadithDaily';
   static const String library = 'library';
-  static const String hadithCategories = 'hadith_categories';
+  static const String hadithCategories = 'hadith_categories_v2';
 
   /// Paginated ahadith cache key generator
   static String paginatedAhadith(String bookSlug, int chapterId) =>

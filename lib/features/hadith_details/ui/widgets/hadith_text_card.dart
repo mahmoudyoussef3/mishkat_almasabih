@@ -20,9 +20,8 @@ class _HadithTextCardState extends State<HadithTextCard> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20.w),
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.w),
         child: RepaintBoundary(
           key: _repaintKey,
           child: Container(
@@ -145,8 +144,7 @@ class _HadithTextCardState extends State<HadithTextCard> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _buildActionIcon(

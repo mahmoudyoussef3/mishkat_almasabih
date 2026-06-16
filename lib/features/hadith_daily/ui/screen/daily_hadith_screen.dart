@@ -10,6 +10,7 @@ import 'package:mishkat_almasabih/core/theming/daily_hadith_decorations.dart';
 import 'package:mishkat_almasabih/core/theming/daily_hadith_styles.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/categories_cubit/categories_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/categories_cubit/categories_state.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/hadith_categories_section.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/similar_ahadith_section.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
@@ -235,9 +236,18 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                           builder: (context, state) {
                             return switch (state) {
                               CategoriesLoaded(categories: final categories) =>
-                                SimilarAhadithSection(
-                                  categoryIds: data.categories ?? const [],
-                                  categories: categories,
+                                Column(
+                                  children: [
+                                    HadithCategoriesSection(
+                                      categoryIds: data.categories ?? const [],
+                                      categories: categories,
+                                    ),
+                                    SizedBox(height: 14.h),
+                                    SimilarAhadithSection(
+                                      categoryIds: data.categories ?? const [],
+                                      categories: categories,
+                                    ),
+                                  ],
                                 ),
                               CategoriesInitial() || CategoriesLoading() =>
                                 _buildCategoriesLoadingSection(),

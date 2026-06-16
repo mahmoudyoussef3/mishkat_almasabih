@@ -11,6 +11,7 @@ class NewDailyHadithModel {
   final String? grade;
   final String? explanation;
   final List<String>? hints;
+  @JsonKey(fromJson: _categoriesFromJson)
   final List<String>? categories;
   final String? id;
 
@@ -44,4 +45,11 @@ class DailyHadithWordMeaning {
       _$DailyHadithWordMeaningFromJson(json);
 
   Map<String, dynamic> toJson() => _$DailyHadithWordMeaningToJson(this);
+}
+
+List<String>? _categoriesFromJson(dynamic json) {
+  if (json is List) {
+    return json.map((e) => e.toString()).toList();
+  }
+  return null;
 }

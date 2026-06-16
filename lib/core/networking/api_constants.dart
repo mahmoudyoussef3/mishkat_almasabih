@@ -86,7 +86,7 @@ class ApiConstants {
   // -----------------------------
   // Ahadith Categories
   // -----------------------------
-  static const String getCategories = "categories/roots/";
+  static const String getCategories = "categories/list/?language=ar";
 
   static const String getAhadithByCategory = "hadeeths/list/";
 }

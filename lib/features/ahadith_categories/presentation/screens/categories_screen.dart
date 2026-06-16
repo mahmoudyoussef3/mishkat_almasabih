@@ -54,16 +54,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           horizontal: 12.w,
                           vertical: 8.h,
                         ),
-                        sliver: SliverGrid(
-                          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                            maxCrossAxisExtent: _getMaxCrossAxisExtent(context),
-                            mainAxisExtent: _getMainAxisExtent(context),
-                            crossAxisSpacing: 12.w,
-                            mainAxisSpacing: 16.h,
-                            childAspectRatio: 0.6,
-                          ),
+                        sliver: Builder(
+                          builder: (context) {
+                            final rootCategories = categories
+                                .where((c) => c.parentId == null || c.parentId == '0' || c.parentId == '')
+                                .toList();
+                            return SliverGrid(
+                              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: _getMaxCrossAxisExtent(context),
+                                mainAxisExtent: _getMainAxisExtent(context),
+                                crossAxisSpacing: 12.w,
+                                mainAxisSpacing: 16.h,
+                                childAspectRatio: 0.6,
+                              ),
                           delegate: SliverChildBuilderDelegate((context, index) {
-                            final category = categories[index];
+                            final category = rootCategories[index];
                             return CategoryCard(
                               category: category,
                               onExploreSubcategories: () {
@@ -76,9 +81,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 );
                               },
                             );
-                          }, childCount: categories.length),
-                        ),
+                          }, childCount: rootCategories.length),
+                        );
+                        }
                       ),
+                    ),
                     CategoriesError(message: final message) =>
                       SliverToBoxAdapter(
                         child: SizedBox(
