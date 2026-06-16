@@ -56,7 +56,7 @@ import '../../features/splash/splash_screen.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/screens/ramadan_tasks_screen.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/cubit/ramadan_tasks_cubit.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/screens/ramadan_progress_screen.dart';
-import 'package:mishkat_almasabih/core/deep_links/ui/deep_link_hadith_screen.dart';
+
 import 'package:mishkat_almasabih/core/deep_links/ui/shared_link_hadith_screen.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_details_cubit/cubit/hadith_by_category_details_cubit.dart';
 
@@ -67,7 +67,32 @@ class AppRouter {
   }
 
   Route? generateRoute(RouteSettings settings) {
-    switch (settings.name) {
+    final String routeName = settings.name ?? '';
+
+    // Handle native deep link paths
+    if (routeName.startsWith('/api/hadith/')) {
+      final id = routeName.split('/').last.replaceAll('%C2%A0', '').replaceAll('\u00A0', '').trim();
+      if (id.isNotEmpty) {
+        _logScreenView('ShareHadithLink (Native)');
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create:
+                    (context) =>
+                        getIt<HadithByCategoryDetailsCubit>()..fetchById(id),
+                child: SharedLinkHadithScreen(hadithId: id),  
+              ),
+        );
+      }
+    }
+
+    if (routeName == '/') {
+      return MaterialPageRoute(
+        builder: (_) => const Scaffold(backgroundColor: Colors.white),
+      );
+    }
+
+    switch (routeName) {
       case Routes.hadithDetail:
         _logScreenView('HadithDetail');
         final args = (settings.arguments as Map?) ?? {};
@@ -250,20 +275,6 @@ class AppRouter {
               ),
         );
 
-      case Routes.deepLinkHadith:
-        _logScreenView('DeepLinkHadith');
-
-        final hadithId = settings.arguments as String;
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create:
-                    (context) =>
-                        getIt<EnhancedSearchCubit>()
-                          ..fetchEnhancedSearchResults(hadithId),
-                child: DeepLinkHadithScreen(hadithId: hadithId),
-              ),
-        );
 
       case Routes.filterResultSearch:
         _logScreenView('FilterResultSearch');

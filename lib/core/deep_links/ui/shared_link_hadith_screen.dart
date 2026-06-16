@@ -25,7 +25,11 @@ class _SharedLinkHadithScreenState extends State<SharedLinkHadithScreen> {
         if (state is HadithByCategoryDetailsLoaded) {
           _navigated = true;
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.of(context).pushReplacementNamed(
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.homeScreen,
+              (route) => false,
+            );
+            Navigator.of(context).pushNamed(
               Routes.hadithOfTheDay,
               arguments: {
                 'model': state.dailyHadithModel,

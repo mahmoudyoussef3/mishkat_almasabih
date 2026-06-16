@@ -25,8 +25,8 @@ class DeepLinkRouter {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       switch (action) {
         case _OpenHadithById(:final id):
-          navigatorKey.currentState?.pushReplacementNamed(
-            Routes.deepLinkHadith,
+          navigatorKey.currentState?.pushNamed(
+            Routes.shareHadithLink,
             arguments: id,
           );
       }
@@ -36,14 +36,14 @@ class DeepLinkRouter {
   static _DeepLinkAction? _parse(Uri uri) {
     // ✅ https link
     if (uri.scheme == 'https' && uri.host == _apiHost) {
-      final id = extractHadithId(uri);
+      final id = _sanitizeId(extractHadithId(uri));
       if (_isValidId(id)) return _OpenHadithById(id!);
     }
 
     // ✅ custom scheme
     if (uri.scheme == 'mishkat') {
       if (uri.host == 'hadith' || uri.host == _apiHost) {
-        final id = extractHadithId(uri);
+        final id = _sanitizeId(extractHadithId(uri));
         if (_isValidId(id)) return _OpenHadithById(id!);
       }
     }
@@ -81,8 +81,14 @@ class DeepLinkRouter {
 
   static bool _isValidId(String? value) {
     if (value == null) return false;
-    final v = value.trim();
+    final v = value.replaceAll('%C2%A0', '').replaceAll('\u00A0', '').trim();
     return v.isNotEmpty && !_reservedSegments.contains(v);
+  }
+
+  static String? _sanitizeId(String? value) {
+    if (value == null) return null;
+    final v = value.replaceAll('%C2%A0', '').replaceAll('\u00A0', '').trim();
+    return v;
   }
 
   static Future<void> _waitForNavigator() async {
