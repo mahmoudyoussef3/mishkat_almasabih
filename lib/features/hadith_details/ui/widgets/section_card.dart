@@ -8,14 +8,11 @@ class SectionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(16.w),
-        decoration: HadithDetailsDecorations.sectionCard(),
-        child: child,
-      ),
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(16.w),
+      decoration: HadithDetailsDecorations.sectionCard(),
+      child: child,
     );
   }
 }

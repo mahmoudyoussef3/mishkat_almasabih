@@ -261,6 +261,33 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                           data: widget.dailyHadithModel,
                         ),
                       ),
+
+                      if ((data.categories ?? const []).isNotEmpty) ...[
+                        SizedBox(height: 20.h),
+                        BlocBuilder<CategoriesCubit, CategoriesState>(
+                          builder: (context, state) {
+                            return switch (state) {
+                              CategoriesLoaded(categories: final categories) =>
+                                Column(
+                                  children: [
+                                    HadithCategoriesSection(
+                                      categoryIds: data.categories ?? const [],
+                                      categories: categories,
+                                    ),
+                                    SizedBox(height: 14.h),
+                                    SimilarAhadithSection(
+                                      categoryIds: data.categories ?? const [],
+                                      categories: categories,
+                                    ),
+                                  ],
+                                ),
+                              CategoriesInitial() || CategoriesLoading() =>
+                                _buildCategoriesLoadingSection(),
+                              CategoriesError() => const SizedBox.shrink(),
+                            };
+                          },
+                        ),
+                      ],
                     ],
                   ),
                 ),

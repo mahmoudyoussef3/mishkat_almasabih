@@ -33,52 +33,33 @@ class HadithCategoriesSection extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    return SectionCard(
+    return Container(
+      width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Container(
-                width: 34.w,
-                height: 34.w,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      ColorsManager.primaryPurple.withOpacity(0.16),
-                      ColorsManager.secondaryPurple.withOpacity(0.12),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                child: Icon(
-                  Icons.sell_rounded,
-                  color: ColorsManager.primaryPurple,
-                  size: 18.sp,
-                ),
+              Icon(
+                Icons.sell_rounded,
+                color: ColorsManager.primaryPurple,
+                size: 16.sp,
               ),
-              SizedBox(width: 10.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'التصنيفات المرتبطة',
-                      style: TextStyle(
-                        fontSize: 15.sp,
-                        fontWeight: FontWeight.w800,
-                        color: ColorsManager.primaryText,
-                      ),
-                    ),
-                  ],
+              SizedBox(width: 8.w),
+              Text(
+                'التصنيفات المرتبطة:',
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w700,
+                  color: ColorsManager.primaryText,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 14.h),
+          SizedBox(height: 10.h),
           Wrap(
-            spacing: 10.w,
-            runSpacing: 10.h,
+            spacing: 8.w,
+            runSpacing: 8.h,
             children:
                 matchedCategories
                     .map(

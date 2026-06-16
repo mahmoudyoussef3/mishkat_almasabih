@@ -89,140 +89,146 @@ class _CategorySimilarAhadithState extends State<_CategorySimilarAhadith> {
             
             final ahadithToShow = state.ahadith.take(3).toList();
 
-            return SectionCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 34.w,
-                        height: 34.w,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              ColorsManager.primaryPurple.withOpacity(0.16),
-                              ColorsManager.secondaryPurple.withOpacity(0.12),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: Icon(
-                          Icons.library_books,
-                          color: ColorsManager.primaryPurple,
-                          size: 18.sp,
-                        ),
-                      ),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'أحاديث مشابهة في:',
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                                color: ColorsManager.secondaryText,
-                                height: 1.3,
-                              ),
-                            ),
-                            Text(
-                              widget.category.title,
-                              style: TextStyle(
-                                fontSize: 15.sp,
-                                fontWeight: FontWeight.w800,
-                                color: ColorsManager.primaryText,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 14.h),
-                  ...ahadithToShow.asMap().entries.map((entry) {
-                    final hadith = entry.value;
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.shareHadithLink,
-                          arguments: hadith.id,
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(12.r),
-                      child: Container(
-                        margin: EdgeInsets.only(bottom: 8.h),
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-                        decoration: BoxDecoration(
-                          color: ColorsManager.primaryPurple.withOpacity(0.02),
-                          borderRadius: BorderRadius.circular(12.r),
-                          border: Border.all(color: ColorsManager.primaryPurple.withOpacity(0.05)),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.menu_book_rounded,
-                              size: 16.sp,
-                              color: ColorsManager.primaryPurple.withOpacity(0.6),
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              child: Text(
-                                hadith.title,
-                                textDirection: TextDirection.rtl,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 13.sp,
-                                  height: 1.5,
-                                  color: ColorsManager.primaryText.withOpacity(0.85),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                  SizedBox(height: 4.h),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.ahadithListScreen,
-                          arguments: {
-                            'categoryId': widget.category.id,
-                            'categoryTitle': widget.category.title,
-                          },
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: ColorsManager.primaryPurple,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'عرض المزيد',
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          SizedBox(width: 4.w),
-                          Icon(Icons.arrow_forward_ios_rounded, size: 12.sp),
-                        ],
-                      ),
-                    ),
+            return Container(
+              margin: EdgeInsets.only(bottom: 12.h),
+              decoration: BoxDecoration(
+                color: ColorsManager.secondaryBackground,
+                borderRadius: BorderRadius.circular(16.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
+                border: Border.all(
+                  color: ColorsManager.primaryPurple.withOpacity(0.06),
+                ),
+              ),
+              child: Theme(
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  tilePadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                  childrenPadding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+                  iconColor: ColorsManager.primaryPurple,
+                  collapsedIconColor: ColorsManager.secondaryText,
+                  leading: Container(
+                    padding: EdgeInsets.all(8.w),
+                    decoration: BoxDecoration(
+                      color: ColorsManager.primaryPurple.withOpacity(0.08),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.library_books_rounded,
+                      size: 16.sp,
+                      color: ColorsManager.primaryPurple,
+                    ),
+                  ),
+                  title: Text(
+                    'أحاديث مشابهة في:',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: ColorsManager.secondaryText,
+                      height: 1.2,
+                    ),
+                  ),
+                  subtitle: Text(
+                    widget.category.title,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w700,
+                      color: ColorsManager.primaryText,
+                    ),
+                  ),
+                  children: [
+                    ...ahadithToShow.asMap().entries.map((entry) {
+                      final hadith = entry.value;
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 10.h),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.shareHadithLink,
+                              arguments: hadith.id,
+                            );
+                          },
+                          borderRadius: BorderRadius.circular(12.r),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+                            decoration: BoxDecoration(
+                              color: ColorsManager.primaryBackground,
+                              borderRadius: BorderRadius.circular(12.r),
+                              border: Border.all(
+                                color: ColorsManager.primaryPurple.withOpacity(0.05),
+                              ),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.menu_book_rounded,
+                                  size: 16.sp,
+                                  color: ColorsManager.primaryPurple.withOpacity(0.6),
+                                ),
+                                SizedBox(width: 10.w),
+                                Expanded(
+                                  child: Text(
+                                    hadith.title,
+                                    textDirection: TextDirection.rtl,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 13.sp,
+                                      height: 1.5,
+                                      fontWeight: FontWeight.w500,
+                                      color: ColorsManager.primaryText.withOpacity(0.85),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            Routes.ahadithListScreen,
+                            arguments: {
+                              'categoryId': widget.category.id,
+                              'categoryTitle': widget.category.title,
+                            },
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          foregroundColor: ColorsManager.primaryPurple,
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'عرض المزيد',
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(width: 4.w),
+                            Icon(Icons.arrow_forward_ios_rounded, size: 12.sp),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }
