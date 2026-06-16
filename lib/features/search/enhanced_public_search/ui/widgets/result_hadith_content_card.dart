@@ -126,7 +126,7 @@ class ResultHadithContentCard extends StatelessWidget {
                       ),
                       _buildActionIcon(
                         context,
-                        icon: Icons.link_rounded,
+                        icon: Icons.ios_share_rounded,
                         color: EnhancedSearchDecorations.shareIconColor,
                         tooltip: "مشاركة كرابط",
                         onTap: () => shareHadithLink(

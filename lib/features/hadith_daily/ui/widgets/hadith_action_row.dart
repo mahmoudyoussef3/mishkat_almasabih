@@ -15,7 +15,7 @@ import 'package:mishkat_almasabih/core/theming/daily_hadith_decorations.dart';
 import 'package:mishkat_almasabih/core/theming/daily_hadith_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart'
     show SharedPreferences;
-
+/*
 class HadithActionsRow extends StatefulWidget {
   final String hadith;
   final String bookName;
@@ -222,3 +222,4 @@ class _HadithActionsRowState extends State<HadithActionsRow> {
     );
   }
 }
+*/

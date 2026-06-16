@@ -127,12 +127,12 @@ class _HadithTextCardState extends State<HadithTextCard> {
                           ),
                           _buildActionIcon(
                             context,
-                            icon: Icons.link_rounded,
+                            icon: Icons.ios_share_rounded,
                             color: ColorsManager.primaryGreen,
                             tooltip: "مشاركة كرابط",
                             onTap: () => shareHadithLink(
                               context,
-                              hadithId:  widget.hadithId,
+                              hadithId: widget.hadithId,
                             ),
                           ),
                         ],

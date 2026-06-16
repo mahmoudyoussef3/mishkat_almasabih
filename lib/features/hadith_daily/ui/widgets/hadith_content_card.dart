@@ -143,7 +143,7 @@ class HadithContentCard extends StatelessWidget {
                       _buildActionIcon(
                         context,
                         icon: Icons.link_rounded,
-                        color: ColorsManager.primaryGold,
+                        color: ColorsManager.primaryGreen,
                         tooltip: "مشاركة كرابط",
                         onTap: () => shareHadithLink(
                           context,
