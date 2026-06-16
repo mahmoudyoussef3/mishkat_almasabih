@@ -24,8 +24,15 @@ import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HadithDailyScreen extends StatefulWidget {
-  const HadithDailyScreen({super.key, required this.dailyHadithModel});
+  const HadithDailyScreen({
+    super.key, 
+    required this.dailyHadithModel,
+    this.title = 'حديث اليوم',
+    this.description = 'نص حديث نبوي شريف مع شرحه',
+  });
   final NewDailyHadithModel dailyHadithModel;
+  final String title;
+  final String description;
 
   @override
   State<HadithDailyScreen> createState() => _HadithDailyScreenState();
@@ -130,8 +137,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           body: CustomScrollView(
             slivers: [
               BuildHeaderAppBar(
-                title: 'حديث اليوم',
-                description: 'نص حديث نبوي شريف مع شرحه',
+                title: widget.title,
+                description: widget.description,
                 actions: [
                   AppBarActionButton(
                     icon: Icons.bookmark_border_rounded,

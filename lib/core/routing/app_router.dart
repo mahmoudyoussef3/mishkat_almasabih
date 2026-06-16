@@ -57,6 +57,8 @@ import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/screens/ra
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/cubit/ramadan_tasks_cubit.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/screens/ramadan_progress_screen.dart';
 import 'package:mishkat_almasabih/core/deep_links/ui/deep_link_hadith_screen.dart';
+import 'package:mishkat_almasabih/core/deep_links/ui/shared_link_hadith_screen.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_details_cubit/cubit/hadith_by_category_details_cubit.dart';
 
 class AppRouter {
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -292,7 +294,20 @@ class AppRouter {
 
       case Routes.hadithOfTheDay:
         _logScreenView('HadithOfTheDay');
-        final query = settings.arguments as NewDailyHadithModel;
+        final args = settings.arguments;
+        NewDailyHadithModel query;
+        String title = 'حديث اليوم';
+        String description = 'نص حديث نبوي شريف مع شرحه';
+
+        if (args is NewDailyHadithModel) {
+          query = args;
+        } else if (args is Map<String, dynamic>) {
+          query = args['model'] as NewDailyHadithModel;
+          title = args['title'] as String? ?? title;
+          description = args['description'] as String? ?? description;
+        } else {
+          return null;
+        }
 
         return MaterialPageRoute(
           builder:
@@ -307,7 +322,11 @@ class AppRouter {
                               ..getBookMarkCollections(),
                   ),
                 ],
-                child: HadithDailyScreen(dailyHadithModel: query),
+                child: HadithDailyScreen(
+                  dailyHadithModel: query,
+                  title: title,
+                  description: description,
+                ),
               ),
         );
       case Routes.aboutUs:
@@ -391,8 +410,8 @@ class AppRouter {
               (_) => BlocProvider(
                 create:
                     (context) =>
-                        getIt<EnhancedSearchCubit>()..fetchEnhancedSearchResults(hadithId),
-                child: DeepLinkHadithScreen(hadithId: hadithId),  
+                        getIt<HadithByCategoryDetailsCubit>()..fetchById(hadithId),
+                child: SharedLinkHadithScreen(hadithId: hadithId),  
               ),
         );
    

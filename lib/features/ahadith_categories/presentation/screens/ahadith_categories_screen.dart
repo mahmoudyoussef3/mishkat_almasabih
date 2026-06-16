@@ -67,7 +67,11 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
               Navigator.pushNamed(
                 context,
                 Routes.hadithOfTheDay,
-                arguments: state.dailyHadithModel,
+                arguments: {
+                  'model': state.dailyHadithModel,
+                  'title': widget.categoryTitle?.isNotEmpty == true ? widget.categoryTitle : 'تفاصيل الحديث',
+                  'description': 'نص حديث نبوي شريف مع شرحه',
+                },
               );
             } else if (state is HadithByCategoryDetailsError) {
               showErrorSnackbar(context, state.message);
