@@ -124,11 +124,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   double _getMainAxisExtent(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     if (width < 600) {
-      return 230.h;
+      return 150.h;
     } else if (width < 900) {
-      return 220.h;
+      return 140.h;
     } else {
-      return 210.h;
+      return 130.h;
     }
   }
 

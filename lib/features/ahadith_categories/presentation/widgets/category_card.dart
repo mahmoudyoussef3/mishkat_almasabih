@@ -64,10 +64,14 @@ class _CategoryCardState extends State<CategoryCard>
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: ColorsManager.primaryPurple.withOpacity(0.08),
+          width: 1,
+        ),
         boxShadow: [
           BoxShadow(
-            color: ColorsManager.primaryPurple.withOpacity(0.08),
-            blurRadius: 16,
+            color: ColorsManager.primaryPurple.withOpacity(0.04),
+            blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
@@ -78,165 +82,66 @@ class _CategoryCardState extends State<CategoryCard>
           onTap: widget.onViewAllHadiths,
           borderRadius: BorderRadius.circular(16.r),
           child: Padding(
-            padding: EdgeInsets.all(12.w),
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Icon Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  textDirection: TextDirection.rtl,
-                  children: [
-                    Container(
-                      width: isCompact ? 40.w : 44.w,
-                      height: isCompact ? 46.w : 56.w,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            ColorsManager.primaryPurple.withOpacity(0.18),
-                            ColorsManager.primaryPurple.withOpacity(0.08),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(14.r),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.auto_stories_rounded,
-                          color: ColorsManager.primaryPurple,
-                          size: isCompact ? 22.sp : 24.sp,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 6.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: ColorsManager.primaryPurple.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Row(
-                        textDirection: TextDirection.rtl,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '${widget.category.hadeethsCount}',
-                            style: TextStyles.font13BlueSemiBold.copyWith(
-                              color: ColorsManager.primaryPurple,
-                            ),
-                          ),
-                          SizedBox(width: 4.w),
-                          Text('حديث', style: TextStyles.font12GrayRegular),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-
-                // Title Section
-            
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Center(
-                        child: Text(
-                        
-                        widget.category.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyles.font14BlueSemiBold.copyWith(
-                          fontSize: 18.sp,
-                          color: ColorsManager.primaryPurple,
-                          height: 1.3,
-                        ),
-                                          ),
-                      ),
-                    ),                  
-
-                
-                SizedBox(height: 10.h),
-
-Spacer(),                SizedBox(
-                  width: double.infinity,
-                  height: isCompact ? 36.h : 40.h,
-                  child: ElevatedButton(
-                    onPressed: widget.onExploreSubcategories,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorsManager.primaryPurple,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Icon(Icons.arrow_forward_rounded, size: 14.sp),
-                        SizedBox(width: 4.w),
-                        Flexible(
-                          child: Text(
-                            isCompact
-                                ? 'استكشاف الفئات'
-                                : 'استكشاف التصنيفات الفرعية',
-                            textDirection: TextDirection.rtl,
-                            style: TextStyles.font13BlueSemiBold.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
+                Container(
+                  width: 42.w,
+                  height: 42.w,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        ColorsManager.primaryPurple.withOpacity(0.12),
+                        ColorsManager.primaryPurple.withOpacity(0.04),
                       ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.auto_stories_rounded,
+                      color: ColorsManager.primaryPurple,
+                      size: 20.sp,
                     ),
                   ),
                 ),
-                SizedBox(height: 6.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: isCompact ? 36.h : 40.h,
-                  child: OutlinedButton(
-                    onPressed: widget.onViewAllHadiths,
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: ColorsManager.primaryPurple.withOpacity(0.5),
-                        width: 1.5,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 14.sp,
+                SizedBox(height: 12.h),
+                Text(
+                  widget.category.title,
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyles.font14BlueSemiBold.copyWith(
+                    fontSize: 15.sp,
+                    color: ColorsManager.primaryPurple,
+                    height: 1.3,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: ColorsManager.primaryPurple.withOpacity(0.06),
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                  child: Row(
+                    textDirection: TextDirection.rtl,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${widget.category.hadeethsCount}',
+                        style: TextStyles.font13BlueSemiBold.copyWith(
                           color: ColorsManager.primaryPurple,
+                          fontSize: 12.sp,
                         ),
-                        SizedBox(width: 4.w),
-                        Flexible(
-                          child: Text(
-                            isCompact ? 'عرض الأحاديث' : 'عرض جميع الأحاديث',
-                            textDirection: TextDirection.rtl,
-                            style: TextStyles.font13BlueSemiBold.copyWith(
-                              color: ColorsManager.primaryPurple,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 4.w),
+                      Text('حديث', style: TextStyles.font12GrayRegular.copyWith(fontSize: 11.sp)),
+                    ],
                   ),
                 ),
               ],

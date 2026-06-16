@@ -70,15 +70,6 @@ class HadithCategoriesSection extends StatelessWidget {
                         color: ColorsManager.primaryText,
                       ),
                     ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      'اضغط على أي تصنيف لاستعراض الأحاديث الخاصة به',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: ColorsManager.secondaryText,
-                        height: 1.3,
-                      ),
-                    ),
                   ],
                 ),
               ),
@@ -127,69 +118,32 @@ class _CategoryChip extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(18.r),
+        borderRadius: BorderRadius.circular(10.r),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                ColorsManager.primaryPurple.withOpacity(0.12),
-                ColorsManager.secondaryPurple.withOpacity(0.08),
-              ],
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-            ),
-            borderRadius: BorderRadius.circular(18.r),
+            color: ColorsManager.primaryPurple.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(10.r),
             border: Border.all(
-              color: ColorsManager.primaryPurple.withOpacity(0.15),
+              color: ColorsManager.primaryPurple.withOpacity(0.1),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: ColorsManager.primaryPurple.withOpacity(0.06),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
-              ),
-            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 22.w,
-                height: 22.w,
-                decoration: BoxDecoration(
-                  color: ColorsManager.primaryPurple.withOpacity(0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.arrow_back_rounded,
-                  size: 14.sp,
+              Icon(
+                Icons.sell_rounded,
+                size: 14.sp,
+                color: ColorsManager.primaryPurple.withOpacity(0.7),
+              ),
+              SizedBox(width: 6.w),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w600,
                   color: ColorsManager.primaryPurple,
                 ),
-              ),
-              SizedBox(width: 8.w),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w700,
-                      color: ColorsManager.primaryText,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    'عرض الأحاديث',
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      color: ColorsManager.secondaryText,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

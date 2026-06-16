@@ -141,7 +141,6 @@ class _CategorySimilarAhadithState extends State<_CategorySimilarAhadith> {
                   ),
                   SizedBox(height: 14.h),
                   ...ahadithToShow.asMap().entries.map((entry) {
-                    final index = entry.key;
                     final hadith = entry.value;
                     return InkWell(
                       onTap: () {
@@ -151,16 +150,45 @@ class _CategorySimilarAhadithState extends State<_CategorySimilarAhadith> {
                           arguments: hadith.id,
                         );
                       },
-                      child: HadithCategoryCard(
-                        hadith: hadith,
-                        index: index + 1,
+                      borderRadius: BorderRadius.circular(12.r),
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 8.h),
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                        decoration: BoxDecoration(
+                          color: ColorsManager.primaryPurple.withOpacity(0.02),
+                          borderRadius: BorderRadius.circular(12.r),
+                          border: Border.all(color: ColorsManager.primaryPurple.withOpacity(0.05)),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.menu_book_rounded,
+                              size: 16.sp,
+                              color: ColorsManager.primaryPurple.withOpacity(0.6),
+                            ),
+                            SizedBox(width: 8.w),
+                            Expanded(
+                              child: Text(
+                                hadith.title,
+                                textDirection: TextDirection.rtl,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 13.sp,
+                                  height: 1.5,
+                                  color: ColorsManager.primaryText.withOpacity(0.85),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   }).toList(),
-                  SizedBox(height: 10.h),
-                  SizedBox(
-                    width: double.infinity,
-                    child: OutlinedButton(
+                  SizedBox(height: 4.h),
+                  Center(
+                    child: TextButton(
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
@@ -171,20 +199,26 @@ class _CategorySimilarAhadithState extends State<_CategorySimilarAhadith> {
                           },
                         );
                       },
-                      style: OutlinedButton.styleFrom(
+                      style: TextButton.styleFrom(
                         foregroundColor: ColorsManager.primaryPurple,
-                        side: BorderSide(color: ColorsManager.primaryPurple.withOpacity(0.5)),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
                       ),
-                      child: Text(
-                        'عرض المزيد',
-                        style: TextStyle(
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'عرض المزيد',
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Icon(Icons.arrow_forward_ios_rounded, size: 12.sp),
+                        ],
                       ),
                     ),
                   ),
