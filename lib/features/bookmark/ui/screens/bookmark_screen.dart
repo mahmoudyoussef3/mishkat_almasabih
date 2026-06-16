@@ -13,6 +13,7 @@ import 'package:mishkat_almasabih/core/theming/bookmark_decorations.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/book_collections_row.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/bookmark_list.dart';
 import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/search_bar_widget.dart';
 
 class BookmarkScreen extends StatefulWidget {
   const BookmarkScreen({super.key});
@@ -160,33 +161,10 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   }
 
   Widget _buildSearchField() {
-    return Card(
-      color: ColorsManager.secondaryBackground,
-      margin: EdgeInsets.zero,
-      elevation: 0,
-      child: Container(
-        decoration: BookmarkDecorations.searchCard(),
-        child: TextField(
-          controller: _searchController,
-          onChanged: (value) => setState(() => _query = value),
-          decoration: InputDecoration(
-            hintText: 'ابحث بنص الحديث أو الملاحظات...',
-            hintStyle: BookmarkTextStyles.searchHint,
-            prefixIcon: Icon(
-              Icons.search,
-              color: ColorsManager.primaryPurple,
-              size: 24,
-            ),
-            border: InputBorder.none,
-            contentPadding: EdgeInsets.symmetric(
-              horizontal: Spacing.md,
-              vertical: Spacing.md,
-            ),
-          ),
-          style: TextStyles.bodyMedium,
-          textInputAction: TextInputAction.search,
-        ),
-      ),
+    return SearchBarWidget(
+      hintText: 'ابحث بنص الحديث أو الملاحظات...',
+      controller: _searchController,
+      onChanged: (value) => setState(() => _query = value),
     );
   }
 

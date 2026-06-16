@@ -27,7 +27,7 @@ class AhadithSearchBar extends StatelessWidget {
           child: SearchBarWidget(
             hintText: 'ابحث في الأحاديث...',
             controller: controller,
-            onSearch: (query) {
+            onChanged: (query) {
               context.read<AhadithsCubit>().filterAhadith(query);
             },
           ),

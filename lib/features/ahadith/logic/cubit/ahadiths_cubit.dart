@@ -355,6 +355,22 @@ class AhadithsCubit extends Cubit<AhadithsState> {
                 .toList();
         emit(currentState.copyWith(filteredAhadith: filtered));
       }
+    } else if (currentState is LocalAhadithsSuccess) {
+      if (normalizedQuery.isEmpty) {
+        emit(currentState.copyWith(filteredHadiths: currentState.hadiths));
+      } else {
+        final filtered =
+            currentState.hadiths
+                .where(
+                  (h) =>
+                      h.arabic != null &&
+                      normalizeArabic(
+                        h.arabic!,
+                      ).contains(normalizedQuery),
+                )
+                .toList();
+        emit(currentState.copyWith(filteredHadiths: filtered));
+      }
     }
   }
 }

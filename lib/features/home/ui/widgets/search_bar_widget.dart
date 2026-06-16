@@ -7,14 +7,16 @@ import 'package:mishkat_almasabih/core/theming/home_styles.dart';
 
 class SearchBarWidget extends StatelessWidget {
   final TextEditingController controller;
-  final Function(String) onSearch;
+  final Function(String)? onSearch;
+  final Function(String)? onChanged;
   final String? hintText;
   final VoidCallback? onTap;
 
   const SearchBarWidget({
     super.key,
     required this.controller,
-    required this.onSearch,
+    this.onSearch,
+    this.onChanged,
     this.onTap,
     this.hintText,
   });
@@ -31,6 +33,7 @@ class SearchBarWidget extends StatelessWidget {
           onTap: onTap,
           controller: controller,
           onSubmitted: onSearch,
+          onChanged: onChanged,
           decoration: InputDecoration(
             hintText: hintText ?? 'ابحث في الأحاديث...',
             hintStyle: HomeTextStyles.searchHint,
@@ -49,6 +52,8 @@ class SearchBarWidget extends StatelessWidget {
                       ),
                       onPressed: () {
                         controller.clear();
+                        onChanged?.call('');
+                        onSearch?.call('');
                       },
                     )
                     : null,

@@ -187,7 +187,7 @@ class GetBookChaptersBlocBuilder extends StatelessWidget {
           child: SearchBarWidget(
             hintText: 'ابحث في الكتب...',
             controller: controller,
-            onSearch: (query) {
+            onChanged: (query) {
               context.read<ChaptersCubit>().filterChapters(query);
             },
           ),
