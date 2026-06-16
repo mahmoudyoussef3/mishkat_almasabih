@@ -10,7 +10,7 @@ import 'package:mishkat_almasabih/core/theming/daily_hadith_decorations.dart';
 import 'package:mishkat_almasabih/core/theming/daily_hadith_styles.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/categories_cubit/categories_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/categories_cubit/categories_state.dart';
-import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/hadith_categories_section.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/similar_ahadith_section.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
@@ -235,7 +235,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                           builder: (context, state) {
                             return switch (state) {
                               CategoriesLoaded(categories: final categories) =>
-                                HadithCategoriesSection(
+                                SimilarAhadithSection(
                                   categoryIds: data.categories ?? const [],
                                   categories: categories,
                                 ),
