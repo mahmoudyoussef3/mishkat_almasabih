@@ -9,28 +9,46 @@ class CategoriesHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(20.w, 16.h, 20.w, 12.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      padding: EdgeInsetsDirectional.fromSTEB(20.w, 10.h, 20.w, 16.h),
+      child: Row(
+        textDirection: TextDirection.rtl,
         children: [
-          Text(
-            'استعرض التصنيفات',
-            textDirection: TextDirection.rtl,
-            style: TextStyles.font24BlueBold.copyWith(
+          Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: ColorsManager.primaryPurple.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(12.r),
+            ),
+            child: Icon(
+              Icons.category_rounded,
               color: ColorsManager.primaryPurple,
-              height: 1.2,
+              size: 22.sp,
             ),
-            textAlign: TextAlign.center,
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'اختر من التصنيفات التالية لاستكشاف الأحاديث الشريفة',
-            textDirection: TextDirection.rtl,
-            style: TextStyles.font14GrayRegular.copyWith(
-              color: Colors.grey[600],
-              height: 1.5,
+          SizedBox(width: 14.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              textDirection: TextDirection.rtl,
+              children: [
+                Text(
+                  'التصنيفات الرئيسية',
+                  style: TextStyles.font24BlueBold.copyWith(
+                    color: ColorsManager.primaryPurple,
+                    fontSize: 20.sp,
+                    height: 1.2,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'اختر تصنيفاً لاستكشاف الأحاديث',
+                  style: TextStyles.font14GrayRegular.copyWith(
+                    color: ColorsManager.secondaryText,
+                    fontSize: 13.sp,
+                  ),
+                ),
+              ],
             ),
-            textAlign: TextAlign.center,
           ),
         ],
       ),

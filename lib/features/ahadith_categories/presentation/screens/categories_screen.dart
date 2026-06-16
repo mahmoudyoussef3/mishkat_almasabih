@@ -10,7 +10,6 @@ import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widge
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/category_card.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/error_widget.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/loading_shimmer.dart';
-import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/search_bar.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
@@ -30,14 +29,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           child: CustomScrollView(
             physics: const BouncingScrollPhysics(),
             slivers: [
-              SliverToBoxAdapter(
-                child: CategoriesSearchBar(
-                  onSearch: (query) {
-                    if (query.trim().isEmpty) return;
-                    _showActionSnackBar('البحث عن: $query');
-                  },
-                ),
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
 
               // Header
               SliverToBoxAdapter(child: CategoriesHeader()),

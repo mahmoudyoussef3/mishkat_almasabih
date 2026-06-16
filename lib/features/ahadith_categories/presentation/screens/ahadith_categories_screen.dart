@@ -177,7 +177,7 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
                       () => navigateToHadithDetailsScreen(context, hadith.id),
                   child: HadithCategoryCard(hadith: hadith, index: index + 1),
                 ),
-                if (index != state.ahadith.length - 1) const IslamicSeparator(),
+                if (index != state.ahadith.length - 1) SizedBox(height: 4.h),
               ],
             );
           }, childCount: state.ahadith.length),
