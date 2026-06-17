@@ -9,6 +9,7 @@ import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import es.antonborri.home_widget.HomeWidgetPlugin
+import android.os.Bundle
 
 class PrayerTimesWidgetProvider : AppWidgetProvider() {
     private val tag = "PrayerTimesWidget"
@@ -19,100 +20,156 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
         appWidgetIds: IntArray,
     ) {
         for (appWidgetId in appWidgetIds) {
-            try {
-                val widgetData = HomeWidgetPlugin.getData(context)
-                val nextPrayerKey = widgetData.getString("prayer_next_key", "fajr") ?: "fajr"
+            updateWidgetView(context, appWidgetManager, appWidgetId, null)
+        }
+    }
 
-                val views = RemoteViews(context.packageName, R.layout.prayer_times_widget).apply {
-                    setTextViewText(
-                        R.id.prayer_widget_hijri_date,
-                        widgetData.getString("prayer_hijri_date", "١٨ ذو القعدة ١٤٤٧ هـ"),
-                    )
-                    setTextViewText(
-                        R.id.prayer_widget_gregorian_date,
-                        widgetData.getString("prayer_gregorian_date", "الثلاثاء، ٢٦ مايو ٢٠٢٦ م"),
-                    )
+    override fun onAppWidgetOptionsChanged(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        updateWidgetView(context, appWidgetManager, appWidgetId, newOptions)
+    }
 
-                    setTextViewText(R.id.prayer_time_fajr, widgetData.getString("prayer_fajr", "--:--"))
-                    setTextViewText(
-                        R.id.prayer_time_sunrise,
-                        widgetData.getString("prayer_sunrise", "--:--"),
-                    )
-                    setTextViewText(R.id.prayer_time_dhuhr, widgetData.getString("prayer_dhuhr", "--:--"))
-                    setTextViewText(R.id.prayer_time_asr, widgetData.getString("prayer_asr", "--:--"))
-                    setTextViewText(
-                        R.id.prayer_time_maghrib,
-                        widgetData.getString("prayer_maghrib", "--:--"),
-                    )
-                    setTextViewText(R.id.prayer_time_isha, widgetData.getString("prayer_isha", "--:--"))
-
-                    applyPrayerItemStyle(
-                        views = this,
-                        context = context,
-                        itemId = R.id.prayer_item_fajr,
-                        labelId = R.id.prayer_label_fajr,
-                        timeId = R.id.prayer_time_fajr,
-                        isActive = nextPrayerKey == "fajr",
-                    )
-                    applyPrayerItemStyle(
-                        views = this,
-                        context = context,
-                        itemId = R.id.prayer_item_sunrise,
-                        labelId = R.id.prayer_label_sunrise,
-                        timeId = R.id.prayer_time_sunrise,
-                        isActive = nextPrayerKey == "sunrise",
-                    )
-                    applyPrayerItemStyle(
-                        views = this,
-                        context = context,
-                        itemId = R.id.prayer_item_dhuhr,
-                        labelId = R.id.prayer_label_dhuhr,
-                        timeId = R.id.prayer_time_dhuhr,
-                        isActive = nextPrayerKey == "dhuhr",
-                    )
-                    applyPrayerItemStyle(
-                        views = this,
-                        context = context,
-                        itemId = R.id.prayer_item_asr,
-                        labelId = R.id.prayer_label_asr,
-                        timeId = R.id.prayer_time_asr,
-                        isActive = nextPrayerKey == "asr",
-                    )
-                    applyPrayerItemStyle(
-                        views = this,
-                        context = context,
-                        itemId = R.id.prayer_item_maghrib,
-                        labelId = R.id.prayer_label_maghrib,
-                        timeId = R.id.prayer_time_maghrib,
-                        isActive = nextPrayerKey == "maghrib",
-                    )
-                    applyPrayerItemStyle(
-                        views = this,
-                        context = context,
-                        itemId = R.id.prayer_item_isha,
-                        labelId = R.id.prayer_label_isha,
-                        timeId = R.id.prayer_time_isha,
-                        isActive = nextPrayerKey == "isha",
-                    )
-
-                    val intent = Intent(context, MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        putExtra("open_screen", "prayer_times")
-                        putExtra("from_widget", true)
-                    }
-                    val pendingIntent = PendingIntent.getActivity(
-                        context,
-                        appWidgetId,
-                        intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-                    )
-                    setOnClickPendingIntent(R.id.prayer_widget_root, pendingIntent)
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
+        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val appWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
+            if (appWidgetIds != null) {
+                for (appWidgetId in appWidgetIds) {
+                    updateWidgetView(context, appWidgetManager, appWidgetId, null)
                 }
-
-                appWidgetManager.updateAppWidget(appWidgetId, views)
-            } catch (e: Exception) {
-                Log.e(tag, "Failed to update prayer widget $appWidgetId", e)
+            } else {
+                val componentName = android.content.ComponentName(context, PrayerTimesWidgetProvider::class.java)
+                val allWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
+                for (appWidgetId in allWidgetIds) {
+                    updateWidgetView(context, appWidgetManager, appWidgetId, null)
+                }
             }
+        }
+    }
+
+    private fun updateWidgetView(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetId: Int,
+        options: Bundle?
+    ) {
+        try {
+            val widgetData = HomeWidgetPlugin.getData(context)
+            
+            val now = System.currentTimeMillis()
+            val prayers = listOf(
+                Pair("fajr", widgetData.getLong("prayer_fajr_millis", 0)),
+                Pair("sunrise", widgetData.getLong("prayer_sunrise_millis", 0)),
+                Pair("dhuhr", widgetData.getLong("prayer_dhuhr_millis", 0)),
+                Pair("asr", widgetData.getLong("prayer_asr_millis", 0)),
+                Pair("maghrib", widgetData.getLong("prayer_maghrib_millis", 0)),
+                Pair("isha", widgetData.getLong("prayer_isha_millis", 0))
+            )
+
+            var nextPrayerKey = "fajr"
+            var nextPrayerMillis = widgetData.getLong("prayer_tomorrow_fajr_millis", 0)
+
+            for (prayer in prayers) {
+                if (prayer.second > now) {
+                    nextPrayerKey = prayer.first
+                    nextPrayerMillis = prayer.second
+                    break
+                }
+            }
+
+            if (nextPrayerMillis > now) {
+                scheduleWidgetUpdate(context, nextPrayerMillis + 1000)
+            }
+
+            val opts = options ?: appWidgetManager.getAppWidgetOptions(appWidgetId)
+            val width = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 300)
+
+            val layoutId = when {
+                width < 200 -> R.layout.prayer_times_widget_small
+                width < 280 -> R.layout.prayer_times_widget_medium
+                else -> R.layout.prayer_times_widget
+            }
+
+            val views = RemoteViews(context.packageName, layoutId).apply {
+                setTextViewText(
+                    R.id.prayer_widget_hijri_date,
+                    widgetData.getString("prayer_hijri_date", "١٨ ذو القعدة ١٤٤٧ هـ"),
+                )
+                setTextViewText(
+                    R.id.prayer_widget_gregorian_date,
+                    widgetData.getString("prayer_gregorian_date", "الثلاثاء، ٢٦ مايو ٢٠٢٦ م"),
+                )
+
+                setTextViewText(R.id.prayer_time_fajr, widgetData.getString("prayer_fajr", "--:--"))
+                setTextViewText(
+                    R.id.prayer_time_sunrise,
+                    widgetData.getString("prayer_sunrise", "--:--"),
+                )
+                setTextViewText(R.id.prayer_time_dhuhr, widgetData.getString("prayer_dhuhr", "--:--"))
+                setTextViewText(R.id.prayer_time_asr, widgetData.getString("prayer_asr", "--:--"))
+                setTextViewText(
+                    R.id.prayer_time_maghrib,
+                    widgetData.getString("prayer_maghrib", "--:--"),
+                )
+                setTextViewText(R.id.prayer_time_isha, widgetData.getString("prayer_isha", "--:--"))
+
+                applyPrayerItemStyle(this, context, R.id.prayer_item_fajr, R.id.prayer_label_fajr, R.id.prayer_time_fajr, nextPrayerKey == "fajr")
+                applyPrayerItemStyle(this, context, R.id.prayer_item_sunrise, R.id.prayer_label_sunrise, R.id.prayer_time_sunrise, nextPrayerKey == "sunrise")
+                applyPrayerItemStyle(this, context, R.id.prayer_item_dhuhr, R.id.prayer_label_dhuhr, R.id.prayer_time_dhuhr, nextPrayerKey == "dhuhr")
+                applyPrayerItemStyle(this, context, R.id.prayer_item_asr, R.id.prayer_label_asr, R.id.prayer_time_asr, nextPrayerKey == "asr")
+                applyPrayerItemStyle(this, context, R.id.prayer_item_maghrib, R.id.prayer_label_maghrib, R.id.prayer_time_maghrib, nextPrayerKey == "maghrib")
+                applyPrayerItemStyle(this, context, R.id.prayer_item_isha, R.id.prayer_label_isha, R.id.prayer_time_isha, nextPrayerKey == "isha")
+
+                val intent = Intent(context, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    putExtra("open_screen", "prayer_times")
+                    putExtra("from_widget", true)
+                }
+                val pendingIntent = PendingIntent.getActivity(
+                    context,
+                    appWidgetId,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                )
+                setOnClickPendingIntent(R.id.prayer_widget_root, pendingIntent)
+            }
+
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+        } catch (e: Exception) {
+            Log.e(tag, "Failed to update prayer widget $appWidgetId", e)
+        }
+    }
+
+    private fun scheduleWidgetUpdate(context: Context, updateTimeMillis: Long) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
+        val intent = Intent(context, PrayerTimesWidgetProvider::class.java).apply {
+            action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
+        }
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        
+        try {
+            alarmManager.setExactAndAllowWhileIdle(
+                android.app.AlarmManager.RTC_WAKEUP,
+                updateTimeMillis,
+                pendingIntent
+            )
+        } catch (e: SecurityException) {
+            alarmManager.set(
+                android.app.AlarmManager.RTC_WAKEUP,
+                updateTimeMillis,
+                pendingIntent
+            )
         }
     }
 

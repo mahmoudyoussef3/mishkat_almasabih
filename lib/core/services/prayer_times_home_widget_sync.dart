@@ -66,6 +66,43 @@ class PrayerTimesHomeWidgetSync {
         _formatTime(prayerTimes.isha),
       );
 
+      // Save exact timestamps for dynamic Native calculation
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_fajr_millis',
+        prayerTimes.fajr.millisecondsSinceEpoch,
+      );
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_sunrise_millis',
+        prayerTimes.sunrise.millisecondsSinceEpoch,
+      );
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_dhuhr_millis',
+        prayerTimes.dhuhr.millisecondsSinceEpoch,
+      );
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_asr_millis',
+        prayerTimes.asr.millisecondsSinceEpoch,
+      );
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_maghrib_millis',
+        prayerTimes.maghrib.millisecondsSinceEpoch,
+      );
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_isha_millis',
+        prayerTimes.isha.millisecondsSinceEpoch,
+      );
+
+      // Calculate and save tomorrow's Fajr
+      final tomorrowPrayerTimes = PrayerTimes(
+        Coordinates(location.latitude, location.longitude),
+        DateComponents.from(now.add(const Duration(days: 1))),
+        params,
+      );
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_tomorrow_fajr_millis',
+        tomorrowPrayerTimes.fajr.millisecondsSinceEpoch,
+      );
+
       await HomeWidget.saveWidgetData<String>('prayer_next_key', next.key);
 
       await HomeWidget.updateWidget(
