@@ -30,6 +30,15 @@
 				<string>mishkat</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<!-- TODO: Replace with REVERSED_CLIENT_ID from GoogleService-Info.plist -->
+				<string>com.googleusercontent.apps.YOUR-REVERSED-CLIENT-ID</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
@@ -39,8 +48,12 @@
 	<true/>
 	<key>NSCalendarsUsageDescription</key>
 	<string>We use your calendar for scheduling notifications</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>نحتاج إلى موقعك لحساب مواقيت الصلاة الدقيقة في منطقتك</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>نحتاج إلى موقعك لحساب مواقيت الصلاة الدقيقة في منطقتك حتى عند إغلاق التطبيق.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>نحتاج إلى الكاميرا للسماح لك بتحديث صورتك الشخصية.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>نحتاج إلى معرض الصور للسماح لك باختيار صورة شخصية.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>نحتاج إلى موقعك لحساب مواقيت الصلاة الدقيقة في منطقتك</string>
 	<key>NSUserTrackingUsageDescription</key>

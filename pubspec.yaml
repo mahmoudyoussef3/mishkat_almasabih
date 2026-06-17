@@ -44,8 +44,6 @@ dependencies:
   fluttertoast: ^8.2.12
   solid_lints: ^0.3.1
   easy_notify: ^1.0.0
-  flutter_background_service: ^5.1.0
-  android_intent_plus: ^6.0.0
   transparent_image: ^2.0.1
   firebase_core: ^4.1.1
   firebase_auth: ^6.1.0
@@ -69,6 +67,7 @@ dependencies:
   hijri: ^3.0.0
   two_dimensional_scrollables: ^0.3.7
   app_links: ^7.0.0
+  sign_in_with_apple: ^8.1.0
 
 dev_dependencies:
   flutter_test:

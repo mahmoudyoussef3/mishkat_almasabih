@@ -11,6 +11,8 @@ class SearchWithFiltersModel {
 
   factory SearchWithFiltersModel.fromJson(Map<String, dynamic> json) =>
       _$SearchWithFiltersModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SearchWithFiltersModelToJson(this);
 }
 
 @JsonSerializable()
@@ -24,6 +26,8 @@ class SearchData {
 
   factory SearchData.fromJson(Map<String, dynamic> json) =>
       _$SearchDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SearchDataToJson(this);
 }
 
 @JsonSerializable()
@@ -38,6 +42,8 @@ class SearchFilters {
 
   factory SearchFilters.fromJson(Map<String, dynamic> json) =>
       _$SearchFiltersFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SearchFiltersToJson(this);
 }
 
 @JsonSerializable()
@@ -49,6 +55,8 @@ class SearchSort {
 
   factory SearchSort.fromJson(Map<String, dynamic> json) =>
       _$SearchSortFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SearchSortToJson(this);
 }
 
 @JsonSerializable()
@@ -77,6 +85,8 @@ class SearchResults {
 
   factory SearchResults.fromJson(Map<String, dynamic> json) =>
       _$SearchResultsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SearchResultsToJson(this);
 }
 
 @JsonSerializable()
@@ -119,6 +129,8 @@ class HadithResult {
 
   factory HadithResult.fromJson(Map<String, dynamic> json) =>
       _$HadithResultFromJson(json);
+
+  Map<String, dynamic> toJson() => _$HadithResultToJson(this);
 }
 
 @JsonSerializable()
@@ -140,6 +152,8 @@ class Book {
   });
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BookToJson(this);
 }
 
 @JsonSerializable()
@@ -162,4 +176,6 @@ class Chapter {
 
   factory Chapter.fromJson(Map<String, dynamic> json) =>
       _$ChapterFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ChapterToJson(this);
 }

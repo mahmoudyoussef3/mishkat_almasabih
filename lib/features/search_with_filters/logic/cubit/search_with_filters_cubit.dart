@@ -18,7 +18,58 @@ class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
     required String chapterNumber,
     required String category,
   }) async {
-    emit(SearchWithFiltersLoading());
+    // Try cache first
+    final cached = await _filtersRepo.getCachedSearchResults(
+      searchQuery: searchQuery,
+      bookSlug: bookSlug,
+      narrator: narrator,
+      grade: grade,
+      chapter: chapterNumber,
+      category: category,
+    );
+
+    if (cached != null) {
+      // Emit cached data immediately
+      emit(SearchWithFiltersSuccess(cached));
+      
+      // Perform background refresh
+      _backgroundRefresh(
+        searchQuery: searchQuery,
+        bookSlug: bookSlug,
+        narrator: narrator,
+        grade: grade,
+        chapterNumber: chapterNumber,
+        category: category,
+      );
+    } else {
+      emit(SearchWithFiltersLoading());
+      final result = await _filtersRepo.searchWithFilters(
+        searchQuery: searchQuery,
+        bookSlug: bookSlug,
+        narrator: narrator,
+        grade: grade,
+        chapter: chapterNumber,
+        category: category,
+      );
+      result.fold(
+        (l) => emit(
+          SearchWithFiltersFailure(
+            l.getAllErrorMessages() ,
+          ),
+        ),
+        (r) => emit(SearchWithFiltersSuccess(r)),
+      );
+    }
+  }
+
+  Future<void> _backgroundRefresh({
+    required String searchQuery,
+    required String bookSlug,
+    required String narrator,
+    required String grade,
+    required String chapterNumber,
+    required String category,
+  }) async {
     final result = await _filtersRepo.searchWithFilters(
       searchQuery: searchQuery,
       bookSlug: bookSlug,
@@ -28,12 +79,12 @@ class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
       category: category,
     );
     result.fold(
-      (l) => emit(
-        SearchWithFiltersFailure(
-          l.getAllErrorMessages() ,
-        ),
-      ),
-      (r) => emit(SearchWithFiltersSuccess(r)),
+      (l) {
+        // Fail silently on background refresh
+      },
+      (r) {
+        emit(SearchWithFiltersSuccess(r));
+      },
     );
   }
 }
