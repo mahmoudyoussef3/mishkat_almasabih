@@ -3,59 +3,41 @@ import 'package:meta/meta.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/models/enhanced_search_response_model.dart';
 import 'package:mishkat_almasabih/features/search/enhanced_public_search/data/repos/enhanced_search_repo.dart';
+import 'package:mishkat_almasabih/core/networking/network_info.dart';
 
 part 'enhanced_search_state.dart';
 
 class EnhancedSearchCubit extends Cubit<EnhancedSearchState> {
   final EnhancedSearchRepo enhancedSearchRepo;
-  EnhancedSearchCubit(this.enhancedSearchRepo) : super(EnhancedSearchInitial());
+  final NetworkInfo _networkInfo;
+
+  EnhancedSearchCubit(this.enhancedSearchRepo, this._networkInfo) : super(EnhancedSearchInitial());
 
   Future<void> fetchEnhancedSearchResults(String searchTerm) async {
-    // Try cache first
     final cached = await enhancedSearchRepo.getCachedSearch(searchTerm);
 
     if (cached != null) {
-      // Emit cached data immediately
-      emit(EnhancedSearchLoaded(cached, isFromCache: true, isRefreshing: true));
+      emit(EnhancedSearchLoaded(cached, isFromCache: true, isRefreshing: false));
+      return;
+    }
 
-      // Background refresh
-      _backgroundRefresh(searchTerm, cached);
-    } else {
-      // No cache, fetch from API
+    final hasInternet = await _networkInfo.isConnected;
+
+    if (hasInternet) {
       emit(EnhancedSearchLoading());
-      final result = await enhancedSearchRepo.fetchEnhancedSearchResults(
-        searchTerm,
-      );
-      result.fold(
-        (error) => emit(EnhancedSearchError(error.getAllErrorMessages())),
-        (enhancedSearch) => emit(EnhancedSearchLoaded(enhancedSearch)),
-      );
+      _fetchFromServer(searchTerm);
+    } else {
+      emit(EnhancedSearchError('لا يوجد اتصال بالإنترنت'));
     }
   }
 
-  Future<void> _backgroundRefresh(
-    String searchTerm,
-    EnhancedSearch cached,
-  ) async {
+  Future<void> _fetchFromServer(String searchTerm) async {
     final result = await enhancedSearchRepo.fetchEnhancedSearchResults(
       searchTerm,
     );
     result.fold(
-      (error) {
-        // Background refresh failed, keep cached data
-        if (state is EnhancedSearchLoaded) {
-          emit((state as EnhancedSearchLoaded).copyWith(isRefreshing: false));
-        }
-      },
-      (enhancedSearch) {
-        emit(
-          EnhancedSearchLoaded(
-            enhancedSearch,
-            isFromCache: false,
-            isRefreshing: false,
-          ),
-        );
-      },
+      (error) => emit(EnhancedSearchError(error.getAllErrorMessages())),
+      (enhancedSearch) => emit(EnhancedSearchLoaded(enhancedSearch)),
     );
   }
 }

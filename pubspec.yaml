@@ -68,6 +68,7 @@ dependencies:
   two_dimensional_scrollables: ^0.3.7
   app_links: ^7.0.0
   sign_in_with_apple: ^8.1.0
+  connectivity_plus: ^7.1.1
 
 dev_dependencies:
   flutter_test:

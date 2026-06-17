@@ -3,12 +3,15 @@ import 'package:meta/meta.dart';
 import 'package:mishkat_almasabih/core/networking/api_error_model.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/models/search_with_filters_model.dart';
 import 'package:mishkat_almasabih/features/search_with_filters/data/repos/search_with_filters_repo.dart';
+import 'package:mishkat_almasabih/core/networking/network_info.dart';
 
 part 'search_with_filters_state.dart';
 
 class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
   final SearchWithFiltersRepo _filtersRepo;
-  SearchWithFiltersCubit(this._filtersRepo) : super(SearchWithFiltersInitial());
+  final NetworkInfo _networkInfo;
+
+  SearchWithFiltersCubit(this._filtersRepo, this._networkInfo) : super(SearchWithFiltersInitial());
 
   Future<void> emitSearchWithFilters({
     required String searchQuery,
@@ -18,7 +21,6 @@ class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
     required String chapterNumber,
     required String category,
   }) async {
-    // Try cache first
     final cached = await _filtersRepo.getCachedSearchResults(
       searchQuery: searchQuery,
       bookSlug: bookSlug,
@@ -29,11 +31,15 @@ class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
     );
 
     if (cached != null) {
-      // Emit cached data immediately
       emit(SearchWithFiltersSuccess(cached));
-      
-      // Perform background refresh
-      _backgroundRefresh(
+      return;
+    }
+
+    final hasInternet = await _networkInfo.isConnected;
+
+    if (hasInternet) {
+      emit(SearchWithFiltersLoading());
+      _fetchFromServer(
         searchQuery: searchQuery,
         bookSlug: bookSlug,
         narrator: narrator,
@@ -42,27 +48,11 @@ class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
         category: category,
       );
     } else {
-      emit(SearchWithFiltersLoading());
-      final result = await _filtersRepo.searchWithFilters(
-        searchQuery: searchQuery,
-        bookSlug: bookSlug,
-        narrator: narrator,
-        grade: grade,
-        chapter: chapterNumber,
-        category: category,
-      );
-      result.fold(
-        (l) => emit(
-          SearchWithFiltersFailure(
-            l.getAllErrorMessages() ,
-          ),
-        ),
-        (r) => emit(SearchWithFiltersSuccess(r)),
-      );
+      emit(SearchWithFiltersFailure('لا يوجد اتصال بالإنترنت'));
     }
   }
 
-  Future<void> _backgroundRefresh({
+  Future<void> _fetchFromServer({
     required String searchQuery,
     required String bookSlug,
     required String narrator,
@@ -79,12 +69,8 @@ class SearchWithFiltersCubit extends Cubit<SearchWithFiltersState> {
       category: category,
     );
     result.fold(
-      (l) {
-        // Fail silently on background refresh
-      },
-      (r) {
-        emit(SearchWithFiltersSuccess(r));
-      },
+      (l) => emit(SearchWithFiltersFailure(l.getAllErrorMessages())),
+      (r) => emit(SearchWithFiltersSuccess(r)),
     );
   }
 }
