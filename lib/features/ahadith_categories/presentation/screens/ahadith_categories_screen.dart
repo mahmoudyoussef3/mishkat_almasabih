@@ -172,7 +172,7 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
             final hadith = state.ahadith[index];
             return Column(
               children: [
-                InkWell(
+                GestureDetector(
                   onTap:
                       () => navigateToHadithDetailsScreen(context, hadith.id),
                   child: HadithCategoryCard(hadith: hadith, index: index + 1),
