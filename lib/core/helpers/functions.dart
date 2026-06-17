@@ -11,20 +11,62 @@ void setupErrorState(BuildContext context, String error) {
   context.pop();
   showDialog(
     context: context,
-    builder:
-        (context) => AlertDialog(
-          backgroundColor: Colors.white,
-          icon: const Icon(Icons.error, color: Colors.red, size: 32),
-          content: Text(error, style: TextStyles.font15DarkBlueMedium),
-          actions: [
-            TextButton(
-              onPressed: () {
-                context.pop();
-              },
-              child: Text('حسنا', style: TextStyles.font14BlueSemiBold),
+    builder: (context) => Dialog(
+      backgroundColor: ColorsManager.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: ColorsManager.primaryPurple.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.info_outline_rounded,
+                color: ColorsManager.primaryPurple,
+                size: 32,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              error,
+              style: TextStyles.font15DarkBlueMedium.copyWith(
+                color: ColorsManager.primaryText,
+                height: 1.5,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () => context.pop(),
+                style: TextButton.styleFrom(
+                  backgroundColor: ColorsManager.primaryPurple.withOpacity(0.1),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Text(
+                  'حسناً',
+                  style: TextStyles.font14BlueSemiBold.copyWith(
+                    color: ColorsManager.primaryPurple,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
+      ),
+    ),
   );
 }
   Color getGradeColor(String? g) {
