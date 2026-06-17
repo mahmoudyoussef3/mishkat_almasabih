@@ -18,6 +18,7 @@ import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import android.widget.RemoteViews
 
 data class PrayerNotificationEntry(
     val id: Int,
@@ -133,23 +134,25 @@ object PrayerNotificationScheduler {
             contentIntent,
         ).build()
 
+        val customView = RemoteViews(context.packageName, R.layout.notification_prayer).apply {
+            setTextViewText(R.id.notification_title, reminderTitle)
+            setTextViewText(R.id.notification_time, reminderBody)
+            setTextViewText(R.id.notification_body, entry.body)
+            setImageViewResource(R.id.notification_icon, R.mipmap.launcher_icon)
+        }
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.mipmap.launcher_icon)
-            .setContentTitle(reminderTitle)
-            .setContentText(reminderBody)
-            .setStyle(
-                NotificationCompat.BigTextStyle()
-                    .setBigContentTitle(reminderTitle)
-                    .bigText(detailsText),
-            )
-            .setSubText("مواقيت الصلاة")
+            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            .setCustomContentView(customView)
+            .setCustomBigContentView(customView)
             .setWhen(entry.fireAtMillis)
             .setShowWhen(true)
             .setContentIntent(contentIntent)
             .addAction(openAction)
             .setAutoCancel(true)
-            .setCategory(NotificationCompat.CATEGORY_REMINDER)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
             .build()
