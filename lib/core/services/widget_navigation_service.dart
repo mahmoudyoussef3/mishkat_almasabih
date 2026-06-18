@@ -31,6 +31,9 @@ class WidgetNavigationService {
             // Ignore invalid URIs.
           }
           return;
+        case 'openPrayerTimes':
+          navigatorKey.currentState?.pushNamed(Routes.prayerTimesScreen);
+          return;
         default:
           return;
       }

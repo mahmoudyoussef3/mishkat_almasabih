@@ -71,7 +71,13 @@ class AppRouter {
 
     // Handle native deep link paths
     if (routeName.startsWith('/api/hadith/')) {
-      final id = routeName.split('/').last.replaceAll('%C2%A0', '').replaceAll('\u00A0', '').trim();
+      final id =
+          routeName
+              .split('/')
+              .last
+              .replaceAll('%C2%A0', '')
+              .replaceAll('\u00A0', '')
+              .trim();
       if (id.isNotEmpty) {
         _logScreenView('ShareHadithLink (Native)');
         return MaterialPageRoute(
@@ -80,7 +86,7 @@ class AppRouter {
                 create:
                     (context) =>
                         getIt<HadithByCategoryDetailsCubit>()..fetchById(id),
-                child: SharedLinkHadithScreen(hadithId: id),  
+                child: SharedLinkHadithScreen(hadithId: id),
               ),
         );
       }
@@ -275,7 +281,6 @@ class AppRouter {
               ),
         );
 
-
       case Routes.filterResultSearch:
         _logScreenView('FilterResultSearch');
 
@@ -367,7 +372,7 @@ class AppRouter {
               ),
         );
 
-      /*   case Routes.prayerTimesScreen:
+      case Routes.prayerTimesScreen:
         _logScreenView('PrayerTimesScreen');
         return MaterialPageRoute(
           builder:
@@ -376,7 +381,6 @@ class AppRouter {
                 child: const PrayerTimesScreen(),
               ),
         );
-        */
       case Routes.qiblahFinder:
         _logScreenView('QiblahFinderScreen');
         return MaterialPageRoute(
@@ -413,7 +417,7 @@ class AppRouter {
                 ),
               ),
         );
-        case Routes.shareHadithLink:
+      case Routes.shareHadithLink:
         _logScreenView('ShareHadithLink');
         final hadithId = settings.arguments as String;
         return MaterialPageRoute(
@@ -421,11 +425,11 @@ class AppRouter {
               (_) => BlocProvider(
                 create:
                     (context) =>
-                        getIt<HadithByCategoryDetailsCubit>()..fetchById(hadithId),
-                child: SharedLinkHadithScreen(hadithId: hadithId),  
+                        getIt<HadithByCategoryDetailsCubit>()
+                          ..fetchById(hadithId),
+                child: SharedLinkHadithScreen(hadithId: hadithId),
               ),
         );
-   
 
       default:
         return null;

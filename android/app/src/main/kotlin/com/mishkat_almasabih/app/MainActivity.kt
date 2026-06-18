@@ -103,6 +103,10 @@ class MainActivity : FlutterActivity() {
                 methodChannel?.invokeMethod("openHadithOfTheDay", null)
             }
 
+            if (fromWidget && openScreen == "prayer_times") {
+                methodChannel?.invokeMethod("openPrayerTimes", null)
+            }
+
             // Handle deep links like mishkat://hadith?... via intent.data
             val dataUri = it.data
             if (dataUri != null && dataUri.scheme == "mishkat" && dataUri.host == "hadith") {

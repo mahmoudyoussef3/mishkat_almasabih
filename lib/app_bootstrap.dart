@@ -9,7 +9,6 @@ import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:mishkat_almasabih/core/config/app_config.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/notification/local_notification.dart';
 import 'package:mishkat_almasabih/core/notification/notification_helper.dart';
@@ -26,7 +25,7 @@ import 'package:mishkat_almasabih/firebase_options.dart';
 
 import 'mishkat_almasabih.dart';
 
-Future<void> bootstrapApp(AppConfig config) async {
+Future<void> bootstrapApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -67,7 +66,6 @@ Future<void> bootstrapApp(AppConfig config) async {
     MishkatAlmasabih(
       analytics: observer,
       appRouter: AppRouter(),
-      config: config,
       isFirstTime: isFirstTime,
     ),
   );

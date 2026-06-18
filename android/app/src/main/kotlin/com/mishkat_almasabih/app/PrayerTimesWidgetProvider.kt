@@ -63,13 +63,19 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
             val widgetData = HomeWidgetPlugin.getData(context)
             
             val now = System.currentTimeMillis()
+            val todayStart = startOfDayMillis(now)
+            val savedDayMillis = widgetData.getLong("prayer_widget_day_millis", 0)
+            val useTomorrowData = savedDayMillis > 0 && todayStart > savedDayMillis
+            val keyPrefix = if (useTomorrowData) "prayer_tomorrow" else "prayer"
+            val hijriDateKey = if (useTomorrowData) "prayer_tomorrow_hijri_date" else "prayer_hijri_date"
+            val gregorianDateKey = if (useTomorrowData) "prayer_tomorrow_gregorian_date" else "prayer_gregorian_date"
             val prayers = listOf(
-                Pair("fajr", widgetData.getLong("prayer_fajr_millis", 0)),
-                Pair("sunrise", widgetData.getLong("prayer_sunrise_millis", 0)),
-                Pair("dhuhr", widgetData.getLong("prayer_dhuhr_millis", 0)),
-                Pair("asr", widgetData.getLong("prayer_asr_millis", 0)),
-                Pair("maghrib", widgetData.getLong("prayer_maghrib_millis", 0)),
-                Pair("isha", widgetData.getLong("prayer_isha_millis", 0))
+                Pair("fajr", widgetData.getLong("${keyPrefix}_fajr_millis", 0)),
+                Pair("sunrise", widgetData.getLong("${keyPrefix}_sunrise_millis", 0)),
+                Pair("dhuhr", widgetData.getLong("${keyPrefix}_dhuhr_millis", 0)),
+                Pair("asr", widgetData.getLong("${keyPrefix}_asr_millis", 0)),
+                Pair("maghrib", widgetData.getLong("${keyPrefix}_maghrib_millis", 0)),
+                Pair("isha", widgetData.getLong("${keyPrefix}_isha_millis", 0))
             )
 
             var nextPrayerKey = "fajr"
@@ -84,8 +90,9 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
             }
 
             if (nextPrayerMillis > now) {
-                scheduleWidgetUpdate(context, nextPrayerMillis + 1000)
+                scheduleWidgetUpdate(context, nextPrayerMillis + 1000, 10)
             }
+            scheduleWidgetUpdate(context, nextMidnightMillis(now) + 1000, 11)
 
             val opts = options ?: appWidgetManager.getAppWidgetOptions(appWidgetId)
             val width = opts.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 300)
@@ -99,25 +106,25 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, layoutId).apply {
                 setTextViewText(
                     R.id.prayer_widget_hijri_date,
-                    widgetData.getString("prayer_hijri_date", "١٨ ذو القعدة ١٤٤٧ هـ"),
+                    widgetData.getString(hijriDateKey, "١٨ ذو القعدة ١٤٤٧ هـ"),
                 )
                 setTextViewText(
                     R.id.prayer_widget_gregorian_date,
-                    widgetData.getString("prayer_gregorian_date", "الثلاثاء، ٢٦ مايو ٢٠٢٦ م"),
+                    widgetData.getString(gregorianDateKey, "الثلاثاء، ٢٦ مايو ٢٠٢٦ م"),
                 )
 
-                setTextViewText(R.id.prayer_time_fajr, widgetData.getString("prayer_fajr", "--:--"))
+                setTextViewText(R.id.prayer_time_fajr, widgetData.getString("${keyPrefix}_fajr", "--:--"))
                 setTextViewText(
                     R.id.prayer_time_sunrise,
-                    widgetData.getString("prayer_sunrise", "--:--"),
+                    widgetData.getString("${keyPrefix}_sunrise", "--:--"),
                 )
-                setTextViewText(R.id.prayer_time_dhuhr, widgetData.getString("prayer_dhuhr", "--:--"))
-                setTextViewText(R.id.prayer_time_asr, widgetData.getString("prayer_asr", "--:--"))
+                setTextViewText(R.id.prayer_time_dhuhr, widgetData.getString("${keyPrefix}_dhuhr", "--:--"))
+                setTextViewText(R.id.prayer_time_asr, widgetData.getString("${keyPrefix}_asr", "--:--"))
                 setTextViewText(
                     R.id.prayer_time_maghrib,
-                    widgetData.getString("prayer_maghrib", "--:--"),
+                    widgetData.getString("${keyPrefix}_maghrib", "--:--"),
                 )
-                setTextViewText(R.id.prayer_time_isha, widgetData.getString("prayer_isha", "--:--"))
+                setTextViewText(R.id.prayer_time_isha, widgetData.getString("${keyPrefix}_isha", "--:--"))
 
                 applyPrayerItemStyle(this, context, R.id.prayer_item_fajr, R.id.prayer_label_fajr, R.id.prayer_time_fajr, nextPrayerKey == "fajr")
                 applyPrayerItemStyle(this, context, R.id.prayer_item_sunrise, R.id.prayer_label_sunrise, R.id.prayer_time_sunrise, nextPrayerKey == "sunrise")
@@ -146,14 +153,14 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
         }
     }
 
-    private fun scheduleWidgetUpdate(context: Context, updateTimeMillis: Long) {
+    private fun scheduleWidgetUpdate(context: Context, updateTimeMillis: Long, requestCode: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
         val intent = Intent(context, PrayerTimesWidgetProvider::class.java).apply {
             action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         }
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            0,
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -171,6 +178,29 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
                 pendingIntent
             )
         }
+    }
+
+    private fun startOfDayMillis(timeMillis: Long): Long {
+        val calendar = java.util.Calendar.getInstance().apply {
+            timeInMillis = timeMillis
+            set(java.util.Calendar.HOUR_OF_DAY, 0)
+            set(java.util.Calendar.MINUTE, 0)
+            set(java.util.Calendar.SECOND, 0)
+            set(java.util.Calendar.MILLISECOND, 0)
+        }
+        return calendar.timeInMillis
+    }
+
+    private fun nextMidnightMillis(timeMillis: Long): Long {
+        val calendar = java.util.Calendar.getInstance().apply {
+            timeInMillis = timeMillis
+            add(java.util.Calendar.DAY_OF_YEAR, 1)
+            set(java.util.Calendar.HOUR_OF_DAY, 0)
+            set(java.util.Calendar.MINUTE, 0)
+            set(java.util.Calendar.SECOND, 0)
+            set(java.util.Calendar.MILLISECOND, 0)
+        }
+        return calendar.timeInMillis
     }
 
     private fun applyPrayerItemStyle(

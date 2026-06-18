@@ -1,4 +1,4 @@
-/*part of 'prayer_times_cubit.dart';
+part of 'prayer_times_cubit.dart';
 
 @immutable
 sealed class PrayerTimesState {}
@@ -41,6 +41,6 @@ final class PrayerTimesLoaded extends PrayerTimesState {
 
 final class PrayerTimesError extends PrayerTimesState {
   final String message;
+
   PrayerTimesError(this.message);
 }
-*/

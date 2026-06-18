@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
@@ -6,7 +6,7 @@ import 'package:mishkat_almasabih/features/prayer_times/data/models/location_mod
 
 class LocationSelectionDialog extends StatefulWidget {
   final LocationModel currentLocation;
-  final Function(LocationModel) onLocationSelected;
+  final ValueChanged<LocationModel> onLocationSelected;
   final VoidCallback onUseCurrentLocation;
 
   const LocationSelectionDialog({
@@ -24,11 +24,8 @@ class LocationSelectionDialog extends StatefulWidget {
 class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
   bool _isLoadingLocation = false;
 
-  void _handleUseCurrentLocation() async {
-    setState(() {
-      _isLoadingLocation = true;
-    });
-
+  void _handleUseCurrentLocation() {
+    setState(() => _isLoadingLocation = true);
     Navigator.pop(context);
     widget.onUseCurrentLocation();
   }
@@ -39,115 +36,102 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
       textDirection: TextDirection.rtl,
       child: Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(18.r),
         ),
-        child: Container(
-          constraints: BoxConstraints(maxHeight: 600.h),
-          padding: EdgeInsets.all(20.w),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Header
-              Row(
-                children: [
-                  Icon(
-                    Icons.location_on,
-                    color: ColorsManager.primaryPurple,
-                    size: 24.sp,
-                  ),
-                  SizedBox(width: 8.w),
-                  Text(
-                    'اختر الموقع',
-                    style: TextStyles.headlineSmall.copyWith(
-                      color: ColorsManager.primaryText,
-                      fontWeight: FontWeight.bold,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 620.h),
+          child: Padding(
+            padding: EdgeInsets.all(20.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on_rounded,
+                      color: ColorsManager.primaryPurple,
+                      size: 24.sp,
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      'اختر الموقع',
+                      style: TextStyles.headlineSmall.copyWith(
+                        color: ColorsManager.primaryText,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close_rounded),
+                      color: ColorsManager.secondaryText,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 18.h),
+                _buildCurrentLocationButton(),
+                SizedBox(height: 16.h),
+                Divider(color: ColorsManager.mediumGray),
+                SizedBox(height: 8.h),
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    'المدن المتاحة',
+                    style: TextStyles.bodyLarge.copyWith(
+                      color: ColorsManager.secondaryText,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const Spacer(),
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: const Icon(Icons.close),
-                    color: ColorsManager.secondaryText,
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-
-              // Current Location Button
-              _buildCurrentLocationButton(context),
-
-              SizedBox(height: 16.h),
-
-              Divider(color: ColorsManager.mediumGray),
-
-              SizedBox(height: 8.h),
-
-              // City List Header
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  'اختر مدينة',
-                  style: TextStyles.bodyLarge.copyWith(
-                    color: ColorsManager.secondaryText,
-                    fontWeight: FontWeight.w600,
+                ),
+                SizedBox(height: 12.h),
+                Flexible(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: LocationModel.egyptianCities.length,
+                    itemBuilder: (context, index) {
+                      final city = LocationModel.egyptianCities[index];
+                      final isSelected =
+                          city.cityName == widget.currentLocation.cityName;
+                      return _buildCityTile(city, isSelected);
+                    },
                   ),
                 ),
-              ),
-
-              SizedBox(height: 12.h),
-
-              // Cities List
-              Flexible(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: LocationModel.egyptianCities.length,
-                  itemBuilder: (context, index) {
-                    final city = LocationModel.egyptianCities[index];
-                    final isSelected =
-                        city.cityName == widget.currentLocation.cityName;
-                    return _buildCityTile(context, city, isSelected);
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildCurrentLocationButton(BuildContext context) {
+  Widget _buildCurrentLocationButton() {
     return InkWell(
       onTap: _isLoadingLocation ? null : _handleUseCurrentLocation,
       borderRadius: BorderRadius.circular(12.r),
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
         decoration: BoxDecoration(
-          color: ColorsManager.primaryGreen.withOpacity(
-            _isLoadingLocation ? 0.05 : 0.1,
-          ),
+          color: ColorsManager.primaryGreen.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
-            color: ColorsManager.primaryGreen.withOpacity(0.3),
+            color: ColorsManager.primaryGreen.withValues(alpha: 0.3),
             width: 1.5,
           ),
         ),
         child: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(8.w),
+              width: 40.r,
+              height: 40.r,
               decoration: BoxDecoration(
-                color: ColorsManager.primaryGreen.withOpacity(
-                  _isLoadingLocation ? 0.5 : 1,
-                ),
-                borderRadius: BorderRadius.circular(8.r),
+                color: ColorsManager.primaryGreen,
+                borderRadius: BorderRadius.circular(10.r),
               ),
               child:
                   _isLoadingLocation
-                      ? SizedBox(
-                        width: 20.sp,
-                        height: 20.sp,
-                        child: CircularProgressIndicator(
+                      ? Padding(
+                        padding: EdgeInsets.all(10.r),
+                        child: const CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             Colors.white,
@@ -155,7 +139,7 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
                         ),
                       )
                       : Icon(
-                        Icons.my_location,
+                        Icons.my_location_rounded,
                         color: Colors.white,
                         size: 20.sp,
                       ),
@@ -166,9 +150,7 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _isLoadingLocation
-                        ? 'جاري تحديد الموقع...'
-                        : 'استخدام الموقع الحالي',
+                    'استخدام الموقع الحالي',
                     style: TextStyles.bodyLarge.copyWith(
                       color: ColorsManager.primaryText,
                       fontWeight: FontWeight.bold,
@@ -176,7 +158,7 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
                   ),
                   SizedBox(height: 2.h),
                   Text(
-                    'الحصول على مواقيت دقيقة بناءً على موقعك',
+                    'تحديث المواقيت والتنبيهات حسب موقعك',
                     style: TextStyles.bodySmall.copyWith(
                       color: ColorsManager.secondaryText,
                     ),
@@ -185,7 +167,7 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
               ),
             ),
             Icon(
-              Icons.arrow_back_ios,
+              Icons.arrow_back_ios_new_rounded,
               size: 16.sp,
               color: ColorsManager.secondaryText,
             ),
@@ -195,23 +177,20 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
     );
   }
 
-  Widget _buildCityTile(
-    BuildContext context,
-    LocationModel city,
-    bool isSelected,
-  ) {
+  Widget _buildCityTile(LocationModel city, bool isSelected) {
     return InkWell(
       onTap: () {
         Navigator.pop(context);
         widget.onLocationSelected(city);
       },
+      borderRadius: BorderRadius.circular(12.r),
       child: Container(
-        margin: EdgeInsets.only(bottom: 8.h),
+        margin: EdgeInsetsDirectional.only(bottom: 8.h),
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
           color:
               isSelected
-                  ? ColorsManager.primaryPurple.withOpacity(0.1)
+                  ? ColorsManager.primaryPurple.withValues(alpha: 0.1)
                   : Colors.transparent,
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(
@@ -219,13 +198,13 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
                 isSelected
                     ? ColorsManager.primaryPurple
                     : ColorsManager.mediumGray,
-            width: isSelected ? 2 : 1,
+            width: isSelected ? 1.5 : 1,
           ),
         ),
         child: Row(
           children: [
             Icon(
-              Icons.location_city,
+              Icons.location_city_rounded,
               color:
                   isSelected
                       ? ColorsManager.primaryPurple
@@ -241,13 +220,13 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
                       isSelected
                           ? ColorsManager.primaryPurple
                           : ColorsManager.primaryText,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                 ),
               ),
             ),
             if (isSelected)
               Icon(
-                Icons.check_circle,
+                Icons.check_circle_rounded,
                 color: ColorsManager.primaryPurple,
                 size: 20.sp,
               ),
@@ -257,4 +236,3 @@ class _LocationSelectionDialogState extends State<LocationSelectionDialog> {
     );
   }
 }
-*/

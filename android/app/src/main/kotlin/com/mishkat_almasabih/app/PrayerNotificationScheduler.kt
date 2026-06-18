@@ -179,16 +179,20 @@ object PrayerNotificationScheduler {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
             Log.w(
                 TAG,
-                "Exact alarm permission missing. Skipping prayer schedule for ${entry.prayerKey}",
+                "Exact alarm permission missing. Scheduling inexact prayer reminder for ${entry.prayerKey}",
             )
-            return
+            alarmManager.setAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                entry.fireAtMillis,
+                pendingIntent,
+            )
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                entry.fireAtMillis,
+                pendingIntent,
+            )
         }
-
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            entry.fireAtMillis,
-            pendingIntent,
-        )
     }
 
     private fun buildPendingIntent(context: Context, entry: PrayerNotificationEntry): PendingIntent {
@@ -331,17 +335,21 @@ object PrayerNotificationScheduler {
         if (entry.fireAtMillis <= System.currentTimeMillis()) return
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-            Log.w(TAG, "Exact alarm permission missing. Skipping test prayer notification")
-            return
-        }
-
         val pendingIntent = buildTestPendingIntent(context, entry)
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            entry.fireAtMillis,
-            pendingIntent,
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            Log.w(TAG, "Exact alarm permission missing. Scheduling inexact test prayer notification")
+            alarmManager.setAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                entry.fireAtMillis,
+                pendingIntent,
+            )
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                entry.fireAtMillis,
+                pendingIntent,
+            )
+        }
     }
 
     private fun buildTestPendingIntent(

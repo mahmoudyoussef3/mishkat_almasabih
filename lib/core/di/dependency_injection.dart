@@ -208,11 +208,8 @@ Future<void> setUpGetIt() async {
     () => SearchHistoryCubit(getIt()),
   );
 
-  /*
-  getIt.registerFactory<PrayerTimesCubit>(
-    () => PrayerTimesCubit(),
-  );
-*/
+  getIt.registerFactory<PrayerTimesCubit>(() => PrayerTimesCubit());
+
   getIt.registerFactory<QiblahCubit>(() => QiblahCubit());
 
   // Firebase Remote Config (shared instance)
@@ -263,13 +260,10 @@ Future<void> setUpGetIt() async {
     () => HadithByCategoryCubit(getIt<GetAhadithByCategoryUseCase>()),
   );
 
-
-    getIt.registerLazySingleton<HadithByCategoryDetailsRepo>(
+  getIt.registerLazySingleton<HadithByCategoryDetailsRepo>(
     () => HadithByCategoryDetailsRepo(),
   );
   getIt.registerFactory<HadithByCategoryDetailsCubit>(
     () => HadithByCategoryDetailsCubit(getIt(), getIt<NetworkInfo>()),
   );
-
-  
 }

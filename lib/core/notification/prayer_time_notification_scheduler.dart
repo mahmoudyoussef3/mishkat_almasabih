@@ -221,14 +221,7 @@ class PrayerNotificationScheduler {
 
       final exactAlarmGranted = await hasExactAlarmPermission();
       if (!exactAlarmGranted) {
-        final requested = await requestExactAlarmPermission();
-        if (!requested) {
-          return const PrayerNotificationActionResult(
-            success: false,
-            message:
-                'يرجى السماح بإنذارات دقيقة حتى تصل إشعارات الصلاة في وقتها',
-          );
-        }
+        await requestExactAlarmPermission();
       }
     }
 

@@ -34,11 +34,38 @@ class PrayerTimesHomeWidgetSync {
       final next = _resolveNextPrayer(prayers, now);
       final hijriDate = _formatHijriDate(now);
       final gregorianDate = _formatGregorianDate(now);
+      final tomorrow = now.add(const Duration(days: 1));
+      final tomorrowPrayerTimes = PrayerTimes(
+        Coordinates(location.latitude, location.longitude),
+        DateComponents.from(tomorrow),
+        params,
+      );
+      final tomorrowPrayers = <_PrayerItem>[
+        _PrayerItem('fajr', 'الفجر', tomorrowPrayerTimes.fajr),
+        _PrayerItem('sunrise', 'الشروق', tomorrowPrayerTimes.sunrise),
+        _PrayerItem('dhuhr', 'الظهر', tomorrowPrayerTimes.dhuhr),
+        _PrayerItem('asr', 'العصر', tomorrowPrayerTimes.asr),
+        _PrayerItem('maghrib', 'المغرب', tomorrowPrayerTimes.maghrib),
+        _PrayerItem('isha', 'العشاء', tomorrowPrayerTimes.isha),
+      ];
+      final tomorrowNext = _resolveNextPrayer(tomorrowPrayers, tomorrow);
 
+      await HomeWidget.saveWidgetData<int>(
+        'prayer_widget_day_millis',
+        DateTime(now.year, now.month, now.day).millisecondsSinceEpoch,
+      );
       await HomeWidget.saveWidgetData<String>('prayer_hijri_date', hijriDate);
       await HomeWidget.saveWidgetData<String>(
         'prayer_gregorian_date',
         gregorianDate,
+      );
+      await HomeWidget.saveWidgetData<String>(
+        'prayer_tomorrow_hijri_date',
+        _formatHijriDate(tomorrow),
+      );
+      await HomeWidget.saveWidgetData<String>(
+        'prayer_tomorrow_gregorian_date',
+        _formatGregorianDate(tomorrow),
       );
 
       await HomeWidget.saveWidgetData<String>(
@@ -92,18 +119,17 @@ class PrayerTimesHomeWidgetSync {
         prayerTimes.isha.millisecondsSinceEpoch,
       );
 
-      // Calculate and save tomorrow's Fajr
-      final tomorrowPrayerTimes = PrayerTimes(
-        Coordinates(location.latitude, location.longitude),
-        DateComponents.from(now.add(const Duration(days: 1))),
-        params,
-      );
+      await _savePrayerData('prayer_tomorrow', tomorrowPrayerTimes);
       await HomeWidget.saveWidgetData<int>(
         'prayer_tomorrow_fajr_millis',
         tomorrowPrayerTimes.fajr.millisecondsSinceEpoch,
       );
 
       await HomeWidget.saveWidgetData<String>('prayer_next_key', next.key);
+      await HomeWidget.saveWidgetData<String>(
+        'prayer_tomorrow_next_key',
+        tomorrowNext.key,
+      );
 
       await HomeWidget.updateWidget(
         name: 'PrayerTimesWidgetProvider',
@@ -183,6 +209,57 @@ class PrayerTimesHomeWidgetSync {
         .split('')
         .map((digit) => arabicDigits[int.parse(digit)])
         .join();
+  }
+
+  static Future<void> _savePrayerData(String prefix, PrayerTimes times) async {
+    await HomeWidget.saveWidgetData<String>(
+      '${prefix}_fajr',
+      _formatTime(times.fajr),
+    );
+    await HomeWidget.saveWidgetData<String>(
+      '${prefix}_sunrise',
+      _formatTime(times.sunrise),
+    );
+    await HomeWidget.saveWidgetData<String>(
+      '${prefix}_dhuhr',
+      _formatTime(times.dhuhr),
+    );
+    await HomeWidget.saveWidgetData<String>(
+      '${prefix}_asr',
+      _formatTime(times.asr),
+    );
+    await HomeWidget.saveWidgetData<String>(
+      '${prefix}_maghrib',
+      _formatTime(times.maghrib),
+    );
+    await HomeWidget.saveWidgetData<String>(
+      '${prefix}_isha',
+      _formatTime(times.isha),
+    );
+    await HomeWidget.saveWidgetData<int>(
+      '${prefix}_fajr_millis',
+      times.fajr.millisecondsSinceEpoch,
+    );
+    await HomeWidget.saveWidgetData<int>(
+      '${prefix}_sunrise_millis',
+      times.sunrise.millisecondsSinceEpoch,
+    );
+    await HomeWidget.saveWidgetData<int>(
+      '${prefix}_dhuhr_millis',
+      times.dhuhr.millisecondsSinceEpoch,
+    );
+    await HomeWidget.saveWidgetData<int>(
+      '${prefix}_asr_millis',
+      times.asr.millisecondsSinceEpoch,
+    );
+    await HomeWidget.saveWidgetData<int>(
+      '${prefix}_maghrib_millis',
+      times.maghrib.millisecondsSinceEpoch,
+    );
+    await HomeWidget.saveWidgetData<int>(
+      '${prefix}_isha_millis',
+      times.isha.millisecondsSinceEpoch,
+    );
   }
 
   static Future<_WidgetLocation> _resolveLocation() async {
