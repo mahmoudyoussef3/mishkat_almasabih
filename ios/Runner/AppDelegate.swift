@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 import FirebaseCore
 import workmanager_apple
+import UserNotifications
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -17,9 +18,7 @@ import workmanager_apple
 
     GeneratedPluginRegistrant.register(with: self)
     
-    if #available(iOS 10.0, *) {
-      UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
-    }
+    UNUserNotificationCenter.current().delegate = self
 
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
     let prayerChannel = FlutterMethodChannel(name: "com.mishkat_almasabih.app/prayer_notifications",
@@ -30,7 +29,7 @@ import workmanager_apple
       switch call.method {
       case "schedulePrayerNotifications":
         if let jsonString = call.arguments as? String {
-            self.schedulePrayerNotifications(jsonString: jsonString)
+            self.schedulePrayerNotifications(jsonString: jsonString, replacingExisting: true)
             result(true)
         } else {
             result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected JSON string", details: nil))
@@ -40,7 +39,7 @@ import workmanager_apple
         result(true)
       case "scheduleTestPrayerNotification":
         if let jsonString = call.arguments as? String {
-            self.schedulePrayerNotifications(jsonString: jsonString)
+            self.schedulePrayerNotifications(jsonString: jsonString, replacingExisting: false)
             result(true)
         } else {
             result(FlutterError(code: "INVALID_ARGUMENT", message: "Expected JSON string", details: nil))
@@ -53,7 +52,19 @@ import workmanager_apple
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
-  private func schedulePrayerNotifications(jsonString: String) {
+  override func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    willPresent notification: UNNotification,
+    withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+  ) {
+      if #available(iOS 14.0, *) {
+          completionHandler([.banner, .list, .sound, .badge])
+      } else {
+          completionHandler([.alert, .sound, .badge])
+      }
+  }
+
+  private func schedulePrayerNotifications(jsonString: String, replacingExisting: Bool) {
       guard let data = jsonString.data(using: .utf8),
             let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
             let items = json["items"] as? [[String: Any]] else {
@@ -61,19 +72,39 @@ import workmanager_apple
       }
 
       let center = UNUserNotificationCenter.current()
-      
-      for item in items {
+
+      if replacingExisting {
+          center.getPendingNotificationRequests { (requests) in
+              let prayerIdentifiers = requests.map { $0.identifier }.filter { $0.hasPrefix("prayer_notification_") }
+              center.removePendingNotificationRequests(withIdentifiers: prayerIdentifiers)
+              self.addPrayerNotificationRequests(center: center, items: items)
+          }
+      } else {
+          addPrayerNotificationRequests(center: center, items: items)
+      }
+  }
+
+  private func addPrayerNotificationRequests(center: UNUserNotificationCenter, items: [[String: Any]]) {
+      let now = Date()
+      let futureItems = items.compactMap { item -> (item: [String: Any], date: Date)? in
+          guard let date = fireDate(from: item["fireAtMillis"]) else {
+              return nil
+          }
+
+          return date > now ? (item, date) : nil
+      }
+      .sorted { $0.date < $1.date }
+      .prefix(64)
+
+      for scheduledItem in futureItems {
+          let item = scheduledItem.item
+          let date = scheduledItem.date
           guard let id = item["id"] as? Int,
                 let title = item["title"] as? String,
-                let body = item["body"] as? String,
-                let fireAtMillis = item["fireAtMillis"] as? Int64 else {
+                let body = item["body"] as? String else {
               continue
           }
-          
-          let date = Date(timeIntervalSince1970: TimeInterval(fireAtMillis) / 1000.0)
-          
-          if date <= Date() { continue }
-          
+
           let content = UNMutableNotificationContent()
           content.title = title
           content.body = body
@@ -90,6 +121,26 @@ import workmanager_apple
               }
           }
       }
+  }
+
+  private func fireDate(from value: Any?) -> Date? {
+      if let milliseconds = value as? Int64 {
+          return Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000.0)
+      }
+
+      if let milliseconds = value as? Int {
+          return Date(timeIntervalSince1970: TimeInterval(milliseconds) / 1000.0)
+      }
+
+      if let milliseconds = value as? Double {
+          return Date(timeIntervalSince1970: milliseconds / 1000.0)
+      }
+
+      if let number = value as? NSNumber {
+          return Date(timeIntervalSince1970: number.doubleValue / 1000.0)
+      }
+
+      return nil
   }
   
   private func cancelPrayerNotifications() {
