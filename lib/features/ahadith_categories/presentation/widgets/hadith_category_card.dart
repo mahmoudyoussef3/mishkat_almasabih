@@ -18,87 +18,97 @@ class HadithCategoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: ColorsManager.secondaryBackground,
-      borderRadius: BorderRadius.circular(8.r),
+      color: Colors.transparent,
       child: Container(
-        padding: EdgeInsetsDirectional.fromSTEB(14.w, 14.h, 14.w, 12.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.r),
+          color: ColorsManager.secondaryBackground,
+          borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
-            color: ColorsManager.primaryPurple.withValues(alpha: 0.12),
+            color: ColorsManager.primaryPurple.withOpacity(0.08),
+            width: 1.5,
           ),
+          boxShadow: [
+            BoxShadow(
+              color: ColorsManager.black.withOpacity(0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                _IndexBadge(index: index),
-                const Spacer(),
-                Container(
-                  padding: EdgeInsetsDirectional.symmetric(
-                    horizontal: 9.w,
-                    vertical: 5.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: ColorsManager.primaryGold.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.menu_book_rounded,
-                        size: 14.sp,
-                        color: ColorsManager.primaryGold,
-                      ),
-                      SizedBox(width: 5.w),
-                      Text(
-                        'حديث',
-                        style: TextStyles.labelSmall.copyWith(
-                          color: ColorsManager.primaryText,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
+            // Header Section
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                color: ColorsManager.primaryPurple.withOpacity(0.04),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                border: Border(
+                  bottom: BorderSide(
+                    color: ColorsManager.primaryPurple.withOpacity(0.08),
+                    width: 1,
                   ),
                 ),
-              ],
-            ),
-            SizedBox(height: 12.h),
-            Text(
-              hadith.title,
-              textDirection: TextDirection.rtl,
-              textAlign: TextAlign.start,
-              maxLines: 5,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyles.hadithText.copyWith(
-                fontSize: 16.sp,
-                height: 1.8,
-                color: ColorsManager.primaryText,
-                fontStyle: FontStyle.normal,
+              ),
+              child: Row(
+                children: [
+                  _IndexBadge(index: index),
+                  const Spacer(),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 6.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: ColorsManager.primaryGold.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(
+                        color: ColorsManager.primaryGold.withOpacity(0.3),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.menu_book_rounded,
+                          size: 14.sp,
+                          color: ColorsManager.primaryGold,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          'حديث',
+                          style: TextStyles.labelSmall.copyWith(
+                            color: ColorsManager.primaryText,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-            SizedBox(height: 12.h),
-            Divider(height: 1, color: ColorsManager.mediumGray),
-            SizedBox(height: 10.h),
-            Row(
-              children: [
-                Text(
-                  'عرض التفاصيل',
-                  style: TextStyles.labelLarge.copyWith(
-                    color: ColorsManager.primaryPurple,
-                    fontWeight: FontWeight.w700,
-                  ),
+
+            // Text Content Section
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: Text(
+                hadith.title,
+                textDirection: TextDirection.rtl,
+                textAlign: TextAlign.start,
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyles.hadithText.copyWith(
+                  fontSize: 16.sp,
+                  height: 1.8,
+                  color: ColorsManager.primaryText,
+                  fontStyle: FontStyle.normal,
                 ),
-                SizedBox(width: 6.w),
-                Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  size: 13.sp,
-                  color: ColorsManager.primaryPurple,
-                ),
-              ],
+              ),
             ),
+
+      
           ],
         ),
       ),
@@ -114,29 +124,29 @@ class _IndexBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 9.w, vertical: 5.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: ColorsManager.primaryPurple.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(
-          color: ColorsManager.primaryPurple.withValues(alpha: 0.18),
-        ),
+        color: ColorsManager.primaryPurple,
+        borderRadius: BorderRadius.circular(10.r),
+        boxShadow: [
+          BoxShadow(
+            color: ColorsManager.primaryPurple.withOpacity(0.3),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         textDirection: TextDirection.rtl,
         children: [
-          Icon(
-            Icons.tag_rounded,
-            size: 14.sp,
-            color: ColorsManager.primaryPurple,
-          ),
+          Icon(Icons.tag_rounded, size: 14.sp, color: Colors.white),
           SizedBox(width: 6.w),
           Text(
             convertToArabicNumber(index),
             style: TextStyles.labelMedium.copyWith(
-              color: ColorsManager.primaryPurple,
-              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

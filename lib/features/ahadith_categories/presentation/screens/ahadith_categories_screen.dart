@@ -14,6 +14,7 @@ import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_details_cubit/cubit/hadith_by_category_details_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/hadith_category_card.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/error_widget.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 
 class AhadithListScreen extends StatefulWidget {
   final String categoryId;
@@ -102,25 +103,29 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
                           controller: _scrollController,
                           physics: const BouncingScrollPhysics(),
                           slivers: [
-                            SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+                            BuildHeaderAppBar(
+                              title:
+                                  widget.categoryTitle?.isNotEmpty == true
+                                      ? widget.categoryTitle!
+                                      : 'أحاديث التصنيف',
+                              description:
+                                  'تصفح الأحاديث المتعلقة بهذا التصنيف',
+                              pinned: true,
+                            ),
+                            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
                             SliverToBoxAdapter(
-                              child: _AhadithSearchHeader(
+                              child: _AhadithSearchField(
                                 controller: _searchController,
-                                categoryTitle:
-                                    widget.categoryTitle?.isNotEmpty == true
-                                        ? widget.categoryTitle!
-                                        : 'أحاديث التصنيف',
                                 onChanged: (value) {
                                   setState(() => _searchQuery = value);
                                 },
-                                onBack: () => Navigator.maybePop(context),
                                 onClear: () {
                                   _searchController.clear();
                                   setState(() => _searchQuery = '');
                                 },
                               ),
                             ),
-                            SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+                            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
                             ..._buildContentSlivers(context, state),
                             SliverToBoxAdapter(child: SizedBox(height: 20.h)),
                           ],
@@ -160,10 +165,16 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
 
   List<Widget> _buildLoadingSlivers() {
     return [
-      SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) => const HadithCardShimmer(),
-          childCount: 6,
+      SliverPadding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => Padding(
+              padding: EdgeInsets.only(bottom: 12.h),
+              child: const HadithCardShimmer(),
+            ),
+            childCount: 6,
+          ),
         ),
       ),
     ];
@@ -203,7 +214,7 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
           lastPage: state.meta.lastPage,
         ),
       ),
-      SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+      SliverToBoxAdapter(child: SizedBox(height: 16.h)),
       SliverPadding(
         padding: EdgeInsetsDirectional.symmetric(horizontal: 16.w),
         sliver: SliverList(
@@ -216,7 +227,7 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
                       () => navigateToHadithDetailsScreen(context, hadith.id),
                   child: HadithCategoryCard(hadith: hadith, index: index + 1),
                 ),
-                if (index != visibleAhadith.length - 1) SizedBox(height: 10.h),
+                if (index != visibleAhadith.length - 1) SizedBox(height: 14.h),
               ],
             );
           }, childCount: visibleAhadith.length),
@@ -247,11 +258,9 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
-              color: ColorsManager.error.withValues(alpha: 0.08),
+              color: ColorsManager.error.withOpacity(0.08),
               borderRadius: BorderRadius.circular(8.r),
-              border: Border.all(
-                color: ColorsManager.error.withValues(alpha: 0.25),
-              ),
+              border: Border.all(color: ColorsManager.error.withOpacity(0.25)),
             ),
             child: Row(
               textDirection: TextDirection.rtl,
@@ -292,13 +301,13 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
     if (!state.hasMore) {
       return SliverToBoxAdapter(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 12.h),
+          padding: EdgeInsets.symmetric(vertical: 24.h),
           child: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: ColorsManager.primaryPurple.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8.r),
+                color: ColorsManager.primaryPurple.withOpacity(0.08),
+                borderRadius: BorderRadius.circular(20.r),
               ),
               child: Text(
                 'تم عرض جميع الأحاديث',
@@ -324,109 +333,75 @@ class _AhadithListScreenState extends State<AhadithListScreen> {
   }
 }
 
-class _AhadithSearchHeader extends StatelessWidget {
+class _AhadithSearchField extends StatelessWidget {
   final TextEditingController controller;
-  final String categoryTitle;
   final ValueChanged<String> onChanged;
-  final VoidCallback onBack;
   final VoidCallback onClear;
 
-  const _AhadithSearchHeader({
+  const _AhadithSearchField({
     required this.controller,
-    required this.categoryTitle,
     required this.onChanged,
-    required this.onBack,
     required this.onClear,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 16.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Material(
-                color: ColorsManager.secondaryBackground,
-                borderRadius: BorderRadius.circular(8.r),
-                child: InkWell(
-                  onTap: onBack,
-                  borderRadius: BorderRadius.circular(8.r),
-                  child: Container(
-                    width: 44.w,
-                    height: 44.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(color: ColorsManager.mediumGray),
-                    ),
-                    child: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: ColorsManager.primaryPurple,
-                      size: 18.sp,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(width: 10.w),
-              Expanded(
-                child: TextField(
-                  controller: controller,
-                  onChanged: onChanged,
-                  textDirection: TextDirection.rtl,
-                  textInputAction: TextInputAction.search,
-                  decoration: InputDecoration(
-                    hintText: 'ابحث داخل أحاديث التصنيف',
-                    hintStyle: TextStyles.bodyMedium.copyWith(
-                      color: ColorsManager.secondaryText,
-                    ),
-                    prefixIcon: const Icon(
-                      Icons.search_rounded,
-                      color: ColorsManager.primaryPurple,
-                    ),
-                    suffixIcon:
-                        controller.text.isEmpty
-                            ? null
-                            : IconButton(
-                              onPressed: onClear,
-                              icon: const Icon(Icons.close_rounded),
-                              color: ColorsManager.secondaryText,
-                              tooltip: 'مسح البحث',
-                            ),
-                    filled: true,
-                    fillColor: ColorsManager.secondaryBackground,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 14.w,
-                      vertical: 13.h,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                      borderSide: BorderSide(color: ColorsManager.mediumGray),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                      borderSide: const BorderSide(
-                        color: ColorsManager.primaryPurple,
-                        width: 1.4,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          Text(
-            categoryTitle,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyles.titleMedium.copyWith(
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: ColorsManager.black.withOpacity(0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: TextField(
+          controller: controller,
+          onChanged: onChanged,
+          textDirection: TextDirection.rtl,
+          textInputAction: TextInputAction.search,
+          decoration: InputDecoration(
+            hintText: 'ابحث داخل أحاديث التصنيف...',
+            hintStyle: TextStyles.bodyMedium.copyWith(
               color: ColorsManager.secondaryText,
-              fontWeight: FontWeight.w600,
+            ),
+            prefixIcon: const Icon(
+              Icons.search_rounded,
+              color: ColorsManager.primaryPurple,
+            ),
+            suffixIcon:
+                controller.text.isEmpty
+                    ? null
+                    : IconButton(
+                      onPressed: onClear,
+                      icon: const Icon(Icons.close_rounded),
+                      color: ColorsManager.secondaryText,
+                      tooltip: 'مسح البحث',
+                    ),
+            filled: true,
+            fillColor: ColorsManager.secondaryBackground,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 16.w,
+              vertical: 14.h,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(
+                color: ColorsManager.primaryPurple.withOpacity(0.1),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: const BorderSide(
+                color: ColorsManager.primaryPurple,
+                width: 1.5,
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -448,13 +423,19 @@ class _CategoryResultSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 16.w),
+      padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Container(
-        padding: EdgeInsets.all(14.w),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: ColorsManager.secondaryBackground,
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: ColorsManager.mediumGray),
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: ColorsManager.black.withOpacity(0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -464,19 +445,29 @@ class _CategoryResultSummary extends StatelessWidget {
               value: convertToArabicNumber(currentCount),
               color: ColorsManager.primaryPurple,
             ),
-            SizedBox(width: 10.w),
+            Container(
+              height: 40.h,
+              width: 1.w,
+              color: ColorsManager.mediumGray.withOpacity(0.5),
+            ),
+            SizedBox(width: 16.w),
             _SummaryItem(
               icon: Icons.library_books_rounded,
               label: 'الإجمالي',
               value: convertToArabicNumber(totalItems),
               color: ColorsManager.primaryGold,
             ),
-            SizedBox(width: 10.w),
+            Container(
+              height: 40.h,
+              width: 1.w,
+              color: ColorsManager.mediumGray.withOpacity(0.5),
+            ),
+            SizedBox(width: 16.w),
             _SummaryItem(
               icon: Icons.layers_rounded,
               label: 'الصفحة',
               value:
-                  '${convertToArabicNumber(currentPage)} / ${convertToArabicNumber(lastPage)}',
+                  '${convertToArabicNumber(currentPage)}/${convertToArabicNumber(lastPage)}',
               color: ColorsManager.hadithAuthentic,
             ),
           ],
@@ -505,15 +496,15 @@ class _SummaryItem extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 34.w,
-            height: 34.w,
+            width: 36.w,
+            height: 36.w,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8.r),
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(10.r),
             ),
             child: Icon(icon, color: color, size: 18.sp),
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: 10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -522,17 +513,20 @@ class _SummaryItem extends StatelessWidget {
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyles.labelLarge.copyWith(
+                  style: TextStyles.titleMedium.copyWith(
                     color: ColorsManager.primaryText,
                     fontWeight: FontWeight.bold,
+                    height: 1.1,
                   ),
                 ),
+                SizedBox(height: 2.h),
                 Text(
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyles.labelSmall.copyWith(
                     color: ColorsManager.secondaryText,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],

@@ -4,11 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
+import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/domain/entities_temp/category_entity.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_by_category_cubit/ahadith_by_category_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_by_category_cubit/ahadith_by_category_state.dart';
-import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/hadith_category_card.dart';
-import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/section_card.dart';
 
 class SimilarAhadithSection extends StatelessWidget {
   final List<String> categoryIds;
@@ -25,10 +24,11 @@ class SimilarAhadithSection extends StatelessWidget {
     final categoryById = {
       for (final category in categories) category.id: category,
     };
-    final matchedCategories = categoryIds
-        .map((id) => categoryById[id])
-        .whereType<CategoryEntity>()
-        .toList();
+    final matchedCategories =
+        categoryIds
+            .map((id) => categoryById[id])
+            .whereType<CategoryEntity>()
+            .toList();
 
     if (matchedCategories.isEmpty) {
       return const SizedBox.shrink();
@@ -36,12 +36,15 @@ class SimilarAhadithSection extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: matchedCategories
-          .map((category) => Padding(
-            padding: EdgeInsets.only(bottom: 14.h),
-            child: _CategorySimilarAhadith(category: category),
-          ))
-          .toList(),
+      children:
+          matchedCategories
+              .map(
+                (category) => Padding(
+                  padding: EdgeInsets.only(bottom: 16.h),
+                  child: _CategorySimilarAhadith(category: category),
+                ),
+              )
+              .toList(),
     );
   }
 }
@@ -52,16 +55,20 @@ class _CategorySimilarAhadith extends StatefulWidget {
   const _CategorySimilarAhadith({required this.category});
 
   @override
-  State<_CategorySimilarAhadith> createState() => _CategorySimilarAhadithState();
+  State<_CategorySimilarAhadith> createState() =>
+      _CategorySimilarAhadithState();
 }
 
 class _CategorySimilarAhadithState extends State<_CategorySimilarAhadith> {
   late final HadithByCategoryCubit _cubit;
+  bool _isExpanded = false;
 
   @override
   void initState() {
     super.initState();
-    _cubit = getIt<HadithByCategoryCubit>()..getAhadithByCategory(widget.category.id);
+    _cubit =
+        getIt<HadithByCategoryCubit>()
+          ..getAhadithByCategory(widget.category.id);
   }
 
   @override
@@ -76,8 +83,9 @@ class _CategorySimilarAhadithState extends State<_CategorySimilarAhadith> {
       value: _cubit,
       child: BlocBuilder<HadithByCategoryCubit, HadithByCategoryState>(
         builder: (context, state) {
-          if (state is HadithByCategoryLoading || state is HadithByCategoryInitial) {
-            return const SizedBox.shrink(); 
+          if (state is HadithByCategoryLoading ||
+              state is HadithByCategoryInitial) {
+            return const SizedBox.shrink();
           }
 
           if (state is HadithByCategoryError) {
@@ -86,145 +94,183 @@ class _CategorySimilarAhadithState extends State<_CategorySimilarAhadith> {
 
           if (state is HadithByCategoryLoaded) {
             if (state.ahadith.isEmpty) return const SizedBox.shrink();
-            
+
             final ahadithToShow = state.ahadith.take(3).toList();
 
             return Container(
-              margin: EdgeInsets.only(bottom: 12.h),
               decoration: BoxDecoration(
                 color: ColorsManager.secondaryBackground,
                 borderRadius: BorderRadius.circular(16.r),
+                border: Border.all(
+                  color:
+                      _isExpanded
+                          ? ColorsManager.primaryPurple.withOpacity(0.3)
+                          : ColorsManager.primaryPurple.withOpacity(0.1),
+                  width: _isExpanded ? 1.5 : 1.0,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
+                    color: ColorsManager.black.withOpacity(0.04),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
                 ],
-                border: Border.all(
-                  color: ColorsManager.primaryPurple.withOpacity(0.06),
-                ),
               ),
               child: Theme(
-                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                data: Theme.of(
+                  context,
+                ).copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
-                  tilePadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
-                  childrenPadding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+                  onExpansionChanged: (expanded) {
+                    setState(() => _isExpanded = expanded);
+                  },
+                  tilePadding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 8.h,
+                  ),
+                  childrenPadding: EdgeInsets.zero,
                   iconColor: ColorsManager.primaryPurple,
                   collapsedIconColor: ColorsManager.secondaryText,
                   leading: Container(
-                    padding: EdgeInsets.all(8.w),
+                    padding: EdgeInsets.all(10.w),
                     decoration: BoxDecoration(
                       color: ColorsManager.primaryPurple.withOpacity(0.08),
-                      shape: BoxShape.circle,
+                      borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: Icon(
-                      Icons.library_books_rounded,
-                      size: 16.sp,
+                      Icons.folder_special_rounded,
+                      size: 20.sp,
                       color: ColorsManager.primaryPurple,
                     ),
                   ),
                   title: Text(
-                    'أحاديث مشابهة في:',
-                    style: TextStyle(
-                      fontSize: 12.sp,
+                    'أحاديث مشابهة في التصنيف',
+                    style: TextStyles.labelSmall.copyWith(
                       color: ColorsManager.secondaryText,
-                      height: 1.2,
                     ),
                   ),
-                  subtitle: Text(
-                    widget.category.title,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w700,
-                      color: ColorsManager.primaryText,
+                  subtitle: Padding(
+                    padding: EdgeInsets.only(top: 4.h),
+                    child: Text(
+                      widget.category.title,
+                      style: TextStyles.titleMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: ColorsManager.primaryText,
+                      ),
                     ),
                   ),
                   children: [
-                    ...ahadithToShow.asMap().entries.map((entry) {
-                      final hadith = entry.value;
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 10.h),
-                        child: InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              Routes.shareHadithLink,
-                              arguments: hadith.id,
-                            );
-                          },
-                          borderRadius: BorderRadius.circular(12.r),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
-                            decoration: BoxDecoration(
-                              color: ColorsManager.primaryBackground,
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: ColorsManager.primaryPurple.withOpacity(0.05),
-                              ),
-                            ),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.menu_book_rounded,
-                                  size: 16.sp,
-                                  color: ColorsManager.primaryPurple.withOpacity(0.6),
-                                ),
-                                SizedBox(width: 10.w),
-                                Expanded(
-                                  child: Text(
-                                    hadith.title,
-                                    textDirection: TextDirection.rtl,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 13.sp,
-                                      height: 1.5,
-                                      fontWeight: FontWeight.w500,
-                                      color: ColorsManager.primaryText.withOpacity(0.85),
+                    Container(
+                      color: ColorsManager.primaryBackground.withOpacity(0.5),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.w,
+                        vertical: 12.h,
+                      ),
+                      child: Column(
+                        children: [
+                          ...ahadithToShow.asMap().entries.map((entry) {
+                            final hadith = entry.value;
+                            return Padding(
+                              padding: EdgeInsets.only(bottom: 10.h),
+                              child: Material(
+                                color: ColorsManager.white,
+                                borderRadius: BorderRadius.circular(12.r),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.shareHadithLink,
+                                      arguments: hadith.id,
+                                    );
+                                  },
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 14.w,
+                                      vertical: 14.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      border: Border.all(
+                                        color: ColorsManager.mediumGray
+                                            .withOpacity(0.4),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Icon(
+                                          Icons.menu_book_rounded,
+                                          size: 18.sp,
+                                          color: ColorsManager.primaryGold,
+                                        ),
+                                        SizedBox(width: 12.w),
+                                        Expanded(
+                                          child: Text(
+                                            hadith.title,
+                                            textDirection: TextDirection.rtl,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyles.bodyMedium
+                                                .copyWith(
+                                                  height: 1.6,
+                                                  color: ColorsManager
+                                                      .primaryText
+                                                      .withOpacity(0.9),
+                                                ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                              ],
+                              ),
+                            );
+                          }),
+                          SizedBox(height: 4.h),
+                          Material(
+                            color: ColorsManager.primaryPurple.withOpacity(
+                              0.08,
                             ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                    Center(
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            Routes.ahadithListScreen,
-                            arguments: {
-                              'categoryId': widget.category.id,
-                              'categoryTitle': widget.category.title,
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          foregroundColor: ColorsManager.primaryPurple,
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              'عرض المزيد',
-                              style: TextStyle(
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w700,
+                            borderRadius: BorderRadius.circular(12.r),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.ahadithListScreen,
+                                  arguments: {
+                                    'categoryId': widget.category.id,
+                                    'categoryTitle': widget.category.title,
+                                  },
+                                );
+                              },
+                              borderRadius: BorderRadius.circular(12.r),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(vertical: 12.h),
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'عرض المزيد من الأحاديث',
+                                      style: TextStyles.labelLarge.copyWith(
+                                        color: ColorsManager.primaryPurple,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: 14.sp,
+                                      color: ColorsManager.primaryPurple,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            SizedBox(width: 4.w),
-                            Icon(Icons.arrow_forward_ios_rounded, size: 12.sp),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

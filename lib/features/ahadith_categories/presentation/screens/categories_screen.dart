@@ -167,11 +167,17 @@ class _CategoriesOverview extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Container(
-        padding: EdgeInsets.all(14.w),
+        padding: EdgeInsets.all(16.w),
         decoration: BoxDecoration(
           color: ColorsManager.secondaryBackground,
-          borderRadius: BorderRadius.circular(8.r),
-          border: Border.all(color: ColorsManager.mediumGray),
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              color: ColorsManager.black.withOpacity(0.04),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -181,7 +187,12 @@ class _CategoriesOverview extends StatelessWidget {
               value: '$categoriesCount',
               color: ColorsManager.primaryPurple,
             ),
-            SizedBox(width: 10.w),
+            Container(
+              height: 40.h,
+              width: 1.w,
+              color: ColorsManager.mediumGray.withOpacity(0.5),
+            ),
+            SizedBox(width: 16.w),
             _OverviewItem(
               icon: Icons.auto_stories_rounded,
               label: 'حديث',
@@ -214,15 +225,15 @@ class _OverviewItem extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 38.w,
-            height: 38.w,
+            width: 44.w,
+            height: 44.w,
             decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(8.r),
+              color: color.withOpacity(0.12),
+              borderRadius: BorderRadius.circular(12.r),
             ),
-            child: Icon(icon, color: color, size: 20.sp),
+            child: Icon(icon, color: color, size: 22.sp),
           ),
-          SizedBox(width: 10.w),
+          SizedBox(width: 12.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,17 +242,19 @@ class _OverviewItem extends StatelessWidget {
                   value,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyles.titleLarge.copyWith(
+                  style: TextStyles.headlineSmall.copyWith(
                     color: ColorsManager.primaryText,
                     fontWeight: FontWeight.bold,
+                    height: 1.2,
                   ),
                 ),
                 Text(
                   label,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyles.bodySmall.copyWith(
+                  style: TextStyles.bodyMedium.copyWith(
                     color: ColorsManager.secondaryText,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -262,33 +275,46 @@ class _CategoriesSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: TextField(
-        onChanged: onChanged,
-        textDirection: TextDirection.rtl,
-        decoration: InputDecoration(
-          hintText: 'ابحث باسم التصنيف',
-          hintStyle: TextStyles.bodyMedium.copyWith(
-            color: ColorsManager.secondaryText,
-          ),
-          prefixIcon: const Icon(
-            Icons.search_rounded,
-            color: ColorsManager.primaryPurple,
-          ),
-          filled: true,
-          fillColor: ColorsManager.secondaryBackground,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: 14.w,
-            vertical: 13.h,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.r),
-            borderSide: BorderSide(color: ColorsManager.mediumGray),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.r),
-            borderSide: const BorderSide(
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: ColorsManager.black.withOpacity(0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: TextField(
+          onChanged: onChanged,
+          textDirection: TextDirection.rtl,
+          decoration: InputDecoration(
+            hintText: 'ابحث باسم التصنيف...',
+            hintStyle: TextStyles.bodyMedium.copyWith(
+              color: ColorsManager.secondaryText,
+            ),
+            prefixIcon: const Icon(
+              Icons.search_rounded,
               color: ColorsManager.primaryPurple,
-              width: 1.4,
+            ),
+            filled: true,
+            fillColor: ColorsManager.secondaryBackground,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 16.w,
+              vertical: 14.h,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: BorderSide(
+                color: ColorsManager.primaryPurple.withOpacity(0.1),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12.r),
+              borderSide: const BorderSide(
+                color: ColorsManager.primaryPurple,
+                width: 1.5,
+              ),
             ),
           ),
         ),

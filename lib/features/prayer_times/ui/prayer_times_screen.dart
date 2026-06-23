@@ -8,6 +8,7 @@ import 'package:mishkat_almasabih/features/prayer_times/logic/cubit/prayer_times
 import 'package:mishkat_almasabih/features/prayer_times/ui/widgets/location_selection_dialog.dart';
 import 'package:mishkat_almasabih/features/prayer_times/ui/widgets/next_prayer_card.dart';
 import 'package:mishkat_almasabih/features/prayer_times/ui/widgets/prayer_times_grid.dart';
+import 'package:mishkat_almasabih/features/home/ui/widgets/build_header_app_bar.dart';
 
 class PrayerTimesScreen extends StatefulWidget {
   const PrayerTimesScreen({super.key});
@@ -71,12 +72,16 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
 
                 return CustomScrollView(
                   slivers: [
-                    SliverToBoxAdapter(
-                      child: _Header(
-                        cityName: cubit.currentLocation.cityName,
-                        dateLabel: _formatDate(date),
-                        onChangeLocation: _showLocationDialog,
-                      ),
+                    BuildHeaderAppBar(
+                      title: 'مواقيت الصلاة',
+                      description:
+                          '${cubit.currentLocation.cityName} • ${_formatDate(date)}',
+                      actions: [
+                        AppBarActionButton(
+                          icon: Icons.location_on_rounded,
+                          onPressed: _showLocationDialog,
+                        ),
+                      ],
                     ),
                     SliverToBoxAdapter(child: SizedBox(height: 16.h)),
                     if (state is PrayerTimesLoading)
@@ -136,105 +141,6 @@ class _PrayerTimesScreenState extends State<PrayerTimesScreen> {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  final String cityName;
-  final String dateLabel;
-  final VoidCallback onChangeLocation;
-
-  const _Header({
-    required this.cityName,
-    required this.dateLabel,
-    required this.onChangeLocation,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsetsDirectional.fromSTEB(16.w, 16.h, 16.w, 0),
-      padding: EdgeInsets.all(18.r),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [ColorsManager.primaryPurple, ColorsManager.primaryGreen],
-          begin: AlignmentDirectional.topStart,
-          end: AlignmentDirectional.bottomEnd,
-        ),
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => Navigator.maybePop(context),
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.white,
-                ),
-                tooltip: 'رجوع',
-              ),
-              const Spacer(),
-              IconButton(
-                onPressed: onChangeLocation,
-                icon: const Icon(
-                  Icons.location_on_rounded,
-                  color: Colors.white,
-                ),
-                tooltip: 'تغيير الموقع',
-              ),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          InkWell(
-            onTap: onChangeLocation,
-            borderRadius: BorderRadius.circular(8.r),
-            child: Padding(
-              padding: EdgeInsetsDirectional.symmetric(vertical: 4.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'مواقيت الصلاة',
-                    style: TextStyles.headlineLarge.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.place_rounded,
-                        color: Colors.white70,
-                        size: 18,
-                      ),
-                      SizedBox(width: 6.w),
-                      Expanded(
-                        child: Text(
-                          cityName,
-                          style: TextStyles.bodyLarge.copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        dateLabel,
-                        style: TextStyles.bodyMedium.copyWith(
-                          color: Colors.white70,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
