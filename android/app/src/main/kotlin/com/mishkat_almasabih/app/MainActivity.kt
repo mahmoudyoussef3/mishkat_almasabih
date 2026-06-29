@@ -13,7 +13,11 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        
+
+        // Create the prayer notification channel as early as possible so it
+        // exists before any alarm fires, even on a fresh install or after a reboot.
+        PrayerNotificationScheduler.ensureNotificationChannel(applicationContext)
+
         methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, PRAYER_CHANNEL)
@@ -30,11 +34,19 @@ class MainActivity : FlutterActivity() {
                             return@setMethodCallHandler
                         }
 
-                        PrayerNotificationScheduler.schedulePrayerNotifications(
+                        val scheduledCount = PrayerNotificationScheduler.schedulePrayerNotifications(
                             applicationContext,
                             payload,
                         )
-                        result.success(true)
+                        if (scheduledCount > 0) {
+                            result.success(scheduledCount)
+                        } else {
+                            result.error(
+                                "schedule_failed",
+                                "No future prayer notification could be scheduled",
+                                null,
+                            )
+                        }
                     }
 
                     "cancelPrayerNotifications" -> {
@@ -53,17 +65,48 @@ class MainActivity : FlutterActivity() {
                             return@setMethodCallHandler
                         }
 
-                        PrayerNotificationScheduler.scheduleTestPrayerNotification(
+                        val scheduled = PrayerNotificationScheduler.scheduleTestPrayerNotification(
                             applicationContext,
                             payload,
                         )
-                        result.success(true)
+                        if (scheduled) {
+                            result.success(true)
+                        } else {
+                            result.error(
+                                "schedule_failed",
+                                "The test prayer notification could not be scheduled",
+                                null,
+                            )
+                        }
                     }
 
                     "hasExactAlarmPermission" -> {
                         result.success(
                             PrayerNotificationScheduler.hasExactAlarmPermission(applicationContext),
                         )
+                    }
+
+                    "arePrayerNotificationsEnabled" -> {
+                        result.success(
+                            PrayerNotificationScheduler.arePrayerNotificationsEnabled(
+                                applicationContext,
+                            ),
+                        )
+                    }
+
+                    "openPrayerNotificationSettings" -> {
+                        try {
+                            PrayerNotificationScheduler.openPrayerNotificationSettings(
+                                applicationContext,
+                            )
+                            result.success(true)
+                        } catch (exception: Exception) {
+                            result.error(
+                                "settings_unavailable",
+                                "Unable to open prayer notification settings",
+                                exception.message,
+                            )
+                        }
                     }
 
                     "requestExactAlarmPermission" -> {

@@ -18,7 +18,7 @@ class PrayerNotificationScheduler {
   static const String _locationKey = 'prayer_notification_location';
   static const String _legacyLocationKey = 'prayer_location';
   static const String _scheduleKey = 'prayer_notification_schedule';
-  static const int _daysAhead = 60;
+  static const int _daysAhead = 366;
   static const String _testPrayerKey = 'test';
 
   static bool _bootstrapped = false;
@@ -88,7 +88,7 @@ class PrayerNotificationScheduler {
       }
 
       final location = await _resolveLocation(prefs);
-      final schedule = _buildSchedule(location);
+      final schedule = buildSchedule(location);
 
       if (schedule.isEmpty) {
         return const PrayerNotificationActionResult(
@@ -100,16 +100,19 @@ class PrayerNotificationScheduler {
       await _persistLocation(prefs, location);
       await _persistSchedule(prefs, schedule);
 
-      await _channel.invokeMethod(
+      final scheduledCount = await _channel.invokeMethod<int>(
         'schedulePrayerNotifications',
         jsonEncode({'items': schedule.map((entry) => entry.toJson()).toList()}),
       );
+      if (scheduledCount == null || scheduledCount <= 0) {
+        throw StateError('Android did not schedule a prayer notification');
+      }
       await PrayerTimesHomeWidgetSync.refresh();
 
       return PrayerNotificationActionResult(
         success: true,
         message: 'تمت مزامنة إشعارات مواقيت الصلاة',
-        scheduledCount: schedule.length,
+        scheduledCount: scheduledCount,
       );
     } catch (e, stackTrace) {
       log(
@@ -169,6 +172,25 @@ class PrayerNotificationScheduler {
     }
   }
 
+  static Future<bool> arePrayerNotificationsEnabled() async {
+    if (!Platform.isAndroid) return true;
+
+    try {
+      return await _channel.invokeMethod<bool>(
+            'arePrayerNotificationsEnabled',
+          ) ??
+          false;
+    } catch (e) {
+      log('Prayer notification availability check failed: $e');
+      return false;
+    }
+  }
+
+  static Future<void> openPrayerNotificationSettings() async {
+    if (!Platform.isAndroid) return;
+    await _channel.invokeMethod<void>('openPrayerNotificationSettings');
+  }
+
   static Future<PrayerNotificationActionResult> testNotification() async {
     final permissionResult = await _requestPermissions();
     if (!permissionResult.success) {
@@ -219,6 +241,15 @@ class PrayerNotificationScheduler {
         );
       }
 
+      if (!await arePrayerNotificationsEnabled()) {
+        await openPrayerNotificationSettings();
+        return const PrayerNotificationActionResult(
+          success: false,
+          message:
+              'فعّل قناة إشعارات مواقيت الصلاة من إعدادات النظام ثم حاول مجدداً',
+        );
+      }
+
       final exactAlarmGranted = await hasExactAlarmPermission();
       if (!exactAlarmGranted) {
         await requestExactAlarmPermission();
@@ -257,7 +288,10 @@ class PrayerNotificationScheduler {
         if (permission == LocationPermission.always ||
             permission == LocationPermission.whileInUse) {
           final position = await Geolocator.getCurrentPosition(
-            desiredAccuracy: LocationAccuracy.high,
+            locationSettings: const LocationSettings(
+              accuracy: LocationAccuracy.high,
+              timeLimit: Duration(seconds: 15),
+            ),
           );
 
           return PrayerNotificationLocation(
@@ -274,18 +308,20 @@ class PrayerNotificationScheduler {
     return PrayerNotificationLocation.defaultLocation;
   }
 
-  static List<PrayerNotificationScheduleEntry> _buildSchedule(
-    PrayerNotificationLocation location,
-  ) {
+  static List<PrayerNotificationScheduleEntry> buildSchedule(
+    PrayerNotificationLocation location, {
+    DateTime? currentTime,
+    int daysAhead = _daysAhead,
+  }) {
     final coordinates = Coordinates(location.latitude, location.longitude);
     final calculationParameters = CalculationMethod.egyptian.getParameters();
     calculationParameters.madhab = Madhab.shafi;
 
-    final now = DateTime.now();
+    final now = currentTime ?? DateTime.now();
     final startOfToday = DateTime(now.year, now.month, now.day);
     final entries = <PrayerNotificationScheduleEntry>[];
 
-    for (var offset = 0; offset < _daysAhead; offset++) {
+    for (var offset = 0; offset < daysAhead; offset++) {
       final day = startOfToday.add(Duration(days: offset));
       final prayerTimes = PrayerTimes(
         coordinates,

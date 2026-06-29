@@ -11,14 +11,14 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
-import androidx.core.app.NotificationCompat.Action
+import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import android.widget.RemoteViews
 
 data class PrayerNotificationEntry(
     val id: Int,
@@ -33,6 +33,7 @@ object PrayerNotificationScheduler {
     private const val TAG = "PrayerNotification"
     private const val PREFS_NAME = "prayer_notification_scheduler"
     private const val KEY_SCHEDULES = "schedules_json"
+    private const val KEY_ROLLING_SCHEDULER_MIGRATED = "rolling_scheduler_migrated"
     private const val CHANNEL_ID = "prayer_notifications"
     private const val CHANNEL_NAME = "Prayer Time Notifications"
     private const val CHANNEL_DESCRIPTION = "Exact prayer time reminders"
@@ -45,35 +46,55 @@ object PrayerNotificationScheduler {
     private const val ACTION_FIRE = "com.mishkat_almasabih.app.action.PRAYER_NOTIFICATION"
     private const val ACTION_TEST_FIRE = "com.mishkat_almasabih.app.action.PRAYER_NOTIFICATION_TEST"
 
-    fun schedulePrayerNotifications(context: Context, payload: String) {
+    fun schedulePrayerNotifications(context: Context, payload: String): Int {
         val entries = parseEntries(payload)
-        replaceSchedules(context, entries)
+        Log.d(TAG, "schedulePrayerNotifications: parsed ${entries.size} entries")
+        return replaceSchedules(context, entries)
     }
 
     fun restorePrayerNotifications(context: Context) {
         val entries = loadEntries(context)
-        if (entries.isEmpty()) return
+        if (entries.isEmpty()) {
+            Log.d(TAG, "restorePrayerNotifications: no stored entries to restore")
+            return
+        }
 
         val now = System.currentTimeMillis()
         val futureEntries = entries.filter { it.fireAtMillis > now }
+        Log.d(TAG, "restorePrayerNotifications: restoring ${futureEntries.size} of ${entries.size} entries")
         persistEntries(context, futureEntries)
-        futureEntries.forEach { scheduleEntry(context, it) }
+        scheduleNextEntry(context, futureEntries)
     }
 
     fun cancelPrayerNotifications(context: Context) {
         val entries = loadEntries(context)
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val prefs = getPrefs(context)
+        val entriesToCancel =
+            if (prefs.getBoolean(KEY_ROLLING_SCHEDULER_MIGRATED, false)) {
+                listOfNotNull(entries.minByOrNull { it.fireAtMillis })
+            } else {
+                // One-time cleanup for upgrades from versions that scheduled every
+                // stored prayer as a separate system alarm.
+                entries
+            }
 
-        entries.forEach { entry ->
+        entriesToCancel.forEach { entry ->
             alarmManager.cancel(buildPendingIntent(context, entry))
         }
 
+        prefs.edit().putBoolean(KEY_ROLLING_SCHEDULER_MIGRATED, true).apply()
         persistEntries(context, emptyList())
+        Log.d(TAG, "cancelPrayerNotifications: cancelled ${entriesToCancel.size} alarms")
     }
 
-    fun removeFiredPrayerNotification(context: Context, notificationId: Int) {
-        val remaining = loadEntries(context).filterNot { it.id == notificationId }
+    fun onPrayerNotificationFired(context: Context, notificationId: Int) {
+        val now = System.currentTimeMillis()
+        val remaining = loadEntries(context).filter {
+            it.id != notificationId && it.fireAtMillis > now
+        }
         persistEntries(context, remaining)
+        scheduleNextEntry(context, remaining)
     }
 
     fun hasExactAlarmPermission(context: Context): Boolean {
@@ -108,90 +129,181 @@ object PrayerNotificationScheduler {
         }
     }
 
-    fun showPrayerNotification(context: Context, entry: PrayerNotificationEntry) {
+    // Called from MainActivity.configureFlutterEngine so the channel exists
+    // before any alarm fires (even after a fresh install or reboot).
+    fun ensureNotificationChannel(context: Context) {
         createChannel(context)
-
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val prayerLabel = entry.prayerLabel.ifBlank { prayerLabelFromKey(entry.prayerKey) }
-        val reminderTime = formatReminderTime(entry.fireAtMillis)
-        val reminderTitle = "تذكير صلاة $prayerLabel"
-        val reminderBody = "وقت التذكير: $reminderTime"
-        val detailsText = "$reminderBody\n${entry.body}"
-
-        val contentIntent = PendingIntent.getActivity(
-            context,
-            entry.id,
-            Intent(context, MainActivity::class.java).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            },
-            pendingIntentFlags(),
-        )
-
-        val openAction = Action.Builder(
-            0,
-            "فتح التطبيق",
-            contentIntent,
-        ).build()
-
-        val customView = RemoteViews(context.packageName, R.layout.notification_prayer).apply {
-            setTextViewText(R.id.notification_title, reminderTitle)
-            setTextViewText(R.id.notification_time, reminderBody)
-            setTextViewText(R.id.notification_body, entry.body)
-            setImageViewResource(R.id.notification_icon, R.mipmap.launcher_icon)
-        }
-
-        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.mipmap.launcher_icon)
-            .setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            .setCustomContentView(customView)
-            .setCustomBigContentView(customView)
-            .setWhen(entry.fireAtMillis)
-            .setShowWhen(true)
-            .setContentIntent(contentIntent)
-            .addAction(openAction)
-            .setAutoCancel(true)
-            .setCategory(NotificationCompat.CATEGORY_ALARM)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
-            .build()
-
-        notificationManager.notify(entry.id, notification)
     }
 
-    private fun replaceSchedules(context: Context, entries: List<PrayerNotificationEntry>) {
+    fun arePrayerNotificationsEnabled(context: Context): Boolean {
+        if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+            return false
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val channel = notificationManager.getNotificationChannel(CHANNEL_ID)
+            return channel == null || channel.importance != NotificationManager.IMPORTANCE_NONE
+        }
+
+        return true
+    }
+
+    fun openPrayerNotificationSettings(context: Context) {
+        val intent =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                    putExtra(Settings.EXTRA_CHANNEL_ID, CHANNEL_ID)
+                }
+            } else {
+                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = android.net.Uri.parse("package:${context.packageName}")
+                }
+            }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
+
+    fun showPrayerNotification(context: Context, entry: PrayerNotificationEntry) {
+        try {
+            createChannel(context)
+
+            val notificationManager =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            if (!arePrayerNotificationsEnabled(context)) {
+                Log.w(TAG, "showPrayerNotification: notifications disabled by user — skipping ${entry.prayerKey}")
+                return
+            }
+
+            val prayerLabel = entry.prayerLabel.ifBlank { prayerLabelFromKey(entry.prayerKey) }
+            val reminderTime = formatReminderTime(entry.fireAtMillis)
+            val reminderTitle = "تذكير صلاة $prayerLabel"
+            val reminderBody = "وقت التذكير: $reminderTime"
+
+            val contentIntent = PendingIntent.getActivity(
+                context,
+                entry.id,
+                Intent(context, MainActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                },
+                pendingIntentFlags(),
+            )
+
+            val openAction = NotificationCompat.Action.Builder(
+                0,
+                "فتح التطبيق",
+                contentIntent,
+            ).build()
+
+            val customView = RemoteViews(context.packageName, R.layout.notification_prayer).apply {
+                setTextViewText(R.id.notification_title, reminderTitle)
+                setTextViewText(R.id.notification_time, reminderBody)
+                setTextViewText(R.id.notification_body, entry.body)
+                // Use the launcher icon bitmap for the large image inside the custom view;
+                // the small icon (status bar) is handled separately via setSmallIcon below.
+                setImageViewResource(R.id.notification_icon, R.mipmap.launcher_icon)
+            }
+
+            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+                // MUST be a drawable resource, not a mipmap.
+                // Android 8+ ignores color and uses only the alpha channel.
+                .setSmallIcon(R.drawable.ic_notification)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(customView)
+                .setCustomBigContentView(customView)
+                .setContentTitle(reminderTitle)
+                .setContentText(entry.body)
+                .setWhen(entry.fireAtMillis)
+                .setShowWhen(true)
+                .setContentIntent(contentIntent)
+                .addAction(openAction)
+                .setAutoCancel(true)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
+                .build()
+
+            notificationManager.notify(entry.id, notification)
+            Log.d(TAG, "showPrayerNotification: posted notification id=${entry.id} for ${entry.prayerKey} at $reminderTime")
+        } catch (e: Exception) {
+            Log.e(TAG, "showPrayerNotification: failed for prayer=${entry.prayerKey} id=${entry.id}", e)
+        }
+    }
+
+    private fun replaceSchedules(
+        context: Context,
+        entries: List<PrayerNotificationEntry>,
+    ): Int {
         cancelPrayerNotifications(context)
 
         val now = System.currentTimeMillis()
         val futureEntries = entries.filter { it.fireAtMillis > now }
 
         persistEntries(context, futureEntries)
-        futureEntries.forEach { scheduleEntry(context, it) }
+        val scheduled = scheduleNextEntry(context, futureEntries)
+        Log.d(TAG, "replaceSchedules: stored ${futureEntries.size} reminders and scheduled next=$scheduled (${entries.size - futureEntries.size} past entries ignored)")
+        return if (scheduled) futureEntries.size else 0
     }
 
-    private fun scheduleEntry(context: Context, entry: PrayerNotificationEntry) {
-        if (entry.fireAtMillis <= System.currentTimeMillis()) return
+    private fun scheduleNextEntry(
+        context: Context,
+        entries: List<PrayerNotificationEntry> = loadEntries(context),
+    ): Boolean {
+        val now = System.currentTimeMillis()
+        val nextEntry = entries
+            .asSequence()
+            .filter { it.fireAtMillis > now }
+            .minByOrNull { it.fireAtMillis }
+            ?: return false
+
+        return scheduleEntry(context, nextEntry)
+    }
+
+    private fun scheduleEntry(context: Context, entry: PrayerNotificationEntry): Boolean {
+        if (entry.fireAtMillis <= System.currentTimeMillis()) return false
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = buildPendingIntent(context, entry)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-            Log.w(
-                TAG,
-                "Exact alarm permission missing. Scheduling inexact prayer reminder for ${entry.prayerKey}",
-            )
-            alarmManager.setAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                entry.fireAtMillis,
-                pendingIntent,
-            )
-        } else {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                entry.fireAtMillis,
-                pendingIntent,
-            )
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                Log.w(TAG, "scheduleEntry: exact alarm permission not granted — using inexact alarm for ${entry.prayerKey} at ${formatReminderTime(entry.fireAtMillis)}")
+                alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    entry.fireAtMillis,
+                    pendingIntent,
+                )
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    entry.fireAtMillis,
+                    pendingIntent,
+                )
+                Log.d(TAG, "scheduleEntry: exact alarm set for ${entry.prayerKey} at ${formatReminderTime(entry.fireAtMillis)} (id=${entry.id})")
+            }
+            true
+        } catch (e: SecurityException) {
+            // Exact alarm permission was revoked between the canScheduleExactAlarms() check
+            // and setExactAndAllowWhileIdle(). Fall back to inexact.
+            Log.w(TAG, "scheduleEntry: SecurityException — falling back to inexact alarm for ${entry.prayerKey}", e)
+            try {
+                alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    entry.fireAtMillis,
+                    pendingIntent,
+                )
+                true
+            } catch (e2: Exception) {
+                Log.e(TAG, "scheduleEntry: fallback alarm also failed for ${entry.prayerKey}", e2)
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "scheduleEntry: unexpected error for ${entry.prayerKey}", e)
+            false
         }
     }
 
@@ -219,6 +331,11 @@ object PrayerNotificationScheduler {
 
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Only create if not already present — createNotificationChannel is idempotent
+        // but we skip the work entirely to avoid unnecessary object allocation on every alarm.
+        if (notificationManager.getNotificationChannel(CHANNEL_ID) != null) return
+
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_NOTIFICATION)
@@ -235,6 +352,7 @@ object PrayerNotificationScheduler {
         }
 
         notificationManager.createNotificationChannel(channel)
+        Log.d(TAG, "createChannel: notification channel '$CHANNEL_ID' created")
     }
 
     private fun persistEntries(context: Context, entries: List<PrayerNotificationEntry>) {
@@ -274,7 +392,7 @@ object PrayerNotificationScheduler {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Unable to load prayer notification entries", e)
+            Log.e(TAG, "loadEntries: failed to deserialize stored entries", e)
             emptyList()
         }
     }
@@ -299,12 +417,14 @@ object PrayerNotificationScheduler {
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Unable to parse prayer notification payload", e)
+            Log.e(TAG, "parseEntries: failed to parse payload", e)
             emptyList()
         }
     }
 
     private fun getPrefs(context: Context): android.content.SharedPreferences {
+        // Device-protected storage is accessible before the user unlocks the device
+        // after a reboot, which is required for the BootReceiver to restore alarms.
         val storageContext =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 context.createDeviceProtectedStorageContext()
@@ -323,32 +443,54 @@ object PrayerNotificationScheduler {
         }
     }
 
-    fun scheduleTestPrayerNotification(context: Context, payload: String) {
-        val entry = parseEntries(payload).firstOrNull() ?: return
-        scheduleSingleTestNotification(context, entry)
+    fun scheduleTestPrayerNotification(context: Context, payload: String): Boolean {
+        val entry = parseEntries(payload).firstOrNull() ?: return false
+        Log.d(TAG, "scheduleTestPrayerNotification: scheduling test for ${entry.prayerKey} at ${formatReminderTime(entry.fireAtMillis)}")
+        return scheduleSingleTestNotification(context, entry)
     }
 
     private fun scheduleSingleTestNotification(
         context: Context,
         entry: PrayerNotificationEntry,
-    ) {
-        if (entry.fireAtMillis <= System.currentTimeMillis()) return
+    ): Boolean {
+        if (entry.fireAtMillis <= System.currentTimeMillis()) return false
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pendingIntent = buildTestPendingIntent(context, entry)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-            Log.w(TAG, "Exact alarm permission missing. Scheduling inexact test prayer notification")
-            alarmManager.setAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                entry.fireAtMillis,
-                pendingIntent,
-            )
-        } else {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                entry.fireAtMillis,
-                pendingIntent,
-            )
+
+        return try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                Log.w(TAG, "scheduleSingleTestNotification: exact alarm permission not granted — using inexact alarm")
+                alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    entry.fireAtMillis,
+                    pendingIntent,
+                )
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    entry.fireAtMillis,
+                    pendingIntent,
+                )
+                Log.d(TAG, "scheduleSingleTestNotification: exact test alarm set (id=${entry.id})")
+            }
+            true
+        } catch (e: SecurityException) {
+            Log.w(TAG, "scheduleSingleTestNotification: SecurityException — falling back to inexact alarm", e)
+            try {
+                alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    entry.fireAtMillis,
+                    pendingIntent,
+                )
+                true
+            } catch (e2: Exception) {
+                Log.e(TAG, "scheduleSingleTestNotification: fallback alarm also failed", e2)
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "scheduleSingleTestNotification: unexpected error", e)
+            false
         }
     }
 
@@ -386,8 +528,7 @@ object PrayerNotificationScheduler {
     }
 
     private fun formatReminderTime(fireAtMillis: Long): String {
-        val locale = Locale("ar")
-        val formatter = SimpleDateFormat("HH:mm", locale)
+        val formatter = SimpleDateFormat("HH:mm", Locale.forLanguageTag("ar"))
         return formatter.format(Date(fireAtMillis))
     }
 }

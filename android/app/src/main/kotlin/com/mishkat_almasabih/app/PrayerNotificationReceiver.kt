@@ -35,7 +35,7 @@ class PrayerNotificationReceiver : BroadcastReceiver() {
             ),
         )
         if (intent.action != "com.mishkat_almasabih.app.action.PRAYER_NOTIFICATION_TEST") {
-            PrayerNotificationScheduler.removeFiredPrayerNotification(context, notificationId)
+            PrayerNotificationScheduler.onPrayerNotificationFired(context, notificationId)
         }
     }
 }

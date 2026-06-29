@@ -213,8 +213,8 @@ class PrayerTimesWidgetProvider : AppWidgetProvider() {
     ) {
         if (isActive) {
             views.setInt(itemId, "setBackgroundResource", R.drawable.prayer_time_item_active)
-            views.setTextColor(labelId, ContextCompat.getColor(context, R.color.prayer_widget_text_primary))
-            views.setTextColor(timeId, ContextCompat.getColor(context, R.color.prayer_widget_text_primary))
+            views.setTextColor(labelId, ContextCompat.getColor(context, R.color.prayer_widget_accent))
+            views.setTextColor(timeId, ContextCompat.getColor(context, R.color.prayer_widget_accent))
         } else {
             views.setInt(itemId, "setBackgroundResource", R.drawable.prayer_time_item_default)
             views.setTextColor(labelId, ContextCompat.getColor(context, R.color.prayer_widget_text_secondary))
