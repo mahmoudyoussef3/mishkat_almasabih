@@ -11,7 +11,6 @@ class PrayerNotificationSection extends StatelessWidget {
   final bool isBusy;
   final ValueChanged<bool> onChanged;
   final VoidCallback onRefresh;
-  final VoidCallback onTest;
 
   const PrayerNotificationSection({
     super.key,
@@ -19,7 +18,6 @@ class PrayerNotificationSection extends StatelessWidget {
     required this.isBusy,
     required this.onChanged,
     required this.onRefresh,
-    required this.onTest,
   });
 
   @override
@@ -41,8 +39,6 @@ class PrayerNotificationSection extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
             _buildRefreshButton(),
-            SizedBox(height: 10.h),
-            _buildTestButton(),
             SizedBox(height: 8.h),
             Text(
               'يتم استخدام موقعك المحفوظ أو موقع الجهاز الحالي، مع إعادة المزامنة عند فتح التطبيق.',
@@ -96,25 +92,6 @@ class PrayerNotificationSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(16.r),
           ),
           padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTestButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: isBusy ? null : onTest,
-        icon: const Icon(Icons.bug_report_outlined),
-        label: const Text('Test Prayer Notification'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: ColorsManager.primaryPurple,
-          foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.r),
-          ),
         ),
       ),
     );

@@ -19,7 +19,6 @@ class PrayerNotificationScheduler {
   static const String _legacyLocationKey = 'prayer_location';
   static const String _scheduleKey = 'prayer_notification_schedule';
   static const int _daysAhead = 366;
-  static const String _testPrayerKey = 'test';
 
   static bool _bootstrapped = false;
 
@@ -27,13 +26,38 @@ class PrayerNotificationScheduler {
     if (_bootstrapped) return;
     _bootstrapped = true;
 
+    await _autoEnableIfPermissionGranted();
+
     if (!await isEnabled()) return;
     await refreshSchedule();
   }
 
+  /// Activates prayer notifications automatically the first time system
+  /// notification permission is granted (e.g. the OS prompt shown during
+  /// app bootstrap), so the user never has to find and flip a toggle in
+  /// Profile. Never runs again once the user has made an explicit choice
+  /// (via [setEnabled]), and never triggers a Settings redirect itself —
+  /// only the interactive [setEnabled] flow does that.
+  static Future<void> _autoEnableIfPermissionGranted() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(_enabledKey)) return;
+
+    final permissionGranted = await Permission.notification.isGranted;
+    if (!permissionGranted) return;
+
+    await prefs.setBool(_enabledKey, true);
+  }
+
+  /// Whether prayer notifications are both requested by the user *and*
+  /// actually permitted by the OS. Keeping both checks in one place means
+  /// the app never keeps scheduling alarms the user can no longer see, and
+  /// the Profile toggle always reflects the real, current state.
   static Future<bool> isEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_enabledKey) ?? false;
+    final preferenceEnabled = prefs.getBool(_enabledKey) ?? false;
+    if (!preferenceEnabled) return false;
+
+    return Permission.notification.isGranted;
   }
 
   static Future<PrayerNotificationActionResult> setEnabled(
@@ -79,14 +103,14 @@ class PrayerNotificationScheduler {
 
   static Future<PrayerNotificationActionResult> refreshSchedule() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      if (!(prefs.getBool(_enabledKey) ?? false)) {
+      if (!await isEnabled()) {
         return const PrayerNotificationActionResult(
           success: true,
           message: 'إشعارات مواقيت الصلاة غير مفعلة',
         );
       }
 
+      final prefs = await SharedPreferences.getInstance();
       final location = await _resolveLocation(prefs);
       final schedule = buildSchedule(location);
 
@@ -191,43 +215,32 @@ class PrayerNotificationScheduler {
     await _channel.invokeMethod<void>('openPrayerNotificationSettings');
   }
 
-  static Future<PrayerNotificationActionResult> testNotification() async {
-    final permissionResult = await _requestPermissions();
-    if (!permissionResult.success) {
-      return permissionResult;
-    }
+  /// Whether the app is exempt from OEM battery optimization. Aggressive
+  /// battery managers (MIUI, EMUI, ColorOS, One UI "deep sleep", ...) can
+  /// kill the app process and silently drop otherwise-exact alarms even
+  /// when [hasExactAlarmPermission] is true, which is a common cause of
+  /// prayer notifications working one day and silently failing the next.
+  static Future<bool> hasBatteryOptimizationExemption() async {
+    if (!Platform.isAndroid) return true;
 
     try {
-      final fireAt = DateTime.now().add(const Duration(minutes: 1));
-      final entry = PrayerNotificationScheduleEntry(
-        id: DateTime.now().millisecondsSinceEpoch % 2147483647,
-        prayerKey: _testPrayerKey,
-        prayerLabel: 'اختبار',
-        title: 'Test Prayer Notification',
-        body: 'This is a test notification',
-        fireAt: fireAt,
+      final result = await _channel.invokeMethod<bool>(
+        'hasIgnoreBatteryOptimizations',
       );
+      return result ?? false;
+    } catch (e) {
+      log('Battery optimization exemption check failed: $e');
+      return false;
+    }
+  }
 
-      await _channel.invokeMethod(
-        'scheduleTestPrayerNotification',
-        jsonEncode({
-          'items': [entry.toJson()],
-        }),
-      );
+  static Future<void> requestBatteryOptimizationExemption() async {
+    if (!Platform.isAndroid) return;
 
-      return const PrayerNotificationActionResult(
-        success: true,
-        message: 'تم جدولة إشعار اختبار بعد دقيقة',
-      );
-    } catch (e, stackTrace) {
-      log(
-        'Error scheduling test prayer notification: $e',
-        stackTrace: stackTrace,
-      );
-      return const PrayerNotificationActionResult(
-        success: false,
-        message: 'تعذر جدولة إشعار الاختبار',
-      );
+    try {
+      await _channel.invokeMethod<bool>('requestIgnoreBatteryOptimizations');
+    } catch (e) {
+      log('Battery optimization exemption request failed: $e');
     }
   }
 
@@ -253,6 +266,10 @@ class PrayerNotificationScheduler {
       final exactAlarmGranted = await hasExactAlarmPermission();
       if (!exactAlarmGranted) {
         await requestExactAlarmPermission();
+      }
+
+      if (!await hasBatteryOptimizationExemption()) {
+        await requestBatteryOptimizationExemption();
       }
     }
 

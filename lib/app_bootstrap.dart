@@ -35,17 +35,20 @@ Future<void> bootstrapApp() async {
     analytics: analytics,
   );
 
-  await NotificationHelper.init();
-  await LocalNotification.init();
-  await PrayerNotificationScheduler.bootstrap();
-  await PrayerTimesWidgetBackgroundWorker.initialize();
-  await PrayerTimesHomeWidgetSync.refresh();
-  PushNotification.setupOnTapNotification();
-  PushNotification.handleTerminatedNotification();
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
 
+  // Only setup that the very first frame depends on (DI-backed cubits/repos,
+  // local storage, date formatting) runs before runApp(). Everything else —
+  // especially anything that can show a permission dialog or a system
+  // Settings screen (notification/exact-alarm/location prompts) — must never
+  // block the first frame, or the app can get stuck on a black screen until
+  // force-killed. See _initializeBackgroundServices below.
   await setUpGetIt();
   await HiveService.init();
-  await _initializeRamadanRemoteConfig();
   await initializeDateFormatting('ar', null);
 
   WidgetNavigationService.initialize();
@@ -54,14 +57,6 @@ Future<void> bootstrapApp() async {
 
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
-
-  await FirebasePerformance.instance.setPerformanceCollectionEnabled(true);
-
   runApp(
     MishkatAlmasabih(
       analytics: observer,
@@ -69,6 +64,58 @@ Future<void> bootstrapApp() async {
       isFirstTime: isFirstTime,
     ),
   );
+
+  unawaited(_initializeBackgroundServices());
+}
+
+/// Runs everything that is not required to render the first frame. This
+/// includes notification permission prompts, exact-alarm/system-settings
+/// intents, prayer notification scheduling, background workers and remote
+/// config — all of which involve dialogs, native Settings screens, or
+/// network I/O and must not block [runApp].
+///
+/// Each step is isolated: a failure in one (e.g. the widget background
+/// worker) must never prevent unrelated steps — most importantly prayer
+/// notification scheduling — from running.
+Future<void> _initializeBackgroundServices() async {
+  await _runIsolated('NotificationHelper.init', NotificationHelper.init);
+  await _runIsolated('LocalNotification.init', LocalNotification.init);
+  await _runIsolated(
+    'PrayerNotificationScheduler.bootstrap',
+    PrayerNotificationScheduler.bootstrap,
+  );
+  await _runIsolated(
+    'PrayerTimesWidgetBackgroundWorker.initialize',
+    PrayerTimesWidgetBackgroundWorker.initialize,
+  );
+  await _runIsolated(
+    'PrayerTimesHomeWidgetSync.refresh',
+    PrayerTimesHomeWidgetSync.refresh,
+  );
+  await _runIsolated('PushNotification.setupOnTapNotification', () async {
+    PushNotification.setupOnTapNotification();
+  });
+  await _runIsolated(
+    'PushNotification.handleTerminatedNotification',
+    PushNotification.handleTerminatedNotification,
+  );
+  await _runIsolated(
+    'FirebasePerformance.setPerformanceCollectionEnabled',
+    () => FirebasePerformance.instance.setPerformanceCollectionEnabled(true),
+  );
+  await _runIsolated(
+    '_initializeRamadanRemoteConfig',
+    _initializeRamadanRemoteConfig,
+  );
+}
+
+Future<void> _runIsolated(String label, Future<void> Function() step) async {
+  try {
+    await step();
+  } catch (e, stackTrace) {
+    debugPrint('Failed to initialize background service "$label": $e');
+    FirebaseCrashlytics.instance.recordError(e, stackTrace, fatal: false);
+  }
 }
 
 Future<void> _initializeRamadanRemoteConfig() async {

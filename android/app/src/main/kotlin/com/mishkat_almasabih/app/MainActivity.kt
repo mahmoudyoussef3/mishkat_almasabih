@@ -54,32 +54,6 @@ class MainActivity : FlutterActivity() {
                         result.success(true)
                     }
 
-                    "scheduleTestPrayerNotification" -> {
-                        val payload = call.arguments as? String
-                        if (payload.isNullOrBlank()) {
-                            result.error(
-                                "invalid_arguments",
-                                "Missing test prayer notification payload",
-                                null,
-                            )
-                            return@setMethodCallHandler
-                        }
-
-                        val scheduled = PrayerNotificationScheduler.scheduleTestPrayerNotification(
-                            applicationContext,
-                            payload,
-                        )
-                        if (scheduled) {
-                            result.success(true)
-                        } else {
-                            result.error(
-                                "schedule_failed",
-                                "The test prayer notification could not be scheduled",
-                                null,
-                            )
-                        }
-                    }
-
                     "hasExactAlarmPermission" -> {
                         result.success(
                             PrayerNotificationScheduler.hasExactAlarmPermission(applicationContext),
@@ -122,10 +96,26 @@ class MainActivity : FlutterActivity() {
                         }
                     }
 
+                    "hasIgnoreBatteryOptimizations" -> {
+                        result.success(
+                            PrayerNotificationScheduler.isIgnoringBatteryOptimizations(applicationContext),
+                        )
+                    }
+
+                    "requestIgnoreBatteryOptimizations" -> {
+                        if (PrayerNotificationScheduler.isIgnoringBatteryOptimizations(applicationContext)) {
+                            result.success(true)
+                        } else {
+                            result.success(
+                                PrayerNotificationScheduler.requestIgnoreBatteryOptimizations(applicationContext),
+                            )
+                        }
+                    }
+
                     else -> result.notImplemented()
                 }
             }
-        
+
         // Handle the initial intent when app is launched from widget
         handleIntent(intent)
     }

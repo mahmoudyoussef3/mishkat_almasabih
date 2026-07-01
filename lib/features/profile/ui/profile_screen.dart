@@ -123,30 +123,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Future<void> _testPrayerNotification() async {
-    if (_isPrayerNotificationBusy) return;
-
-    setState(() {
-      _isPrayerNotificationBusy = true;
-    });
-
-    final result = await PrayerNotificationScheduler.testNotification();
-
-    if (!mounted) return;
-
-    setState(() {
-      _isPrayerNotificationBusy = false;
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(result.message),
-        backgroundColor:
-            result.success ? ColorsManager.primaryPurple : ColorsManager.error,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -177,7 +153,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     isBusy: _isPrayerNotificationBusy,
                     onChanged: _togglePrayerNotifications,
                     onRefresh: _refreshPrayerNotifications,
-                    onTest: _testPrayerNotification,
                   ),
 
                   if (_token != null) const StatisticsSection(),

@@ -9,6 +9,7 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import android.util.Log
 import android.widget.RemoteViews
@@ -44,7 +45,6 @@ object PrayerNotificationScheduler {
     const val EXTRA_BODY = "extra_body"
     const val EXTRA_FIRE_AT_MILLIS = "extra_fire_at_millis"
     private const val ACTION_FIRE = "com.mishkat_almasabih.app.action.PRAYER_NOTIFICATION"
-    private const val ACTION_TEST_FIRE = "com.mishkat_almasabih.app.action.PRAYER_NOTIFICATION_TEST"
 
     fun schedulePrayerNotifications(context: Context, payload: String): Int {
         val entries = parseEntries(payload)
@@ -443,77 +443,26 @@ object PrayerNotificationScheduler {
         }
     }
 
-    fun scheduleTestPrayerNotification(context: Context, payload: String): Boolean {
-        val entry = parseEntries(payload).firstOrNull() ?: return false
-        Log.d(TAG, "scheduleTestPrayerNotification: scheduling test for ${entry.prayerKey} at ${formatReminderTime(entry.fireAtMillis)}")
-        return scheduleSingleTestNotification(context, entry)
+    // OEM battery optimizers (MIUI, EMUI, ColorOS, One UI "deep sleep", etc.) can kill the
+    // app process and silently drop otherwise-exact alarms even when canScheduleExactAlarms()
+    // is true. Requesting this exemption meaningfully reduces missed/delayed prayer alarms.
+    fun isIgnoringBatteryOptimizations(context: Context): Boolean {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isIgnoringBatteryOptimizations(context.packageName)
     }
 
-    private fun scheduleSingleTestNotification(
-        context: Context,
-        entry: PrayerNotificationEntry,
-    ): Boolean {
-        if (entry.fireAtMillis <= System.currentTimeMillis()) return false
-
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pendingIntent = buildTestPendingIntent(context, entry)
-
+    fun requestIgnoreBatteryOptimizations(context: Context): Boolean {
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-                Log.w(TAG, "scheduleSingleTestNotification: exact alarm permission not granted — using inexact alarm")
-                alarmManager.setAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    entry.fireAtMillis,
-                    pendingIntent,
-                )
-            } else {
-                alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    entry.fireAtMillis,
-                    pendingIntent,
-                )
-                Log.d(TAG, "scheduleSingleTestNotification: exact test alarm set (id=${entry.id})")
+            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                data = android.net.Uri.parse("package:${context.packageName}")
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
+            context.startActivity(intent)
             true
-        } catch (e: SecurityException) {
-            Log.w(TAG, "scheduleSingleTestNotification: SecurityException — falling back to inexact alarm", e)
-            try {
-                alarmManager.setAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    entry.fireAtMillis,
-                    pendingIntent,
-                )
-                true
-            } catch (e2: Exception) {
-                Log.e(TAG, "scheduleSingleTestNotification: fallback alarm also failed", e2)
-                false
-            }
         } catch (e: Exception) {
-            Log.e(TAG, "scheduleSingleTestNotification: unexpected error", e)
+            Log.e(TAG, "Unable to request battery optimization exemption", e)
             false
         }
-    }
-
-    private fun buildTestPendingIntent(
-        context: Context,
-        entry: PrayerNotificationEntry,
-    ): PendingIntent {
-        val intent = Intent(context, PrayerNotificationReceiver::class.java).apply {
-            action = ACTION_TEST_FIRE
-            putExtra(EXTRA_NOTIFICATION_ID, entry.id)
-            putExtra(EXTRA_PRAYER_KEY, entry.prayerKey)
-            putExtra(EXTRA_PRAYER_LABEL, entry.prayerLabel)
-            putExtra(EXTRA_TITLE, entry.title)
-            putExtra(EXTRA_BODY, entry.body)
-            putExtra(EXTRA_FIRE_AT_MILLIS, entry.fireAtMillis)
-        }
-
-        return PendingIntent.getBroadcast(
-            context,
-            entry.id,
-            intent,
-            pendingIntentFlags(),
-        )
     }
 
     private fun prayerLabelFromKey(prayerKey: String): String {

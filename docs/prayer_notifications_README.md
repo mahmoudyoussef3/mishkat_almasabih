@@ -27,7 +27,7 @@ Why Android native scheduling is used:
 End-to-end flow in this project:
 
 ```txt
-Profile UI (toggle/refresh/test)
+Profile UI (toggle/refresh)
     -> PrayerNotificationScheduler (Dart)
     -> MethodChannel: com.mishkat_almasabih.app/prayer_notifications
     -> MainActivity.kt method handler
@@ -60,25 +60,39 @@ Responsibility:
 
 Important methods:
 - `bootstrap()`:
-  - called at app startup
-  - if feature is enabled, calls `refreshSchedule()`
+  - called at app startup (from a fire-and-forget background init task, after the
+    first frame has rendered — see `lib/app_bootstrap.dart` notes below)
+  - the first time notification permission is granted and the user has never made
+    an explicit enable/disable choice, auto-enables the feature
+    (`_autoEnableIfPermissionGranted()`) so no manual toggle is required
+  - if the feature ends up enabled, calls `refreshSchedule()`
+- `isEnabled()`:
+  - true only when the user preference is on AND the OS notification permission
+    is currently granted, so the Profile toggle always reflects reality and the
+    app never keeps arming alarms the user can no longer see
 - `setEnabled(bool enabled, {bool refresh = true})`:
   - toggles feature on/off
-  - when enabling, checks permissions and schedules alarms
+  - when enabling, checks permissions (notification, exact alarm, and battery
+    optimization exemption) and schedules alarms
   - when disabling, cancels all alarms
 - `refreshSchedule()`:
   - resolves location
   - builds rolling schedule for `_daysAhead = 60`
   - persists schedule metadata in SharedPreferences
   - calls native method `schedulePrayerNotifications`
+  - also invoked every 6 hours by a periodic `Workmanager` task
+    (`PrayerTimesWidgetBackgroundWorker`) as a safety net: if the native
+    rolling-alarm chain is ever broken (killed receiver, OEM battery
+    restrictions, a missed exact alarm), this bounds how long notifications
+    can stay silently broken
 - `cancelAll()`:
   - calls native method `cancelPrayerNotifications`
-- `testNotification()`:
-  - schedules one test alarm at `DateTime.now().add(Duration(minutes: 1))`
-  - title: `Test Prayer Notification`
-  - body: `This is a test notification`
 - `hasExactAlarmPermission()` and `requestExactAlarmPermission()`:
   - communicate with Android to check/request exact alarm capability
+- `hasBatteryOptimizationExemption()` and `requestBatteryOptimizationExemption()`:
+  - communicate with Android to check/request exemption from OEM battery
+    optimization (MIUI, EMUI, ColorOS, One UI "deep sleep", ...), which can kill
+    the app process and silently drop otherwise-exact alarms
 
 Supporting models in same file:
 - `PrayerNotificationActionResult`
@@ -112,7 +126,6 @@ Responsibility:
 Feature triggers:
 - `_togglePrayerNotifications(bool enabled)` -> `PrayerNotificationScheduler.setEnabled(...)`
 - `_refreshPrayerNotifications()` -> `PrayerNotificationScheduler.refreshSchedule()`
-- `_testPrayerNotification()` -> `PrayerNotificationScheduler.testNotification()`
 
 Also loads persisted UI state:
 - `_loadPrayerNotificationState()` reads `PrayerNotificationScheduler.isEnabled()`
@@ -125,9 +138,10 @@ Responsibility:
 - prayer notifications controls UI
 
 UI controls:
-- switch for enable/disable
+- switch for enable/disable (reflects `PrayerNotificationScheduler.isEnabled()`,
+  which is auto-activated once notification permission is granted — no manual
+  toggle is required for the feature to start working)
 - refresh button (`onRefresh`)
-- test button (`onTest`) with text `Test Prayer Notification`
 
 ---
 
@@ -183,13 +197,20 @@ Dart -> Kotlin methods currently implemented:
 - expected result:
   - returns true if already granted, false after opening settings when not granted
 
-5. `scheduleTestPrayerNotification`
-- Dart payload:
-  - same `items` JSON format but one test item
+5. `hasIgnoreBatteryOptimizations`
+- Dart payload: none
 - Kotlin receiver:
-  - `PrayerNotificationScheduler.scheduleTestPrayerNotification(...)`
+  - `PrayerNotificationScheduler.isIgnoringBatteryOptimizations(...)`
 - expected result:
-  - schedules one exact test alarm in 1 minute
+  - returns boolean
+
+6. `requestIgnoreBatteryOptimizations`
+- Dart payload: none
+- Kotlin receiver:
+  - `PrayerNotificationScheduler.requestIgnoreBatteryOptimizations(...)` opens
+    `Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`
+- expected result:
+  - returns true if already exempt, false after opening settings when not exempt
 
 Note about requested names in original prompt:
 - there is no separate Dart method named `requestPermissions` exposed on channel
@@ -210,9 +231,10 @@ Responsibility:
 Receives:
 - `schedulePrayerNotifications`
 - `cancelPrayerNotifications`
-- `scheduleTestPrayerNotification`
 - `hasExactAlarmPermission`
 - `requestExactAlarmPermission`
+- `hasIgnoreBatteryOptimizations`
+- `requestIgnoreBatteryOptimizations`
 
 Also handles existing widget/deep-link navigation methods on another channel (`com.mishkat_almasabih.app/widget`).
 
@@ -262,7 +284,7 @@ Responsibility:
 - receives scheduled alarm broadcasts
 - reads extras (id, prayerKey, title, body)
 - calls `PrayerNotificationScheduler.showPrayerNotification(...)`
-- removes fired entries from persisted schedule for non-test alarms
+- removes the fired entry from the persisted schedule and re-arms the next one
 
 Tap behavior:
 - notification pending intent opens `MainActivity`
@@ -357,8 +379,7 @@ Reschedule strategy:
 - refresh calls replace old schedule with new computed schedule
 
 RequestCode generation:
-- real prayer alarms: deterministic by date + prayer index in Dart (`YYYYMMDD * 10 + prayerIndex`)
-- test alarm: timestamp-derived positive int
+- deterministic by date + prayer index in Dart (`YYYYMMDD * 10 + prayerIndex`)
 - Android uses `entry.id` as PendingIntent requestCode
 
 Timezone handling:
@@ -386,30 +407,18 @@ How loaded and rescheduled:
 
 ## 10. Testing
 
-### A) Test notification (manual quick test)
+### A) Real prayer schedule test
 
 Steps:
-1. Open profile screen
-2. Go to prayer notifications section
-3. Tap `Test Prayer Notification`
-
-Expected:
-- if permissions missing, prompts/settings flow appears
-- one test notification is scheduled after 1 minute
-- notification appears
-- tapping it opens app (`MainActivity`)
-
-### B) Real prayer schedule test
-
-Steps:
-1. Enable prayer notifications using switch
+1. Enable prayer notifications using switch (or grant notification permission on
+   first launch, which auto-enables the feature)
 2. tap refresh (`مزامنة الإشعارات الآن`)
 3. wait for next prayer time
 
 Expected:
 - notification appears at exact prayer time
 
-### C) Reboot test
+### B) Reboot test
 
 Steps:
 1. ensure feature enabled and schedule exists
@@ -419,7 +428,7 @@ Steps:
 Expected:
 - alarms restored and notification still appears
 
-### D) Permission denied test
+### C) Permission denied test
 
 POST_NOTIFICATIONS denied:
 - enabling returns error message; schedule not activated
@@ -427,7 +436,7 @@ POST_NOTIFICATIONS denied:
 Exact alarm denied:
 - settings screen opened; if still denied, exact scheduling is not performed
 
-### E) Timezone/time change test
+### D) Timezone/time change test
 
 Steps:
 1. change device timezone/time
@@ -473,16 +482,24 @@ Files:
 - `android/app/src/main/kotlin/com/mishkat_almasabih/app/PrayerNotificationBootReceiver.kt`
 - `android/app/src/main/AndroidManifest.xml`
 
-### Issue: test button does nothing
+### Issue: notifications work for a while then silently stop
+
+This is usually the native rolling-alarm chain breaking (only the *next* prayer
+alarm is ever armed; each fire re-arms the following one) — a killed receiver,
+OEM battery restrictions, or a missed exact alarm stops the whole chain.
 
 Check:
-- profile section wired (`onTest`)
-- channel method `scheduleTestPrayerNotification` exists in MainActivity
+- battery optimization exemption granted (`hasIgnoreBatteryOptimizations`) —
+  MIUI/EMUI/ColorOS/One UI "deep sleep" style battery managers are the most
+  common real-world cause
+- the periodic `Workmanager` safety net (`prayer_notifications_resync`, every
+  6h) is registered and firing — it calls `refreshSchedule()` to re-arm the
+  chain if it was ever broken
 
 Files:
-- `lib/features/profile/ui/widgets/prayer_notification_section.dart`
-- `lib/features/profile/ui/profile_screen.dart`
-- `android/app/src/main/kotlin/com/mishkat_almasabih/app/MainActivity.kt`
+- `lib/core/services/prayer_times_widget_background_worker.dart`
+- `lib/core/notification/prayer_time_notification_scheduler.dart`
+- `android/app/src/main/kotlin/com/mishkat_almasabih/app/PrayerNotificationScheduler.kt`
 
 ---
 
