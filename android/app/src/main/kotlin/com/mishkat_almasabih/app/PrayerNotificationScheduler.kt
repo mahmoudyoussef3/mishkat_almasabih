@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.RingtoneManager
 import android.os.Build
@@ -38,6 +39,8 @@ object PrayerNotificationScheduler {
     private const val CHANNEL_ID = "prayer_notifications"
     private const val CHANNEL_NAME = "Prayer Time Notifications"
     private const val CHANNEL_DESCRIPTION = "Exact prayer time reminders"
+    // Brand purple used to tint the notification's small icon and app name.
+    private val BRAND_ACCENT_COLOR = Color.parseColor("#7440E9")
     const val EXTRA_NOTIFICATION_ID = "extra_notification_id"
     const val EXTRA_PRAYER_KEY = "extra_prayer_key"
     const val EXTRA_PRAYER_LABEL = "extra_prayer_label"
@@ -180,8 +183,11 @@ object PrayerNotificationScheduler {
 
             val prayerLabel = entry.prayerLabel.ifBlank { prayerLabelFromKey(entry.prayerKey) }
             val reminderTime = formatReminderTime(entry.fireAtMillis)
-            val reminderTitle = "تذكير صلاة $prayerLabel"
-            val reminderBody = "وقت التذكير: $reminderTime"
+            val reminderTitle = "صلاة $prayerLabel"
+            val reminderSubtitle = "حان الآن موعد الأذان"
+            // Fallback text used by the collapsed/system rendering and for
+            // accessibility services when the custom view can't be shown.
+            val reminderContentText = "حان الآن موعد صلاة $prayerLabel — $reminderTime"
 
             val contentIntent = PendingIntent.getActivity(
                 context,
@@ -200,22 +206,22 @@ object PrayerNotificationScheduler {
 
             val customView = RemoteViews(context.packageName, R.layout.notification_prayer).apply {
                 setTextViewText(R.id.notification_title, reminderTitle)
-                setTextViewText(R.id.notification_time, reminderBody)
-                setTextViewText(R.id.notification_body, entry.body)
-                // Use the launcher icon bitmap for the large image inside the custom view;
-                // the small icon (status bar) is handled separately via setSmallIcon below.
-                setImageViewResource(R.id.notification_icon, R.mipmap.launcher_icon)
+                setTextViewText(R.id.notification_subtitle, reminderSubtitle)
+                setTextViewText(R.id.notification_time, reminderTime)
             }
 
             val notification = NotificationCompat.Builder(context, CHANNEL_ID)
                 // MUST be a drawable resource, not a mipmap.
                 // Android 8+ ignores color and uses only the alpha channel.
                 .setSmallIcon(R.drawable.ic_notification)
+                // Tints the small icon and app name in the decorated header to
+                // match the brand purple used by the custom card below.
+                .setColor(BRAND_ACCENT_COLOR)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                 .setCustomContentView(customView)
                 .setCustomBigContentView(customView)
                 .setContentTitle(reminderTitle)
-                .setContentText(entry.body)
+                .setContentText(reminderContentText)
                 .setWhen(entry.fireAtMillis)
                 .setShowWhen(true)
                 .setContentIntent(contentIntent)
