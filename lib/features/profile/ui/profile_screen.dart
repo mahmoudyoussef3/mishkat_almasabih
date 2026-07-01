@@ -25,6 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? _token;
   bool _prayerNotificationsEnabled = false;
   bool _isPrayerNotificationBusy = false;
+  bool _batteryOptimizationIgnored = true;
 
   @override
   void initState() {
@@ -39,12 +40,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadPrayerNotificationState() async {
-    final enabled = await PrayerNotificationScheduler.isEnabled();
+    final results = await Future.wait([
+      PrayerNotificationScheduler.isEnabled(),
+      PrayerNotificationScheduler.hasBatteryOptimizationExemption(),
+    ]);
     if (!mounted) return;
 
     setState(() {
-      _prayerNotificationsEnabled = enabled;
+      _prayerNotificationsEnabled = results[0];
+      _batteryOptimizationIgnored = results[1];
     });
+  }
+
+  Future<void> _improvePrayerNotificationReliability() async {
+    await PrayerNotificationScheduler.openBatteryOptimizationSettings();
+    // The user returns from the system settings screen; re-read the state so
+    // the reliability tile hides once the app has been exempted.
+    await _loadPrayerNotificationState();
   }
 
   Future<void> _checkToken() async {
@@ -151,8 +163,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   PrayerNotificationSection(
                     enabled: _prayerNotificationsEnabled,
                     isBusy: _isPrayerNotificationBusy,
+                    showBatteryReliabilityAction:
+                        _prayerNotificationsEnabled &&
+                        !_batteryOptimizationIgnored,
                     onChanged: _togglePrayerNotifications,
                     onRefresh: _refreshPrayerNotifications,
+                    onImproveReliability:
+                        _improvePrayerNotificationReliability,
                   ),
 
                   if (_token != null) const StatisticsSection(),

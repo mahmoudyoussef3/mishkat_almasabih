@@ -9,15 +9,23 @@ import 'notification_toggle_card.dart';
 class PrayerNotificationSection extends StatelessWidget {
   final bool enabled;
   final bool isBusy;
+
+  /// Whether the optional battery-reliability tile should be shown: true only
+  /// when notifications are on and the app is not yet exempt from battery
+  /// optimization. When false, the tile is hidden entirely.
+  final bool showBatteryReliabilityAction;
   final ValueChanged<bool> onChanged;
   final VoidCallback onRefresh;
+  final VoidCallback onImproveReliability;
 
   const PrayerNotificationSection({
     super.key,
     required this.enabled,
     required this.isBusy,
+    required this.showBatteryReliabilityAction,
     required this.onChanged,
     required this.onRefresh,
+    required this.onImproveReliability,
   });
 
   @override
@@ -39,6 +47,10 @@ class PrayerNotificationSection extends StatelessWidget {
             ),
             SizedBox(height: 10.h),
             _buildRefreshButton(),
+            if (showBatteryReliabilityAction) ...[
+              SizedBox(height: 10.h),
+              _buildBatteryReliabilityCard(),
+            ],
             SizedBox(height: 8.h),
             Text(
               'يتم استخدام موقعك المحفوظ أو موقع الجهاز الحالي، مع إعادة المزامنة عند فتح التطبيق.',
@@ -46,6 +58,58 @@ class PrayerNotificationSection extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBatteryReliabilityCard() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: ColorsManager.primaryGold.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: ColorsManager.primaryGold.withOpacity(0.35),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                FontAwesomeIcons.batteryHalf,
+                size: 18.sp,
+                color: ColorsManager.primaryGold,
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Text(
+                  'لضمان وصول التنبيهات في وقتها بدقة، استثنِ التطبيق من تحسين البطارية على جهازك.',
+                  style: ProfileTextStyles.notificationCardSubtitle,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10.h),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton.icon(
+              onPressed: isBusy ? null : onImproveReliability,
+              icon: Icon(Icons.tune, size: 18.sp),
+              label: const Text('تحسين موثوقية التنبيهات'),
+              style: TextButton.styleFrom(
+                foregroundColor: ColorsManager.primaryPurple,
+                padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 12.w),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

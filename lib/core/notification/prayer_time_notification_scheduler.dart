@@ -228,13 +228,18 @@ class PrayerNotificationScheduler {
     }
   }
 
-  static Future<void> requestBatteryOptimizationExemption() async {
+  /// Opens the system battery-optimization settings so the user can exempt the
+  /// app themselves. This is an explicit, user-initiated action (surfaced as an
+  /// optional button in Profile) — it is intentionally never triggered
+  /// automatically, and it opens the standard settings list rather than the
+  /// restricted "allow" dialog, so no Play-restricted permission is needed.
+  static Future<void> openBatteryOptimizationSettings() async {
     if (!Platform.isAndroid) return;
 
     try {
-      await _channel.invokeMethod<bool>('requestIgnoreBatteryOptimizations');
+      await _channel.invokeMethod<bool>('openBatteryOptimizationSettings');
     } catch (e) {
-      log('Battery optimization exemption request failed: $e');
+      log('Opening battery optimization settings failed: $e');
     }
   }
 
@@ -257,13 +262,14 @@ class PrayerNotificationScheduler {
         );
       }
 
+      // Exact-alarm capability is part of the core feature, so we still request
+      // it here. Battery-optimization exemption is NOT requested automatically —
+      // it is offered as an optional reliability button in Profile so the app
+      // never shows an unexpected system dialog and avoids the Play-restricted
+      // REQUEST_IGNORE_BATTERY_OPTIMIZATIONS permission.
       final exactAlarmGranted = await hasExactAlarmPermission();
       if (!exactAlarmGranted) {
         await requestExactAlarmPermission();
-      }
-
-      if (!await hasBatteryOptimizationExemption()) {
-        await requestBatteryOptimizationExemption();
       }
     }
 

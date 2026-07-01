@@ -451,24 +451,40 @@ object PrayerNotificationScheduler {
 
     // OEM battery optimizers (MIUI, EMUI, ColorOS, One UI "deep sleep", etc.) can kill the
     // app process and silently drop otherwise-exact alarms even when canScheduleExactAlarms()
-    // is true. Requesting this exemption meaningfully reduces missed/delayed prayer alarms.
+    // is true. Exempting the app from battery optimization meaningfully reduces missed/delayed
+    // prayer alarms. Reading the current state only needs PowerManager — no special permission.
     fun isIgnoringBatteryOptimizations(context: Context): Boolean {
         val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         return powerManager.isIgnoringBatteryOptimizations(context.packageName)
     }
 
-    fun requestIgnoreBatteryOptimizations(context: Context): Boolean {
-        return try {
-            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+    // Opens the standard, per-app battery-optimization settings list and lets the user
+    // exempt the app themselves. We deliberately avoid the direct
+    // ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS dialog because it needs the restricted
+    // REQUEST_IGNORE_BATTERY_OPTIMIZATIONS permission, which Google Play policy limits and
+    // which can get the listing rejected. This action requires no special permission.
+    fun openBatteryOptimizationSettings(context: Context): Boolean {
+        val intents = listOf(
+            Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS),
+            // Fallback: the app's own details page, from which users can reach
+            // "Battery" on devices that don't expose the list activity.
+            Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
                 data = android.net.Uri.parse("package:${context.packageName}")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            },
+        )
+
+        for (intent in intents) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            try {
+                context.startActivity(intent)
+                return true
+            } catch (e: Exception) {
+                Log.w(TAG, "Battery optimization settings intent failed, trying fallback", e)
             }
-            context.startActivity(intent)
-            true
-        } catch (e: Exception) {
-            Log.e(TAG, "Unable to request battery optimization exemption", e)
-            false
         }
+
+        Log.e(TAG, "Unable to open any battery optimization settings screen")
+        return false
     }
 
     private fun prayerLabelFromKey(prayerKey: String): String {

@@ -90,10 +90,15 @@ Important methods:
   - calls native method `cancelPrayerNotifications`
 - `hasExactAlarmPermission()` and `requestExactAlarmPermission()`:
   - communicate with Android to check/request exact alarm capability
-- `hasBatteryOptimizationExemption()` and `requestBatteryOptimizationExemption()`:
-  - communicate with Android to check/request exemption from OEM battery
-    optimization (MIUI, EMUI, ColorOS, One UI "deep sleep", ...), which can kill
-    the app process and silently drop otherwise-exact alarms
+- `hasBatteryOptimizationExemption()` and `openBatteryOptimizationSettings()`:
+  - check whether the app is exempt from OEM battery optimization (MIUI, EMUI,
+    ColorOS, One UI "deep sleep", ...), which can kill the app process and
+    silently drop otherwise-exact alarms
+  - `openBatteryOptimizationSettings()` is user-initiated only (an optional
+    "تحسين موثوقية التنبيهات" button in Profile) and opens the standard battery
+    settings list. It deliberately avoids the direct "allow" dialog so the app
+    does not need the Play-restricted `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`
+    permission
 
 Supporting models in same file:
 - `PrayerNotificationActionResult`
@@ -205,13 +210,17 @@ Dart -> Kotlin methods currently implemented:
 - expected result:
   - returns boolean
 
-6. `requestIgnoreBatteryOptimizations`
+6. `openBatteryOptimizationSettings`
 - Dart payload: none
 - Kotlin receiver:
-  - `PrayerNotificationScheduler.requestIgnoreBatteryOptimizations(...)` opens
-    `Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`
+  - `PrayerNotificationScheduler.openBatteryOptimizationSettings(...)` opens
+    `Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS` (the standard list),
+    falling back to the app details page. It does NOT use the restricted
+    `ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` dialog, so no
+    `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` permission is declared
 - expected result:
-  - returns true if already exempt, false after opening settings when not exempt
+  - returns true if already exempt, otherwise opens settings and returns whether
+    a settings screen could be launched
 
 Note about requested names in original prompt:
 - there is no separate Dart method named `requestPermissions` exposed on channel
@@ -235,7 +244,7 @@ Receives:
 - `hasExactAlarmPermission`
 - `requestExactAlarmPermission`
 - `hasIgnoreBatteryOptimizations`
-- `requestIgnoreBatteryOptimizations`
+- `openBatteryOptimizationSettings`
 
 Also handles existing widget/deep-link navigation methods on another channel (`com.mishkat_almasabih.app/widget`).
 

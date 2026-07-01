@@ -102,12 +102,12 @@ class MainActivity : FlutterActivity() {
                         )
                     }
 
-                    "requestIgnoreBatteryOptimizations" -> {
+                    "openBatteryOptimizationSettings" -> {
                         if (PrayerNotificationScheduler.isIgnoringBatteryOptimizations(applicationContext)) {
                             result.success(true)
                         } else {
                             result.success(
-                                PrayerNotificationScheduler.requestIgnoreBatteryOptimizations(applicationContext),
+                                PrayerNotificationScheduler.openBatteryOptimizationSettings(applicationContext),
                             )
                         }
                     }
