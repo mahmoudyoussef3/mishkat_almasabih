@@ -35,34 +35,32 @@ void main() {
   });
 
   group('PrayerNotificationScheduler.isEnabled', () {
-    test('is false when the user preference was never enabled', () async {
+    test(
+      'is true by default (no toggle) once OS permission is granted',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        _mockNotificationPermission(true);
+
+        expect(await PrayerNotificationScheduler.isEnabled(), isTrue);
+      },
+    );
+
+    test('is false when the OS notification permission is not granted', () async {
       SharedPreferences.setMockInitialValues({});
-      _mockNotificationPermission(true);
+      _mockNotificationPermission(false);
 
       expect(await PrayerNotificationScheduler.isEnabled(), isFalse);
     });
 
     test(
-      'is false when enabled by preference but OS permission is revoked',
+      'is false when the user explicitly disabled it, even with permission',
       () async {
         SharedPreferences.setMockInitialValues({
-          'prayer_notifications_enabled': true,
-        });
-        _mockNotificationPermission(false);
-
-        expect(await PrayerNotificationScheduler.isEnabled(), isFalse);
-      },
-    );
-
-    test(
-      'is true only when both the preference and OS permission are granted',
-      () async {
-        SharedPreferences.setMockInitialValues({
-          'prayer_notifications_enabled': true,
+          'prayer_notifications_user_disabled': true,
         });
         _mockNotificationPermission(true);
 
-        expect(await PrayerNotificationScheduler.isEnabled(), isTrue);
+        expect(await PrayerNotificationScheduler.isEnabled(), isFalse);
       },
     );
   });

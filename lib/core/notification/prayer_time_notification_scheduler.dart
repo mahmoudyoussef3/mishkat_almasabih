@@ -14,7 +14,11 @@ class PrayerNotificationScheduler {
     'com.mishkat_almasabih.app/prayer_notifications',
   );
 
-  static const String _enabledKey = 'prayer_notifications_enabled';
+  // Source of truth is "did the user explicitly turn the feature OFF?", not
+  // "did the user turn it ON". This makes prayer notifications active by
+  // default for anyone who has granted OS notification permission — no manual
+  // toggle is ever required — while still honoring an explicit opt-out.
+  static const String _userDisabledKey = 'prayer_notifications_user_disabled';
   static const String _locationKey = 'prayer_notification_location';
   static const String _legacyLocationKey = 'prayer_location';
   static const String _scheduleKey = 'prayer_notification_schedule';
@@ -26,36 +30,24 @@ class PrayerNotificationScheduler {
     if (_bootstrapped) return;
     _bootstrapped = true;
 
-    await _autoEnableIfPermissionGranted();
-
+    // No auto-enable step and no permission prompt here: bootstrap runs in the
+    // background after the first frame, so it must never show a dialog. If the
+    // OS already granted notification permission and the user hasn't opted out,
+    // [isEnabled] is already true and we schedule automatically.
     if (!await isEnabled()) return;
     await refreshSchedule();
   }
 
-  /// Activates prayer notifications automatically the first time system
-  /// notification permission is granted (e.g. the OS prompt shown during
-  /// app bootstrap), so the user never has to find and flip a toggle in
-  /// Profile. Never runs again once the user has made an explicit choice
-  /// (via [setEnabled]), and never triggers a Settings redirect itself —
-  /// only the interactive [setEnabled] flow does that.
-  static Future<void> _autoEnableIfPermissionGranted() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.containsKey(_enabledKey)) return;
-
-    final permissionGranted = await Permission.notification.isGranted;
-    if (!permissionGranted) return;
-
-    await prefs.setBool(_enabledKey, true);
-  }
-
-  /// Whether prayer notifications are both requested by the user *and*
-  /// actually permitted by the OS. Keeping both checks in one place means
-  /// the app never keeps scheduling alarms the user can no longer see, and
-  /// the Profile toggle always reflects the real, current state.
+  /// Whether prayer notifications should be active right now: the OS has
+  /// granted notification permission AND the user has not explicitly turned
+  /// the feature off. Keeping the check in one place means scheduling starts
+  /// automatically once permission exists, the app never keeps arming alarms
+  /// the user can no longer see, and the Profile toggle always reflects the
+  /// real, current state.
   static Future<bool> isEnabled() async {
     final prefs = await SharedPreferences.getInstance();
-    final preferenceEnabled = prefs.getBool(_enabledKey) ?? false;
-    if (!preferenceEnabled) return false;
+    final userDisabled = prefs.getBool(_userDisabledKey) ?? false;
+    if (userDisabled) return false;
 
     return Permission.notification.isGranted;
   }
@@ -68,7 +60,7 @@ class PrayerNotificationScheduler {
 
     if (!enabled) {
       await cancelAll();
-      await prefs.setBool(_enabledKey, false);
+      await prefs.setBool(_userDisabledKey, true);
       return const PrayerNotificationActionResult(
         success: true,
         message: 'تم إيقاف إشعارات مواقيت الصلاة',
@@ -80,7 +72,7 @@ class PrayerNotificationScheduler {
       return permissionResult;
     }
 
-    await prefs.setBool(_enabledKey, true);
+    await prefs.setBool(_userDisabledKey, false);
 
     if (!refresh) {
       return const PrayerNotificationActionResult(
@@ -89,9 +81,11 @@ class PrayerNotificationScheduler {
       );
     }
 
+    // A transient refresh failure must not silently re-disable the feature:
+    // the user opted in, so leave it enabled and let the periodic safety-net
+    // resync retry rather than forcing the user to toggle again.
     final refreshResult = await refreshSchedule();
     if (!refreshResult.success) {
-      await prefs.setBool(_enabledKey, false);
       return refreshResult;
     }
 

@@ -62,14 +62,15 @@ Important methods:
 - `bootstrap()`:
   - called at app startup (from a fire-and-forget background init task, after the
     first frame has rendered — see `lib/app_bootstrap.dart` notes below)
-  - the first time notification permission is granted and the user has never made
-    an explicit enable/disable choice, auto-enables the feature
-    (`_autoEnableIfPermissionGranted()`) so no manual toggle is required
-  - if the feature ends up enabled, calls `refreshSchedule()`
+  - never prompts and never shows a Settings screen (it runs in the background)
+  - if `isEnabled()` is already true, calls `refreshSchedule()` — so scheduling
+    starts automatically with no user action required
 - `isEnabled()`:
-  - true only when the user preference is on AND the OS notification permission
-    is currently granted, so the Profile toggle always reflects reality and the
-    app never keeps arming alarms the user can no longer see
+  - true whenever the OS notification permission is granted AND the user has not
+    explicitly turned the feature off (`prayer_notifications_user_disabled`).
+    The feature is therefore ON by default for anyone who granted notification
+    permission — no manual toggle is required — while still honoring an explicit
+    opt-out, and the Profile toggle always reflects this real state
 - `setEnabled(bool enabled, {bool refresh = true})`:
   - toggles feature on/off
   - when enabling, checks permissions (notification, exact alarm, and battery
