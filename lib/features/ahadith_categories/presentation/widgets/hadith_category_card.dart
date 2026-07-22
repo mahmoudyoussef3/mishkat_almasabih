@@ -17,57 +17,100 @@ class HadithCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsetsDirectional.only(top: 6.h, bottom: 6.h),
-      padding: EdgeInsetsDirectional.fromSTEB(18.w, 16.h, 18.w, 18.h),
-      decoration: BoxDecoration(
-        color: ColorsManager.cardBackground,
-        borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(
-          color: ColorsManager.primaryPurple.withAlpha(14),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: ColorsManager.black.withAlpha(10),
-            blurRadius: 22,
-            offset: const Offset(0, 10),
+    return Material(
+      color: Colors.transparent,
+      child: Container(
+        decoration: BoxDecoration(
+          color: ColorsManager.secondaryBackground,
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: ColorsManager.primaryPurple.withOpacity(0.08),
+            width: 1.5,
           ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          PositionedDirectional(
-            top: 4.h,
-            end: 6.w,
-            child: Icon(
-              Icons.format_quote,
-              size: 36.sp,
-              color: ColorsManager.primaryPurple.withAlpha(24),
+          boxShadow: [
+            BoxShadow(
+              color: ColorsManager.black.withOpacity(0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: _IndexBadge(index: index),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header Section
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                color: ColorsManager.primaryPurple.withOpacity(0.04),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+                border: Border(
+                  bottom: BorderSide(
+                    color: ColorsManager.primaryPurple.withOpacity(0.08),
+                    width: 1,
+                  ),
+                ),
               ),
-              SizedBox(height: 12.h),
-              Text(
+              child: Row(
+                children: [
+                  _IndexBadge(index: index),
+                  const Spacer(),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 6.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: ColorsManager.primaryGold.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(10.r),
+                      border: Border.all(
+                        color: ColorsManager.primaryGold.withOpacity(0.3),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.menu_book_rounded,
+                          size: 14.sp,
+                          color: ColorsManager.primaryGold,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          'حديث',
+                          style: TextStyles.labelSmall.copyWith(
+                            color: ColorsManager.primaryText,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Text Content Section
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              child: Text(
                 hadith.title,
                 textDirection: TextDirection.rtl,
-                textAlign: TextAlign.justify,
+                textAlign: TextAlign.start,
+                maxLines: 5,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyles.hadithText.copyWith(
-                  fontSize: 17.sp,
+                  fontSize: 16.sp,
                   height: 1.8,
                   color: ColorsManager.primaryText,
                   fontStyle: FontStyle.normal,
                 ),
               ),
-            ],
-          ),
-        ],
+            ),
+
+      
+          ],
+        ),
       ),
     );
   }
@@ -81,22 +124,15 @@ class _IndexBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 10.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            ColorsManager.primaryPurple.withAlpha(220),
-            ColorsManager.secondaryPurple.withAlpha(210),
-          ],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-        ),
-        borderRadius: BorderRadius.circular(12.r),
+        color: ColorsManager.primaryPurple,
+        borderRadius: BorderRadius.circular(10.r),
         boxShadow: [
           BoxShadow(
-            color: ColorsManager.primaryPurple.withAlpha(35),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            color: ColorsManager.primaryPurple.withOpacity(0.3),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -104,13 +140,13 @@ class _IndexBadge extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         textDirection: TextDirection.rtl,
         children: [
-          Icon(Icons.bookmark, size: 14.sp, color: ColorsManager.white),
+          Icon(Icons.tag_rounded, size: 14.sp, color: Colors.white),
           SizedBox(width: 6.w),
           Text(
             convertToArabicNumber(index),
             style: TextStyles.labelMedium.copyWith(
-              color: ColorsManager.white,
-              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ],

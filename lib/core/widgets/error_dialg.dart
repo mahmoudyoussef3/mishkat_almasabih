@@ -4,7 +4,9 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 
 class ErrorState extends StatelessWidget {
   final String error;
-  const ErrorState({super.key, required this.error});
+  final VoidCallback? onRetry;
+  
+  const ErrorState({super.key, required this.error, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +41,18 @@ class ErrorState extends StatelessWidget {
             width: 80.w,
             height: 80.h,
             decoration: BoxDecoration(
-              color: ColorsManager.hadithWeak.withOpacity(0.1),
+              color: ColorsManager.primaryPurple.withOpacity(0.08),
               borderRadius: BorderRadius.circular(40.r),
             ),
             child: Icon(
-              Icons.error_outline,
+              Icons.cloud_off_rounded,
               size: 40.r,
-              color: ColorsManager.hadithWeak,
+              color: ColorsManager.primaryPurple.withOpacity(0.7),
             ),
           ),
           SizedBox(height: 24.h),
           Text(
-            'حدث خطأ',
+            'تنبيه',
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.w800,
@@ -65,9 +67,47 @@ class ErrorState extends StatelessWidget {
               fontSize: 16.sp,
               color: ColorsManager.secondaryText,
               fontFamily: 'Amiri',
+              height: 1.5,
             ),
             textAlign: TextAlign.center,
           ),
+          if (onRetry != null) ...[
+            SizedBox(height: 24.h),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onRetry,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: ColorsManager.primaryPurple.withOpacity(0.1),
+                  elevation: 0,
+                  padding: EdgeInsets.symmetric(vertical: 12.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.refresh_rounded,
+                      color: ColorsManager.primaryPurple,
+                      size: 20.sp,
+                    ),
+                    SizedBox(width: 8.w),
+                    Text(
+                      'إعادة المحاولة',
+                      style: TextStyle(
+                        color: ColorsManager.primaryPurple,
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Amiri',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ]
         ],
       ),
     );

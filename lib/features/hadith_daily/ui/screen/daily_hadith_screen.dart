@@ -2,11 +2,16 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mishkat_almasabih/core/di/dependency_injection.dart';
 import 'package:mishkat_almasabih/core/helpers/extensions.dart';
 import 'package:mishkat_almasabih/core/routing/routes.dart';
 import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/daily_hadith_decorations.dart';
 import 'package:mishkat_almasabih/core/theming/daily_hadith_styles.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/categories_cubit/categories_cubit.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/categories_cubit/categories_state.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/hadith_categories_section.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/widgets/similar_ahadith_section.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/add_cubit/cubit/add_cubit_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/logic/cubit/get_collections_bookmark_cubit.dart';
 import 'package:mishkat_almasabih/features/bookmark/ui/widgets/add_bookmark_dialogs.dart';
@@ -20,8 +25,15 @@ import 'package:mishkat_almasabih/features/serag/data/models/serag_request_model
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HadithDailyScreen extends StatefulWidget {
-  const HadithDailyScreen({super.key, required this.dailyHadithModel});
+  const HadithDailyScreen({
+    super.key, 
+    required this.dailyHadithModel,
+    this.title = 'حديث اليوم',
+    this.description = 'نص حديث نبوي شريف مع شرحه',
+  });
   final NewDailyHadithModel dailyHadithModel;
+  final String title;
+  final String description;
 
   @override
   State<HadithDailyScreen> createState() => _HadithDailyScreenState();
@@ -49,9 +61,11 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
   Widget build(BuildContext context) {
     final data = widget.dailyHadithModel;
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: SafeArea(
+    return BlocProvider(
+      create: (context) => getIt<CategoriesCubit>()..getCategories(),
+      child: Directionality(
+        textDirection: TextDirection.rtl,
+        child: SafeArea(
           top: true,
         bottom: true,
         child: Scaffold(
@@ -124,8 +138,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           body: CustomScrollView(
             slivers: [
               BuildHeaderAppBar(
-                title: 'حديث اليوم',
-                description: 'نص حديث نبوي شريف مع شرحه',
+                title: widget.title,
+                description: widget.description,
                 actions: [
                   AppBarActionButton(
                     icon: Icons.bookmark_border_rounded,
@@ -216,6 +230,7 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                         ],
                       ),
                       HadithAttributionAndGrade(data: widget.dailyHadithModel),
+
                       Column(
                         children: [
                           SizedBox(height: 5.h),
@@ -246,6 +261,33 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
                           data: widget.dailyHadithModel,
                         ),
                       ),
+
+                      if ((data.categories ?? const []).isNotEmpty) ...[
+                        SizedBox(height: 20.h),
+                        BlocBuilder<CategoriesCubit, CategoriesState>(
+                          builder: (context, state) {
+                            return switch (state) {
+                              CategoriesLoaded(categories: final categories) =>
+                                Column(
+                                  children: [
+                                    HadithCategoriesSection(
+                                      categoryIds: data.categories ?? const [],
+                                      categories: categories,
+                                    ),
+                                    SizedBox(height: 14.h),
+                                    SimilarAhadithSection(
+                                      categoryIds: data.categories ?? const [],
+                                      categories: categories,
+                                    ),
+                                  ],
+                                ),
+                              CategoriesInitial() || CategoriesLoading() =>
+                                _buildCategoriesLoadingSection(),
+                              CategoriesError() => const SizedBox.shrink(),
+                            };
+                          },
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -256,7 +298,8 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 
   Widget _buildEnhancedTabsSection() {
@@ -268,6 +311,37 @@ class _HadithDailyScreenState extends State<HadithDailyScreen> {
         onTabSelected: (tab) {
           setState(() => selectedTab = tab);
         },
+      ),
+    );
+  }
+
+  Widget _buildCategoriesLoadingSection() {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: ColorsManager.secondaryBackground,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: ColorsManager.primaryPurple.withOpacity(0.08)),
+      ),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 18.w,
+            height: 18.w,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              color: ColorsManager.primaryPurple,
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Text(
+            'جاري تحميل التصنيفات...',
+            style: TextStyle(
+              fontSize: 13.sp,
+              color: ColorsManager.secondaryText,
+            ),
+          ),
+        ],
       ),
     );
   }

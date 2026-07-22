@@ -1,15 +1,24 @@
-# 🕌 Mishkat Al-Ahadith
-
 <div align="center">
+<img src="screenshots/app_identiy_logo.png" width="520" alt="Mishkat Al-Ahadith app identity"/>
 
-![Flutter](https://img.shields.io/badge/Flutter-3.7+-02569B.svg?logo=flutter)
-![Dart](https://img.shields.io/badge/Dart-3.7+-0175C2.svg?logo=dart)
-![BLoC](https://img.shields.io/badge/BLoC-8.1.4-00B4AB.svg)
-[![Google Play](https://img.shields.io/badge/Google_Play-Download-414141?logo=google-play)](https://play.google.com/store/apps/details?id=com.mishkat_almasabih.app&hl=ar)
+# مشكاة الأحاديث — Mishkat Al-Ahadith
 
-**A beautifully designed Islamic Hadith library application built with Flutter**
+### Reviving the Sunnah, one authentic hadith at a time 🌙
 
-[📥 Download from Google Play](https://play.google.com/store/apps/details?id=com.mishkat_almasabih.app&hl=ar)
+[![Flutter](https://img.shields.io/badge/Flutter-3.7+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.7+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+[![BLoC](https://img.shields.io/badge/State_Management-BLoC-00B4AB)](https://bloclibrary.dev)
+[![Firebase](https://img.shields.io/badge/Backend-Firebase-FFCA28?logo=firebase&logoColor=white)](https://firebase.google.com)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20iOS-3DDC84)](#)
+[![Google Play](https://img.shields.io/badge/Google_Play-Download-414141?logo=google-play&logoColor=white)](https://play.google.com/store/apps/details?id=com.mishkat_almasabih.app&hl=ar)
+
+**A modern, offline-capable Islamic Hadith library built with Flutter** — 17 authenticated books, 51,000+ hadiths, an AI companion, prayer times, Qiblah direction, and home-screen widgets, wrapped in a clean, Arabic-first design.
+
+[📥 Get it on Google Play](https://play.google.com/store/apps/details?id=com.mishkat_almasabih.app&hl=ar) · [🌐 Official Website](https://hadith-shareef.com/islamic-library)
+
+<br/>
+
+<img src="screenshots/full_app.png" width="850" alt="Mishkat Al-Ahadith app overview"/>
 
 </div>
 
@@ -19,11 +28,20 @@
 
 - [🌟 Overview](#-overview)
 - [✨ Features](#-features)
-- [🏗️ Architecture](#️-architecture)
+  - [📚 A Complete Hadith Library](#-a-complete-hadith-library)
+  - [🔍 Smart Filterable Search](#-smart-filterable-search)
+  - [🌅 Daily and Random Hadith](#-daily-and-random-hadith)
+  - [📌 Bookmarks and Custom Collections](#-bookmarks-and-custom-collections)
+  - [🤖 Meet Serag the AI Assistant](#-meet-serag-the-ai-assistant)
+  - [🕌 Prayer Times and Qiblah Finder](#-prayer-times-and-qiblah-finder)
+  - [📲 Home Screen Widgets](#-home-screen-widgets)
+  - [🔔 Native Notifications](#-native-notifications)
+  - [🔐 Authentication](#-authentication)
+  - [🧭 More in the App](#-more-in-the-app)
+- [🧩 Architecture](#-architecture)
 - [🎨 Design System](#-design-system)
-- [📱 Screenshots](#-screenshots)
-- [🛠️ Tech Stack](#️-tech-stack)
-- [📁 Project Structure](#-project-structure)
+- [🧰 Tech Stack](#-tech-stack)
+- [🗂️ Project Structure](#️-project-structure)
 - [🚀 Getting Started](#-getting-started)
 - [🤝 Contributing](#-contributing)
 
@@ -31,251 +49,269 @@
 
 ## 🌟 Overview
 
-**Mishkat Al-Ahadith** is a comprehensive Islamic Hadith library application that provides users with access to authentic Islamic texts, daily hadiths, and a beautiful reading experience. The app follows modern software engineering principles and implements a stunning Islamic-themed design system.
+**Mishkat Al-Ahadith** ("The Niche of Lamps") is a full-featured Islamic Hadith library built with Flutter. It's more than a static book reader — it pairs a huge, well-organized corpus of authenticated hadiths with modern tools: an AI assistant grounded in trusted sources, live prayer times, a Qiblah compass, and home-screen widgets, so users can read, search, save, and act on the Sunnah every day.
 
-### 🎯 Key Highlights
-- 📚 **17 Major Islamic Books** with comprehensive content
-- 🎨 **Beautiful Islamic Design** with purple and gold colors
-- 🏛️ **Clean Architecture** following SOLID principles
-- 🔄 **State Management** using BLoC pattern
-- 📱 **Responsive Design** optimized for all devices
-- 🔤 **Full Arabic Language Support** with proper text direction
-- 💾 **Offline Capabilities** with local data storage
+<div align="center">
+
+**📚 17 books · 📄 700+ chapters · 🕋 51,000+ hadiths · 🧠 AI-assisted reading**
+
+</div>
+
+### Highlights
+
+- **Massive, curated corpus** — Sahih Al-Bukhari, Sahih Muslim, Sunan Abu Dawood, Sunan At-Tirmidhi, Sunan An-Nasa'i, Muwatta Malik, and more, organized as Book → Chapter → Hadith.
+- **Serag AI** — a Sharia-focused assistant that explains hadiths and answers questions, grounded in classical sources.
+- **A native worship toolkit** — accurate prayer times, a Qiblah compass, and a Hijri calendar, backed by device-level scheduling that survives reboots.
+- **Built to last offline** — Hive-backed local storage and cached content for a fast, reliable reading experience.
+- **Arabic-first, RTL-native UI** — every screen is designed and tested right-to-left, not translated as an afterthought.
+- **Clean, layered architecture** — Presentation → Domain → Data, with Cubit/BLoC state management and `get_it` dependency injection throughout.
 
 ---
 
 ## ✨ Features
 
-### 📚 Core Library Features
-- **Hadith of the Day**: A new hadith every day with explanation
-- **Book Categories**: Organized by Islamic topics
-- **Chapter Navigation**: Easy browsing through book chapters
-- **Search Functionality**: Advanced search across all content
-- **Bookmark System**: Save favorite hadiths and passages
-- **Reading Progress Tracking**: Track your reading journey
+### 📚 A Complete Hadith Library
 
-### 🔐 Authentication & User Management
-- **User Registration**: Create secure accounts
-- **Login System**: Multiple authentication methods
-- **Google Sign-In**: OAuth integration
-- **Profile Management**: User preferences and settings
-- **Data Synchronization**: Cloud backup and sync
+Browse a huge, trustworthy hadith library organized the way scholars study it: **Books → Chapters (أبواب) → Hadiths**, plus a topical classification view (Faith, Purification, Prayer, and more) for jumping straight to a subject.
 
-### 🎨 User Experience Features
-- **Islamic Design**: Authentic cultural aesthetics
-- **Dark/Light Mode**: Comfortable reading in any environment
-- **Responsive Layout**: Optimized for all screen sizes
-- **Smooth Animations**: Enhanced user interactions
-- **Accessibility**: Screen reader support and high contrast
+<div align="center">
+<img src="screenshots/categories.png" width="850" alt="Library, chapters and classifications screens"/>
+</div>
 
-### 📱 Technical Features
-- **Offline Reading**: Download content for offline access
-- **Push Notifications**: Daily hadith reminders
-- **Share Functionality**: Share hadiths with others
-- **Multi-Language Support**: Arabic and English interfaces
-- **Optimized Performance**: Fast loading and smooth scrolling
+- Full book catalogue with cover art and per-book hadith counts (Sahih Al-Bukhari, Sahih Muslim, Sunan Abu Dawood, Sunan At-Tirmidhi, Sunan An-Nasa'i, Muwatta Malik...)
+- Chapter-by-chapter navigation for focused reading
+- Subject-based classifications for quick topical access
+- Every hadith carries its authenticity grade (صحيح / حسن / ضعيف) at a glance
+
+### 🔍 Smart Filterable Search
+
+A search engine built for scale, searching instantly across 51,000+ hadiths.
+
+<div align="center">
+<img src="screenshots/search.png" width="850" alt="Search, results and advanced filters screens"/>
+</div>
+
+- **Quick search** with recent searches and smart suggestions
+- **Advanced filters** — by book, narrator, authenticity grade, topic, and chapter
+- **Ranked results** showing the matched book, grade badge, and hadith number
+- One-tap **bookmarking** straight from the results list
+
+### 🌅 Daily and Random Hadith
+
+Two lightweight habits built right into the home screen: a curated hadith every day, and a random one whenever curiosity strikes.
+
+<table>
+<tr>
+<td width="50%"><img src="screenshots/daily_hadith.png" width="100%" alt="Hadith of the day screen"/></td>
+<td width="50%"><img src="screenshots/random_hadith.png" width="100%" alt="Random hadith screen"/></td>
+</tr>
+</table>
+
+- **Hadith of the Day** — a hand-picked hadith with full text, explanation (شرح), word meanings, and lessons learned
+- **Random Hadith** — a fresh pick on demand, sourced from the same authenticated corpus
+- Copy, share, or bookmark any hadith in one tap
+- One-tap **quick AI analysis** available on any hadith details screen for an instant breakdown
+
+### 📌 Bookmarks and Custom Collections
+
+Never lose track of a hadith that matters to you.
+
+<div align="center">
+<img src="screenshots/bookmarks.png" width="380" alt="Bookmarks and collections screens"/>
+</div>
+
+- Save any hadith with a single tap
+- Organize saves into **named collections** (e.g. "Prayer hadiths", "Ramadan")
+- Search inside your saved hadiths and collections
+- Everything is stored locally for instant, offline access
+
+### 🤖 Meet Serag the AI Assistant
+
+**Serag** (سراج, Arabic for "lantern") is a Sharia-focused AI assistant built into the app: ask about a hadith or a fiqh question and get an answer grounded in trusted Islamic sources, not a generic chatbot.
+
+<div align="center">
+<img src="screenshots/serag.png" width="380" alt="Serag AI chat assistant"/>
+</div>
+
+- Conversational Q&A about hadiths, meanings, and rulings
+- Answers reference their sources and follow a recognized Islamic methodology
+- **Chat history** is saved so you can revisit past conversations
+- Daily usage is quota-based and clearly displayed to the user
+- Available 24/7, directly from the hadith details screen or its own tab
+
+> ⚠️ Like any AI assistant, Serag can get things wrong — the app is upfront about this and always points users back to authoritative sources to confirm an answer.
+
+### 🕌 Prayer Times and Qiblah Finder
+
+Everyday worship tools built natively, not bolted on.
+
+<table>
+<tr>
+<td width="50%"><img src="screenshots/prayer_times.png" width="100%" alt="Prayer times screen"/></td>
+<td width="50%"><img src="screenshots/qiplah.png" width="100%" alt="Qiblah compass screen"/></td>
+</tr>
+</table>
+
+- Prayer times computed from the device's **live location**, using the Egyptian General Authority calculation method
+- Countdown to the next prayer, plus the full day's schedule at a glance
+- **Qiblah compass** with live bearing, deviation angle, and an accuracy indicator
+- Combined **Hijri + Gregorian date** display throughout the app
+
+### 📲 Home Screen Widgets
+
+Take the app's most-used content to the home screen, no need to open the app.
+
+<div align="center">
+<img src="screenshots/home_widgets.jpeg" width="380" alt="Android home screen widgets"/>
+</div>
+
+- **Hadith of the Day** widget, refreshed automatically in the background
+- **Prayer Times** widget with today's full schedule
+- Kept in sync via a background worker, independent of whether the app is open
+
+### 🔔 Native Notifications
+
+Notifications engineered at the platform level, not left to default plugin behavior.
+
+<div align="center">
+<img src="screenshots/feature_collection_2.png" width="480" alt="Notifications, widgets and native integrations overview"/>
+</div>
+
+- **Exact prayer-time alarms** scheduled through Android's `AlarmManager`, delivered even while the device is idle
+- Survives **reboots and timezone changes** via a native boot receiver that automatically re-schedules every alarm
+- Daily hadith reminders and configurable per-prayer alerts
+- Backed by Firebase Cloud Messaging for remote and push notifications
+
+### 🔐 Authentication
+
+A simple, privacy-respecting sign-in flow.
+
+<div align="center">
+<img src="screenshots/auth.png" width="380" alt="Login and sign-up screens"/>
+</div>
+
+- Email & password, backed by Firebase Authentication
+- **Google Sign-In**
+- **Guest mode** — browse the entire library without creating an account
+- Clear consent to terms and privacy policy at sign-up
+
+### 🧭 More in the App
+
+Rounding out the experience:
+
+- 🗓️ **Ramadan Planner** — a daily worship checklist (prayers, Qur'an, adhkar, custom tasks) with monthly progress tracking and a calendar view
+- 🔗 **Deep links & sharing** — open a shared hadith link straight into its detail screen
+- 📡 **Connectivity-aware** — built with `connectivity_plus` to detect and handle offline state
+- 💬 **Send Suggestions** — an in-app channel for users to submit feedback and ideas
+- ℹ️ **About Us** — app and team information
+- 🔁 **Smooth pagination** through tens of thousands of hadiths
 
 ---
 
-## 🏗️ Architecture
+## 🧩 Architecture
 
-### Clean Architecture Implementation
-
-The app follows **Clean Architecture** principles with a **Feature-First** organization, ensuring maintainability, scalability, and testability.
+The app follows a **feature-first Clean Architecture**: every feature under `lib/features/<feature_name>/` is split into its own layers.
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    PRESENTATION LAYER                       │
-│                        (UI Layer)                           │
-├─────────────────────────────────────────────────────────────┤
-│  • Screens (UI)                                             │
-│  • Widgets (Reusable Components)                            │
-│  • BLoC Cubits (State Management)                           │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  BUSINESS LOGIC LAYER                       │
-│                   (Domain Layer)                            │
-├─────────────────────────────────────────────────────────────┤
-│  • Use Cases                                                │
-│  • Business Rules                                           │
-│  • Validation Logic                                         │
-└─────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────┐
-│                       DATA LAYER                            │
-│                   (Infrastructure Layer)                    │
-├─────────────────────────────────────────────────────────────┤
-│  • Repositories                                             │
-│  • Data Sources (API/Local)                                 │
-│  • Models                                                   │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────┐
+│                PRESENTATION                  │
+│    Screens · Widgets · Cubits (BLoC)         │
+└───────────────────────┬───────────────────────┘
+                         │ depends on
+┌───────────────────────▼───────────────────────┐
+│                   DOMAIN                      │
+│   Use Cases · Entities · Business Rules       │
+│           (zero Flutter imports)              │
+└───────────────────────┬───────────────────────┘
+                         │ depends on
+┌───────────────────────▼───────────────────────┐
+│                    DATA                       │
+│  Repositories · Data Sources · Models         │
+│     (Dio/Retrofit APIs, Hive, preferences)    │
+└─────────────────────────────────────────────┘
 ```
 
-### State Management with BLoC
-
-- **Predictable State Flow**: Clear flow from Event → State → UI
-- **Separation of Concerns**: Business logic isolated from UI
-- **Testability**: Easy independent testing of business logic
-- **Scalability**: Easy addition of new features and states
-
-### Dependency Injection
-
-- **GetIt Container**: Centralized dependency management
-- **Lazy Loading**: Services initialized only when needed
-- **Testability**: Easy mocking of dependencies for testing
-- **Loose Coupling**: Components easily replaceable
+- **State management** — `flutter_bloc` / Cubit; Cubits depend only on use cases, never on repositories or data sources directly.
+- **Dependency injection** — `get_it`, registered centrally under `lib/core/di/`.
+- **Routing** — centralized route names and a single app router, no ad-hoc navigation.
+- **Error handling** — exceptions are caught and mapped to typed `Failure`s in the data layer; the domain layer returns a result type; the presentation layer turns failures into user-friendly states.
+- **RTL by design** — directional widgets (`EdgeInsetsDirectional`, `AlignmentDirectional`) are used throughout since the app is Arabic-first.
 
 ---
 
 ## 🎨 Design System
 
-### Islamic Color Palette
-
-Our design system is built around authentic Islamic aesthetics:
+An Islamic-inspired visual identity, defined centrally in `lib/core/theming/`:
 
 ```dart
-// Primary Colors
-primaryPurple: #7440E9    // Main brand color
-primaryGold: #FFB300      // Islamic gold accents
-secondaryPurple: #9D7BF0  // Light purple variations
-
-// Semantic Colors
-hadithAuthentic: #4CAF50  // Authentic (Green)
-hadithGood: #9C27B0       // Good (Purple)
-hadithWeak: #FF9800       // Weak (Orange)
+primaryPurple    = #7440E9   // Primary brand color
+primaryGold      = #FFB300   // Islamic gold accents
+secondaryPurple  = #9D7BF0   // Supporting purple tones
 ```
 
-### Typography System
-
-- **Base Font**: Amiri (optimized for Arabic)
-- **Fallback Font**: YaModernPro
-- **Responsive Size**: ScreenUtil for adaptive typography
-- **Hierarchical Styles**: Clear text hierarchy for better readability
-
-### Component Design
-
-- **Card-Based Layout**: Clean and organized information display
-- **Islamic Patterns**: Subtle geometric overlays
-- **Gradient Backgrounds**: Beautiful color transitions
-- **Enhanced Shadows**: Visual depth and hierarchy
-- **Rounded Corners**: Modern and friendly appearance
+- **Typography** — Amiri for Arabic hadith text, Cairo and YaModernPro for UI text
+- **Responsive sizing** — `flutter_screenutil` for adaptive layouts across devices
+- **Consistent components** — card-based layouts, soft gradients, and subtle Islamic geometric motifs
 
 ---
 
-## 📱 Screenshots
+## 🧰 Tech Stack
 
-<div align="center">
+| Category | Packages |
+|---|---|
+| **Framework** | Flutter 3.7+, Dart 3.7+ |
+| **State Management** | flutter_bloc, get_it |
+| **Networking** | dio, retrofit, pretty_dio_logger |
+| **Local Storage** | hive, hive_flutter, shared_preferences |
+| **Firebase** | firebase_auth, firebase_messaging, firebase_remote_config, firebase_crashlytics, firebase_analytics, firebase_performance |
+| **Prayer & Location** | adhan, flutter_qiblah, geolocator, hijri, flutter_timezone |
+| **Home Screen & Background** | home_widget, workmanager |
+| **Auth** | google_sign_in, firebase_auth |
+| **Deep Linking** | app_links |
+| **UI/UX** | flutter_screenutil, flutter_animate, shimmer, flutter_svg, font_awesome_flutter |
+| **Other** | dartz (functional error handling), infinite_scroll_pagination, share_plus, permission_handler, connectivity_plus |
 
-### Home Screen
-<img src="screenshots/home.webp" width="250" alt="Home Screen"/>
-
-### Library
-<img src="screenshots/library.webp" width="250" alt="Library"/>
-
-### Books
-<img src="screenshots/books.webp" width="250" alt="Books"/>
-
-### Chapters
-<img src="screenshots/chapters.webp" width="250" alt="Chapters"/>
-
-### Ahadith
-<img src="screenshots/ahadith.webp" width="250" alt="Ahadith"/>
-
-### Hadith Details
-<img src="screenshots/hadith_details.webp" width="250" alt="Hadith Details"/>
-
-### Search Results
-<img src="screenshots/search_result.webp" width="250" alt="Search Results"/>
-
-### Hadith of the Day
-<img src="screenshots/hadith_of_th_day.webp" width="250" alt="Hadith of the Day"/>
-
-</div>
+The app ships as **development** and **production** flavors, and uses **Shorebird** for over-the-air code push between store releases.
 
 ---
 
-## 🛠️ Tech Stack
-
-### Frontend Framework
-- **Flutter 3.7+**: Multi-platform app development
-- **Dart 3.7+**: Modern and type-safe programming language
-
-### State Management
-- **flutter_bloc 8.1.4**: Predictable state management
-- **get_it 7.6.7**: Dependency injection container
-
-### Networking & API
-- **Dio 5.0.0**: HTTP client with interceptors
-- **Retrofit 4.0.3**: Type-safe HTTP client
-- **pretty_dio_logger 1.3.1**: Beautiful API logging
-
-### UI & Design
-- **flutter_screenutil 5.9.0**: Responsive design utilities
-- **flutter_animate 4.5.2**: Smooth animations
-- **shimmer 3.0.0**: Loading state animations
-- **flutter_svg 2.2.0**: Vector graphics support
-
-### Data & Storage
-- **shared_preferences 2.5.3**: Local data persistence
-- **dartz 0.10.1**: Functional programming tools
-
-### Authentication
-- **google_sign_in 6.2.2**: OAuth integration
-- **permission_handler 12.0.1**: Device permissions
-
----
-
-## 📁 Project Structure
+## 🗂️ Project Structure
 
 ```
 lib/
-├── core/                           # Core application layer
-│   ├── di/                        # Dependency injection
-│   ├── helpers/                   # Utility functions
-│   ├── networking/                # API and HTTP layer
-│   ├── routing/                   # Navigation management
-│   ├── theming/                   # Themes and styling
-│   └── widgets/                   # Shared components
-├── features/                      # Feature modules
-│   ├── authentication/            # Login/signup flows
-│   ├── home/                     # Main dashboard
-│   ├── hadith_daily/             # Daily hadith feature
-│   ├── hadith_details/           # Hadith details views
-│   ├── library/                  # Book library management
-│   ├── bookmark/                 # Bookmark system
-│   ├── search/                   # Search functionality
-│   ├── profile/                  # User profile management
-│   ├── chapters/                 # Chapter navigation
-│   ├── ahadith/                  # Hadith content
-│   ├── book_data/                # Book information
-│   ├── navigation/               # Navigation logic
-│   ├── notification/             # Push notifications
-│   ├── main_navigation/          # Bottom navigation
-│   ├── onboarding/               # User onboarding
-│   └── splash/                   # Splash screen
-├── main_development.dart          # Development entry point
-├── main_production.dart           # Production entry point
-└── mishkat_almasabih.dart        # Main app configuration
+├── core/                       # Shared, app-wide layer
+│   ├── di/                     # get_it service locator setup
+│   ├── networking/             # Dio client, interceptors, API contracts
+│   ├── notification/           # Local + push notification pipeline
+│   ├── deep_links/             # Deep link routing
+│   ├── services/               # Hive, home-widget sync, background workers
+│   ├── routing/                # Centralized routes & app router
+│   ├── theming/                # Colors, typography, decorations
+│   └── widgets/                # Shared, reusable UI components
+├── features/
+│   ├── authentication/         # Login / sign-up
+│   ├── home/                   # Main dashboard
+│   ├── library/ chapters/ ahadith/ ahadith_categories/ book_data/
+│   ├── search/ search_with_filters/
+│   ├── hadith_daily/ random_ahadith/ hadith_details/ hadith_analysis/
+│   ├── bookmark/
+│   ├── serag/ remaining_questions/     # AI assistant
+│   ├── prayer_times/ qiblah_finder/ hijri_date/
+│   ├── ramadan_tasks/
+│   ├── profile/ send_suggestion/ about_us/
+│   └── notification/ navigation/ main_navigation/ onboarding/ splash/
+├── main_development.dart       # Development entry point
+├── main_production.dart        # Production entry point
+└── mishkat_almasabih.dart      # Main app configuration
 ```
 
-### Feature Module Structure
-
-Each feature follows a consistent structure:
+Each feature keeps this shape:
 
 ```
 feature_name/
-├── data/                          # Data layer
-│   ├── models/                    # Data models
-│   ├── repos/                     # Repository implementations
-│   └── datasources/               # API and local data sources
-├── logic/                         # Business logic layer
-│   └── cubit/                     # BLoC cubits
-└── ui/                            # Presentation layer
-    ├── screens/                   # Main screens
-    └── widgets/                   # Feature-specific widgets
+├── data/           # Models, repositories, data sources
+├── domain/         # Entities, use cases (pure Dart, no Flutter imports)
+└── presentation/   # Screens, widgets, cubits
 ```
 
 ---
@@ -284,93 +320,47 @@ feature_name/
 
 ### Prerequisites
 
-- Flutter SDK 3.7.0 or higher
-- Dart SDK 3.7.0 or higher
-- Android Studio / VS Code
-- Git
+- Flutter SDK ≥ 3.7.0
+- Dart SDK ≥ 3.7.0
+- A configured Firebase project (`google-services.json` / `GoogleService-Info.plist`)
 
 ### Installation
 
 ```bash
-# 1. Clone the repository
 git clone https://github.com/mahmoudyoussef3/mishkat_almasabih.git
-cd mishkat-ahadith
-
-# 2. Install dependencies
+cd mishkat_almasabih
 flutter pub get
-
-# 3. Run the app
 flutter run
 ```
 
-### Environment Setup
-
-The app supports multiple environments:
-
-- **Development**: `flutter run --flavor development`
-- **Production**: `flutter run --flavor production`
-
-### Build Commands
+### Flavors
 
 ```bash
-# Android APK
-flutter build apk 
+flutter run --flavor development -t lib/main_development.dart
+flutter run --flavor production  -t lib/main_production.dart
+```
 
-# Android App Bundle (for Google Play release)
-flutter build appbundle
+### Building
 
-# iOS
-flutter build ios
+```bash
+flutter build apk           # Android APK
+flutter build appbundle     # Android App Bundle (Google Play)
+flutter build ios           # iOS
 ```
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions from the community! Please read our contributing guidelines:
+Contributions are welcome!
 
-### Development Workflow
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m "Add amazing feature"`
+4. Push the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
 
-1. **Fork the repository**
-2. **Create a feature branch**
-```bash
-   git checkout -b feature/amazing-feature
-```
-3. **Make your changes**
-4. **Commit your changes**
-```bash
-   git commit -m 'Add amazing feature'
-```
-5. **Push to the branch**
-```bash
-   git push origin feature/amazing-feature
-```
-6. **افتح طلب سحب | Open a Pull Request**
-
-### **معايير الكود | Code Standards**
-
-- اتبع **أفضل ممارسات Flutter**
-- استخدم مبادئ **البنية النظيفة**
-- حافظ على **اصطلاحات تسمية متسقة**
-- اكتب **توثيقًا شاملاً**
-
----
-
-
-## 🙏 Acknowledgments
-
-- **Islamic Scholars**: For authentic hadith content
-- **Flutter Community**: For excellent development tools
-- **Design Inspiration**: Traditional Islamic art and architecture
-- **Contributors**: All developers who contributed to this project
-
----
-
-
-## 🔗 روابط مهمة | Important Links
-
-- [📥 تحميل من Google Play](https://play.google.com/store/apps/details?id=com.mishkat_almasabih.app&hl=ar)
-- [🌐 الموقع الرسمي | Official Website](https://hadith-shareef.com/islamic-library)
+Please keep changes consistent with the project's Clean Architecture, use Cubit/BLoC for state management, and avoid introducing new state-management or DI approaches without discussion first.
 
 ---
 
@@ -378,10 +368,10 @@ We welcome contributions from the community! Please read our contributing guidel
 
 **Made with ❤️ for the Islamic community**
 
-*"Seeking knowledge is obligatory upon every Muslim" - Prophet Muhammad ﷺ*
+*"Seeking knowledge is obligatory upon every Muslim." — Prophet Muhammad ﷺ*
 
----
+[📥 Download on Google Play](https://play.google.com/store/apps/details?id=com.mishkat_almasabih.app&hl=ar) · [🌐 hadith-shareef.com](https://hadith-shareef.com/islamic-library)
 
-### ⭐ If you like this project, don't forget to give it a star!
+### ⭐ If this project inspires you, consider giving it a star!
 
 </div>

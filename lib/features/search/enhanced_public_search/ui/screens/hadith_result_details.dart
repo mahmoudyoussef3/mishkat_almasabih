@@ -297,6 +297,8 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                     ),
 
                     //
+
+                    /*
                     SliverToBoxAdapter(
                       child: Container(
                         margin: EdgeInsets.symmetric(
@@ -304,6 +306,13 @@ class _HadithDailyScreenState extends State<HadithResultDetails> {
                           vertical: 20.h,
                         ),
                         child: _buildEnhancedActionsSection(),
+                      ),
+                    ),
+                    */
+
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 80.h,
                       ),
                     ),
                   ],

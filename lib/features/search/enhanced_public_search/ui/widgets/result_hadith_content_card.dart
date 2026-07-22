@@ -124,6 +124,16 @@ class ResultHadithContentCard extends StatelessWidget {
                               text: data.hadeeth ?? "",
                             ),
                       ),
+                      _buildActionIcon(
+                        context,
+                        icon: Icons.ios_share_rounded,
+                        color: EnhancedSearchDecorations.shareIconColor,
+                        tooltip: "مشاركة كرابط",
+                        onTap: () => shareHadithLink(
+                          context,
+                          hadithId: data.id?.toString(),
+                        ),
+                      ),
                     ],
                   ),
                 ),

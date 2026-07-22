@@ -39,7 +39,7 @@ Hadiths _$HadithsFromJson(Map<String, dynamic> json) => Hadiths(
           .toList(),
   next_page_url: json['next_page_url'] as String?,
   path: json['path'] as String?,
-  per_page: json['per_page'] as String?,
+  per_page: _stringFromJson(json['per_page']),
   prev_page_url: json['prev_page_url'] as String?,
   to: (json['to'] as num?)?.toInt(),
   total: (json['total'] as num?)?.toInt(),
@@ -55,7 +55,7 @@ Map<String, dynamic> _$HadithsToJson(Hadiths instance) => <String, dynamic>{
   'links': instance.links,
   'next_page_url': instance.next_page_url,
   'path': instance.path,
-  'per_page': instance.per_page,
+  'per_page': _stringToJson(instance.per_page),
   'prev_page_url': instance.prev_page_url,
   'to': instance.to,
   'total': instance.total,
@@ -63,7 +63,7 @@ Map<String, dynamic> _$HadithsToJson(Hadiths instance) => <String, dynamic>{
 
 Hadith _$HadithFromJson(Map<String, dynamic> json) => Hadith(
   id: (json['id'] as num?)?.toInt(),
-  hadithNumber: json['hadithNumber'] as String?,
+  hadithNumber: _stringFromJson(json['hadithNumber']),
   englishNarrator: json['englishNarrator'] as String?,
   hadithEnglish: json['hadithEnglish'] as String?,
   hadithUrdu: json['hadithUrdu'] as String?,
@@ -72,10 +72,10 @@ Hadith _$HadithFromJson(Map<String, dynamic> json) => Hadith(
   headingArabic: json['headingArabic'] as String?,
   headingUrdu: json['headingUrdu'] as String?,
   headingEnglish: json['headingEnglish'] as String?,
-  chapterId: json['chapterId'] as String?,
+  chapterId: _stringFromJson(json['chapterId']),
   bookSlug: json['bookSlug'] as String?,
-  volume: json['volume'] as String?,
-  status: json['status'] as String?,
+  volume: _stringFromJson(json['volume']),
+  status: _stringFromJson(json['status']),
   book:
       json['book'] == null
           ? null
@@ -88,7 +88,7 @@ Hadith _$HadithFromJson(Map<String, dynamic> json) => Hadith(
 
 Map<String, dynamic> _$HadithToJson(Hadith instance) => <String, dynamic>{
   'id': instance.id,
-  'hadithNumber': instance.hadithNumber,
+  'hadithNumber': _stringToJson(instance.hadithNumber),
   'englishNarrator': instance.englishNarrator,
   'hadithEnglish': instance.hadithEnglish,
   'hadithUrdu': instance.hadithUrdu,
@@ -97,10 +97,10 @@ Map<String, dynamic> _$HadithToJson(Hadith instance) => <String, dynamic>{
   'headingArabic': instance.headingArabic,
   'headingUrdu': instance.headingUrdu,
   'headingEnglish': instance.headingEnglish,
-  'chapterId': instance.chapterId,
+  'chapterId': _stringToJson(instance.chapterId),
   'bookSlug': instance.bookSlug,
-  'volume': instance.volume,
-  'status': instance.status,
+  'volume': _stringToJson(instance.volume),
+  'status': _stringToJson(instance.status),
   'book': instance.book,
   'chapter': instance.chapter,
 };
@@ -127,7 +127,7 @@ Map<String, dynamic> _$HadithBookToJson(HadithBook instance) =>
 HadithChapter _$HadithChapterFromJson(Map<String, dynamic> json) =>
     HadithChapter(
       id: (json['id'] as num?)?.toInt(),
-      chapterNumber: json['chapterNumber'] as String?,
+      chapterNumber: _stringFromJson(json['chapterNumber']),
       chapterEnglish: json['chapterEnglish'] as String?,
       chapterUrdu: json['chapterUrdu'] as String?,
       chapterArabic: json['chapterArabic'] as String?,
@@ -137,7 +137,7 @@ HadithChapter _$HadithChapterFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$HadithChapterToJson(HadithChapter instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'chapterNumber': instance.chapterNumber,
+      'chapterNumber': _stringToJson(instance.chapterNumber),
       'chapterEnglish': instance.chapterEnglish,
       'chapterUrdu': instance.chapterUrdu,
       'chapterArabic': instance.chapterArabic,

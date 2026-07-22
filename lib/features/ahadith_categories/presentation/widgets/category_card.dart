@@ -4,7 +4,7 @@ import 'package:mishkat_almasabih/core/theming/colors.dart';
 import 'package:mishkat_almasabih/core/theming/styles.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/domain/entities_temp/category_entity.dart';
 
-class CategoryCard extends StatefulWidget {
+class CategoryCard extends StatelessWidget {
   final CategoryEntity category;
   final VoidCallback onExploreSubcategories;
   final VoidCallback onViewAllHadiths;
@@ -17,232 +17,141 @@ class CategoryCard extends StatefulWidget {
   });
 
   @override
-  State<CategoryCard> createState() => _CategoryCardState();
-}
-
-class _CategoryCardState extends State<CategoryCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 600),
-      vsync: this,
-    );
-
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
-    );
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return ScaleTransition(
-      scale: _scaleAnimation,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final isCompact = constraints.maxWidth < 190;
-          return _buildCard(isCompact);
-        },
-      ),
-    );
-  }
-
-  Widget _buildCard(bool isCompact) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onViewAllHadiths,
         borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            color: ColorsManager.primaryPurple.withOpacity(0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
+        child: Container(
+          padding: EdgeInsets.all(16.w),
+          decoration: BoxDecoration(
+            color: ColorsManager.secondaryBackground,
+            borderRadius: BorderRadius.circular(16.r),
+            border: Border.all(
+              color: ColorsManager.primaryPurple.withOpacity(0.08),
+              width: 1.5,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: ColorsManager.black.withOpacity(0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: widget.onViewAllHadiths,
-          borderRadius: BorderRadius.circular(16.r),
-          child: Padding(
-            padding: EdgeInsets.all(12.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Icon Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  textDirection: TextDirection.rtl,
+          child: Row(
+            children: [
+              Container(
+                width: 52.w,
+                height: 52.w,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      ColorsManager.primaryPurple,
+                      ColorsManager.primaryPurple.withOpacity(0.8),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: BorderRadius.circular(14.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: ColorsManager.primaryPurple.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.auto_stories_rounded,
+                  color: ColorsManager.white,
+                  size: 24.sp,
+                ),
+              ),
+              SizedBox(width: 14.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: isCompact ? 40.w : 44.w,
-                      height: isCompact ? 46.w : 56.w,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            ColorsManager.primaryPurple.withOpacity(0.18),
-                            ColorsManager.primaryPurple.withOpacity(0.08),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(14.r),
-                      ),
-                      child: Center(
-                        child: Icon(
-                          Icons.auto_stories_rounded,
-                          color: ColorsManager.primaryPurple,
-                          size: isCompact ? 22.sp : 24.sp,
-                        ),
+                    Text(
+                      category.title,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.titleLarge.copyWith(
+                        color: ColorsManager.primaryText,
+                        fontWeight: FontWeight.bold,
+                        height: 1.3,
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 6.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: ColorsManager.primaryPurple.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Row(
-                        textDirection: TextDirection.rtl,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            '${widget.category.hadeethsCount}',
-                            style: TextStyles.font13BlueSemiBold.copyWith(
-                              color: ColorsManager.primaryPurple,
-                            ),
-                          ),
-                          SizedBox(width: 4.w),
-                          Text('حديث', style: TextStyles.font12GrayRegular),
-                        ],
+                    SizedBox(height: 6.h),
+                    Text(
+                      'اضغط لعرض الأحاديث المرتبطة',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyles.bodySmall.copyWith(
+                        color: ColorsManager.secondaryText,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 10.h),
-
-                // Title Section
-            
-                    Directionality(
-                      textDirection: TextDirection.rtl,
-                      child: Center(
-                        child: Text(
-                        
-                        widget.category.title,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyles.font14BlueSemiBold.copyWith(
-                          fontSize: 18.sp,
-                          color: ColorsManager.primaryPurple,
-                          height: 1.3,
-                        ),
-                                          ),
-                      ),
-                    ),                  
-
-                
-                SizedBox(height: 10.h),
-
-Spacer(),                SizedBox(
-                  width: double.infinity,
-                  height: isCompact ? 36.h : 40.h,
-                  child: ElevatedButton(
-                    onPressed: widget.onExploreSubcategories,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: ColorsManager.primaryPurple,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Icon(Icons.arrow_forward_rounded, size: 14.sp),
-                        SizedBox(width: 4.w),
-                        Flexible(
-                          child: Text(
-                            isCompact
-                                ? 'استكشاف الفئات'
-                                : 'استكشاف التصنيفات الفرعية',
-                            textDirection: TextDirection.rtl,
-                            style: TextStyles.font13BlueSemiBold.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: 6.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: isCompact ? 36.h : 40.h,
-                  child: OutlinedButton(
-                    onPressed: widget.onViewAllHadiths,
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(
-                        color: ColorsManager.primaryPurple.withOpacity(0.5),
-                        width: 1.5,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      padding: EdgeInsets.zero,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 14.sp,
-                          color: ColorsManager.primaryPurple,
-                        ),
-                        SizedBox(width: 4.w),
-                        Flexible(
-                          child: Text(
-                            isCompact ? 'عرض الأحاديث' : 'عرض جميع الأحاديث',
-                            textDirection: TextDirection.rtl,
-                            style: TextStyles.font13BlueSemiBold.copyWith(
-                              color: ColorsManager.primaryPurple,
-                              fontWeight: FontWeight.w600,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+              SizedBox(width: 10.w),
+              _HadithCountChip(count: category.hadeethsCount),
+              SizedBox(width: 6.w),
+              Icon(
+                Icons.arrow_forward_ios_rounded, // Forward for RTL!
+                color: ColorsManager.primaryPurple,
+                size: 16.sp,
+              ),
+            ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _HadithCountChip extends StatelessWidget {
+  final int count;
+
+  const _HadithCountChip({required this.count});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: BoxConstraints(minWidth: 54.w),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: ColorsManager.primaryGold.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: ColorsManager.primaryGold.withOpacity(0.3)),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '$count',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyles.titleMedium.copyWith(
+              color: ColorsManager.primaryGold,
+              fontWeight: FontWeight.w800,
+              height: 1.1,
+            ),
+          ),
+          SizedBox(height: 2.h),
+          Text(
+            'حديث',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyles.labelSmall.copyWith(
+              color: ColorsManager.primaryText,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }

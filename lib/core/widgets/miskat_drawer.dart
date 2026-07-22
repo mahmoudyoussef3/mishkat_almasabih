@@ -121,7 +121,7 @@ class _MishkatDrawerState extends State<MishkatDrawer> {
                     context.pushNamed(Routes.bookmarkScreen);
                   },
                 ),
-                   _buildDrawerItem(
+                _buildDrawerItem(
                   context,
                   icon: Icons.bookmark_rounded,
                   title: 'تصنيفات الأحاديث',
@@ -149,26 +149,23 @@ class _MishkatDrawerState extends State<MishkatDrawer> {
                     context.pushNamed(Routes.dailyZekrScreen);
                   },
                 ),
-              
-
-                                      _buildDrawerItem(
+                */
+                _buildDrawerItem(
                   context,
                   icon: Icons.access_time_rounded,
                   title: 'مواقيت الصلاة',
-  onTap: () {
+                  onTap: () {
                     Navigator.pop(context);
                     context.pushNamed(Routes.prayerTimesScreen);
                   },
                 ),
-                */
-                
 
-                   _buildDrawerItem(
+                _buildDrawerItem(
                   context,
 
                   icon: Icons.explore_rounded,
                   title: 'القبلة',
-  onTap: () {
+                  onTap: () {
                     Navigator.pop(context);
                     context.pushNamed(Routes.qiblahFinder);
                   },
@@ -182,7 +179,7 @@ class _MishkatDrawerState extends State<MishkatDrawer> {
                     context.pushNamed(Routes.profileScreen);
                   },
                 ),
-                    _buildDrawerItem(
+                _buildDrawerItem(
                   context,
                   icon: Icons.info_rounded,
                   title: 'من نحن',
@@ -191,7 +188,7 @@ class _MishkatDrawerState extends State<MishkatDrawer> {
                     context.pushNamed(Routes.aboutUs);
                   },
                 ),
-                    _buildDrawerItem(
+                _buildDrawerItem(
                   context,
                   icon: Icons.person_rounded,
                   title: 'إضافة مقترحات',

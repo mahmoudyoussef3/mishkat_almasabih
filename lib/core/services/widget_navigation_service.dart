@@ -21,7 +21,7 @@ class WidgetNavigationService {
             // We only route; the OS-level deep link is handled by app_links.
             final uri = Uri.parse(link);
             navigatorKey.currentState?.pushNamed(
-              Routes.deepLinkHadith,
+              Routes.shareHadithLink,
               arguments:
                   uri.pathSegments.isNotEmpty
                       ? uri.pathSegments.last
@@ -30,6 +30,9 @@ class WidgetNavigationService {
           } catch (_) {
             // Ignore invalid URIs.
           }
+          return;
+        case 'openPrayerTimes':
+          navigatorKey.currentState?.pushNamed(Routes.prayerTimesScreen);
           return;
         default:
           return;

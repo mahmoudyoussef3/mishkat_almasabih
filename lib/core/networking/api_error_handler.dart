@@ -13,18 +13,18 @@ class ErrorHandler {
       // حالات بدون رد من السيرفر
       switch (error.type) {
         case DioExceptionType.connectionTimeout:
-          return ApiErrorModel(message: "انتهت مهلة الاتصال");
+          return ApiErrorModel(message: "يبدو أن هناك بطء في شبكة الإنترنت، يرجى المحاولة مرة أخرى.");
         case DioExceptionType.receiveTimeout:
-          return ApiErrorModel(message: "انتهت مهلة استقبال البيانات");
+          return ApiErrorModel(message: "عذراً، الخادم يستغرق وقتاً طويلاً للاستجابة. حاول مجدداً لاحقاً.");
         case DioExceptionType.connectionError:
-          return ApiErrorModel(message: "فشل الاتصال بالخادم");
+          return ApiErrorModel(message: "يبدو أنك غير متصل بالإنترنت. يرجى التحقق من اتصالك والمحاولة مجدداً.");
           
         case DioExceptionType.badResponse:
           return _handleError(error.response?.data);
         case DioExceptionType.cancel:
-          return ApiErrorModel(message: "تم إلغاء الطلب");
+          return ApiErrorModel(message: "تم إلغاء الطلب.");
         default:
-          return ApiErrorModel(message: "حدث خطأ غير متوقع");
+          return ApiErrorModel(message: "عذراً، لم نتمكن من جلب البيانات الآن.");
       }
     }
 
@@ -33,7 +33,7 @@ class ErrorHandler {
 
 static ApiErrorModel _handleError(dynamic data, {int? statusCode}) {
   if (data == null) {
-    return ApiErrorModel(message: "حدث خطأ، حاول مرة أخرى.");
+    return ApiErrorModel(message: "عذراً، لم نتمكن من جلب البيانات الآن. نرجو المحاولة لاحقاً.");
   }
 
   try {
@@ -57,7 +57,7 @@ static ApiErrorModel _handleError(dynamic data, {int? statusCode}) {
 
     return ApiErrorModel(message: data.toString());
   } catch (_) {
-    return ApiErrorModel(message: "حدث خطأ أثناء معالجة الرد.");
+    return ApiErrorModel(message: "عذراً، حدث خطأ أثناء معالجة البيانات.");
   }
 }
 }

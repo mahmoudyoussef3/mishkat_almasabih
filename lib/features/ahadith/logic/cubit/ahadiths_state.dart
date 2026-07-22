@@ -45,8 +45,22 @@ final class AhadithsSuccess extends AhadithsState {
 
 final class LocalAhadithsSuccess extends AhadithsState {
   final List<LocalHadith> hadiths;
+  final List<LocalHadith> filteredHadiths;
 
-  LocalAhadithsSuccess({required this.hadiths});
+  LocalAhadithsSuccess({
+    required this.hadiths,
+    List<LocalHadith>? filteredHadiths,
+  }) : filteredHadiths = filteredHadiths ?? hadiths;
+
+  LocalAhadithsSuccess copyWith({
+    List<LocalHadith>? hadiths,
+    List<LocalHadith>? filteredHadiths,
+  }) {
+    return LocalAhadithsSuccess(
+      hadiths: hadiths ?? this.hadiths,
+      filteredHadiths: filteredHadiths ?? this.filteredHadiths,
+    );
+  }
 }
 
 final class AhadithsFailure extends AhadithsState {

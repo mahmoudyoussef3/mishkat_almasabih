@@ -5,7 +5,7 @@ import 'package:mishkat_almasabih/features/hadith_details/ui/widgets/action_butt
 import 'package:share_plus/share_plus.dart';
 import 'package:mishkat_almasabih/core/theming/hadith_details_decorations.dart';
 import 'package:mishkat_almasabih/core/theming/hadith_details_styles.dart';
-
+/*
 class HadithActions extends StatelessWidget {
   final String hadithText;
   final bool isBookMark;
@@ -65,3 +65,4 @@ class HadithActions extends StatelessWidget {
     );
   }
 }
+*/

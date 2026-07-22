@@ -11,6 +11,8 @@ class NewDailyHadithModel {
   final String? grade;
   final String? explanation;
   final List<String>? hints;
+  @JsonKey(fromJson: _categoriesFromJson)
+  final List<String>? categories;
   final String? id;
 
   @JsonKey(name: 'words_meanings')
@@ -24,6 +26,7 @@ class NewDailyHadithModel {
     this.grade,
     this.explanation,
     this.hints,
+    this.categories,
     this.words_meanings,
   });
   factory NewDailyHadithModel.fromJson(Map<String, dynamic> json) =>
@@ -42,4 +45,11 @@ class DailyHadithWordMeaning {
       _$DailyHadithWordMeaningFromJson(json);
 
   Map<String, dynamic> toJson() => _$DailyHadithWordMeaningToJson(this);
+}
+
+List<String>? _categoriesFromJson(dynamic json) {
+  if (json is List) {
+    return json.map((e) => e.toString()).toList();
+  }
+  return null;
 }

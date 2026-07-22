@@ -56,7 +56,9 @@ import '../../features/splash/splash_screen.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/screens/ramadan_tasks_screen.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/cubit/ramadan_tasks_cubit.dart';
 import 'package:mishkat_almasabih/features/ramadan_tasks/presentation/screens/ramadan_progress_screen.dart';
-import 'package:mishkat_almasabih/core/deep_links/ui/deep_link_hadith_screen.dart';
+
+import 'package:mishkat_almasabih/core/deep_links/ui/shared_link_hadith_screen.dart';
+import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_details_cubit/cubit/hadith_by_category_details_cubit.dart';
 
 class AppRouter {
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -65,7 +67,38 @@ class AppRouter {
   }
 
   Route? generateRoute(RouteSettings settings) {
-    switch (settings.name) {
+    final String routeName = settings.name ?? '';
+
+    // Handle native deep link paths
+    if (routeName.startsWith('/api/hadith/')) {
+      final id =
+          routeName
+              .split('/')
+              .last
+              .replaceAll('%C2%A0', '')
+              .replaceAll('\u00A0', '')
+              .trim();
+      if (id.isNotEmpty) {
+        _logScreenView('ShareHadithLink (Native)');
+        return MaterialPageRoute(
+          builder:
+              (_) => BlocProvider(
+                create:
+                    (context) =>
+                        getIt<HadithByCategoryDetailsCubit>()..fetchById(id),
+                child: SharedLinkHadithScreen(hadithId: id),
+              ),
+        );
+      }
+    }
+
+    if (routeName == '/') {
+      return MaterialPageRoute(
+        builder: (_) => const Scaffold(backgroundColor: Colors.white),
+      );
+    }
+
+    switch (routeName) {
       case Routes.hadithDetail:
         _logScreenView('HadithDetail');
         final args = (settings.arguments as Map?) ?? {};
@@ -248,21 +281,6 @@ class AppRouter {
               ),
         );
 
-      case Routes.deepLinkHadith:
-        _logScreenView('DeepLinkHadith');
-
-        final hadithId = settings.arguments as String;
-        return MaterialPageRoute(
-          builder:
-              (_) => BlocProvider(
-                create:
-                    (context) =>
-                        getIt<EnhancedSearchCubit>()
-                          ..fetchEnhancedSearchResults(hadithId),
-                child: DeepLinkHadithScreen(hadithId: hadithId),
-              ),
-        );
-
       case Routes.filterResultSearch:
         _logScreenView('FilterResultSearch');
 
@@ -292,7 +310,20 @@ class AppRouter {
 
       case Routes.hadithOfTheDay:
         _logScreenView('HadithOfTheDay');
-        final query = settings.arguments as NewDailyHadithModel;
+        final args = settings.arguments;
+        NewDailyHadithModel query;
+        String title = 'حديث اليوم';
+        String description = 'نص حديث نبوي شريف مع شرحه';
+
+        if (args is NewDailyHadithModel) {
+          query = args;
+        } else if (args is Map<String, dynamic>) {
+          query = args['model'] as NewDailyHadithModel;
+          title = args['title'] as String? ?? title;
+          description = args['description'] as String? ?? description;
+        } else {
+          return null;
+        }
 
         return MaterialPageRoute(
           builder:
@@ -307,7 +338,11 @@ class AppRouter {
                               ..getBookMarkCollections(),
                   ),
                 ],
-                child: HadithDailyScreen(dailyHadithModel: query),
+                child: HadithDailyScreen(
+                  dailyHadithModel: query,
+                  title: title,
+                  description: description,
+                ),
               ),
         );
       case Routes.aboutUs:
@@ -337,7 +372,7 @@ class AppRouter {
               ),
         );
 
-      /*   case Routes.prayerTimesScreen:
+      case Routes.prayerTimesScreen:
         _logScreenView('PrayerTimesScreen');
         return MaterialPageRoute(
           builder:
@@ -346,7 +381,6 @@ class AppRouter {
                 child: const PrayerTimesScreen(),
               ),
         );
-        */
       case Routes.qiblahFinder:
         _logScreenView('QiblahFinderScreen');
         return MaterialPageRoute(
@@ -383,7 +417,7 @@ class AppRouter {
                 ),
               ),
         );
-        case Routes.shareHadithLink:
+      case Routes.shareHadithLink:
         _logScreenView('ShareHadithLink');
         final hadithId = settings.arguments as String;
         return MaterialPageRoute(
@@ -391,11 +425,11 @@ class AppRouter {
               (_) => BlocProvider(
                 create:
                     (context) =>
-                        getIt<EnhancedSearchCubit>()..fetchEnhancedSearchResults(hadithId),
-                child: DeepLinkHadithScreen(hadithId: hadithId),  
+                        getIt<HadithByCategoryDetailsCubit>()
+                          ..fetchById(hadithId),
+                child: SharedLinkHadithScreen(hadithId: hadithId),
               ),
         );
-   
 
       default:
         return null;

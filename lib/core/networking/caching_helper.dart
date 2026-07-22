@@ -271,7 +271,7 @@ class CacheKeys {
   static const String chaptersResponse = 'chaptersResponse';
   static const String hadithDaily = 'hadithDaily';
   static const String library = 'library';
-  static const String hadithCategories = 'hadith_categories';
+  static const String hadithCategories = 'hadith_categories_v2';
 
   /// Paginated ahadith cache key generator
   static String paginatedAhadith(String bookSlug, int chapterId) =>
@@ -298,12 +298,24 @@ class CacheKeys {
       'enhanced_search_${query.hashCode}';
 
   /// Search with filters cache key generator
-  static String searchWithFilters(String query, String? bookSlug) =>
-      'search_filtered_${query.hashCode}_${bookSlug ?? 'all'}';
+  static String searchWithFilters(
+    String query,
+    String? bookSlug,
+    String narrator,
+    String grade,
+    String chapter,
+    String category,
+  ) {
+    final filters = '${bookSlug ?? 'all'}_${narrator}_${grade}_${chapter}_$category';
+    return 'search_filtered_${query.hashCode}_${filters.hashCode}';
+  }
 
   /// Ahadith by category cache key generator
   static String ahadithByCategory(String categoryId, int page, int perPage) =>
       'ahadith_by_category_${categoryId}_${page}_$perPage';
+
+  /// Hadith details by ID cache key generator
+  static String hadithDetails(String id) => 'hadith_details_$id';
 }
 
 // =========================== TYPE-SAFE CACHE EXTENSIONS ===========================

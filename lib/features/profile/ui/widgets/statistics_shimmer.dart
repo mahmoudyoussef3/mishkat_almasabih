@@ -46,7 +46,7 @@ class StatisticsShimmer extends StatelessWidget {
       crossAxisCount: 2,
       mainAxisSpacing: 12.h,
       crossAxisSpacing: 12.w,
-      childAspectRatio: 1.3,
+      childAspectRatio: 1.1,
       children: [
         _buildStatCardShimmer(),
         _buildStatCardShimmer(),

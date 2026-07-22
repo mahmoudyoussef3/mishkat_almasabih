@@ -29,7 +29,7 @@ class _CategoryApiService implements CategoryApiService {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'categories/roots/',
+            'categories/list/?language=ar',
             queryParameters: queryParameters,
             data: _data,
           )

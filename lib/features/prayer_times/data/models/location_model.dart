@@ -1,8 +1,8 @@
-/*class LocationModel {
+class LocationModel {
   final double latitude;
   final double longitude;
   final String cityName;
-  final String timezone; // e.g., "+2.0" for Egypt
+  final String timezone;
 
   const LocationModel({
     required this.latitude,
@@ -22,14 +22,13 @@
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
-      latitude: json['latitude'] as double,
-      longitude: json['longitude'] as double,
-      cityName: json['cityName'] as String,
-      timezone: json['timezone'] as String,
+      latitude: (json['latitude'] as num?)?.toDouble() ?? 30.0444,
+      longitude: (json['longitude'] as num?)?.toDouble() ?? 31.2357,
+      cityName: json['cityName'] as String? ?? 'القاهرة، مصر',
+      timezone: json['timezone'] as String? ?? '+2.0',
     );
   }
 
-  // Default location (Cairo)
   static const LocationModel defaultLocation = LocationModel(
     latitude: 30.0444,
     longitude: 31.2357,
@@ -37,51 +36,50 @@
     timezone: '+2.0',
   );
 
-  // Common Egyptian cities
-  static List<LocationModel> egyptianCities = [
-    const LocationModel(
+  static const List<LocationModel> egyptianCities = [
+    LocationModel(
       latitude: 30.0444,
       longitude: 31.2357,
       cityName: 'القاهرة',
       timezone: '+2.0',
     ),
-    const LocationModel(
+    LocationModel(
       latitude: 31.2001,
       longitude: 29.9187,
       cityName: 'الإسكندرية',
       timezone: '+2.0',
     ),
-    const LocationModel(
+    LocationModel(
       latitude: 26.8206,
       longitude: 30.8025,
       cityName: 'أسيوط',
       timezone: '+2.0',
     ),
-    const LocationModel(
+    LocationModel(
       latitude: 25.6872,
       longitude: 32.6396,
       cityName: 'الأقصر',
       timezone: '+2.0',
     ),
-    const LocationModel(
+    LocationModel(
       latitude: 24.0889,
       longitude: 32.8998,
       cityName: 'أسوان',
       timezone: '+2.0',
     ),
-    const LocationModel(
+    LocationModel(
       latitude: 31.0409,
       longitude: 31.3785,
       cityName: 'المنصورة',
       timezone: '+2.0',
     ),
-    const LocationModel(
+    LocationModel(
       latitude: 27.1809,
       longitude: 31.1837,
       cityName: 'المنيا',
       timezone: '+2.0',
     ),
-    const LocationModel(
+    LocationModel(
       latitude: 30.5965,
       longitude: 31.5084,
       cityName: 'بنها',
@@ -92,4 +90,3 @@
   @override
   String toString() => cityName;
 }
-*/

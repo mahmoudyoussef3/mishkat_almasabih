@@ -1,15 +1,22 @@
-/*import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
+
+import 'package:adhan/adhan.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:adhan/adhan.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:mishkat_almasabih/core/notification/prayer_time_notification_scheduler.dart';
+import 'package:mishkat_almasabih/core/services/prayer_times_home_widget_sync.dart';
 import 'package:mishkat_almasabih/features/prayer_times/data/models/location_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 part 'prayer_times_state.dart';
 
 class PrayerTimesCubit extends Cubit<PrayerTimesState> {
   PrayerTimesCubit() : super(PrayerTimesInitial());
+
+  static const String _notificationLocationKey = 'prayer_notification_location';
+  static const String _legacyLocationKey = 'prayer_location';
 
   Timer? _ticker;
   LocationModel _currentLocation = LocationModel.defaultLocation;
@@ -20,17 +27,13 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
   Future<void> init() async {
     emit(PrayerTimesLoading());
     try {
-      // Load saved location or use default
       await _loadSavedLocation();
-
       final times = _calculatePrayerTimes(_currentLocation);
-      final date = DateTime.now();
-      final loaded = _buildLoaded(date, times);
-      emit(loaded);
-
+      emit(_buildLoaded(DateTime.now(), times));
       _startTicker();
+      unawaited(PrayerTimesHomeWidgetSync.refresh());
     } catch (e) {
-      debugPrint('Error in init: $e');
+      debugPrint('Error in prayer times init: $e');
       emit(PrayerTimesError('تعذر حساب مواقيت الصلاة'));
     }
   }
@@ -40,7 +43,11 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     final params = CalculationMethod.egyptian.getParameters();
     params.madhab = Madhab.shafi;
 
-    final prayerTimes = PrayerTimes.today(coordinates, params);
+    final prayerTimes = PrayerTimes(
+      coordinates,
+      DateComponents.from(DateTime.now()),
+      params,
+    );
     _prayerTimes = prayerTimes;
     return prayerTimes;
   }
@@ -48,26 +55,25 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
   Future<void> _loadSavedLocation() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final locationJson = prefs.getString('prayer_location');
-      if (locationJson != null) {
-        final json = jsonDecode(locationJson) as Map<String, dynamic>;
-        _currentLocation = LocationModel.fromJson(json);
-      }
+      final locationJson =
+          prefs.getString(_notificationLocationKey) ??
+          prefs.getString(_legacyLocationKey);
+      if (locationJson == null || locationJson.isEmpty) return;
+
+      final json = jsonDecode(locationJson) as Map<String, dynamic>;
+      _currentLocation = LocationModel.fromJson(json);
     } catch (e) {
-      debugPrint('Error loading saved location: $e');
+      debugPrint('Error loading saved prayer location: $e');
     }
   }
 
   Future<void> _saveLocation(LocationModel location) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('prayer_location', jsonEncode(location.toJson()));
-    } catch (e) {
-      debugPrint('Error saving location: $e');
-    }
+    final prefs = await SharedPreferences.getInstance();
+    final locationJson = jsonEncode(location.toJson());
+    await prefs.setString(_notificationLocationKey, locationJson);
+    await prefs.setString(_legacyLocationKey, locationJson);
   }
 
-  /// Update prayer times with a new location
   Future<void> updateLocation(LocationModel location) async {
     emit(PrayerTimesLoading());
     try {
@@ -75,50 +81,36 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
       await _saveLocation(location);
 
       final times = _calculatePrayerTimes(location);
-      final date = DateTime.now();
-      final loaded = _buildLoaded(date, times);
-      emit(loaded);
+      emit(_buildLoaded(DateTime.now(), times));
 
       _startTicker();
+      await PrayerTimesHomeWidgetSync.refresh();
+      unawaited(PrayerNotificationScheduler.refreshSchedule());
     } catch (e) {
-      debugPrint('Error updating location: $e');
+      debugPrint('Error updating prayer location: $e');
       emit(PrayerTimesError('تعذر حساب مواقيت الصلاة'));
     }
   }
 
-  /// Get user's current location and update prayer times
   Future<void> useCurrentLocation() async {
     try {
-      debugPrint('🔍 Starting location request...');
-
-      // Check if location services are enabled
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        debugPrint('❌ Location services are disabled');
         emit(PrayerTimesError('الرجاء تفعيل خدمات الموقع على جهازك'));
         return;
       }
 
-      debugPrint('✅ Location services enabled');
-
-      // Check permissions
-      LocationPermission permission = await Geolocator.checkPermission();
-      debugPrint('📍 Current permission: $permission');
+      var permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
 
       if (permission == LocationPermission.denied) {
-        debugPrint('🔐 Requesting permission...');
-        permission = await Geolocator.requestPermission();
-        debugPrint('📍 Permission after request: $permission');
-
-        if (permission == LocationPermission.denied) {
-          debugPrint('❌ Permission denied');
-          emit(PrayerTimesError('يجب السماح بالوصول إلى الموقع'));
-          return;
-        }
+        emit(PrayerTimesError('يجب السماح بالوصول إلى الموقع'));
+        return;
       }
 
       if (permission == LocationPermission.deniedForever) {
-        debugPrint('❌ Permission denied forever');
         emit(
           PrayerTimesError(
             'تم رفض الوصول إلى الموقع بشكل دائم. الرجاء تفعيله من الإعدادات',
@@ -127,22 +119,15 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
         return;
       }
 
-      debugPrint('✅ Permission granted, getting position...');
       emit(PrayerTimesLoading());
-
-      // Get position with timeout
       final position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-        timeLimit: const Duration(seconds: 10),
+        locationSettings: const LocationSettings(
+          accuracy: LocationAccuracy.high,
+          timeLimit: Duration(seconds: 10),
+        ),
       );
 
-      debugPrint(
-        '✅ Position obtained: ${position.latitude}, ${position.longitude}',
-      );
-
-      // Calculate timezone offset (simplified - using device timezone)
       final timezoneOffset = DateTime.now().timeZoneOffset.inHours;
-
       final location = LocationModel(
         latitude: position.latitude,
         longitude: position.longitude,
@@ -151,12 +136,10 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
             timezoneOffset >= 0 ? '+$timezoneOffset.0' : '$timezoneOffset.0',
       );
 
-      debugPrint('📍 Updating location to: ${location.cityName}');
       await updateLocation(location);
-    } catch (e, stackTrace) {
-      debugPrint('❌ Error getting location: $e');
-      debugPrint('Stack trace: $stackTrace');
-      emit(PrayerTimesError('تعذر الحصول على الموقع الحالي: ${e.toString()}'));
+    } catch (e) {
+      debugPrint('Error getting current location: $e');
+      emit(PrayerTimesError('تعذر الحصول على الموقع الحالي'));
     }
   }
 
@@ -166,54 +149,53 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
       final current = state;
       if (current is! PrayerTimesLoaded) return;
 
-      // Recalculate at day change
       final now = DateTime.now();
       if (!_isSameDay(now, current.date)) {
         final newTimes = _calculatePrayerTimes(_currentLocation);
         emit(_buildLoaded(now, newTimes));
+        unawaited(PrayerTimesHomeWidgetSync.refresh());
+        unawaited(PrayerNotificationScheduler.refreshSchedule());
         return;
       }
 
-      // Update remaining time for next prayer
-      if (_prayerTimes != null) {
-        final nextPrayer = _getNextPrayer(now);
-        if (nextPrayer != null) {
-          final remaining = _calculateRemaining(nextPrayer, now);
-          emit(
-            current.copyWith(
-              remaining: remaining,
-              nextPrayerLabel: _arabicLabel(nextPrayer.$1),
-              nextPrayerTime: nextPrayer.$2,
-            ),
-          );
-        }
-      }
+      final nextPrayer = _getNextPrayer(now);
+      if (nextPrayer == null) return;
+
+      emit(
+        current.copyWith(
+          remaining: nextPrayer.$2.difference(now),
+          nextPrayerLabel: _arabicLabel(nextPrayer.$1),
+          nextPrayerTime: nextPrayer.$2,
+        ),
+      );
     });
   }
 
   (String, DateTime)? _getNextPrayer(DateTime now) {
-    if (_prayerTimes == null) return null;
+    final prayerTimes = _prayerTimes;
+    if (prayerTimes == null) return null;
 
     final prayers = [
-      ('fajr', _prayerTimes!.fajr),
-      ('dhuhr', _prayerTimes!.dhuhr),
-      ('asr', _prayerTimes!.asr),
-      ('maghrib', _prayerTimes!.maghrib),
-      ('isha', _prayerTimes!.isha),
+      ('fajr', prayerTimes.fajr),
+      ('dhuhr', prayerTimes.dhuhr),
+      ('asr', prayerTimes.asr),
+      ('maghrib', prayerTimes.maghrib),
+      ('isha', prayerTimes.isha),
     ];
 
     for (final prayer in prayers) {
-      if (prayer.$2.isAfter(now)) {
-        return prayer;
-      }
+      if (prayer.$2.isAfter(now)) return prayer;
     }
 
-    // If no prayer remaining today, return tomorrow's Fajr
-    return ('fajr', _prayerTimes!.fajr.add(const Duration(days: 1)));
-  }
-
-  Duration _calculateRemaining((String, DateTime) nextPrayer, DateTime now) {
-    return nextPrayer.$2.difference(now);
+    final tomorrow = now.add(const Duration(days: 1));
+    final params = CalculationMethod.egyptian.getParameters();
+    params.madhab = Madhab.shafi;
+    final tomorrowTimes = PrayerTimes(
+      Coordinates(_currentLocation.latitude, _currentLocation.longitude),
+      DateComponents.from(tomorrow),
+      params,
+    );
+    return ('fajr', tomorrowTimes.fajr);
   }
 
   PrayerTimesLoaded _buildLoaded(DateTime date, PrayerTimes times) {
@@ -223,32 +205,26 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     return PrayerTimesLoaded(
       date: DateTime(date.year, date.month, date.day),
       times: times,
-      nextPrayerLabel: nextPrayer != null ? _arabicLabel(nextPrayer.$1) : null,
+      nextPrayerLabel: _arabicLabel(nextPrayer?.$1),
       nextPrayerTime: nextPrayer?.$2,
-      remaining:
-          nextPrayer != null ? _calculateRemaining(nextPrayer, now) : null,
+      remaining: nextPrayer?.$2.difference(now),
     );
   }
 
   String? _arabicLabel(String? name) {
-    switch (name) {
-      case 'fajr':
-        return 'الفجر';
-      case 'dhuhr':
-        return 'الظهر';
-      case 'asr':
-        return 'العصر';
-      case 'maghrib':
-        return 'المغرب';
-      case 'isha':
-        return 'العشاء';
-      default:
-        return null;
-    }
+    return switch (name) {
+      'fajr' => 'الفجر',
+      'dhuhr' => 'الظهر',
+      'asr' => 'العصر',
+      'maghrib' => 'المغرب',
+      'isha' => 'العشاء',
+      _ => null,
+    };
   }
 
-  bool _isSameDay(DateTime a, DateTime b) =>
-      a.year == b.year && a.month == b.month && a.day == b.day;
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
 
   @override
   Future<void> close() {
@@ -256,4 +232,3 @@ class PrayerTimesCubit extends Cubit<PrayerTimesState> {
     return super.close();
   }
 }
-*/

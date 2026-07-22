@@ -1,4 +1,4 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -44,9 +44,12 @@ class ShareImageEditorBottomSheet extends StatefulWidget {
   final double initialFontSize;
   final String initialFontFamily;
 
+  final String? deepLink;
+
   const ShareImageEditorBottomSheet({
     super.key,
     required this.text,
+    this.deepLink,
     this.appName = 'مشكاة الأحاديث',
     this.appIconAsset = 'assets/images/app_logo.png',
     this.assetBackgrounds = const [
@@ -807,7 +810,11 @@ class _ShareImageEditorBottomSheetState
       );
       await file.writeAsBytes(pngBytes);
 
-      await Share.shareXFiles([XFile(file.path)], text: 'شارك من تطبيق ${widget.appName}');
+      String shareCaption = 'شارك من تطبيق ${widget.appName}';
+      if (widget.deepLink != null && widget.deepLink!.isNotEmpty) {
+        shareCaption += '\n\n${widget.deepLink}';
+      }
+      await Share.shareXFiles([XFile(file.path)], text: shareCaption);
     } catch (e) {
       debugPrint('Error exporting: $e');
     } finally {
@@ -817,7 +824,11 @@ class _ShareImageEditorBottomSheetState
 
   Future<void> _shareTextOnly() async {
     try {
-      await Share.share(widget.text);
+      String shareContent = widget.text;
+      if (widget.deepLink != null && widget.deepLink!.isNotEmpty) {
+        shareContent += '\n\n${widget.deepLink}';
+      }
+      await Share.share(shareContent);
     } catch (e) {
       debugPrint('Error sharing text: $e');
     }

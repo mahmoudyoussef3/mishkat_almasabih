@@ -9,10 +9,14 @@ class CategoryModel {
   @JsonKey(name: 'hadeeths_count')
   final String? hadeethsCount;
 
+  @JsonKey(name: 'parent_id')
+  final String? parentId;
+
   CategoryModel({
     this.id,
     this.title,
     this.hadeethsCount,
+    this.parentId,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) =>
@@ -24,5 +28,6 @@ class CategoryModel {
         id: id ?? '',
         title: title ?? '',
         hadeethsCount: int.tryParse(hadeethsCount ?? '0') ?? 0,
+        parentId: parentId,
       );
 }

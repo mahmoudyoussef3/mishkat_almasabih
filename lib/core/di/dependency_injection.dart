@@ -5,6 +5,8 @@ import 'package:mishkat_almasabih/features/ahadith_categories/domain/repositorie
 import 'package:mishkat_almasabih/features/ahadith_categories/domain/usecases/get_ahadith_by_category_usecase.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_by_category_cubit/ahadith_by_category_cubit.dart';
 import 'package:mishkat_almasabih/features/ahadith_categories/presentation/cubit/hadith_details_cubit/cubit/hadith_by_category_details_cubit.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:mishkat_almasabih/core/networking/network_info.dart';
 
 import 'package:mishkat_almasabih/features/authentication/signup/data/repo/signup_repo.dart';
 import 'package:mishkat_almasabih/features/authentication/signup/logic/signup_cubit.dart';
@@ -77,6 +79,11 @@ final customGetIt = GetIt.instance;
 Future<void> setUpGetIt() async {
   final Dio dio = DioFactory.getDio();
 
+  getIt.registerLazySingleton<Connectivity>(() => Connectivity());
+  getIt.registerLazySingleton<NetworkInfo>(
+    () => NetworkInfoImpl(getIt<Connectivity>()),
+  );
+
   getIt.registerLazySingleton<ApiService>(() => ApiService(dio));
   getIt.registerLazySingleton<CategoryApiService>(
     () => CategoryApiService(dio),
@@ -131,7 +138,7 @@ Future<void> setUpGetIt() async {
   // Hadith of the day feature
   getIt.registerLazySingleton<SaveHadithDailyRepo>(() => SaveHadithDailyRepo());
   getIt.registerFactory<DailyHadithCubit>(
-    () => DailyHadithCubit(getIt<SaveHadithDailyRepo>()),
+    () => DailyHadithCubit(getIt<SaveHadithDailyRepo>(), getIt<NetworkInfo>()),
   );
 
   getIt.registerLazySingleton<NavigationRepo>(() => NavigationRepo(getIt()));
@@ -145,14 +152,14 @@ Future<void> setUpGetIt() async {
     () => SearchWithFiltersRepo(getIt()),
   );
   getIt.registerFactory<SearchWithFiltersCubit>(
-    () => SearchWithFiltersCubit(getIt()),
+    () => SearchWithFiltersCubit(getIt(), getIt<NetworkInfo>()),
   );
 
   getIt.registerLazySingleton<EnhancedSearchRepo>(
     () => EnhancedSearchRepo(getIt()),
   );
   getIt.registerFactory<EnhancedSearchCubit>(
-    () => EnhancedSearchCubit(getIt()),
+    () => EnhancedSearchCubit(getIt(), getIt<NetworkInfo>()),
   );
 
   getIt.registerLazySingleton<UserResponseRepo>(
@@ -191,7 +198,7 @@ Future<void> setUpGetIt() async {
     () => RandomAhadithRepo(customGetIt()),
   );
   customGetIt.registerFactory<RandomAhadithCubit>(
-    () => RandomAhadithCubit(customGetIt()),
+    () => RandomAhadithCubit(customGetIt(), getIt<NetworkInfo>()),
   );
 
   customGetIt.registerLazySingleton<SearchHistoryRepo>(
@@ -201,11 +208,8 @@ Future<void> setUpGetIt() async {
     () => SearchHistoryCubit(getIt()),
   );
 
-  /*
-  getIt.registerFactory<PrayerTimesCubit>(
-    () => PrayerTimesCubit(),
-  );
-*/
+  getIt.registerFactory<PrayerTimesCubit>(() => PrayerTimesCubit());
+
   getIt.registerFactory<QiblahCubit>(() => QiblahCubit());
 
   // Firebase Remote Config (shared instance)
@@ -256,13 +260,10 @@ Future<void> setUpGetIt() async {
     () => HadithByCategoryCubit(getIt<GetAhadithByCategoryUseCase>()),
   );
 
-
-    getIt.registerLazySingleton<HadithByCategoryDetailsRepo>(
+  getIt.registerLazySingleton<HadithByCategoryDetailsRepo>(
     () => HadithByCategoryDetailsRepo(),
   );
   getIt.registerFactory<HadithByCategoryDetailsCubit>(
-    () => HadithByCategoryDetailsCubit(getIt()),
+    () => HadithByCategoryDetailsCubit(getIt(), getIt<NetworkInfo>()),
   );
-
-  
 }

@@ -35,9 +35,8 @@ class _MishkatAlmasabihState extends State<MishkatAlmasabih> {
     super.initState();
 
     // ✅ نحسب البداية مرة واحدة بس
-    _startScreen = widget.isFirstTime
-        ? Routes.onBoardingScreen
-        : Routes.splashScreen;
+    _startScreen =
+        widget.isFirstTime ? Routes.onBoardingScreen : Routes.splashScreen;
 
     log("Start screen: $_startScreen");
 
@@ -67,13 +66,10 @@ class _MishkatAlmasabihState extends State<MishkatAlmasabih> {
         return MaterialApp(
           navigatorObservers: [widget.analytics],
           navigatorKey: navigatorKey,
-          title: 'مشكاة الأحاديث',
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            fontFamily: 'Cairo',
-            useMaterial3: true,
-          ),
+          theme: ThemeData(fontFamily: 'Cairo', useMaterial3: true),
 
+        
           // ✅ استخدم القيمة المحفوظة
           initialRoute: _startScreen,
 
@@ -83,9 +79,10 @@ class _MishkatAlmasabihState extends State<MishkatAlmasabih> {
           onUnknownRoute: (settings) {
             log("❌ Unknown route: ${settings.name}");
             return MaterialPageRoute(
-              builder: (_) => const Scaffold(
-                body: Center(child: Text('Route not found')),
-              ),
+              builder:
+                  (_) => const Scaffold(
+                    body: Center(child: Text('Route not found')),
+                  ),
             );
           },
         );
